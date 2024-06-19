@@ -11,11 +11,11 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class PhotoVO {
+public class Photo {
 	private int photoNo;
 	private String contentType;
 	private int fileSize;
 	//private String picture;
 	private Date createdAt;
-	private StoreVO store;
+	private Store store;
 }
