@@ -3,20 +3,20 @@ package org.omsf.store.dao;
 import java.util.List;
 import java.util.Optional;
 
-import org.omsf.store.model.StoreVO;
+import org.omsf.store.model.Store;
 
 public interface StoreRepository {
 	     
-	List<StoreVO> selectAllStore();
-	List<StoreVO> getStoreByposition();
+	List<Store> selectAllStore();
+	List<Store> getStoreByposition();
 	
-	Optional<StoreVO> getStoreByNo(int storeNo);
+	Optional<Store> getStoreByNo(int storeNo);
 	void createStore();
-//	void createStore(StoreVO store);
-	void updateStore(StoreVO store);
+//	void createStore(Store store);
+	void updateStore(Store store);
 	void deleteStore(int storeNo);
 	
-	void updateTotalReview(StoreVO store);
-	void updateTotalRating(StoreVO store);
-	void updateLikes(StoreVO store);
+	void updateTotalReview(Store store);
+	void updateTotalRating(Store store);
+	void updateLikes(Store store);
 }
