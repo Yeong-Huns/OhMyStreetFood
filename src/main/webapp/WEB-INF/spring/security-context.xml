@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    https://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/security 
+    http://www.springframework.org/schema/security/spring-security.xsd">
+    
+    <http pattern="/" security="none"></http>
+    <http pattern="/resources/**" security="none"></http>
+    <http pattern="/signin/google" security="none"></http>
+    <http auto-config="true">
+        <intercept-url pattern="/ohmystreetfood/**" access="isAuthenticated()"/>
+        <form-login
+            login-page="/signin"
+            login-processing-url="/signin"
+            username-parameter="email"
+            password-parameter="password" 
+            authentication-success-handler-ref="myAuthenticationSuccessHandler" />
+            
+        <logout
+            logout-url="/logout"
+            logout-success-url="/"
+            delete-cookies="JSESSIONID" />
+    </http>
+    
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="admin@test.com" password="{noop}admin" authorities="ROLE_ADMIN" />
+                <user name="user@test.com" password="{noop}user" authorities="ROLE_USER" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+    
+    <beans:bean id="myAuthenticationSuccessHandler" class="org.omsf.main.MyAuthenticationSuccessHandler">
+        <beans:property name="defaultTargetUrl" value="/"/>
+    </beans:bean>
+
+	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+</beans:beans>
