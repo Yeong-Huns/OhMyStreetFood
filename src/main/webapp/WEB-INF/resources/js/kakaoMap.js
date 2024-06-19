@@ -17,12 +17,6 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 var geocoder = new kakao.maps.services.Geocoder();
 
 
-// 지도의 영역
-console.log(map.getBounds());
-console.log();
-//var sw = new kakao.maps.LatLng(36, 127),
-//    ne = new kakao.maps.LatLng(37, 128),
-//    lb = new kakao.maps.LatLngBounds(sw, ne);
 
 
 
@@ -47,25 +41,12 @@ var positions = [
     }
 ];
 
+var positions = getRandomPositions(30);
+
 // 마커 이미지의 이미지 주소입니다
 var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png"; 
     
-for (var i = 0; i < positions.length; i ++) {
-    
-    // 마커 이미지의 이미지 크기 입니다
-    var imageSize = new kakao.maps.Size(24, 35); 
-    
-    // 마커 이미지를 생성합니다    
-    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
-    
-    // 마커를 생성합니다
-    var marker = new kakao.maps.Marker({
-        map: map, // 마커를 표시할 지도
-        position: positions[i].latlng, // 마커를 표시할 위치
-        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-        image : markerImage // 마커 이미지 
-    });
-}
+
 
 
 var marker = new kakao.maps.Marker({ 
@@ -73,14 +54,20 @@ var marker = new kakao.maps.Marker({
     position: map.getCenter() 
 });
 marker.setMap(map);
+renderingMarker();
 
 
+kakao.maps.event.addListener(map, 'idle', function() {
+	      
+    renderingMarker();   
+    console.log("드래그 완료");   
+});
 
-//searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+
 
 // 마우스 드래그로 지도 이동이 완료되었을 때 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
 kakao.maps.event.addListener(map, 'bounds_changed', function() {        
-    
+//    renderingMarker();
     // 지도 중심좌표를 얻어옵니다 
     var latlng = map.getCenter();
     
@@ -96,19 +83,66 @@ kakao.maps.event.addListener(map, 'bounds_changed', function() {
 
 	
 //	searchAddrFromCoords(latlng, displayCenterInfo);
-	console.log(message);
+//	console.log(message);
 	
 	searchDetailAddrFromCoords(latlng, function(result, status) {
         if (status === kakao.maps.services.Status.OK) {
-            detailAddr = '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
-                        
+//            detailAddr = '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
+            detailAddr = result[0].address.address_name;
             var resultDiv = document.getElementById('result');  
     		resultDiv.innerHTML = detailAddr;
 
         }   
     });
     
+    
 });
+
+function renderingMarker(){
+	
+	// 지도의 영역
+	console.log(map.getBounds());
+	
+	var bounds = map.getBounds();
+	// 영역의 남서쪽 좌표를 얻어옵니다 
+	var swLatLng = bounds.getSouthWest(); 
+	    
+	// 영역의 북동쪽 좌표를 얻어옵니다 
+	var neLatLng = bounds.getNorthEast();  
+	
+	var sw = new kakao.maps.LatLng(swLatLng.getLat(), swLatLng.getLng()),
+	    ne = new kakao.maps.LatLng(neLatLng.getLat(), neLatLng.getLng()),
+	    mapBounds = new kakao.maps.LatLngBounds(sw, ne);
+	console.log(swLatLng);
+	console.log(neLatLng);
+	
+	for (var i = 0; i < positions.length; i ++) {
+    
+    // 마커 이미지의 이미지 크기 입니다
+    var imageSize = new kakao.maps.Size(24, 35); 
+    
+    // 마커 이미지를 생성합니다    
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+    
+    console.log("마커");
+    console.log(positions[i].latlng.La);
+    console.log(positions[i].latlng.Ma);
+    var isTrue = mapBounds.contain(new kakao.maps.LatLng(positions[i].latlng.Ma, positions[i].latlng.La));
+    console.log(isTrue);
+    
+    // 마커를 생성합니다
+    if(isTrue){
+		var marker = new kakao.maps.Marker({
+        map: map, // 마커를 표시할 지도
+        position: positions[i].latlng, // 마커를 표시할 위치
+        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+        image : markerImage // 마커 이미지 
+    	});
+	}
+
+}
+}
+
 
 function searchAddrFromCoords(coords, callback) {
     // 좌표로 행정동 주소 정보를 요청합니다
@@ -119,3 +153,26 @@ function searchDetailAddrFromCoords(coords, callback) {
     // 좌표로 법정동 상세 주소 정보를 요청합니다
     geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
 }
+
+// 랜덤
+function getRandomLatitude(min = 33, max = 34) {
+    return Math.random() * (max - min) + min;
+}
+
+function getRandomLongitude(min = 126, max = 127) {
+    return Math.random() * (max - min) + min;
+}
+
+function getRandomPositions(count) {
+    const positions = [];
+    for (let i = 0; i < count; i++) {
+        const latitude = getRandomLatitude();
+        const longitude = getRandomLongitude();
+        positions.push({
+            title: `Random Place ${i + 1}`,
+            latlng: new kakao.maps.LatLng(latitude, longitude)
+        });
+    }
+    return positions;
+}
+
