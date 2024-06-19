@@ -34,28 +34,32 @@ public class MemberController { // yunbin
     }
     
     @PostMapping("/signup/general")
-    public String signUpGeneralMember(@ModelAttribute("generalMember") @Valid GeneralMember generalMember,
-    		@RequestParam("passwordConfirm") String passwordConfirm,
+    public String signUpGeneralMember(@Valid GeneralMember generalMember,
                                       BindingResult result,
                                       Model model) {
-        if (result.hasErrors()) {
-        	model.addAttribute("generalMember", generalMember);
-            return "signupGeneral";
-        }
+        try {
+        	if (!generalMember.getPassword().equals(generalMember.getPasswordConfirm())) {
+			    result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
+			    model.addAttribute("generalMember", generalMember);
+			    return "signupGeneral";
+			}
+        	
+        	if (result.hasErrors()) {
+				model.addAttribute("generalMember", generalMember);
+			    return "signupGeneral";
+			}
 
-        if (!generalMember.getPassword().equals(passwordConfirm)) {
-            result.rejectValue("password", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
-            model.addAttribute("generalMember", generalMember);
-            return "signupGeneral";
-        }
-
-        generalMemberService.insertGeneralMember(generalMember);
-        model.addAttribute("success", true);
+			generalMemberService.insertGeneralMember(generalMember);
+			model.addAttribute("success", true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         return "redirect:/signin";
     }
     
-    @PostMapping("/signup/confirm")
+    @PostMapping("/signup/confirmId")
     @ResponseBody
     public ResponseEntity<Boolean> comfirmId(String username) {
     	boolean result = true;
@@ -63,7 +67,7 @@ public class MemberController { // yunbin
 		if(username.trim().isEmpty()) {
 			result = false;
 		} else {
-			if (generalMemberService.getMemberId(username)) {
+			if (generalMemberService.checkMemberId(username)) {
 				result = false;
 			} else {
 				result = true;
@@ -73,5 +77,22 @@ public class MemberController { // yunbin
 		return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
+    @PostMapping("/signup/confirmNickName")
+    @ResponseBody
+    public ResponseEntity<Boolean> comfirmNickName(String nickName) {
+    	boolean result = true;
+		
+		if(nickName.trim().isEmpty()) {
+			result = false;
+		} else {
+			if (generalMemberService.checkMemberNickName(nickName)) {
+				result = false;
+			} else {
+				result = true;
+			}
+		}
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+    }
     
 }

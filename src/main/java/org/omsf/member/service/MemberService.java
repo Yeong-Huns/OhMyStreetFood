@@ -4,6 +4,6 @@ import org.omsf.member.model.Member;
 
 public interface MemberService<T extends Member> {
 
-	boolean getMemberId(String username);
+	boolean checkMemberId(String username);
 
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 public class OnwerServiceImpl implements OwnerService {
 
 	@Override
-	public boolean getMemberId(String username) {
+	public boolean checkMemberId(String username) {
 		// TODO Auto-generated method stub
 		return false;
 	}

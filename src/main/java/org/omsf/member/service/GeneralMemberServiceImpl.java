@@ -19,7 +19,12 @@ public class GeneralMemberServiceImpl implements GeneralMemberService {
 	}
 
 	@Override
-	public boolean getMemberId(String username) {
-		return generalMemberRepository.getMemberId(username);
+	public boolean checkMemberId(String username) {
+		return generalMemberRepository.checkMemberId(username);
+	}
+
+	@Override
+	public boolean checkMemberNickName(String nickName) {
+		return generalMemberRepository.checkMemberNickName(nickName);
 	}
 }

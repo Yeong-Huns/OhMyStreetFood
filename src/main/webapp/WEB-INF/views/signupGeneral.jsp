@@ -22,22 +22,23 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-	let isDuplicateChecked = false;
-
+	let isIdDuplicateChecked = false;
+	let isNickNameDuplicateChecked = false;
+	
     $(document).ready(function() {
     	//ID 중복 확인
-    	$("#duplicateConfirm").click(function() {
+    	$("#idDuplicateConfirm").click(function() {
     		
     		var id = $("#username").val();
     		
     		if(id == '' || id.length == 0) {
-    			$("#alertLabel").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
+    			$("#idAlertLabel").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
     			return false;
     		}
     		
         	//Ajax로 전송
         	$.ajax({
-        		url : './confirm',
+        		url : './confirmId',
         		data : {
         			username : id
         		},
@@ -45,32 +46,78 @@
         		dataType : 'json',
         		success : function(result) {
         			if (result == true) {
-        				$("#alertLabel").css("color", "black").text("사용 가능한 ID 입니다.");
-        				isDuplicateChecked = true;
+        				$("#idAlertLabel").css("color", "black").text("사용 가능한 ID 입니다.");
+        				isIdDuplicateChecked = true;
         			} else{
-        				$("#alertLabel").css("color", "red").text("사용 불가능한 ID 입니다.");
+        				$("#idAlertLabel").css("color", "red").text("사용 불가능한 ID 입니다.");
         				$("#username").val('');
-        				isDuplicateChecked = false;
+        				isIdDuplicateChecked = false;
         			}
         		},
         		error: function(xhr, status, error) {
                     console.error("AJAX Error: " + status + error);
-                    isDuplicateChecked = false;
+                    isIdDuplicateChecked = false;
                 }
         	});
         	
     	});
     	
-    	// 아이디 중복 확인 후 수정했을 때 중복 확인 다시 해야 함
+    	// 닉네임 중복 확인 
+		$("#nickNameDuplicateConfirm").click(function() {
+    		
+    		var nickName = $("#nickName").val();
+    		
+    		if(nickName == '' || nickName.length == 0) {
+    			$("#nickNameAlertLabel").css("color", "red").text("공백은 닉네임으로 사용할 수 없습니다.");
+    			return false;
+    		}
+    		
+        	//Ajax로 전송
+        	$.ajax({
+        		url : './confirmNickName',
+        		data : {
+        			nickName : nickName
+        		},
+        		type : 'POST',
+        		dataType : 'json',
+        		success : function(result) {
+        			if (result == true) {
+        				$("#nickNameAlertLabel").css("color", "black").text("사용 가능한 닉네임 입니다.");
+        				isNickNameDuplicateChecked = true;
+        			} else{
+        				$("#nickNameAlertLabel").css("color", "red").text("사용 불가능한 닉네임 입니다.");
+        				$("#nickName").val('');
+        				isNickNameDuplicateChecked = false;
+        			}
+        		},
+        		error: function(xhr, status, error) {
+                    console.error("AJAX Error: " + status + error);
+                    isNickNameDuplicateChecked = false;
+                }
+        	});
+        	
+    	});
+    	
+    	// 중복 확인 후 수정했을 때 중복 확인 다시 해야 함
     	$("#username").on('input', function() {
-    		$("#alertLabel").empty();
-        	isDuplicateChecked = false;
+    		$("#idAlertLabel").empty();
+        	isIdDuplicateChecked = false;
         });
     	
-    	// 아이디 중복 확인 안했을 때 폼 제출 막기
+    	$("#nickName").on('input', function() {
+    		$("#nickNameAlertLabel").empty();
+        	isNickNameDuplicateChecked = false;
+        });
+    	
+    	// 중복 확인 안했을 때 폼 제출 막기
     	$("#generalMember").submit(function(event) {
-            if (!isDuplicateChecked) {
+            if (!isIdDuplicateChecked) {
                 alert("아이디 중복 확인을 해주세요.");
+                event.preventDefault();
+            }
+            
+            if (!isNickNameDuplicateChecked) {
+                alert("닉네임 중복 확인을 해주세요.");
                 event.preventDefault();
             }
         });
@@ -94,13 +141,15 @@
 				<div class="form-group">
 					<label for="username">아이디(이메일 주소)</label>
 				 	<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id" /> 
-				 	<input type="button" value="중복 확인" id="duplicateConfirm" /> 
-				 	<label id="alertLabel"></label>
+				 	<input type="button" value="중복 확인" id="idDuplicateConfirm" /> 
+				 	<label id="idAlertLabel"></label>
 					<form:errors path="username" cssClass="text-danger"/>
 				</div>
 				<div class="form-group">
 					<label for="nickName">닉네임</label>
 					<form:input type="text" path="nickName" class="form-control" placeholder="NickName" />
+					<input type="button" value="중복 확인" id="nickNameDuplicateConfirm" /> 
+					<label id="nickNameAlertLabel"></label>
 					<form:errors path="nickName" cssClass="text-danger"/>
 				</div>
 				<div class="form-group">
@@ -110,8 +159,8 @@
 				</div>
 				<div class="form-group">
 					<label for="passwordConfirm">비밀번호 확인</label> 
-					<input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Password Confirm">
-					<form:errors path="password" cssClass="text-danger"/>
+					<form:password path="passwordConfirm" class="form-control" placeholder="Password Confirm"/>
+					<form:errors path="passwordConfirm" cssClass="text-danger"/>
 				</div>
 				<div class="col-md-12">
 					<input type="submit" value="회원가입" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">

@@ -8,4 +8,10 @@
 		VALUES (
 		#{username}, #{nickName}, #{password}, '일반', '일반', SYSDATE, SYSDATE)
 	</insert>
+	
+	<select id="checkMemberNickName" resultType="boolean">
+		SELECT count(*)
+		FROM member
+		WHERE nickname = #{nickName}
+	</select>
 </mapper>
