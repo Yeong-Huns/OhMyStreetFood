@@ -140,17 +140,21 @@
 			<form:form modelAttribute="generalMember" action="${pageContext.request.contextPath}/signup/general" method="post">
 				<div class="form-group">
 					<label for="username">아이디(이메일 주소)</label>
-				 	<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id" /> 
-				 	<input type="button" value="중복 확인" id="idDuplicateConfirm" /> 
+					<span style="display: flex; align-items: center;">
+				 	<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id"/> 
+				 	<input type="button" value="중복 확인" id="idDuplicateConfirm" class="btn btn-primary"/> 
 				 	<label id="idAlertLabel"></label>
 					<form:errors path="username" cssClass="text-danger"/>
+					</span>
 				</div>
 				<div class="form-group">
 					<label for="nickName">닉네임</label>
+					<span style="display: flex; align-items: center;">
 					<form:input type="text" path="nickName" class="form-control" placeholder="NickName" />
-					<input type="button" value="중복 확인" id="nickNameDuplicateConfirm" /> 
+					<input type="button" value="중복 확인" id="nickNameDuplicateConfirm" class="btn btn-primary"/> 
 					<label id="nickNameAlertLabel"></label>
 					<form:errors path="nickName" cssClass="text-danger"/>
+					</span>
 				</div>
 				<div class="form-group">
 					<label for="password">비밀번호</label> 
