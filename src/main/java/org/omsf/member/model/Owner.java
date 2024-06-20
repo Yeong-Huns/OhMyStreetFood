@@ -4,19 +4,21 @@ import java.sql.Date;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @ToString
 @Getter
 @Setter
+@NoArgsConstructor
 public class Owner extends Member{
 	private String BankAccount;
 	
 	@Builder
-	public Owner(String username, String nickName, String password, String memberType, String loginType, Date createdAt,
+	public Owner(String username, String password, String loginType, Date createdAt,
 			Date modifiedAt, String BankAccount) {
-		super(username, nickName, password, memberType, loginType, createdAt, modifiedAt);
+		super(username, password, "사장", loginType, createdAt, modifiedAt);
 		this.BankAccount=BankAccount;
 	}
 

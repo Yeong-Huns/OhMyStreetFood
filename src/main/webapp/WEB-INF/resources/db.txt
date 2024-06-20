@@ -1,0 +1,148 @@
+-- 멤버 테이블
+CREATE TABLE member (
+    username    VARCHAR2(255 CHAR) NOT NULL,
+    nickname    VARCHAR2(255) NOT NULL,
+    password    VARCHAR2(255) NOT NULL,
+    membertype  VARCHAR2(50) NOT NULL,
+    logintype   VARCHAR2(50) NOT NULL,
+    bankaccount VARCHAR2(50 CHAR),
+    createdat   DATE NOT NULL,
+    modifiedat  DATE
+);
+
+ALTER TABLE member ADD CONSTRAINT member_pk PRIMARY KEY ( username );
+
+
+-- 점포 테이블
+CREATE TABLE store (
+    storeno         NUMBER NOT NULL,
+    storename       VARCHAR2(50 CHAR) NOT NULL,
+    latitude        NUMBER(20, 15) NOT NULL,
+    longitude       NUMBER(20, 15) NOT NULL,
+    address         VARCHAR2(255 CHAR) NOT NULL,
+    picture         BLOB,
+    operatingdate   VARCHAR2(50 CHAR),
+    operatinghours  VARCHAR2(50 CHAR),
+    rating          NUMBER(5, 3),
+    createdat       DATE NOT NULL,
+    modifiedat      DATE,
+    member_username VARCHAR2(255 CHAR) NOT NULL
+);
+
+CREATE UNIQUE INDEX store__idx ON store ( member_username ASC );
+
+ALTER TABLE store ADD CONSTRAINT store_pk PRIMARY KEY ( storeno );
+
+ALTER TABLE store
+    ADD CONSTRAINT store_member_fk FOREIGN KEY ( member_username )
+        REFERENCES member ( username );
+
+
+-- 메뉴 테이블
+CREATE TABLE menu (
+    menuno        NUMBER NOT NULL,
+    menuname      VARCHAR2(50 CHAR) NOT NULL,
+    price         NUMBER(10) NOT NULL,
+    createdat     DATE NOT NULL,
+    modifiedat    DATE,
+    store_storeno NUMBER NOT NULL
+);
+
+ALTER TABLE menu ADD CONSTRAINT menu_pk PRIMARY KEY ( menuno );
+
+ALTER TABLE menu
+    ADD CONSTRAINT menu_store_fk FOREIGN KEY ( store_storeno )
+        REFERENCES store ( storeno );
+
+
+-- 리뷰 테이블
+CREATE TABLE review (
+    reviewno        NUMBER NOT NULL,
+    rating          NUMBER(1) NOT NULL,
+    content         VARCHAR2(1000 CHAR),
+    createdat       DATE NOT NULL,
+    modifiedat      DATE,
+    member_username VARCHAR2(255 CHAR) NOT NULL,
+    store_storeno   NUMBER NOT NULL
+);
+
+ALTER TABLE review ADD CONSTRAINT review_pk PRIMARY KEY ( reviewno );
+
+ALTER TABLE review
+    ADD CONSTRAINT review_member_fk FOREIGN KEY ( member_username )
+        REFERENCES member ( username );
+
+ALTER TABLE review
+    ADD CONSTRAINT review_store_fk FOREIGN KEY ( store_storeno )
+        REFERENCES store ( storeno );
+
+
+-- 사진 테이블
+CREATE TABLE photo (
+    photono       NUMBER NOT NULL,
+    contenttype   VARCHAR2(50 CHAR) NOT NULL,
+    filesize      NUMBER(20) NOT NULL,
+    picture       BLOB NOT NULL,
+    createdat     DATE NOT NULL,
+    store_storeno NUMBER NOT NULL
+);
+
+ALTER TABLE photo ADD CONSTRAINT photo_pk PRIMARY KEY ( photono );
+
+ALTER TABLE photo
+    ADD CONSTRAINT photo_store_fk FOREIGN KEY ( store_storeno )
+        REFERENCES store ( storeno );
+
+
+-- 채팅 테이블
+CREATE TABLE chatroom (
+    chatroomno NUMBER NOT NULL,
+    createdat  DATE NOT NULL
+);
+
+ALTER TABLE chatroom ADD CONSTRAINT chatroom_pk PRIMARY KEY ( chatroomno );
+
+
+-- 메세지 테이블
+CREATE TABLE message (
+    messageno                NUMBER NOT NULL,
+    content                  VARCHAR2(1000 CHAR) NOT NULL,
+    createdat                DATE NOT NULL,
+    roommember_roommember_id NUMBER NOT NULL
+);
+
+ALTER TABLE message ADD CONSTRAINT message_pk PRIMARY KEY ( messageno );
+
+ALTER TABLE message
+    ADD CONSTRAINT message_chatroommember_fk FOREIGN KEY ( roommember_roommember_id )
+        REFERENCES chatroommember ( chatroommember_id );
+
+
+-- 채팅방 테이블
+CREATE TABLE chatroommember (
+    chatroommember_id   NUMBER NOT NULL,
+    member_username     VARCHAR2(255 CHAR) NOT NULL,
+    chatroom_chatroomno NUMBER NOT NULL,
+    isvisible           CHAR(1) NOT NULL
+);
+
+ALTER TABLE chatroommember ADD CONSTRAINT chatroommember_pk PRIMARY KEY ( chatroommember_id );
+
+ALTER TABLE chatroommember
+    ADD CONSTRAINT chatroommember_chatroom_fk FOREIGN KEY ( chatroom_chatroomno )
+        REFERENCES chatroom ( chatroomno );
+
+ALTER TABLE chatroommember
+    ADD CONSTRAINT chatroommember_member_fk FOREIGN KEY ( member_username )
+        REFERENCES member ( username );
+
+CREATE SEQUENCE chatroommember_chatroommember_ START WITH 1 NOCACHE ORDER;
+
+CREATE OR REPLACE TRIGGER chatroommember_chatroommember_ BEFORE
+    INSERT ON chatroommember
+    FOR EACH ROW
+    WHEN ( new.chatroommember_id IS NULL )
+BEGIN
+    :new.chatroommember_id := chatroommember_chatroommember_.nextval;
+END;
+/
