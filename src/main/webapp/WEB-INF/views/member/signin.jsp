@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -53,13 +53,20 @@
 				</div>
 			</form>
 			<div class="col-md-12 text-center">
-				<a href="/signup/owner">가게 사장님 회원가입하기</a>
+				<a href="./signup/owner">가게 사장님 회원가입하기</a>
 			</div>
 		</div>
 	</div>
 
 	<!-- Bootstrap JS -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+        window.onload = function() {
+            var success = '${success}';
+            if (success === true) {
+                alert('회원가입이 완료되었습니다.');
+            }
+        }
+	</script>
 </body>
 </html>

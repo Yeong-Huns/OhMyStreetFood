@@ -22,25 +22,43 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-	let isIdDuplicateChecked = false;
-	let isNickNameDuplicateChecked = false;
+	var isIdDuplicateChecked = false;
+	var isNickNameDuplicateChecked = false;
 	
     $(document).ready(function() {
+    	// 사장님 회원가입일 경우 닉네임 입력 숨기기 
+    	var memberType = "${memberType}";
+
+        if (memberType === "owner") {
+            $("#nickNameGroup").hide(); 
+        } else {
+            $("#nickNameGroup").show(); 
+        }
+        
     	//ID 중복 확인
     	$("#idDuplicateConfirm").click(function() {
-    		
     		var id = $("#username").val();
-    		
+            var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            
     		if(id == '' || id.length == 0) {
     			$("#idAlertLabel").css("color", "red").text("공백은 ID로 사용할 수 없습니다.");
+    			isIdDuplicateChecked = false;
     			return false;
     		}
+    		
+    		// 이메일 형식 확인
+            if (!emailPattern.test(id)) {
+                $("#idAlertLabel").css("color", "red").text("사용 불가능한 ID 입니다.");
+                isIdDuplicateChecked = false;
+                return false; 
+            }
     		
         	//Ajax로 전송
         	$.ajax({
         		url : './confirmId',
         		data : {
-        			username : id
+        			username : id,
+        			memberType : "${memberType}"
         		},
         		type : 'POST',
         		dataType : 'json',
@@ -50,7 +68,6 @@
         				isIdDuplicateChecked = true;
         			} else{
         				$("#idAlertLabel").css("color", "red").text("사용 불가능한 ID 입니다.");
-        				$("#username").val('');
         				isIdDuplicateChecked = false;
         			}
         		},
@@ -120,6 +137,7 @@
                 alert("닉네임 중복 확인을 해주세요.");
                 event.preventDefault();
             }
+            
         });
     	
     });
@@ -137,22 +155,18 @@
 			<div class="col-md-12 text-center" id="logo">
 				<h3>회원가입</h3>
 			</div>
-			<form:form modelAttribute="generalMember" action="${pageContext.request.contextPath}/signup/general" method="post">
+			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/signup/${memberType}" method="post">
 				<div class="form-group">
 					<label for="username">아이디(이메일 주소)</label>
-					<span style="display: flex; align-items: center;">
-				 	<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id"/> 
-				 	<input type="button" value="중복 확인" id="idDuplicateConfirm" class="btn btn-primary"/> 
-					</span>
+				 	<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id" /> 
+				 	<input type="button" value="중복 확인" id="idDuplicateConfirm" /> 
 				 	<label id="idAlertLabel"></label>
 					<form:errors path="username" cssClass="text-danger"/>
 				</div>
-				<div class="form-group">
+				<div class="form-group" id="nickNameGroup">
 					<label for="nickName">닉네임</label>
-					<span style="display: flex; align-items: center;">
 					<form:input type="text" path="nickName" class="form-control" placeholder="NickName" />
-					<input type="button" value="중복 확인" id="nickNameDuplicateConfirm" class="btn btn-primary"/> 
-					</span>
+					<input type="button" value="중복 확인" id="nickNameDuplicateConfirm" /> 
 					<label id="nickNameAlertLabel"></label>
 					<form:errors path="nickName" cssClass="text-danger"/>
 				</div>
@@ -175,13 +189,5 @@
 
 	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-        window.onload = function() {
-            var success = ${success};
-            if (success === 'true') {
-                alert('회원가입이 완료되었습니다.');
-            }
-        }
-	</script>
 </body>
 </html>
