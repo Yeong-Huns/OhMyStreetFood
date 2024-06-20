@@ -26,14 +26,7 @@
 	var isNickNameDuplicateChecked = false;
 	
     $(document).ready(function() {
-    	// 사장님 회원가입일 경우 닉네임 입력 숨기기 
-    	var memberType = "${memberType}";
 
-        if (memberType === "owner") {
-            $("#nickNameGroup").hide(); 
-        } else {
-            $("#nickNameGroup").show(); 
-        }
         
     	//ID 중복 확인
     	$("#idDuplicateConfirm").click(function() {
@@ -55,7 +48,7 @@
     		
         	//Ajax로 전송
         	$.ajax({
-        		url : './confirmId',
+        		url : '/signup/confirmId',
         		data : {
         			username : id,
         			memberType : "${memberType}"
@@ -91,7 +84,7 @@
     		
         	//Ajax로 전송
         	$.ajax({
-        		url : './confirmNickName',
+        		url : '/signup/confirmNickName',
         		data : {
         			nickName : nickName
         		},
@@ -140,6 +133,10 @@
             
         });
     	
+    	$(".form-control").on('input', function() {
+    		$(".text-danger").empty();
+        });
+    	
     });
 </script>
 </head>
@@ -155,7 +152,8 @@
 			<div class="col-md-12 text-center" id="logo">
 				<h3>회원가입</h3>
 			</div>
-			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/signup/${memberType}" method="post">
+			
+			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
 				<div class="form-group">
 					<label for="username">아이디(이메일 주소)</label>
 				 	<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id" /> 
@@ -163,13 +161,15 @@
 				 	<label id="idAlertLabel"></label>
 					<form:errors path="username" cssClass="text-danger"/>
 				</div>
-				<div class="form-group" id="nickNameGroup">
-					<label for="nickName">닉네임</label>
-					<form:input type="text" path="nickName" class="form-control" placeholder="NickName" />
-					<input type="button" value="중복 확인" id="nickNameDuplicateConfirm" /> 
-					<label id="nickNameAlertLabel"></label>
-					<form:errors path="nickName" cssClass="text-danger"/>
-				</div>
+				<c:if test="${member.memberType != 'owner'}">
+			        <div class="form-group" id="nickNameGroup">
+			            <label for="nickName">닉네임</label>
+			            <form:input type="text" path="nickName" class="form-control" placeholder="NickName" />
+			            <input type="button" value="중복 확인" id="nickNameDuplicateConfirm" /> 
+			            <label id="nickNameAlertLabel"></label>
+			            <form:errors path="nickName" cssClass="text-danger"/>
+			        </div>
+			    </c:if>
 				<div class="form-group">
 					<label for="password">비밀번호</label> 
 					<form:password path="password" class="form-control" placeholder="비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다."/>
@@ -181,6 +181,8 @@
 					<form:errors path="passwordConfirm" cssClass="text-danger"/>
 				</div>
 				<div class="col-md-12">
+					<form:hidden path="memberType" value="${member.memberType}"/>
+					<form:hidden path="loginType" value="email"/>
 					<input type="submit" value="회원가입" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">
 				</div>
 			</form:form>

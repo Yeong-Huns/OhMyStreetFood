@@ -35,35 +35,38 @@ public class MemberController { // yunbin
     @GetMapping("/signup/{memberType}")
     public String showGeneralSignUpPage(@PathVariable String memberType, Model model) {
     	if (memberType.equals("general")) {
-    		GeneralMember generalMember = new GeneralMember();
+    		GeneralMember generalMember = GeneralMember.builder().memberType(memberType).build();
     		model.addAttribute("member", generalMember);
-    		
     	}
     	else {
-    		Owner owner = new Owner();
+    		Owner owner = Owner.builder().memberType(memberType).build();
     		model.addAttribute("member", owner);
     	}
     	
-    	model.addAttribute("memberType", memberType);
         return "member/signup";
     }
 
     
     @PostMapping("/signup/general")
-    public String signUpMember(@Valid @ModelAttribute("member") GeneralMember generalMember,
+    public String processSignUp(@Valid @ModelAttribute("member") GeneralMember generalMember,
                                       BindingResult result,
                                       Model model,
                                       RedirectAttributes redirectAttributes) {
         try {
-        	if (!generalMember.getPassword().equals(generalMember.getPasswordConfirm())) {
+        	if (!generalMember.getPasswordConfirm().isEmpty() &&
+        			!generalMember.getPassword().equals(generalMember.getPasswordConfirm())) {
 			    result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
-			    model.addAttribute("generalMember", generalMember);
-			    return "member/signupGeneral";
+			    model.addAttribute("member", generalMember);
+			    System.out.println(generalMember);
+			    System.out.println(generalMember.getMemberType());
+			    return "member/signup";
 			}
         	
         	if (result.hasErrors()) {
-				model.addAttribute("generalMember", generalMember);
-			    return "member/signupGeneral";
+				model.addAttribute("member", generalMember);
+				System.out.println(generalMember);
+				System.out.println(generalMember.getMemberType());
+				return "member/signup";
 			}
 
 			generalMemberService.insertGeneralMember(generalMember);
@@ -77,11 +80,12 @@ public class MemberController { // yunbin
     }
     
     @PostMapping("/signup/owner")
-    public String signUpMember(@Valid @ModelAttribute("member") Owner owner,
+    public String processSignUp(@Valid @ModelAttribute("member") Owner owner,
                                       BindingResult result,
                                       Model model) {
         try {
-        	if (!owner.getPassword().equals(owner.getPasswordConfirm())) {
+        	if (!owner.getPasswordConfirm().isEmpty() &&
+        			!owner.getPassword().equals(owner.getPasswordConfirm())) {
 			    result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
 			    model.addAttribute("owner", owner);
 			    return "member/signup";
@@ -92,7 +96,9 @@ public class MemberController { // yunbin
 			    return "member/signup";
 			}
 
-			//ownerService.insertOwner(owner);
+			ownerService.insertOwner(owner);
+			model.addAttribute("owner", owner);
+			model.addAttribute("success", true);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,17 +109,26 @@ public class MemberController { // yunbin
     
     @PostMapping("/signup/confirmId")
     @ResponseBody
-    public ResponseEntity<Boolean> comfirmId(String username) {
+    public ResponseEntity<Boolean> comfirmId(String username, String memberType) {
     	boolean result = true;
 		
 		if(username.trim().isEmpty()) {
 			result = false;
 		} else {
-			if (generalMemberService.checkMemberId(username)) {
-				result = false;
+			if (memberType.equals("general")) {
+				if (generalMemberService.checkMemberId(username)) {
+					result = false;
+				} else {
+					result = true;
+				}
 			} else {
-				result = true;
+				if (ownerService.checkMemberId(username)) {
+					result = false;
+				} else {
+					result = true;
+				}
 			}
+			
 		}
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);

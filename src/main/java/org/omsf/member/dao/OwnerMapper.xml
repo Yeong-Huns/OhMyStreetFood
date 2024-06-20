@@ -2,4 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.omsf.member.dao.OwnerRepository">
+	<insert id="insertOwner">
+		INSERT INTO member(
+		username, password, membertype, logintype, createdat, modifiedat)
+		VALUES (
+		#{username}, #{password}, #{memberType}, #{loginType}, SYSDATE, SYSDATE)
+	</insert>
 </mapper>
