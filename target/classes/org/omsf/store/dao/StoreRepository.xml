@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="org.omsf.store.dao.StoreRepository">
+
+  <insert id="createStore" parameterType="org.omsf.store.model.Store">
+        INSERT INTO store
+        (
+            storeName,
+            latitude,
+            longitude,
+            address,
+            createdAt,
+            modifiedAt,
+            <trim suffixOverrides=",">
+                MEMBER_USERNAME,
+                <if test="picture != null">picture,</if>
+                <if test="introduce != null">introduce,</if>
+                <if test="operatingDate != null">operatingDate,</if>
+                <if test="operatingHours != null">operatingHours,</if>
+                <if test="totalReview != null">totalReview,</if>
+                <if test="totalRating != null">totalRating,</if>
+                <if test="likes != null">likes,</if>
+            </trim>
+        )
+        VALUES
+        (
+            #{storeName},
+            #{latitude},
+            #{longitude},
+            #{address},
+            sysdate,
+            sysdate,
+            <trim suffixOverrides=",">
+                #{username},
+                <if test="picture != null">#{picture},</if> 
+                <if test="introduce != null">#{introduce},</if>
+                <if test="operatingDate != null">#{operatingDate},</if>
+                <if test="operatingHours != null">#{operatingHours},</if>
+                <if test="totalReview != null">#{totalReview},</if>
+                <if test="totalRating != null">#{totalRating},</if>
+                <if test="likes != null">#{likes},</if>
+            </trim>
+        )
+    </insert>
+
+</mapper>

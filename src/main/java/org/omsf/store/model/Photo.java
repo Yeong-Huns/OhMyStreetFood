@@ -15,7 +15,8 @@ public class Photo {
 	private int photoNo;
 	private String contentType;
 	private int fileSize;
-	//private String picture;
+	private String picture;
 	private Date createdAt;
-	private Store store;
+	
+	private String storeNo;
 }

@@ -11,8 +11,7 @@ public interface StoreRepository {
 	List<Store> getStoreByposition();
 	
 	Optional<Store> getStoreByNo(int storeNo);
-	void createStore();
-//	void createStore(Store store);
+	void createStore(Store store);
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
 	

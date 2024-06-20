@@ -18,7 +18,7 @@ public class Store {
 	private double latitude;
 	private double longitude;
 	private String address;
-	//private byte[] pricture;
+	private String picture;
 	private String introduce;
 	private String operatingDate;
 	private String operatingHours;
@@ -27,5 +27,6 @@ public class Store {
 	private int likes;
 	private Date createdAt;
 	private Date modifiedAt;
-	//private UserVO user;
+	
+	private String username;
 }
