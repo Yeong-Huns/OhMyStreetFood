@@ -2,6 +2,7 @@ package org.omsf.review.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
 
@@ -20,7 +21,7 @@ public interface ReviewRepository {
 	Review getReviewByReviewNo(int reviewNo);
 	
 	// 리뷰 수정
-	void updateReview(RequestReview review);
+	void updateReview(@Param("reviewNo") int reviewNo, @Param("review") RequestReview review);
 	
 	// 리뷰 삭제
 	void deleteReview(int reviewNo);
