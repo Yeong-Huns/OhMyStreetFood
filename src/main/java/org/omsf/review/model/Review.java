@@ -10,8 +10,8 @@ public class Review {
 	private int reviewNo;
 	private int rating;
 	private String content;
-	private Date createDat;
-	private Date modifieDat;
+	private Date createdAt;
+	private Date modifiedAt;
 	private String memberUserName;
 	private int storeStoreNo;
 }
