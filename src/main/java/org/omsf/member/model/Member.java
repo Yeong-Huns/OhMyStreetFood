@@ -37,6 +37,10 @@ public class Member {
 	private Date createdAt;
 	private Date modifiedAt;
 	
+	public Member(String memberType) {
+		this.memberType=memberType;
+	}
+	
 	public Member(String username, String password, String memberType, String loginType, Date createdAt, Date modifiedAt) {
 		this.username = username;
 		this.password = password;

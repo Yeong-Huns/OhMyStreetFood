@@ -3,28 +3,27 @@
     xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans 
-    https://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/security 
-    http://www.springframework.org/schema/security/spring-security.xsd">
-    
-    <http pattern="/" security="none"></http>
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security 
+        http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http pattern="/ohmystreetfood" security="none"></http>
+    <http pattern="/ohmystreetfood/signin/google" security="none"></http>
     <http pattern="/resources/**" security="none"></http>
-    <http pattern="/signin/google" security="none"></http>
+
     <http auto-config="true">
-        <intercept-url pattern="/ohmystreetfood/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/ohmystreetfood/**" access="isAuthenticated()" />
         <form-login
-            login-page="/signin"
+            login-page="/ohmystreetfood/signin"
             login-processing-url="/signin"
-            username-parameter="email"
-            password-parameter="password" 
-            authentication-success-handler-ref="myAuthenticationSuccessHandler" />
-            
+            default-target-url="/"
+            authentication-failure-url="/ohmystreetfood/signin?error=true" />
         <logout
-            logout-url="/logout"
-            logout-success-url="/"
+            logout-url="/ohmystreetfood/logout"
+            logout-success-url="/ohmystreetfood"
             delete-cookies="JSESSIONID" />
     </http>
-    
+
     <authentication-manager>
         <authentication-provider>
             <user-service>
@@ -33,10 +32,11 @@
             </user-service>
         </authentication-provider>
     </authentication-manager>
-    
+
     <beans:bean id="myAuthenticationSuccessHandler" class="org.omsf.main.MyAuthenticationSuccessHandler">
         <beans:property name="defaultTargetUrl" value="/"/>
     </beans:bean>
 
-	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
 </beans:beans>

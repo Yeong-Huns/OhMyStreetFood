@@ -18,8 +18,7 @@
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
 	rel="stylesheet">
 <!-- CSS -->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/styles.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
 	<div class="main">
@@ -33,27 +32,31 @@
 			<div class="col-md-12 text-center" id="logo">
 				<h3>로그인</h3>
 			</div>
-			<form>
+			<form action="${pageContext.request.contextPath}/signin" method="post">
 				<div class="form-group">
-					<label for="exampleInputEmail1">이메일 주소</label> <input type="email"
-						class="form-control" id="exampleInputEmail1"
-						aria-describedby="emailHelp" placeholder="Email">
+					<label for="username">이메일 주소</label> 
+					<input type="email" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="Email">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputPassword1">비밀번호</label> <input
-						type="password" class="form-control" id="exampleInputPassword1"
-						placeholder="Password">
+					<label for="password">비밀번호</label> 
+					<input type="password" class="form-control" id="password" name="password" placeholder="Password">
 				</div>
 
+				<c:if test="${param.error}">
+					<div class="alert alert-danger">
+                		사용자ID 또는 비밀번호를 확인해 주세요.
+            		</div>
+				</c:if>
 				<div class="col-md-12">
-					<button type="button" onclick="window.location.href='./signup';" class="btn btn-primary"
+					<button type="submit" class="btn btn-primary"
 						style="height: 50px; width: 100%; margin-bottom: 20px;">로그인하기</button>
-					<button type="button" onclick="window.location.href='./signup/general';" class="btn btn-outline-primary"
+					<button type="button" onclick="window.location.href='${pageContext.request.contextPath}/signup/general';" class="btn btn-outline-primary"
 						style="height: 50px; width: 100%; margin-bottom: 20px;">회원가입하기</button>
 				</div>
+				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</form>
 			<div class="col-md-12 text-center">
-				<a href="./signup/owner">가게 사장님 회원가입하기</a>
+				<a href="${pageContext.request.contextPath}/signup/owner">가게 사장님 회원가입하기</a>
 			</div>
 		</div>
 	</div>

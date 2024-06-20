@@ -6,7 +6,7 @@
 		INSERT INTO member (
 		username, nickname, password, membertype, logintype, createdat, modifiedat)
 		VALUES (
-		#{username}, #{nickName}, #{password}, '일반', '일반', SYSDATE, SYSDATE)
+		#{username}, #{nickName}, #{password}, #{memberType}, #{loginType}, SYSDATE, SYSDATE)
 	</insert>
 	
 	<select id="checkMemberNickName" resultType="boolean">
