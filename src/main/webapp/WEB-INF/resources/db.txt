@@ -22,8 +22,9 @@ CREATE TABLE store (
     address         VARCHAR2(255 CHAR) NOT NULL,
     picture         BLOB,
     operatingdate   VARCHAR2(50 CHAR),
-    operatinghours  VARCHAR2(50 CHAR),
-    rating          NUMBER(5, 3),
+    starttime       DATE,
+    endtime         DATE,
+    totalrating     NUMBER(5, 3) DEFAULT 0.0,
     createdat       DATE NOT NULL,
     modifiedat      DATE,
     member_username VARCHAR2(255 CHAR) NOT NULL
@@ -37,6 +38,22 @@ ALTER TABLE store
     ADD CONSTRAINT store_member_fk FOREIGN KEY ( member_username )
         REFERENCES member ( username );
 
+CREATE SEQUENCE store_seq
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;
+    
+CREATE OR REPLACE TRIGGER store_bir 
+BEFORE INSERT ON store
+FOR EACH ROW
+WHEN (NEW.storeno IS NULL)
+BEGIN
+    SELECT store_seq.NEXTVAL
+    INTO   :NEW.storeno
+    FROM   dual;
+END;
+/
 
 -- 메뉴 테이블
 CREATE TABLE menu (

@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import org.omsf.store.dao.StoreRepository;
 import org.omsf.store.model.Store;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
 	
+	@Autowired
 	private final StoreRepository storeRepository;
 	
 	@Override
@@ -63,6 +65,13 @@ public class StoreServiceImpl implements StoreService {
 		int reviewCount = store.getTotalReview() + 1;
 		store.setTotalReview(reviewCount++);
 		return store;
+	}
+
+	
+	// jaeeun
+	@Override
+	public void addStore(Store store) {
+		storeRepository.insertStore(store);
 	}
 
 }
