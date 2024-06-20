@@ -17,8 +17,7 @@ public interface StoreRepository {
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
 	
-	void updateTotalReview(Store store);
-	void updateTotalRating(Store store);
+	void updateTotalReviewAndRating(Store store);
 	void updateLikes(Store store);
 	void createPhoto(Photo photo);
 	void deletePhoto(int PhotoNo);

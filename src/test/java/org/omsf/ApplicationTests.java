@@ -62,10 +62,10 @@ public class ApplicationTests {
 		ArrayList<MultipartFile> files = new ArrayList<>();
 	    files.add(file);
 		
-		storeRepository.createStore(store);
-		int storeNo = storeRepository.getStoreNo();
+		int storeNo = storeService.createStore(store);
 		System.out.println("생성된 storeNo: " + storeNo);
 		storeService.UploadImage(files, storeNo);
-		
+		Store dbStore = storeRepository.getStoreByNo(storeNo).get();
+		System.out.println(dbStore);
 	}
 }
