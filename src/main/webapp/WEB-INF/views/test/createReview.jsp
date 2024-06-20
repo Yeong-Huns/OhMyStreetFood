@@ -17,8 +17,8 @@
 			<form:form method="post" modelAttribute="requestReview">
 				<form:errors path="*" />
 				<p>
-					<form:hidden path="memberUserName" />
-					<form:errors path="memberUserName" />
+					<form:hidden path="memberUsername" />
+					<form:errors path="memberUsername" />
 				</p>
 				<p>
 					<form:hidden path="storeStoreNo" />
