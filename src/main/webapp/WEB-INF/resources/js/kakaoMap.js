@@ -118,6 +118,7 @@ async function displayLocation() {
         searchDetailAddrFromCoords(latlng, function(result, status) {
             if (status === kakao.maps.services.Status.OK) {
                 var detailAddr = result[0].address.address_name;
+                	detailAddr += latlng;
                 var resultDiv = document.getElementById('result');  
                 resultDiv.innerHTML = detailAddr;
             }   
