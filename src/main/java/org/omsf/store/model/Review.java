@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class ReviewVO {
+public class Review {
 	
 	private int reviewNo;
 	private int rating;
@@ -19,5 +19,5 @@ public class ReviewVO {
 	private Date createdAt;
 	private Date modifiedAt;
 	//	private UserVO user;
-	private StoreVO store;
+	private Store store;
 }

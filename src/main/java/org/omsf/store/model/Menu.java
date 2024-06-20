@@ -11,12 +11,12 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class MenuVO {
+public class Menu {
 	private int menuNo;
 	private String menuName;
 	private long price;
 	private Date createdAt;
 	private Date modifiedAt;
 	
-	private StoreVO store;
+	private Store store;
 }

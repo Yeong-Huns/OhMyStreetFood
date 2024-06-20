@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class StoreVO {
+public class Store {
 	
 	private int storeNo;
 	private String storeName;

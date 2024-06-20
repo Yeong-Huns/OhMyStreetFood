@@ -2,19 +2,19 @@ package org.omsf.store.service;
 
 import java.util.List;
 
-import org.omsf.store.model.StoreVO;
+import org.omsf.store.model.Store;
 
 public interface StoreService {
 	
-	List<StoreVO> getStoreByposition();
+	List<Store> getStoreByposition();
 	
-	StoreVO getStoreByNo(int storeNo);
-	void createStore(StoreVO store);
-	void updateStore(StoreVO store);
+	Store getStoreByNo(int storeNo);
+	void createStore(Store store);
+	void updateStore(Store store);
 	void deleteStore(int storeNo);
 	
-	StoreVO updateTotalReview(StoreVO store);
-	StoreVO updateTotalRating(StoreVO store);
-	StoreVO updateLikes(StoreVO store);
+	Store updateTotalReview(Store store);
+	Store updateTotalRating(Store store);
+	Store updateLikes(Store store);
 	
 }
