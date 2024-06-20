@@ -2,10 +2,13 @@ package org.omsf.review.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
+import org.springframework.stereotype.Repository;
 
+@Repository("reviewDao")
 public interface ReviewRepository {
 
 	// 리뷰 등록
