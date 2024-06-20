@@ -14,9 +14,9 @@ import lombok.ToString;
 public class Photo {
 	private int photoNo;
 	private String contentType;
-	private int fileSize;
+	private long fileSize;
 	private String picture;
 	private Date createdAt;
 	
-	private String storeNo;
+	private int storeNo;
 }

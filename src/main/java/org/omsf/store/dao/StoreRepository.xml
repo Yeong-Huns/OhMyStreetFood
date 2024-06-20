@@ -44,5 +44,28 @@
             </trim>
         )
     </insert>
-
+	
+	<select id="getStoreNo" resultType="int">
+		SELECT MAX(STORENO)
+		FROM STORE
+	</select>
+	
+	<insert id="createPhoto" parameterType="org.omsf.store.model.Photo">
+    INSERT INTO PHOTO 
+    (
+        CONTENTTYPE,
+        FILESIZE,
+        PICTURE,
+        CREATEDAT,
+        STORE_STORENO
+    )
+    VALUES
+    (
+        #{contentType},
+        #{fileSize},
+        #{picture},
+        sysdate,
+        #{storeNo}
+    )
+	</insert>
 </mapper>

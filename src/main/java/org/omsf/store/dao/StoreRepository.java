@@ -3,6 +3,7 @@ package org.omsf.store.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 
 public interface StoreRepository {
@@ -12,10 +13,13 @@ public interface StoreRepository {
 	
 	Optional<Store> getStoreByNo(int storeNo);
 	void createStore(Store store);
+	int getStoreNo();
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
 	
 	void updateTotalReview(Store store);
 	void updateTotalRating(Store store);
 	void updateLikes(Store store);
+	void createPhoto(Photo photo);
+	void deletePhoto(int PhotoNo);
 }

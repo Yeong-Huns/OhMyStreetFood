@@ -1,20 +1,26 @@
 package org.omsf.store.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import org.omsf.store.dao.StoreRepository;
+import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
 	
-	private final StoreRepository storeRepository;
+	@Autowired
+	private StoreRepository storeRepository;
 	
 	@Override
 	public List<Store> getStoreByposition() {
@@ -29,9 +35,10 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public void createStore(Store store) {
-		// TODO Auto-generated method stub
-
+	public int createStore(Store store) {
+		storeRepository.createStore(store);
+		int storeNo = storeRepository.getStoreNo();
+		return storeNo;
 	}
 
 	@Override
@@ -63,6 +70,52 @@ public class StoreServiceImpl implements StoreService {
 		int reviewCount = store.getTotalReview() + 1;
 		store.setTotalReview(reviewCount++);
 		return store;
+	}
+
+	@Override
+	public void UploadImage(ArrayList<MultipartFile> files, int storeNo) {
+		String savedFileName = "";
+//		String uploadPath = servletContext.getRealPath("/uploaded_files/");
+		String uploadPath = "/temp/uploaded_files/";
+       
+		ArrayList<String> originalFileNameList = new ArrayList<String>();
+        for(MultipartFile file : files) {
+            String originalFileName = file.getOriginalFilename();
+            originalFileNameList.add(originalFileName);
+            
+            UUID uuid = UUID.randomUUID();
+            // 확장자 추출
+            String fileExtension = "";
+            if (originalFileName != null && originalFileName.contains(".")) {
+                fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            }
+            savedFileName = uuid.toString() + fileExtension;
+
+            File file1 = new File(uploadPath + savedFileName);
+           
+            if (!file1.getParentFile().exists()) {
+                file1.getParentFile().mkdirs();
+            }
+            //서버로 전송
+            try {
+				file.transferTo(file1);
+			} catch (IllegalStateException e) {
+				
+				e.printStackTrace();
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
+            
+            Photo photo = Photo.builder()
+      			  .contentType(file.getContentType())
+      			  .fileSize(file.getSize())
+      			  .picture(uploadPath + savedFileName)
+      			  .storeNo(storeNo)
+      			  .build();
+           
+            storeRepository.createPhoto(photo);
+        }
 	}
 
 }
