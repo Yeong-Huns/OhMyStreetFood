@@ -21,7 +21,7 @@ public interface ReviewService {
 	Review getReviewByReviewNo(int reviewNo);
 	
 	// 리뷰 수정
-	void updateReview(@Param("reviewNo") int reviewNo, @Param("review") RequestReview review);
+	void updateReview(int reviewNo, RequestReview review);
 	
 	// 리뷰 삭제
 	void deleteReview(int reviewNo);
