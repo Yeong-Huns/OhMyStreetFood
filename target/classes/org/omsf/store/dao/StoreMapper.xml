@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
+
 <mapper namespace="org.omsf.store.dao.StoreRepository">
 
-	<insert id="createStore">
-	<![CDATA[
-		INSERT INTO 
-			TEST
-		VALUES 
-			(10)
-	]]>
+    <insert id="insertStore">
+    INSERT INTO store (storeName, address, latitude, longitude, introduce, operatingDate, operatingHours, totalReview, totalRating, likes, createdAt, modifiedAt, member_username)
+    VALUES (#{storeName}, #{address}, #{latitude}, #{longitude}, #{introduce}, #{operatingDate}, #{operatingHours}, 0, 1.0, 0, SYSDATE, SYSDATE, 'test9@naver.com')
 	</insert>
 
 </mapper>

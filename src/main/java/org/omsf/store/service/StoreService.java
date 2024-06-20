@@ -16,5 +16,8 @@ public interface StoreService {
 	Store updateTotalReview(Store store);
 	Store updateTotalRating(Store store);
 	Store updateLikes(Store store);
+
+	// jaeeun
+	void addStore(Store store);
 	
 }
