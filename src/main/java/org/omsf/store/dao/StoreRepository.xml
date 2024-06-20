@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="org.omsf.store.dao.StoreRepository">
+	
+  	<resultMap id="storeResultMap" type="org.omsf.store.model.Store">
+	    <id property="storeNo" column="STORENO"/>
+	    <result property="storeName" column="STORENAME"/>
+	    <result property="latitude" column="LATITUDE"/>
+	    <result property="longitude" column="LONGITUDE"/>
+	    <result property="address" column="ADDRESS"/>
+	    <result property="introduce" column="INTRODUCE"/>
+	    <result property="operatingDate" column="OPERATINGDATE"/>
+	    <result property="operatingHours" column="OPERATINGHOURS"/>
+	    <result property="totalReview" column="TOTALREVIEW"/>
+	    <result property="totalRating" column="TOTALRATING"/>
+	    <result property="likes" column="LIKES"/>
+	    <result property="createdAt" column="CREATEDAT"/>
+	    <result property="modifiedAt" column="MODIFIEDAT"/>
+	    <result property="username" column="MEMBER_USERNAME"/>
+	    <result property="picture" column="PICTURE"/>
+	</resultMap>
+  
+  <insert id="createStore" parameterType="org.omsf.store.model.Store">
+        INSERT INTO store
+        (
+            storeName,
+            latitude,
+            longitude,
+            address,
+            createdAt,
+            modifiedAt,
+            <trim suffixOverrides=",">
+                MEMBER_USERNAME,
+                <if test="picture != null">picture,</if>
+                <if test="introduce != null">introduce,</if>
+                <if test="operatingDate != null">operatingDate,</if>
+                <if test="operatingHours != null">operatingHours,</if>
+                <if test="totalReview != null">totalReview,</if>
+                <if test="totalRating != null">totalRating,</if>
+                <if test="likes != null">likes,</if>
+            </trim>
+        )
+        VALUES
+        (
+            #{storeName},
+            #{latitude},
+            #{longitude},
+            #{address},
+            sysdate,
+            sysdate,
+            <trim suffixOverrides=",">
+                #{username},
+                <if test="picture != null">#{picture},</if> 
+                <if test="introduce != null">#{introduce},</if>
+                <if test="operatingDate != null">#{operatingDate},</if>
+                <if test="operatingHours != null">#{operatingHours},</if>
+                <if test="totalReview != null">#{totalReview},</if>
+                <if test="totalRating != null">#{totalRating},</if>
+                <if test="likes != null">#{likes},</if>
+            </trim>
+        )
+    </insert>
+	
+	<select id="getStoreNo" resultType="int">
+		SELECT MAX(STORENO)
+		FROM STORE
+	</select>
+	
+	<insert id="createPhoto" parameterType="org.omsf.store.model.Photo">
+    INSERT INTO PHOTO 
+    (
+        CONTENTTYPE,
+        FILESIZE,
+        PICTURE,
+        CREATEDAT,
+        STORE_STORENO
+    )
+    VALUES
+    (
+        #{contentType},
+        #{fileSize},
+        #{picture},
+        sysdate,
+        #{storeNo}
+    )
+	</insert>
+	<update id="deletePhoto" parameterType="int">
+		DELETE PHOTO WHERE PHOTO = #{PhotoNo}
+	</update>
+	
+	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap">
+		SELECT *
+		FROM STORE
+		WHERE STORENO = #{storeNo}
+	</select>
+	<update id="updateStore">
+	    UPDATE STORE
+	    SET
+	        STORENAME = #{storeName},
+	        
+	        LATITUDE = #{latitude},
+	        LONGITUDE = #{longitude},
+	        ADDRESS = #{address},
+	        INTRODUCE = #{introduce},
+	        OPERATINGDATE = #{operatingDate},
+	        OPERATINGHOURS = #{operatingHours},
+	        MODIFIEDAT = sysdate
+	    WHERE
+	        STORENO = #{storeNo}
+	</update>
+	<update id="deleteStore" parameterType="int">
+	    DELETE STORE
+	    SET
+	        STORENO = #{storeNo}
+	</update>
+	
+	
+	<update id="updateTotalReviewAndRating">
+	    UPDATE STORE
+	     SET
+	        TOTALREVIEW = #{totalReview},
+	        TOTALRATING = #{totalRating}
+	     WHERE
+	        STORENO = #{storeNo}
+	</update>
+	<update id="updateLikes">
+	    UPDATE STORE
+	     SET
+	        LIKES = #{likes},
+	     WHERE
+	        STORENO = #{storeNo}
+	</update>
+
+
+</mapper>

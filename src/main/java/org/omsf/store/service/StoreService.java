@@ -1,15 +1,17 @@
 package org.omsf.store.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.omsf.store.model.Store;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface StoreService {
 	
 	List<Store> getStoreByposition();
 	
 	Store getStoreByNo(int storeNo);
-	void createStore(Store store);
+	int createStore(Store store);
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
 	
@@ -20,4 +22,5 @@ public interface StoreService {
 	// jaeeun
 	void addStore(Store store);
 	
+	void UploadImage(ArrayList<MultipartFile> files, int storeNo);
 }

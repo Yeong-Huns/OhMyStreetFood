@@ -1,6 +1,6 @@
 package org.omsf.store.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -20,11 +20,12 @@ public class Store {
 	private String introduce;
 	private String operatingDate;
 	private String operatingHours;
-	private Integer totalReview;
-	private Double totalRating;
-	private Integer likes;
-	private Date createdAt;
-	private Date modifiedAt;
+	private int totalReview;
+	private double totalRating;
+	private int likes;
+	private Timestamp createdAt;
+	private Timestamp modifiedAt;
+	private String picture;
+	
 	private String username;
-	private byte[] picture;
 }

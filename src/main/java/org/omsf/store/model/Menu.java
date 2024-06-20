@@ -18,5 +18,5 @@ public class Menu {
 	private Date createdAt;
 	private Date modifiedAt;
 	
-	private Store store;
+	private String storeNo;
 }
