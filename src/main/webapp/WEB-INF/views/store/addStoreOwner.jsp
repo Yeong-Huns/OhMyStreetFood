@@ -23,6 +23,12 @@
 <!-- CSS -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/styles.css">
+<<<<<<< HEAD
+=======
+<!-- JavaScript -->
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
+>>>>>>> ca535f1b0ed4c849fe611d468d3bcbfe5c9c17cb
 </head>
 <body>
 	<div class="main">
@@ -34,6 +40,7 @@
 				</a>
 			</div>
 			<div class="col-md-12 text-center" id="logo">
+<<<<<<< HEAD
 				<h3>가게 정보</h3>
 			</div>
 			<form>
@@ -102,11 +109,98 @@
 
 				<div class="col-md-12">
 					<button type="button" class="btn btn-primary"
+=======
+				<h3>가게 정보 등록</h3>
+			</div>
+			<form method="post"
+				action="${pageContext.request.contextPath}/store/addbyowner">
+				
+				<div>
+					<div class="col-md-12" id="map" style="width: 100%; height: 500px; border-radius: 20px"></div>
+					<div class="col-md-12" id="result"></div>
+				</div>
+				
+				<div class="form-group">
+					<label for="storeName">가게 이름</label> <input type="text"
+						class="form-control" id="storeName" name="storeName"
+						placeholder="가게 이름을 입력하세요">
+				</div>
+
+				<div class="form-group">
+					<label for="address">가게 주소</label> <input type="text"
+						class="form-control" id="address" name="address"
+						placeholder="가게 주소">
+				</div>
+				<div class="form-group">
+					<label for="latitude">위도</label> <input type="text"
+						class="form-control" id="latitude" name="latitude"
+						placeholder="위도">
+				</div>
+				<div class="form-group">
+					<label for="longitude">경도</label> <input type="text"
+						class="form-control" id="longitude" name="longitude"
+						placeholder="경도">
+				</div>
+				
+				<div class="form-group">
+					<label for="picture">가게 대표 사진</label> <input type="text"
+						class="form-control" id="picture" name="picture"
+						placeholder="가게 대표 사진">
+				</div>
+				
+			    <div class="form-group">
+			        <label for="operatingDate">가게 운영일자</label>
+			        <div class="form-control" id="operatingDate" name="operatingDate" style="padding: 20px 0 0 0; border: none;">
+			            <input type="checkbox" class="btn-check" id="btn-check-mon" name="days" value="월" autocomplete="off">
+			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-mon" data-value="월">월</label>
+			    
+			            <input type="checkbox" class="btn-check" id="btn-check-tue" name="days" value="화" autocomplete="off">
+			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-tue" data-value="화">화</label>
+			    
+			            <input type="checkbox" class="btn-check" id="btn-check-wed" name="days" value="수" autocomplete="off">
+			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-wed" data-value="수">수</label>
+			    
+			            <input type="checkbox" class="btn-check" id="btn-check-thu" name="days" value="목" autocomplete="off">
+			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-thu" data-value="목">목</label>
+			    
+			            <input type="checkbox" class="btn-check" id="btn-check-fri" name="days" value="금" autocomplete="off">
+			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-fri" data-value="금">금</label>
+			    
+			            <input type="checkbox" class="btn-check" id="btn-check-sat" name="days" value="토" autocomplete="off">
+			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-sat" data-value="토">토</label>
+			    
+			            <input type="checkbox" class="btn-check" id="btn-check-sun" name="days" value="일" autocomplete="off">
+			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-sun" data-value="일">일</label>
+			        </div>
+			    </div>
+
+
+				<div class="form-group" style="margin-bottom: 15px;">
+					<label for="operatingHours">가게 운영시간</label> 
+					<span style="display: flex; align-items: center;">
+					<input type="time" class="form-control" id="startTime" name="startTime"
+							placeholder="시작 시간 선택" style="width: 280px; margin-right: 10px;">
+						<span>&nbsp;부터&nbsp;</span> 
+					<input type="time" class="form-control" id="endTime" name="endTime"
+							placeholder="종료 시간 선택" style="width: 280px; margin-right: 10px;">
+						<span>&nbsp;까지&nbsp;</span>
+					</span>	
+				</div>
+
+				<div class="form-group">
+					<label for="introduce">가게 소개</label>
+					<textarea class="form-control" id="introduce" name="introduce" rows="5"></textarea>
+				</div>
+
+				<div class="col-md-12">
+					<button type="submit" class="btn btn-primary"
+>>>>>>> ca535f1b0ed4c849fe611d468d3bcbfe5c9c17cb
 						style="height: 50px; width: 100%; margin-bottom: 10px;">등록하기</button>
 				</div>
 			</form>
 		</div>
 	</div>
+<<<<<<< HEAD
 	<script>
 		document.getElementById('inputEndTime')
 				.addEventListener(
@@ -175,5 +269,11 @@
             document.getElementById('priceInput').value = "";
         }
 	</script>
+=======
+	
+	<!-- kakaoMap API key -->
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
+>>>>>>> ca535f1b0ed4c849fe611d468d3bcbfe5c9c17cb
 </body>
 </html>

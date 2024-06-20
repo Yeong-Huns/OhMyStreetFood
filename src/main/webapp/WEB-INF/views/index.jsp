@@ -32,10 +32,7 @@
 				</form>
 			</div>
 		
-			<div class="col-md-12" id="map" style="height: 500px;">
-				<!-- Example: <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_API_KEY&libraries=services"></script> -->
-				KAKAO MAP API
-			</div>
+			<div class="col-md-12" id="map" style="height: 500px;"></div>
 			
 			<div class="col-md-12" >
 			인기 점포

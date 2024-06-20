@@ -19,4 +19,7 @@ public interface StoreRepository {
 	void updateTotalReview(Store store);
 	void updateTotalRating(Store store);
 	void updateLikes(Store store);
+	
+	// jaeeun
+	void insertStore(Store store);
 }
