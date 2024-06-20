@@ -15,36 +15,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReviewServiceImpl implements ReviewService {
 
-	private final ReviewRepository reviewRepository;
+	private final ReviewRepository reviewDao;
 	
 	@Override
 	public void createReview(RequestReview review) {
-		reviewRepository.createReview(review);
+		reviewDao.createReview(review);
 	}
 
 	@Override
 	public List<Review> getReviewListByStoreId(int storeNo) {
-		return reviewRepository.getReviewListByStoreId(storeNo);
+		return reviewDao.getReviewListByStoreId(storeNo);
 	}
 
 	@Override
 	public List<Review> getReviewListByUsername(String userName) {
-		return reviewRepository.getReviewListByUsername(userName);
+		return reviewDao.getReviewListByUsername(userName);
 	}
 
 	@Override
 	public Review getReviewByReviewNo(int reviewNo) {
-		return reviewRepository.getReviewByReviewNo(reviewNo);
+		return reviewDao.getReviewByReviewNo(reviewNo);
 	}
 
 	@Override
 	public void updateReview(int reviewNo, RequestReview review) {
-		reviewRepository.updateReview(reviewNo, review);
+		reviewDao.updateReview(reviewNo, review);
 	}
 
 	@Override
 	public void deleteReview(int reviewNo) {
-		reviewRepository.deleteReview(reviewNo);
+		reviewDao.deleteReview(reviewNo);
 	}
 
 }
