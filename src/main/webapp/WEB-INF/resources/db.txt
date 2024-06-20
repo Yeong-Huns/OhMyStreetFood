@@ -55,7 +55,6 @@ BEGIN
 END;
 /
 
-
 -- 메뉴 테이블
 CREATE TABLE menu (
     menuno        NUMBER NOT NULL,
