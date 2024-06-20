@@ -12,6 +12,6 @@ public class Review {
 	private String content;
 	private Date createdAt;
 	private Date modifiedAt;
-	private String memberUserName;
+	private String memberUsername;
 	private int storeStoreNo;
 }

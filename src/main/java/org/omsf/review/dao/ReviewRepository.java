@@ -18,7 +18,7 @@ public interface ReviewRepository {
 	List<Review> getReviewListByStoreId(int storeNo);
 	
 	// 마이페이지 리뷰 목록 가져오기
-	List<Review> getReviewListByUsername(String userName);
+	List<Review> getReviewListByUsername(String username);
 	
 	// 리뷰 상세글 가져오기
 	Review getReviewByReviewNo(int reviewNo);

@@ -16,6 +16,6 @@ public class RequestReview {
 	@NotBlank
 	private String content;
 	
-	private String memberUserName;
+	private String memberUsername;
 	private int storeStoreNo;
 }

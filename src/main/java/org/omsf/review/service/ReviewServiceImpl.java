@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@Service
+@Service("reviewServ")
 @RequiredArgsConstructor
 @Slf4j
 public class ReviewServiceImpl implements ReviewService {
@@ -28,8 +28,8 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<Review> getReviewListByUsername(String userName) {
-		return reviewDao.getReviewListByUsername(userName);
+	public List<Review> getReviewListByUsername(String username) {
+		return reviewDao.getReviewListByUsername(username);
 	}
 
 	@Override
