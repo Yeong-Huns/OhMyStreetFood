@@ -47,7 +47,8 @@ public class ReviewController {
 	// 가게별 리뷰
 	@GetMapping("list/{storeId}")
 	public String testReviewList(@PathVariable("storeId") int storeId, Model model) {
-		model.addAttribute("list", reviewServ.getReviewListByStoreId(storeId));
+//		model.addAttribute("list", reviewServ.getReviewListByStoreId(storeId));
+		model.addAttribute("list", reviewServ.getReviewListOnStore(storeId));
 		return "test/getReviewListTest";
 	}
 	

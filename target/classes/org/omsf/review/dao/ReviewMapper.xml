@@ -71,5 +71,21 @@
 		WHERE REVIEWNO = #{reviewNo}
 	</delete>
 	
+	<!-- 가게별 최근 리뷰 5개 가져오기 -->
+	<select id="getReviewListOnStore" resultType="org.omsf.review.model.Review">
+		SELECT
+			REVIEWNO AS "reviewNo",
+			RATING AS "rating",
+			CONTENT AS "content",
+			CREATEDAT AS "createdAt",
+			MODIFIEDAT AS "modifiedAt",
+			MEMBER_USERNAME AS "memberUsername",
+			STORE_STORENO AS "storeStoreNo"
+		FROM REVIEW
+		WHERE STORE_STORENO = #{storeNo}
+		ORDER BY CREATEDAT DESC
+		OFFSET 0 ROWS FETCH
+		FIRST 5 ROWS ONLY
+	</select>
 	
 </mapper>
