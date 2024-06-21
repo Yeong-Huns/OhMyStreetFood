@@ -8,7 +8,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface StoreService {
 	
+
 	List<Store> getStoreByposition(String position);
+
 	
 	Store getStoreByNo(int storeNo);
 	int createStore(Store store);
@@ -20,4 +22,7 @@ public interface StoreService {
 	Store updateLikes(Store store);
 	
 	int UploadImage(ArrayList<MultipartFile> files, int storeNo);
+	
+	// jaeeun
+	void addStore(Store store);
 }

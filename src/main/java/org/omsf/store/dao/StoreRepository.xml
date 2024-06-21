@@ -4,24 +4,25 @@
     
 <mapper namespace="org.omsf.store.dao.StoreRepository">
 	
-  	<resultMap id="storeResultMap" type="org.omsf.store.model.Store">
-	    <id property="storeNo" column="STORENO"/>
-	    <result property="storeName" column="STORENAME"/>
-	    <result property="latitude" column="LATITUDE"/>
-	    <result property="longitude" column="LONGITUDE"/>
-	    <result property="address" column="ADDRESS"/>
-	    <result property="introduce" column="INTRODUCE"/>
-	    <result property="operatingDate" column="OPERATINGDATE"/>
-	    <result property="operatingHours" column="OPERATINGHOURS"/>
-	    <result property="totalReview" column="TOTALREVIEW"/>
-	    <result property="totalRating" column="TOTALRATING"/>
-	    <result property="likes" column="LIKES"/>
-	    <result property="createdAt" column="CREATEDAT"/>
-	    <result property="modifiedAt" column="MODIFIEDAT"/>
-	    <result property="username" column="MEMBER_USERNAME"/>
-	    <result property="picture" column="PICTURE"/>
-	</resultMap>
+<!--   	<resultMap id="storeResultMap" type="org.omsf.store.model.Store"> -->
+<!-- 	    <id property="storeNo" column="STORENO"/> -->
+<!-- 	    <result property="storeName" column="STORENAME"/> -->
+<!-- 	    <result property="latitude" column="LATITUDE"/> -->
+<!-- 	    <result property="longitude" column="LONGITUDE"/> -->
+<!-- 	    <result property="address" column="ADDRESS"/> -->
+<!-- 	    <result property="introduce" column="INTRODUCE"/> -->
+<!-- 	    <result property="operatingDate" column="OPERATINGDATE"/> -->
+<!-- 	    <result property="operatingHours" column="OPERATINGHOURS"/> -->
+<!-- 	    <result property="totalReview" column="TOTALREVIEW"/> -->
+<!-- 	    <result property="totalRating" column="TOTALRATING"/> -->
+<!-- 	    <result property="likes" column="LIKES"/> -->
+<!-- 	    <result property="createdAt" column="CREATEDAT"/> -->
+<!-- 	    <result property="modifiedAt" column="MODIFIEDAT"/> -->
+<!-- 	    <result property="username" column="MEMBER_USERNAME"/> -->
+<!-- 	    <result property="picture" column="PICTURE"/> -->
+<!-- 	</resultMap> -->
   
+
   <select id="getStoreByposition" resultType="org.omsf.store.model.Store">
   	<bind name="pattern" value="'%' + position + '%'" />
 <!--   	SELECT * FROM STORE WHERE ADDRESS LIKE #{pattern} -->
@@ -89,60 +90,103 @@
        		SELECT STORE_SEQ.CURRVAL FROM DUAL
   		</selectKey>
     </insert>
+
+<!--   <insert id="createStore" parameterType="org.omsf.store.model.Store"> -->
+<!--         INSERT INTO store -->
+<!--         ( -->
+<!--         	storeNo, -->
+<!--             storeName, -->
+<!--             latitude, -->
+<!--             longitude, -->
+<!--             address, -->
+<!--             createdAt, -->
+<!--             <trim suffixOverrides=","> -->
+<!--                 MEMBER_USERNAME, -->
+<!--                 <if test="picture != null">picture,</if> -->
+<!--                 <if test="introduce != null">introduce,</if> -->
+<!--                 <if test="operatingDate != null">operatingDate,</if> -->
+<!--                 <if test="operatingHours != null">operatingHours,</if> -->
+<!--                 <if test="totalReview != null">totalReview,</if> -->
+<!--                 <if test="totalRating != null">totalRating,</if> -->
+<!--                 <if test="likes != null">likes,</if> -->
+<!--             </trim> -->
+<!--         ) -->
+<!--         VALUES -->
+<!--         ( -->
+<!--         	STORE_SEQ.NEXTVAL, -->
+<!--             #{storeName}, -->
+<!--             #{latitude}, -->
+<!--             #{longitude}, -->
+<!--             #{address}, -->
+<!--             sysdate, -->
+<!--             <trim suffixOverrides=","> -->
+<!--                 #{username}, -->
+<!--                 <if test="picture != null">#{picture},</if>  -->
+<!--                 <if test="introduce != null">#{introduce},</if> -->
+<!--                 <if test="operatingDate != null">#{operatingDate},</if> -->
+<!--                 <if test="operatingHours != null">#{operatingHours},</if> -->
+<!--                 <if test="totalReview != null">#{totalReview},</if> -->
+<!--                 <if test="totalRating != null">#{totalRating},</if> -->
+<!--                 <if test="likes != null">#{likes},</if> -->
+<!--             </trim> -->
+<!--         ) -->
+<!--         <selectKey keyProperty="storeNo" resultType="int" order="AFTER"> -->
+<!--        		SELECT STORE_SEQ.CURRVAL FROM DUAL -->
+<!--   		</selectKey> -->
+<!--     </insert> -->
+
 	
-	<insert id="createPhoto" parameterType="org.omsf.store.model.Photo">
-    INSERT INTO PHOTO 
-    (	
-    	PHOTONO,
-        CONTENTTYPE,
-        FILESIZE,
-        PICTURE,
-        CREATEDAT,
-        STORE_STORENO
-    )
-    VALUES
-    (	
-    	PHOTO_SEQ.NEXTVAL,
-        #{contentType},
-        #{fileSize},
-        #{picture},
-        sysdate,
-        #{storeNo}
-    )
-   		 <selectKey keyProperty="photoNo" resultType="int" order="AFTER">
-       		SELECT PHOTO_SEQ.CURRVAL FROM DUAL
-  		</selectKey>
-	</insert>
-	<update id="deletePhoto" parameterType="int">
-		DELETE PHOTO WHERE PHOTO = #{PhotoNo}
-	</update>
+<!-- 	<insert id="createPhoto" parameterType="org.omsf.store.model.Photo"> -->
+<!--     INSERT INTO PHOTO  -->
+<!--     (	 -->
+<!--     	PHOTONO, -->
+<!--         CONTENTTYPE, -->
+<!--         FILESIZE, -->
+<!--         PICTURE, -->
+<!--         CREATEDAT, -->
+<!--         STORE_STORENO -->
+<!--     ) -->
+<!--     VALUES -->
+<!--     (	 -->
+<!--     	PHOTO_SEQ.NEXTVAL, -->
+<!--         #{contentType}, -->
+<!--         #{fileSize}, -->
+<!--         #{picture}, -->
+<!--         sysdate, -->
+<!--         #{storeNo} -->
+<!--     ) -->
+<!--    		 <selectKey keyProperty="photoNo" resultType="int" order="AFTER"> -->
+<!--        		SELECT PHOTO_SEQ.CURRVAL FROM DUAL -->
+<!--   		</selectKey> -->
+<!-- 	</insert> -->
+<!-- 	<update id="deletePhoto" parameterType="int"> -->
+<!-- 		DELETE PHOTO WHERE PHOTO = #{PhotoNo} -->
+<!-- 	</update> -->
 	
-	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap">
-		SELECT *
-		FROM STORE
-		WHERE STORENO = #{storeNo}
-	</select>
-	<update id="updateStore">
-	    UPDATE STORE
-	    SET
-	        STORENAME = #{storeName},
-	        
-	        LATITUDE = #{latitude},
-	        LONGITUDE = #{longitude},
-	        ADDRESS = #{address},
-	        INTRODUCE = #{introduce},
-	        OPERATINGDATE = #{operatingDate},
-	        OPERATINGHOURS = #{operatingHours},
-	        MODIFIEDAT = sysdate,
-	        PICTURE = #{picture}
-	    WHERE
-	        STORENO = #{storeNo}
-	</update>
-	<update id="deleteStore" parameterType="int">
-	      DELETE FROM store
-    		WHERE storeNo = #{storeNo}
-	</update>
-	
+<!-- 	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap"> -->
+<!-- 		SELECT * -->
+<!-- 		FROM STORE -->
+<!-- 		WHERE STORENO = #{storeNo} -->
+<!-- 	</select> -->
+<!-- 	<update id="updateStore"> -->
+<!-- 	    UPDATE STORE -->
+<!-- 	    SET -->
+<!-- 	        STORENAME = #{storeName}, -->
+<!-- 	        LATITUDE = #{latitude}, -->
+<!-- 	        LONGITUDE = #{longitude}, -->
+<!-- 	        ADDRESS = #{address}, -->
+<!-- 	        INTRODUCE = #{introduce}, -->
+<!-- 	        OPERATINGDATE = #{operatingDate}, -->
+<!-- 	        OPERATINGHOURS = #{operatingHours}, -->
+<!-- 	        MODIFIEDAT = sysdate, -->
+<!-- 	        PICTURE = #{picture} -->
+<!-- 	    WHERE -->
+<!-- 	        STORENO = #{storeNo} -->
+<!-- 	</update> -->
+<!-- 	<update id="deleteStore" parameterType="int"> -->
+<!-- 	      DELETE FROM store -->
+<!--     		WHERE storeNo = #{storeNo} -->
+<!-- 	</update> -->
 	
 	<update id="updateTotalReviewAndRating">
 	    UPDATE STORE
@@ -159,6 +203,15 @@
 	     WHERE
 	        STORENO = #{storeNo}
 	</update>
-
+	
+	<select id="getStoreByposition" parameterType="String" resultMap="storeResultMap">
+		SELECT *
+		FROM STORE
+		WHERE ADDRESS LIKE #{address}
+	</select>
+	<select id="selectAllStore" resultMap="storeResultMap">
+		SELECT *
+		FROM STORE
+	</select>
 
 </mapper>

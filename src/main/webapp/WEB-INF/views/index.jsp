@@ -18,14 +18,14 @@
 <body>
     <div class="main">
         <div class="row">
-			<div class="col-md-12 text-center" style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 10px;" id="logo">
+			<div class="col-md-12 text-center" style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 10px; text-decoration: underline; text-decoration-color: #007bff;" id="logo">
 				<h3>Oh My Street Food!</h3>
 			</div>
 		
 			<div class="col-md-12">
 				<form class="input-group">
 					<input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
-					<button class="btn" type="button" id="button-addon2" style="background-color: #FFA500;">
+					<button class="btn btn-primary" type="button" id="button-addon2">
 						<i class="fas fa-search" style="color: white;"></i>
 					</button>
 				</form>
