@@ -3,40 +3,50 @@
     xmlns:beans="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans 
-    https://www.springframework.org/schema/beans/spring-beans.xsd
-    http://www.springframework.org/schema/security 
-    http://www.springframework.org/schema/security/spring-security.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security 
+        http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<global-method-security pre-post-annotations="enabled"/>
+	
+	<http auto-config="true">
     
-    <http pattern="/" security="none"></http>
-    <http pattern="/resources/**" security="none"></http>
-    <http pattern="/signin/google" security="none"></http>
-    <http auto-config="true">
-        <intercept-url pattern="/ohmystreetfood/**" access="isAuthenticated()"/>
-        <form-login
-            login-page="/signin"
-            login-processing-url="/signin"
-            username-parameter="email"
-            password-parameter="password" 
-            authentication-success-handler-ref="myAuthenticationSuccessHandler" />
-            
-        <logout
-            logout-url="/logout"
-            logout-success-url="/"
-            delete-cookies="JSESSIONID" />
-    </http>
+	    <intercept-url pattern="/**" access="permitAll" />
+	    
+	    <form-login
+	        login-page="/signin"
+	        login-processing-url="/signin"
+	        default-target-url="/"
+	        authentication-failure-url="/signin?error=true" />
+	        
+	    <logout
+	        logout-url="/logout"
+	        logout-success-url="/"
+	        delete-cookies="JSESSIONID" />
+	</http>
+    
+	<beans:bean id="customUserDetailsService" class="org.omsf.user.UserSecurityService"/>
+
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    
+    <!-- <beans:bean id="myAuthenticationSuccessHandler" class="org.omsf.main.MyAuthenticationSuccessHandler">
+        <beans:property name="defaultTargetUrl" value="/"/> 
+    </beans:bean> -->
     
     <authentication-manager>
+        <authentication-provider user-service-ref="customUserDetailsService">
+            <password-encoder ref="passwordEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+    
+
+	<!-- <authentication-manager>
         <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource"/>
             <user-service>
                 <user name="admin@test.com" password="{noop}admin" authorities="ROLE_ADMIN" />
                 <user name="user@test.com" password="{noop}user" authorities="ROLE_USER" />
             </user-service>
         </authentication-provider>
-    </authentication-manager>
-    
-    <beans:bean id="myAuthenticationSuccessHandler" class="org.omsf.main.MyAuthenticationSuccessHandler">
-        <beans:property name="defaultTargetUrl" value="/"/>
-    </beans:bean>
-
-	<beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    </authentication-manager> -->
 </beans:beans>

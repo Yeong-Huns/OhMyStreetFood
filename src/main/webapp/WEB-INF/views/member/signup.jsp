@@ -26,14 +26,7 @@
 	var isNickNameDuplicateChecked = false;
 	
     $(document).ready(function() {
-    	// 사장님 회원가입일 경우 닉네임 입력 숨기기 
-    	var memberType = "${memberType}";
 
-        if (memberType === "owner") {
-            $("#nickNameGroup").hide(); 
-        } else {
-            $("#nickNameGroup").show(); 
-        }
         
     	//ID 중복 확인
     	$("#idDuplicateConfirm").click(function() {
@@ -55,7 +48,7 @@
     		
         	//Ajax로 전송
         	$.ajax({
-        		url : './confirmId',
+        		url : '/signup/confirmId',
         		data : {
         			username : id,
         			memberType : "${memberType}"
@@ -91,7 +84,7 @@
     		
         	//Ajax로 전송
         	$.ajax({
-        		url : './confirmNickName',
+        		url : '/signup/confirmNickName',
         		data : {
         			nickName : nickName
         		},
@@ -185,6 +178,8 @@
 					<form:errors path="passwordConfirm" cssClass="text-danger"/>
 				</div>
 				<div class="col-md-12">
+					<form:hidden path="memberType" value="${member.memberType}"/>
+					<form:hidden path="loginType" value="email"/>
 					<input type="submit" value="회원가입" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">
 				</div>
 			</form:form>

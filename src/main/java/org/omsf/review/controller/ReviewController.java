@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -41,5 +42,12 @@ public class ReviewController {
 		}
 		reviewServ.createReview(review);
 		return "redirect:/test/review";
+	}
+	
+	@GetMapping("list/{storeId}")
+	public String testReviewList(@PathVariable("storeId") int storeId, Model model) {
+//		model.addAttribute("list", reviewServ.getReviewListByStoreId(storeId));
+		model.addAttribute("list", reviewServ.getReviewListOnStore(storeId));
+		return "test/getReviewListTest";
 	}
 }

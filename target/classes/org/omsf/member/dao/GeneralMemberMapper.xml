@@ -6,12 +6,28 @@
 		INSERT INTO member (
 		username, nickname, password, membertype, logintype, createdat, modifiedat)
 		VALUES (
-		#{username}, #{nickName}, #{password}, '일반', '일반', SYSDATE, SYSDATE)
+		#{username}, #{nickName}, #{password}, #{memberType}, #{loginType}, SYSDATE, SYSDATE)
 	</insert>
 	
 	<select id="checkMemberNickName" resultType="boolean">
 		SELECT count(*)
 		FROM member
 		WHERE nickname = #{nickName}
+	</select>
+	
+	<resultMap id="generalMemberMap" type="org.omsf.member.model.GeneralMember">
+		<result property="username" column="username" />
+		<result property="nickName" column="nickname" />
+		<result property="password" column="password" />
+		<result property="memberType" column="membertype" />
+		<result property="loginType" column="logintype" />
+		<result property="createdAt" column="createdat" />
+		<result property="modifiedAt" column="modifiedat" />
+	</resultMap>
+	
+	<select id="findByUsername" resultMap="generalMemberMap">
+		SELECT username, nickname, password, membertype, logintype, createdat, modifiedat
+		FROM MEMBER
+		WHERE USERNAME = #{username}
 	</select>
 </mapper>
