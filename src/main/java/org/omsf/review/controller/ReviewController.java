@@ -1,5 +1,7 @@
 package org.omsf.review.controller;
 
+import javax.validation.Valid;
+
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.service.ReviewService;
 import org.springframework.stereotype.Controller;
@@ -32,7 +34,7 @@ public class ReviewController {
 	}
 	
 	@PostMapping("review")
-	public String testReviewInsert(@ModelAttribute("RequestReview") RequestReview review,
+	public String testReviewInsert(@Valid @ModelAttribute("requestReview") RequestReview review,
 										Errors errors,
 										Model model) {
 		log.info("RequestReview content : {}", review.toString());
