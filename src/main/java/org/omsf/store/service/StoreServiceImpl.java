@@ -119,5 +119,10 @@ public class StoreServiceImpl implements StoreService {
         
         return photoNo;
 	}
-
+	
+	// jaeeun
+		@Override
+		public void addStore(Store store) {
+			storeRepository.insertStore(store);
+		}
 }

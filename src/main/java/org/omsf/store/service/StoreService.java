@@ -20,4 +20,7 @@ public interface StoreService {
 	Store updateLikes(Store store);
 	
 	int UploadImage(ArrayList<MultipartFile> files, int storeNo);
+	
+	// jaeeun
+	void addStore(Store store);
 }
