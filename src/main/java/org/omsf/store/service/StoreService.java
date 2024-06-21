@@ -18,9 +18,6 @@ public interface StoreService {
 	Store updateTotalReview(Store store);
 	Store updateTotalRating(Store store);
 	Store updateLikes(Store store);
-
-	// jaeeun
-	void addStore(Store store);
 	
-	void UploadImage(ArrayList<MultipartFile> files, int storeNo);
+	int UploadImage(ArrayList<MultipartFile> files, int storeNo);
 }

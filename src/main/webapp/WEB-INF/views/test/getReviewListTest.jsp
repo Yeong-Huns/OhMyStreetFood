@@ -30,7 +30,7 @@
 						<tr>
 							<td>${review.memberUsername}</td>
 							<!-- url태그 -->
-							<td><a href="<c:url value="/test/review/${review.reviewNo}"/>">${review.content}</a></td>
+							<td><a href="#">${review.content}</a></td>
 							<td>${review.rating}</td>
 							<td>${review.createdAt}</td>
 						</tr>
