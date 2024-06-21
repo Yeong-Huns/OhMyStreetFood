@@ -155,20 +155,24 @@
 			<div class="col-md-12 text-center" id="logo">
 				<h3>회원가입</h3>
 			</div>
-			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/signup/${memberType}" method="post">
+			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
 				<div class="form-group">
 					<label for="username">아이디(이메일 주소)</label>
-				 	<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id" /> 
-				 	<input type="button" value="중복 확인" id="idDuplicateConfirm" /> 
-				 	<label id="idAlertLabel"></label>
-					<form:errors path="username" cssClass="text-danger"/>
+					<span style="display: flex; align-items: center;">
+				 		<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id" /> 
+				 		<input type="button" id="idDuplicateConfirm" class="btn btn-primary" value="중복 확인" /> 
+						<form:errors path="username" cssClass="text-danger"/>
+					</span>
+				 		<label id="idAlertLabel"></label>
 				</div>
 				<div class="form-group" id="nickNameGroup">
 					<label for="nickName">닉네임</label>
-					<form:input type="text" path="nickName" class="form-control" placeholder="NickName" />
-					<input type="button" value="중복 확인" id="nickNameDuplicateConfirm" /> 
-					<label id="nickNameAlertLabel"></label>
-					<form:errors path="nickName" cssClass="text-danger"/>
+					<span style="display: flex; align-items: center;">
+						<form:input type="text" path="nickName" class="form-control" placeholder="NickName" />
+						<input type="button" id="nickNameDuplicateConfirm" class="btn btn-primary" value="중복 확인" /> 
+						<form:errors path="nickName" cssClass="text-danger"/>
+					</span>
+						<label id="nickNameAlertLabel"></label>
 				</div>
 				<div class="form-group">
 					<label for="password">비밀번호</label> 
