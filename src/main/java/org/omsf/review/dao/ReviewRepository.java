@@ -29,5 +29,7 @@ public interface ReviewRepository {
 	// 리뷰 삭제
 	void deleteReview(int reviewNo);
 	
+	// 가게별 최근 리뷰 5개 가져오기
+	List<Review> getReviewListOnStore(int storeNo);
 	
 }
