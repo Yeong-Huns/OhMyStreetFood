@@ -1,5 +1,7 @@
 package org.omsf;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
@@ -40,7 +42,7 @@ public class ApplicationTests {
 					  .build();
 		
 		storeRepository.createStore(store);
-		int result = storeRepository.getStoreNo();
+		int result = store.getStoreNo();
 		System.out.println(result);
 	}
 	
@@ -64,8 +66,11 @@ public class ApplicationTests {
 		
 		int storeNo = storeService.createStore(store);
 		System.out.println("생성된 storeNo: " + storeNo);
-		storeService.UploadImage(files, storeNo);
+		int photoNo = storeService.UploadImage(files, storeNo);
+		store.setPicture(photoNo);
+		storeService.updateStore(store);
 		Store dbStore = storeRepository.getStoreByNo(storeNo).get();
-		System.out.println(dbStore);
+		
+		assertEquals(photoNo, dbStore.getPicture());
 	}
 }

@@ -25,6 +25,7 @@
   <insert id="createStore" parameterType="org.omsf.store.model.Store">
         INSERT INTO store
         (
+        	storeNo,
             storeName,
             latitude,
             longitude,
@@ -44,6 +45,7 @@
         )
         VALUES
         (
+        	STORE_SEQ.NEXTVAL,
             #{storeName},
             #{latitude},
             #{longitude},
@@ -61,16 +63,15 @@
                 <if test="likes != null">#{likes},</if>
             </trim>
         )
+        <selectKey keyProperty="storeNo" resultType="int" order="AFTER">
+       		SELECT STORE_SEQ.CURRVAL FROM DUAL
+  		</selectKey>
     </insert>
-	
-	<select id="getStoreNo" resultType="int">
-		SELECT MAX(STORENO)
-		FROM STORE
-	</select>
 	
 	<insert id="createPhoto" parameterType="org.omsf.store.model.Photo">
     INSERT INTO PHOTO 
-    (
+    (	
+    	PHOTONO,
         CONTENTTYPE,
         FILESIZE,
         PICTURE,
@@ -78,13 +79,17 @@
         STORE_STORENO
     )
     VALUES
-    (
+    (	
+    	PHOTO_SEQ.NEXTVAL,
         #{contentType},
         #{fileSize},
         #{picture},
         sysdate,
         #{storeNo}
     )
+   		 <selectKey keyProperty="photoNo" resultType="int" order="AFTER">
+       		SELECT PHOTO_SEQ.CURRVAL FROM DUAL
+  		</selectKey>
 	</insert>
 	<update id="deletePhoto" parameterType="int">
 		DELETE PHOTO WHERE PHOTO = #{PhotoNo}
@@ -106,14 +111,14 @@
 	        INTRODUCE = #{introduce},
 	        OPERATINGDATE = #{operatingDate},
 	        OPERATINGHOURS = #{operatingHours},
-	        MODIFIEDAT = sysdate
+	        MODIFIEDAT = sysdate,
+	        PICTURE = #{picture}
 	    WHERE
 	        STORENO = #{storeNo}
 	</update>
 	<update id="deleteStore" parameterType="int">
-	    DELETE STORE
-	    SET
-	        STORENO = #{storeNo}
+	      DELETE FROM store
+    		WHERE storeNo = #{storeNo}
 	</update>
 	
 	

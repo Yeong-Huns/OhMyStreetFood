@@ -24,7 +24,7 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Override
 	public List<Store> getStoreByposition() {
-		
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -37,7 +37,7 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public int createStore(Store store) {
 		storeRepository.createStore(store);
-		int storeNo = storeRepository.getStoreNo();
+		int storeNo = store.getStoreNo();
 		return storeNo;
 	}
 
@@ -73,11 +73,11 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public void UploadImage(ArrayList<MultipartFile> files, int storeNo) {
+	public int UploadImage(ArrayList<MultipartFile> files, int storeNo) {
 		String savedFileName = "";
 //		String uploadPath = servletContext.getRealPath("/uploaded_files/");
 		String uploadPath = "/temp/uploaded_files/";
-       
+		int photoNo = 0;
 		ArrayList<String> originalFileNameList = new ArrayList<String>();
         for(MultipartFile file : files) {
             String originalFileName = file.getOriginalFilename();
@@ -115,13 +115,10 @@ public class StoreServiceImpl implements StoreService {
       			  .build();
            
             storeRepository.createPhoto(photo);
+           photoNo = photo.getPhotoNo();
         }
-	}
-
-	@Override
-	public void addStore(Store store) {
-		// TODO Auto-generated method stub
-		
+        
+        return photoNo;
 	}
 
 }

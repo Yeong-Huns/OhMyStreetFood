@@ -13,7 +13,6 @@ public interface StoreRepository {
 	
 	Optional<Store> getStoreByNo(int storeNo);
 	void createStore(Store store);
-	int getStoreNo();
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
 	
