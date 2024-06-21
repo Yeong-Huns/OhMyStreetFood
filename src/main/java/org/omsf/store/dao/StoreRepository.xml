@@ -31,7 +31,6 @@
             longitude,
             address,
             createdAt,
-            modifiedAt,
             <trim suffixOverrides=",">
                 MEMBER_USERNAME,
                 <if test="picture != null">picture,</if>
@@ -50,7 +49,6 @@
             #{latitude},
             #{longitude},
             #{address},
-            sysdate,
             sysdate,
             <trim suffixOverrides=",">
                 #{username},

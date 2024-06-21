@@ -1,10 +1,13 @@
 package org.omsf.store.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.omsf.store.model.Menu;
 import org.omsf.store.model.Store;
+import org.omsf.store.service.MenuService;
 import org.omsf.store.service.StoreService;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +27,7 @@ public class StoreController {
 	
 	private final StoreService storeService;
 //	private final ReviewService reviewService;
-//	private final MenuService menuService;
+	private final MenuService menuService;
 	
 	@GetMapping("/kakaomap")
 	public String testKakaoMap() {
@@ -52,7 +55,11 @@ public class StoreController {
     @GetMapping("/{storeNo}")
     public String storeDetail(@PathVariable("storeNo") int storeNo, Model model) {
         Store store = storeService.getStoreByNo(storeNo);
+//       ReviewService.getReviewListBystoreNo(storeNo); 최신5개만 + 페이징
+        List<Menu> menus = menuService.getMenusByStoreNo(storeNo);
+        
         model.addAttribute("store", store);
+        model.addAttribute("menus", menus);
         return "storeDetail";
     }
 }
