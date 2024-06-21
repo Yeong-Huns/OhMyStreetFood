@@ -135,6 +135,14 @@
 	     WHERE
 	        STORENO = #{storeNo}
 	</update>
-
-
+	
+	<select id="getStoreByposition" parameterType="String" resultMap="storeResultMap">
+		SELECT *
+		FROM STORE
+		WHERE ADDRESS LIKE #{address}
+	</select>
+	<select id="selectAllStore" resultMap="storeResultMap">
+		SELECT *
+		FROM STORE
+	</select>
 </mapper>

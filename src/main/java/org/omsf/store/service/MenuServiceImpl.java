@@ -42,9 +42,19 @@ public class MenuServiceImpl implements MenuService {
 	}
 
 	@Override
-	public void updateMenus(List<Menu> menus) {
-		// 원래 메뉴 순서들을 받아서
-		// 클라이언트에서 받은 메뉴의 순서들로 업데이트
-		// 각각 하나씩 update하는 방식구현
+	public void updateMenus(int storeNo, List<Menu> menues) {
+		
+		List<Menu> dbMenus = menuRepository.getMenusByStoreNo(storeNo);
+		if (dbMenus.size() != menues.size()) {
+			throw new IllegalArgumentException("메뉴의 수가 일치하지 않습니다.");
+		}
+		
+		for (int i=0; i<menues.size(); i++) {
+			Menu dbMenu = dbMenus.get(i);
+			Menu menu = menues.get(i);
+			dbMenu.setMenuName(menu.getMenuName());
+			dbMenu.setPrice(menu.getPrice());
+			menuRepository.updateMenu(dbMenu);
+		}
 	}
 }

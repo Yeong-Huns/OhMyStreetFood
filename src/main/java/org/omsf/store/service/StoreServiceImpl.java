@@ -23,9 +23,8 @@ public class StoreServiceImpl implements StoreService {
 	private StoreRepository storeRepository;
 	
 	@Override
-	public List<Store> getStoreByposition() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Store> getStoreByposition(String address) {
+		return storeRepository.getStoreByposition(address);
 	}
 
 	@Override

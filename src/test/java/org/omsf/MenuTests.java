@@ -3,6 +3,7 @@ package org.omsf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -82,13 +83,33 @@ public class MenuTests {
 	
 	@Test
 	public void updateMenuTest() {
-		Menu menu = menuService.getMenuByMenuNo(menuNo);
-		menu.setMenuName("돈까스");
-		menu.setPrice(8000);
-		menuService.updateMenu(menu);
-		Menu menu2 = menuService.getMenuByMenuNo(menuNo);
-		assertEquals(menu.getMenuName(), menu2.getMenuName());
-		assertEquals(menu.getPrice(), menu2.getPrice());
+		for (int i=1; i<=5; i++) {
+			Menu menu = Menu.builder()
+			.menuName("테스트 메뉴" + i)
+			.price(i * 1000)
+			.storeNo(storeNo)
+			.build();
+			menuService.createMenu(menu);
+		}
+		List<Menu> menus = new ArrayList<Menu>();
+		for (int i=6; i>=1; i--) {
+			Menu menu = Menu.builder()
+			.menuName("테스트 메뉴" + i)
+			.price(i * 1000)
+			.storeNo(storeNo)
+			.build();
+			menus.add(menu);
+		}
+		menuService.updateMenus(storeNo, menus);
+		
+		List<Menu> dbMenus = menuService.getMenusByStoreNo(storeNo);
+		for (int i=0; i<dbMenus.size(); i++) {
+			Menu dbMenu = dbMenus.get(i);
+			Menu Menu = menus.get(i);
+			System.out.println(dbMenu);
+			assertEquals(dbMenu.getMenuName(), Menu.getMenuName());
+		}
+		
 	}
 		
 	@Test
