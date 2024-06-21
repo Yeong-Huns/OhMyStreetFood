@@ -13,5 +13,5 @@ public interface MenuService {
 	void updateMenu(Menu menu);
 	void deleteMenu(int MenuNo);
 	
-	void updateMenus(List<Menu> menus);
+	void updateMenus(int storeNo, List<Menu> menus);
 }

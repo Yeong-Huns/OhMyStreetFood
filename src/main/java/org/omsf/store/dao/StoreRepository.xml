@@ -118,24 +118,30 @@
 <!--     		WHERE storeNo = #{storeNo} -->
 <!-- 	</update> -->
 	
-<!-- 	<update id="updateTotalReviewAndRating"> -->
-<!-- 	    UPDATE STORE -->
-<!-- 	     SET -->
-<!-- 	        TOTALREVIEW = #{totalReview}, -->
-<!-- 	        TOTALRATING = #{totalRating} -->
-<!-- 	     WHERE -->
-<!-- 	        STORENO = #{storeNo} -->
-<!-- 	</update> -->
-<!-- 	<update id="updateLikes"> -->
-<!-- 	    UPDATE STORE -->
-<!-- 	     SET -->
-<!-- 	        LIKES = #{likes}, -->
-<!-- 	     WHERE -->
-<!-- 	        STORENO = #{storeNo} -->
-<!-- 	</update> -->
+	<update id="updateTotalReviewAndRating">
+	    UPDATE STORE
+	     SET
+	        TOTALREVIEW = #{totalReview},
+	        TOTALRATING = #{totalRating}
+	     WHERE
+	        STORENO = #{storeNo}
+	</update>
+	<update id="updateLikes">
+	    UPDATE STORE
+	     SET
+	        LIKES = #{likes},
+	     WHERE
+	        STORENO = #{storeNo}
+	</update>
+	
+	<select id="getStoreByposition" parameterType="String" resultMap="storeResultMap">
+		SELECT *
+		FROM STORE
+		WHERE ADDRESS LIKE #{address}
+	</select>
+	<select id="selectAllStore" resultMap="storeResultMap">
+		SELECT *
+		FROM STORE
+	</select>
 
-	<insert id="insertStore">
-    	INSERT INTO store (storeName, latitude, longitude, address, introduce, operatingDate, operatingHours, totalReview, totalRating, likes, createdAt, modifiedAt, picture, member_username)
-    	VALUES (#{storeName}, #{latitude}, #{longitude}, #{address}, #{introduce}, #{operatingDate}, #{operatingHours}, 0, 0.0, 0, SYSDATE, SYSDATE, #{picture}, #{username, jdbcType=VARCHAR})
-	</insert>
 </mapper>

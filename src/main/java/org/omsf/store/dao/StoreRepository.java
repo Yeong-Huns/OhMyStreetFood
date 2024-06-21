@@ -9,7 +9,7 @@ import org.omsf.store.model.Store;
 public interface StoreRepository {
 	     
 	List<Store> selectAllStore();
-	List<Store> getStoreByposition();
+	List<Store> getStoreByposition(String address);
 	
 	Optional<Store> getStoreByNo(int storeNo);
 	void createStore(Store store);
