@@ -3,13 +3,14 @@ package org.omsf.store.dao;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.ibatis.annotations.Param;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 
 public interface StoreRepository {
 	     
 	List<Store> selectAllStore();
-	List<Store> getStoreByposition();
+	List<Store> getStoreByposition(@Param("position") String position);
 	
 	Optional<Store> getStoreByNo(int storeNo);
 	void createStore(Store store);

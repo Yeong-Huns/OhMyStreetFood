@@ -27,5 +27,5 @@ public class Store {
 	private Timestamp modifiedAt;
 	
 	private String username;
-	private int picture;
+	private Integer picture;
 }

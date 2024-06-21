@@ -22,6 +22,30 @@
 	    <result property="picture" column="PICTURE"/>
 	</resultMap>
   
+  <select id="getStoreByposition" resultType="org.omsf.store.model.Store">
+  	<bind name="pattern" value="'%' + position + '%'" />
+<!--   	SELECT * FROM STORE WHERE ADDRESS LIKE #{pattern} -->
+  	SELECT
+  		STORENO AS "storeNo",
+  		STORENAME AS "storeName",
+  		LATITUDE AS "latitude",
+  		LONGITUDE AS "longitude",
+  		ADDRESS AS "address",
+  		INTRODUCE AS "introduce",
+  		OPERATINGDATE AS "operatingDate",
+  		OPERATINGHOURS AS "operatingHours",
+  		TOTALREVIEW AS "totalReview",
+  		TOTALRATING AS "totalRating",
+  		LIKES AS "likes",
+  		CREATEDAT AS "createdAt",
+  		MODIFIEDAT AS "modifiedAt",
+  		MEMBER_USERNAME AS "username",
+  		PICTURE AS "picture"
+  	FROM STORE
+  	WHERE ADDRESS LIKE #{pattern}
+  </select>
+  
+  
   <insert id="createStore" parameterType="org.omsf.store.model.Store">
         INSERT INTO store
         (

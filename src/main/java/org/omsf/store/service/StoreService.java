@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface StoreService {
 	
-	List<Store> getStoreByposition();
+	List<Store> getStoreByposition(String position);
 	
 	Store getStoreByNo(int storeNo);
 	int createStore(Store store);
