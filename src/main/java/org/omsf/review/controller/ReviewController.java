@@ -25,8 +25,8 @@ public class ReviewController {
 	@GetMapping("review")
 	public String testReview(Model model) {
 		RequestReview review = new RequestReview();
-		review.setStoreStoreNo(20);
-		review.setMemberUsername("test10@naver.com");
+		review.setStoreStoreNo(54);
+		review.setMemberUsername("owner1@naver.com");
 		model.addAttribute("requestReview", review);
 		return "test/createReview";
 	}
@@ -44,9 +44,54 @@ public class ReviewController {
 		return "redirect:/test/review";
 	}
 	
+	// 가게별 리뷰
 	@GetMapping("list/{storeId}")
 	public String testReviewList(@PathVariable("storeId") int storeId, Model model) {
 		model.addAttribute("list", reviewServ.getReviewListByStoreId(storeId));
 		return "test/getReviewListTest";
 	}
+	
+	// username별 리뷰
+	@GetMapping("list")
+	public String testReviewListByUsername(Model model) {
+		String username = "owner1@naver.com";
+		model.addAttribute("list", reviewServ.getReviewListByUsername(username));
+		return "test/getReviewListTest";
+	}
+	
+	// 리뷰 상세화면
+	@GetMapping("review/{reviewNo}")
+	public String testReviewDetail(@PathVariable("reviewNo") int reviewNo, Model model) {
+		model.addAttribute("review", reviewServ.getReviewByReviewNo(reviewNo));
+		return "test/reviewDetail";
+	}
+	
+	// 리뷰 수정화면
+	@GetMapping("review/{reviewNo}/update")
+	public String testReviewUpdate(@PathVariable("reviewNo") int reviewNo, Model model) {
+		model.addAttribute("requestReview", reviewServ.getReviewByReviewNo(reviewNo));
+		return "test/createReview";
+	}
+	
+	@PostMapping("review/{reviewNo}/update")
+	public String testReviewUpdate(@ModelAttribute("RequestReview") RequestReview review,
+									@PathVariable("reviewNo") int reviewNo, 
+									Errors errors,
+									Model model) {
+		log.info("RequestReview content : {}", review.toString());
+		
+		if(errors.hasErrors()) {
+			return "test/createReview";
+		}
+		reviewServ.updateReview(reviewNo, review);
+		return String.format("redirect:/test/review/%d", reviewNo);
+	}
+	
+	// 리뷰 삭제
+	@GetMapping("review/{reviewNo}/delete")
+	public String testReviewDelete(@PathVariable("reviewNo") int reviewNo, Model model) {
+		reviewServ.deleteReview(reviewNo);
+		return "redirect:/test/review";
+	}
+	
 }

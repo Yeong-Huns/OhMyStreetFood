@@ -24,7 +24,7 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Override
 	public List<Store> getStoreByposition() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -116,6 +116,12 @@ public class StoreServiceImpl implements StoreService {
            
             storeRepository.createPhoto(photo);
         }
+	}
+
+	@Override
+	public void addStore(Store store) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
