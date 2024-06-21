@@ -20,4 +20,7 @@ public interface StoreRepository {
 	void updateLikes(Store store);
 	void createPhoto(Photo photo);
 	void deletePhoto(int PhotoNo);
+	
+	// jaeeun
+	void insertStore(Store store);
 }
