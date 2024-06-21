@@ -10,32 +10,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <!-- CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
-    
 </head>
 <body>
     <div class="main">
         <div class="row">
-			<div class="col-md-12 text-center" id="logo">
+			<div class="col-md-12 text-center" style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 10px;" id="logo">
 				<h3>Oh My Street Food!</h3>
 			</div>
 		
 			<div class="col-md-12">
 				<form class="input-group">
 					<input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
-					<button class="btn btn-primary" type="button" id="button-addon2">
+					<button class="btn" type="button" id="button-addon2" style="background-color: #FFA500;">
 						<i class="fas fa-search" style="color: white;"></i>
 					</button>
 				</form>
 			</div>
 		
+			<!-- KAKAO MAP API -->
 			<div class="col-md-12" id="map" style="height: 500px;"></div>
 			
 			<div class="col-md-12" >
-			인기 점포
+				인기 점포
 				<div id="result">
 				
 				</div>

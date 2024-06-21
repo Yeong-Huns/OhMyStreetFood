@@ -23,12 +23,11 @@
 <!-- CSS -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/css/styles.css">
-<<<<<<< HEAD
-=======
+
 <!-- JavaScript -->
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
->>>>>>> ca535f1b0ed4c849fe611d468d3bcbfe5c9c17cb
+
 </head>
 <body>
 	<div class="main">
@@ -40,7 +39,7 @@
 				</a>
 			</div>
 			<div class="col-md-12 text-center" id="logo">
-<<<<<<< HEAD
+
 				<h3>가게 정보</h3>
 			</div>
 			<form>
@@ -194,13 +193,13 @@
 
 				<div class="col-md-12">
 					<button type="submit" class="btn btn-primary"
->>>>>>> ca535f1b0ed4c849fe611d468d3bcbfe5c9c17cb
+
 						style="height: 50px; width: 100%; margin-bottom: 10px;">등록하기</button>
 				</div>
 			</form>
 		</div>
 	</div>
-<<<<<<< HEAD
+
 	<script>
 		document.getElementById('inputEndTime')
 				.addEventListener(
@@ -269,11 +268,17 @@
             document.getElementById('priceInput').value = "";
         }
 	</script>
-=======
-	
+
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
->>>>>>> ca535f1b0ed4c849fe611d468d3bcbfe5c9c17cb
+	<script>
+        window.onload = function() {
+            var success = '${success}';
+            if (success === true) {
+                alert('회원가입이 완료되었습니다.');
+            }
+        }
+	</script>
 </body>
 </html>

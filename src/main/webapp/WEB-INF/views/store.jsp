@@ -18,7 +18,24 @@
 <body>
     <div class="main">
         <div class="row">
-			점포
+			<div class="col-md-12" style="text-align: right;">
+				<a href="#">점포 등록</a>
+			</div>
+			
+			    <div class="card" style="width: 100%; height: 200px;">
+			        <div class="row g-0">
+			            <div class="col-md-3" style="padding: 0 20px;">
+			                <img src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+			            </div>
+			            <div class="col-md-9 card-body" style="padding: 0 20px;">
+			                    <h5 class="card-title">Card title</h5>
+			                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+			                    <a href="#" class="btn btn-primary">Go somewhere</a>
+			            </div>
+			        </div>
+			    </div>
+
+            
 		</div>
     </div>
     
