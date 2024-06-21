@@ -18,7 +18,33 @@
 <body>
     <div class="main">
         <div class="row">
-			검색
+			<div class="col-md-12">
+				<form class="input-group">
+					<input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
+					<button class="btn btn-primary" type="button" id="button-addon2">
+						<i class="fas fa-search" style="color: white;"></i>
+					</button>
+				</form>
+			</div>
+			
+			<div class="col-md-12" >
+				인기 검색어
+				<p style="padding: 20px 0;">
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;닭꼬치&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;떡볶이&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+				</p>
+			</div>
 		</div>
     </div>
     
