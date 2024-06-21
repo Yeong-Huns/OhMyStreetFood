@@ -6,15 +6,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Select Review Test</title>
+<title>Review Detail Test</title>
 </head>
 <body>
 	<main class="container">
 		<div class="main-container">
-			<c:if test="${empty list }">
+			<c:if test="${empty review }">
 				등록된 리뷰가 없습니다.
 			</c:if>
-			<c:if test="${!empty list}">
+			<c:if test="${!empty review}">
 				<table style="width:100%; border-style: solid;">
 					<thead>
 						<tr>
@@ -25,23 +25,21 @@
 						</tr>
 					</thead>
 					<tbody>
-						<!-- 반복문 -->
-						<c:forEach var="review" items="${list}" >
+						
 						<tr>
 							<td>${review.memberUsername}</td>
 							<!-- url태그 -->
-							<td><a href="<c:url value="/test/review/${review.reviewNo}"/>">${review.content}</a></td>
+							<td>${review.content}</a></td>
 							<td>${review.rating}</td>
 							<td>${review.createdAt}</td>
-						</tr>
-						</c:forEach>					
+						</tr>				
 					</tbody>
 				</table>
+				
+				<a href="<c:url value="/test/review/${review.reviewNo}/update" />">수정</a>
+				<a href="<c:url value="/test/review/${review.reviewNo}/delete" />" onclick="confirm('삭제하시겠습니까?')">삭제</a>
 			</c:if>
-			
-			
-			
-			
+
 		</div>
 	</main>
 </body>
