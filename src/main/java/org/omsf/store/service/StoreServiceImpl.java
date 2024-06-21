@@ -23,8 +23,9 @@ public class StoreServiceImpl implements StoreService {
 	private StoreRepository storeRepository;
 	
 	@Override
-	public List<Store> getStoreByposition(String address) {
-		return storeRepository.getStoreByposition(address);
+	public List<Store> getStoreByposition(String position) {
+		return storeRepository.getStoreByposition(position);
+
 	}
 
 	@Override

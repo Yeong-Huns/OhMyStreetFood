@@ -20,11 +20,15 @@ public class Store {
 	private String introduce;
 	private String operatingDate;
 	private String operatingHours;
-	private Integer totalReview;
-	private Double totalRating;
-	private Integer likes;
-	private Date createdAt;
-	private Date modifiedAt;
-	private int picture;
+
+	private int totalReview;
+	private double totalRating;
+	private int likes;
+	private Timestamp createdAt;
+	private Timestamp modifiedAt;
+	
 	private String username;
+	private Integer picture;
+
+
 }
