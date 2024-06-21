@@ -47,4 +47,9 @@ public class ReviewServiceImpl implements ReviewService {
 		reviewDao.deleteReview(reviewNo);
 	}
 
+	@Override
+	public List<Review> getReviewListOnStore(int storeNo) {
+		return reviewDao.getReviewListOnStore(storeNo);
+	}
+
 }
