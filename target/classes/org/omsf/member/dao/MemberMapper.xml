@@ -7,4 +7,19 @@
 		FROM MEMBER
 		WHERE USERNAME = #{username}
 	</select>
+	
+	<resultMap id="memberMap" type="org.omsf.member.model.Member">
+		<result property="username" column="username" />
+		<result property="password" column="password" />
+		<result property="memberType" column="membertype" />
+		<result property="loginType" column="logintype" />
+		<result property="createdAt" column="createdat" />
+		<result property="modifiedAt" column="modifiedat" />
+	</resultMap>
+	
+	<select id="findByUsername" resultMap="memberMap">
+		SELECT username, password, membertype, logintype, createdat, modifiedat
+		FROM MEMBER
+		WHERE USERNAME = #{username}
+	</select>
 </mapper>

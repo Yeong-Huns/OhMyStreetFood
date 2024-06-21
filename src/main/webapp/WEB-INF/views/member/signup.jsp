@@ -133,10 +133,6 @@
             
         });
     	
-    	$(".form-control").on('input', function() {
-    		$(".text-danger").empty();
-        });
-    	
     });
 </script>
 </head>

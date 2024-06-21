@@ -8,6 +8,7 @@ import org.omsf.member.service.GeneralMemberService;
 import org.omsf.member.service.OwnerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -150,6 +151,12 @@ public class MemberController { // yunbin
 		}
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage")
+    public String showMypage() {
+    	return "/member/mypage";
     }
     
 }

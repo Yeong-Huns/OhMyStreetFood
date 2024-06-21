@@ -8,4 +8,20 @@
 		VALUES (
 		#{username}, #{password}, #{memberType}, #{loginType}, SYSDATE, SYSDATE)
 	</insert>
+	
+	<resultMap id="ownerMap" type="org.omsf.member.model.Owner">
+		<result property="username" column="username" />
+		<result property="password" column="password" />
+		<result property="memberType" column="membertype" />
+		<result property="loginType" column="logintype" />
+		<result property="bankaccount" column="bankaccount" />
+		<result property="createdAt" column="createdat" />
+		<result property="modifiedAt" column="modifiedat" />
+	</resultMap>
+	
+	<select id="findByUsername" resultMap="ownerMap">
+		SELECT username, password, membertype, logintype, bankaccount, createdat, modifiedat
+		FROM MEMBER
+		WHERE USERNAME = #{username}
+	</select>
 </mapper>
