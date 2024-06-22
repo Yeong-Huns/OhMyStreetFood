@@ -25,6 +25,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StoreController {
 	
+//	private final String uploadDir = "src/main/resources/static/uploads";
+	private final String uploadDir = "upload";
+
 	private final StoreService storeService;
 //	private final ReviewService reviewService;
 //	private final MenuService menuService;
@@ -69,7 +72,7 @@ public class StoreController {
 	    return "store/addStoreGeneral";
 	}
 
-    @PostMapping("/addbygeneral")
+	@PostMapping("/addbygeneral")
     public String addStore(
             @RequestParam("storeName") String storeName,
             @RequestParam("latitude") Double latitude,
@@ -83,9 +86,9 @@ public class StoreController {
             RedirectAttributes redirectAttributes
     ) {
         try {
-        	String operatingDate = String.join(",", selectedDays);
-    	    String operatingHours = startTime + " - " + endTime;
-        
+            String operatingDate = String.join(",", selectedDays);
+            String operatingHours = startTime + " - " + endTime;
+
             Store store = Store.builder()
                     .storeName(storeName)
                     .latitude(latitude)
@@ -104,29 +107,30 @@ public class StoreController {
 
             // Handle picture upload if provided
             if (picture != null && !picture.isEmpty()) {
-    	        String fileName = UUID.randomUUID().toString() + "_" + picture.getOriginalFilename();
-    	        String uploadDir = "/path/to/upload/directory";
+                String fileName = UUID.randomUUID().toString() + "_" + picture.getOriginalFilename();
+                Path filePath = Paths.get(uploadDir, fileName);
 
-    	        File uploadDirFile = new File(uploadDir);
-    	        if (!uploadDirFile.exists()) {
-    	            uploadDirFile.mkdirs();
-    	        }
+                // 디렉토리가 존재하지 않으면 생성
+                File uploadDirFile = new File(uploadDir);
+                if (!uploadDirFile.exists()) {
+                    uploadDirFile.mkdirs();
+                }
 
-    	        Path filePath = Paths.get(uploadDir, fileName);
-    	        Files.copy(picture.getInputStream(), filePath);
+                // 파일을 지정된 경로로 복사
+                Files.copy(picture.getInputStream(), filePath);
 
-    	        String picturePath = filePath.toString();
-            	
+                String picturePath = filePath.toString();
                 store.setPicturePath(picturePath);
             }
 
+            // storeService를 사용하여 데이터베이스에 가게 정보 저장
             storeService.addStore(store);
 
             redirectAttributes.addFlashAttribute("successMessage", "가게 등록이 완료되었습니다.");
-            return "/index";
+            return "index";
         } catch (IOException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "가게 등록 중 오류가 발생했습니다.");
-            return "/index";
+            return "index";
         }
     }
 }
