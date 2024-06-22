@@ -19,7 +19,7 @@
     <div class="main">
         <div class="row">
 			<div class="col-md-12" style="text-align: right;">
-				<a href="#">점포 등록</a>
+				<a href="${pageContext.request.contextPath}/store/addbygeneral">점포 등록</a>
 			</div>
 			
 			    <div class="card" style="width: 100%; height: 200px;">

@@ -38,11 +38,12 @@
 					class="fas fa-arrow-left"></i>
 				</a>
 			</div>
-			<div class="col-md-12 text-center">
+			<div class="col-md-12 text-center" id="title">
 				<h3>가게 정보 등록</h3>
 			</div>
 			<form method="post"
-				action="${pageContext.request.contextPath}/store/addbyowner">
+				action="${pageContext.request.contextPath}/store/addbygeneral"
+				enctype="multipart/form-data">
 				
 				<div>
 					<div class="col-md-12" id="map" style="width: 100%; height: 500px; border-radius: 20px"></div>
@@ -112,11 +113,14 @@
 				</div>
 				
 				<div class="form-group">
-                    <label for="picture">가게 대표 사진</label>
-                    <input type="file" class="form-control" id="picture" name="picture" />
-                    <button type="button" onclick="uploadPicture()">사진 업로드</button>
-                </div>
+				    <label for="picture">가게 대표 사진</label>
+				    <input class="form-control" id="picture" name="picture" type="file" accept="image/*">
 				
+				    <span id="preview">
+				        <img id="previewImg" src="" alt="이미지 미리보기" class="img-thumbnail" style="display: none; max-width: 100px;">
+				    </span>
+				</div>
+
 				<div class="form-group">
 					<label for="introduce">가게 소개</label>
 					<textarea class="form-control" id="introduce" name="introduce" rows="5"></textarea>
@@ -125,9 +129,6 @@
 				<div class="col-md-12">
 					<button type="submit" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">등록하기</button>
 				</div>
-				
-				<input type="hidden" name="username" value="${username}">
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</form>
 		</div>
 	</div>
@@ -224,7 +225,20 @@
             xhr.send(formData);
         }
 	</script>
-
+	<script>
+    $(document).ready(function() {
+        $('#picture').on('change', function(event) {
+            const [file] = this.files;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#previewImg').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>

@@ -155,7 +155,7 @@
                class="fas fa-arrow-left"></i>
             </a>
          </div>
-         <div class="col-md-12 text-center" id="logo">
+         <div class="col-md-12 text-center" id="title">
             <h3>회원가입</h3>
          </div>
          

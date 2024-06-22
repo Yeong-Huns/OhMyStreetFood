@@ -1,9 +1,14 @@
 package org.omsf.store.controller;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.util.UUID;
 
 import org.omsf.store.model.Store;
-import org.omsf.store.service.MenuService;
 import org.omsf.store.service.StoreService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +27,8 @@ public class StoreController {
 	
 	private final StoreService storeService;
 //	private final ReviewService reviewService;
-	private final MenuService menuService;
-	
+//	private final MenuService menuService;
+
 //	@GetMapping("/kakaomap")
 //	public String testKakaoMap() {
 //		return "store/kakaomap";
@@ -57,32 +63,70 @@ public class StoreController {
 //        return "storeDetail";
 //    }
     
-    
 	// jaeeun
- 	@GetMapping("/addbyowner")
- 	public String showAddStoreOwnerPage() {
- 		return "store/addStoreOwner";
- 	}
+	@GetMapping("/addbygeneral")
+	public String showAddStoreGeneralPage() {
+	    return "store/addStoreGeneral";
+	}
 
- 	@PostMapping("/addbyowner")
-     public String addStoreOwner(Store store,
-     							 @RequestParam("days") String[] selectedDays,
-                                 @RequestParam("startTime") String startTime,
-                                 @RequestParam("endTime") String endTime,
-                                 @RequestParam("picture") ArrayList<MultipartFile> picture,
-                                 String username) {
+    @PostMapping("/addbygeneral")
+    public String addStore(
+            @RequestParam("storeName") String storeName,
+            @RequestParam("latitude") Double latitude,
+            @RequestParam("longitude") Double longitude,
+            @RequestParam("address") String address,
+            @RequestParam("introduce") String introduce,
+            @RequestParam("days") String[] selectedDays,
+            @RequestParam("startTime") String startTime,
+            @RequestParam("endTime") String endTime,
+            @RequestParam(value = "picture", required = false) MultipartFile picture,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+        	String operatingDate = String.join(",", selectedDays);
+    	    String operatingHours = startTime + " - " + endTime;
+        
+            Store store = Store.builder()
+                    .storeName(storeName)
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .address(address)
+                    .introduce(introduce)
+                    .operatingDate(operatingDate)
+                    .operatingHours(operatingHours)
+                    .totalReview(0)
+                    .totalRating(0.0)
+                    .likes(0)
+                    .createdAt(new Timestamp(System.currentTimeMillis()))
+                    .modifiedAt(new Timestamp(System.currentTimeMillis()))
+                    .username("redjoun@gmail.com")
+                    .build();
 
-         String operatingDate = String.join(",", selectedDays);
-         String operatingHours = startTime + " - " + endTime;
+            // Handle picture upload if provided
+            if (picture != null && !picture.isEmpty()) {
+    	        String fileName = UUID.randomUUID().toString() + "_" + picture.getOriginalFilename();
+    	        String uploadDir = "/path/to/upload/directory";
 
-         store.setOperatingDate(operatingDate);
-         store.setOperatingHours(operatingHours);
-         store.setUsername(username);
-         
-//         storeService.addStore(store);
-         int storeno = storeService.createStore(store);
-		 storeService.UploadImage(picture, storeno);
-         
-         return "index";
-     }
+    	        File uploadDirFile = new File(uploadDir);
+    	        if (!uploadDirFile.exists()) {
+    	            uploadDirFile.mkdirs();
+    	        }
+
+    	        Path filePath = Paths.get(uploadDir, fileName);
+    	        Files.copy(picture.getInputStream(), filePath);
+
+    	        String picturePath = filePath.toString();
+            	
+                store.setPicturePath(picturePath);
+            }
+
+            storeService.addStore(store);
+
+            redirectAttributes.addFlashAttribute("successMessage", "가게 등록이 완료되었습니다.");
+            return "/index";
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "가게 등록 중 오류가 발생했습니다.");
+            return "/index";
+        }
+    }
 }

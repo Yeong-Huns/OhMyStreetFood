@@ -1,6 +1,8 @@
 package org.omsf.store.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -21,14 +23,13 @@ public class Store {
 	private String operatingDate;
 	private String operatingHours;
 
-	private int totalReview;
-	private double totalRating;
-	private int likes;
+	private Integer totalReview;
+	private Double totalRating;
+	private Integer likes;
 	private Timestamp createdAt;
 	private Timestamp modifiedAt;
 	
 	private String username;
-	private Integer picture;
-
-
+	private MultipartFile picture;
+    private String picturePath;
 }

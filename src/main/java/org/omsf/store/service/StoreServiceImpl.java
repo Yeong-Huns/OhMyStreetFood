@@ -3,7 +3,6 @@ package org.omsf.store.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -22,11 +21,10 @@ public class StoreServiceImpl implements StoreService {
 	@Autowired
 	private StoreRepository storeRepository;
 	
-	@Override
-	public List<Store> getStoreByposition(String position) {
-		return storeRepository.getStoreByposition(position);
-
-	}
+//	@Override
+//	public List<Store> getStoreByposition(String position) {
+//		return storeRepository.getStoreByposition(position);
+//	}
 
 	@Override
 	public Store getStoreByNo(int storeNo) {

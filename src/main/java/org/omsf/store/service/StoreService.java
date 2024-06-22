@@ -1,18 +1,16 @@
 package org.omsf.store.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.omsf.store.model.Store;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface StoreService {
-	
 
-	List<Store> getStoreByposition(String position);
-
-	
+//	List<Store> getStoreByposition(String position);
 	Store getStoreByNo(int storeNo);
+	
 	int createStore(Store store);
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
@@ -24,5 +22,5 @@ public interface StoreService {
 	int UploadImage(ArrayList<MultipartFile> files, int storeNo);
 	
 	// jaeeun
-	void addStore(Store store);
+	public void addStore(Store store) throws IOException;
 }
