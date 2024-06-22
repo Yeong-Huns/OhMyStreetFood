@@ -125,7 +125,33 @@
 					<label for="introduce">가게 소개</label>
 					<textarea class="form-control" id="introduce" name="introduce" rows="5"></textarea>
 				</div>
+				
+			    <div class="form-group">
+			      <label for="menu">메뉴 추가</label>
+			      <span style="display: flex; align-items: center;">
+			        <span style="width: 300px; margin-right: 10px;">
+			        	<input type="text" class="form-control" placeholder="메뉴" id="menuName">
+			        </span>
+			        <span style="width: 300px; margin-right: 10px;">
+				        <input type="number" class="form-control" placeholder="가격" id="menuPrice">
+				    </span>
+			        <button type="button" class="btn btn-primary" id="addMenuBtn" style="width: 50px;">+</button>
+			      </span>
 
+				  <table class="table">
+				    <thead>
+				      <tr>
+				        <th style="width: 310px;">메뉴</th>
+				        <th style="width: 310px;">가격</th>
+				        <th style="width: 50px;"></th> <!-- 삭제 버튼 열 -->
+				      </tr>
+				    </thead>
+				    <tbody id="menuList">
+				      <!-- 동적 추가 -->
+				    </tbody>
+				  </table>
+			    </div>
+				
 				<div class="col-md-12">
 					<button type="submit" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">등록하기</button>
 				</div>
@@ -184,6 +210,39 @@
         }
 
         document.getElementById('endTime').addEventListener('blur', checkTime);
+        
+        // 메뉴 추가
+        $(document).ready(function() {
+	        $('#addMenuBtn').click(function() {
+	            var menuName = $('#menuName').val();
+	            var menuPrice = $('#menuPrice').val();
+	            // 입력값 유효성 검사
+	            if (menuName === '' || menuPrice === '') {
+	                alert('메뉴 이름과 가격을 모두 입력해주세요.');
+	                return;
+	            }
+	
+	            // 새로운 행 추가
+	            var newRow = '<tr>' +
+                    '<td>' + menuName + '</td>' +
+                    '<td>' + menuPrice + '</td>' +
+                    '<td><button type="button" class="btn btn-danger btn-sm deleteBtn" style="border-radius: 500px;">-</button></td>' +
+                 '</tr>';
+	            
+	            console.log(newRow);
+	            
+	            $('#menuList').append(newRow);
+	
+	            // 입력 필드 초기화
+	            $('#menuName').val('');
+	            $('#menuPrice').val('');
+	        });
+	
+	        // 삭제 버튼 클릭 이벤트 처리
+	        $('#menuList').on('click', '.deleteBtn', function() {
+	            $(this).closest('tr').remove();
+	        });
+	    });
 	</script>
 
 	<script>
