@@ -73,7 +73,7 @@ public class StoreController {
 	}
 
 	@PostMapping("/addbygeneral")
-    public String addStore(
+    public String showAddStoreGeneralPage(
             @RequestParam("storeName") String storeName,
             @RequestParam("latitude") Double latitude,
             @RequestParam("longitude") Double longitude,
@@ -133,4 +133,10 @@ public class StoreController {
             return "index";
         }
     }
+	
+	@GetMapping("/showStore")
+	public String showStorePage() {
+	    return "store/showStore";
+	}
+
 }

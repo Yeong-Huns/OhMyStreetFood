@@ -24,9 +24,8 @@
 	<div class="main">
 		<div class="row">
 			<div>
-				<a href="javascript:history.go(-1);"
-					style="text-decoration: none; color: inherit;"> <i
-					class="fas fa-arrow-left"></i>
+				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
+					<i class="fas fa-arrow-left"></i>
 				</a>
 			</div>
 			<div class="col-md-12 text-center" id="title">
@@ -40,7 +39,7 @@
 				</p>
 			</div>
 			
-			<div style="width:100%; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+			<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				<i class="fas fa-store"></i>&nbsp;<strong>내가 등록한 가게</strong>
 				<p style="padding: 20px 0 0 20px;">
 					마약닭꼬치
@@ -50,7 +49,7 @@
 				</p>
 			</div>
 			
-			<div style="width:100%; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+			<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				<i class="fas fa-heart"></i>&nbsp;<strong>내가 찜한 가게</strong>
 				<p style="padding: 20px 0 0 20px;">
 					마약닭꼬치
@@ -60,7 +59,7 @@
 				</p>
 			</div>
 			
-			<div style="width:100%; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+			<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				<i class="fa fa-pen"></i>&nbsp;<strong>내가 쓴 리뷰</strong>
 				<p style="padding: 20px 0 0 20px;">
 					마약닭꼬치
@@ -70,7 +69,7 @@
 				</p>
 			</div>
 			
-			<div style="width:100%; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+			<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				<i class="fa fa-comments"></i>&nbsp;<strong>나의 채팅방</strong>
 				<p style="padding: 20px 0 0 20px;">
 					마약닭꼬치

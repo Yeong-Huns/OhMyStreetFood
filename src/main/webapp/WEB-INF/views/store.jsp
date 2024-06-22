@@ -30,11 +30,10 @@
 			            <div class="col-md-9 card-body" style="padding: 0 20px;">
 			                    <h5 class="card-title">Card title</h5>
 			                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-			                    <a href="#" class="btn btn-primary">Go somewhere</a>
+			                    <a href="${pageContext.request.contextPath}/store/showStore" class="btn btn-primary">Go somewhere</a>
 			            </div>
 			        </div>
 			    </div>
-
             
 		</div>
     </div>
