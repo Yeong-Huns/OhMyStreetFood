@@ -46,7 +46,7 @@
 				enctype="multipart/form-data">
 				
 				<div>
-					<div class="col-md-12" id="map" style="width: 100%; height: 500px; border-radius: 20px"></div>
+					<div class="col-md-12" id="map" style="width: 100%; height: 400px; border-radius: 20px"></div>
 					<div class="col-md-12" id="result"></div>
 				</div>
 
@@ -133,74 +133,7 @@
 		</div>
 	</div>
 
-	<script>
-		document.getElementById('inputEndTime')
-				.addEventListener(
-						'change',
-						function() {
-							var startTime = document
-									.getElementById('inputStartTime').value;
-							var endTime = this.value;
-
-							// 시간을 Date 객체로 변환하여 비교
-							var startDate = new Date('2000-01-01T' + startTime
-									+ ':00');
-							var endDate = new Date('2000-01-01T' + endTime
-									+ ':00');
-
-							if (endDate <= startDate) {
-								alert('종료 시간은 시작 시간보다 커야 합니다.');
-								// 종료 시간을 시작 시간으로 설정
-								this.value = startTime;
-							}
-						});
-
-		function addMenu() {
-            var menuInput = document.getElementById('menuInput').value;
-            var priceInput = document.getElementById('priceInput').value;
-
-            var menuContainer = document.getElementById('menuContainer');
-
-            var card = document.createElement('span');
-            card.classList.add('card');
-            card.style.height = '50px';
-            card.style.margin = "20px 0 0 0";
-//             card.style.border = 'none';
-
-            var cardBody = document.createElement('span');
-            cardBody.classList.add('card-body', 'd-flex', 'justify-content-between', 'align-items-center');
-            cardBody.style.padding = '5px';
-//             cardBody.style.border = 'none';
-
-            var menuName = document.createElement('span');
-            menuName.textContent = menuInput;
-            menuName.style.whiteSpace = 'nowrap';
-            menuName.style.overflow = 'hidden';
-            menuName.style.maxWidth = '40%';
-
-            var menuPrice = document.createElement('span');
-            menuPrice.textContent = priceInput;
-            menuPrice.style.whiteSpace = 'nowrap';
-            menuPrice.style.overflow = 'hidden';
-            menuPrice.style.maxWidth = '40%';
-
-            var deleteButton = document.createElement('button');
-            deleteButton.textContent = '―';
-            deleteButton.classList.add('btn', 'btn-danger', 'btn-sm', 'rounded-circle');
-            deleteButton.onclick = function() {
-                menuContainer.removeChild(card);
-            };
-
-            cardBody.appendChild(menuName);
-            cardBody.appendChild(menuPrice);
-            cardBody.appendChild(deleteButton);
-            card.appendChild(cardBody);
-            menuContainer.appendChild(card);
-
-            document.getElementById('menuInput').value = "";
-            document.getElementById('priceInput').value = "";
-        }
-		
+	<script>		
 		 // 파일 업로드를 위한 AJAX 함수
         function uploadPicture() {
             var formData = new FormData();
@@ -224,31 +157,46 @@
             // FormData 객체 전송
             xhr.send(formData);
         }
-	</script>
-	<script>
-    $(document).ready(function() {
-        $('#picture').on('change', function(event) {
-            const [file] = this.files;
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#previewImg').attr('src', e.target.result).show();
+		
+		// 미리보기 이미지
+        $(document).ready(function() {
+            $('#picture').on('change', function(event) {
+                const [file] = this.files;
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#previewImg').attr('src', e.target.result).show();
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
-            }
+            });
         });
-    });
-</script>
+        
+     	// 종료시간이 시작시간보다 작을 때 알림창
+        function checkTime() {
+            var startTime = document.getElementById('startTime').value;
+            var endTime = document.getElementById('endTime').value;
+
+            if (startTime >= endTime) {
+                alert('종료 시간이 시작 시간보다 빠를 수 없습니다.');
+                document.getElementById('endTime').value = ''; 
+            }
+        }
+
+        document.getElementById('endTime').addEventListener('blur', checkTime);
+	</script>
+
+	<script>
+       window.onload = function() {
+           var success = '${success}';
+           if (success === true) {
+               alert('회원가입이 완료되었습니다.');
+           }
+       }
+	</script>
+
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
-	<script>
-        window.onload = function() {
-            var success = '${success}';
-            if (success === true) {
-                alert('회원가입이 완료되었습니다.');
-            }
-        }
-	</script>
 </body>
 </html>

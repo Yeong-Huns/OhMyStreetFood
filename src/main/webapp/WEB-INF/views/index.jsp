@@ -32,18 +32,58 @@
 			</div>
 		
 			<!-- KAKAO MAP API -->
-			<div class="col-md-12" id="map" style="height: 500px;"></div>
-			
-			<div class="col-md-12" >
-				인기 점포
-				<div id="result">
-				
-				</div>
+			<div class="col-md-12">
+				<div id="map" style="width: 100%; height: 400px; border-radius: 20px"></div>
 			</div>
-		</div>
+			
+			<div class="col-md-12">
+				<span style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#e2f0fe; border-radius:10px;">
+			    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="#">사장님 모드</a></strong>
+				</span>
+			</div>
+
+			<div class="col-md-12">
+                <h5>인기 점포</h5>
+                <span class="d-flex flex-wrap">
+                    <div class="card" style="width:180px; border: none;">
+                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
+                        <div class="card-body">
+                            <p class="card-title">Card title</p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                    <div class="card" style="width:180px; border: none;">
+                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
+                        <div class="card-body">
+                            <p class="card-title">Card title</p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                    <div class="card" style="width:180px; border: none;">
+                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
+                        <div class="card-body">
+                            <p class="card-title">Card title</p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                    <div class="card" style="width:180px; border: none;">
+                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
+                        <div class="card-body">
+                            <p class="card-title">Card title</p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
+                </span>
+            </div>
+
     </div>
     
-    <jsp:include page="menu.jsp" />
+    <!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="menu.jsp" />
+        </div>
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

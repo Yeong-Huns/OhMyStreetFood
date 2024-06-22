@@ -70,7 +70,7 @@
 			    
 			    <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
 			        <span>메뉴</span>
-			        <span></span>
+			        <span>&nbsp;</span>
 			    </span>
 			    
 			    <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
@@ -79,6 +79,7 @@
 			    </span>
 		    </div>
 
+			<!-- KAKAO MAP API -->
 			<div>
 				<div class="col-md-12" id="map" style="width: 100%; height: 200px; border-radius: 20px"></div>
 				<div class="col-md-12" id="result"></div>
@@ -96,15 +97,9 @@
 			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 3" class="gallery-img"></span>
 			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 4" class="gallery-img"></span>
 			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 5" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 6" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 7" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 8" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 9" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 10" class="gallery-img"></span>
 			  </span>
 			</div>
- 
-  
+
 			<div>
 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                   <span><h5>리뷰 정보</h5></span>
