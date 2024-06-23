@@ -45,7 +45,6 @@
 <!--   	WHERE ADDRESS LIKE #{pattern} -->
 <!--   </select> -->
   
-  
 <!--   <insert id="createStore" parameterType="org.omsf.store.model.Store"> -->
 <!--         INSERT INTO store -->
 <!--         ( -->
@@ -209,7 +208,7 @@
 	</select> -->
 
 	<!-- jaeeun -->
-	<insert id="insertStore" parameterType="org.omsf.store.model.Store" useGeneratedKeys="true" keyProperty="storeNo">
+	<insert id="insertStore" parameterType="org.omsf.store.model.Store">
 	    INSERT INTO store (
 	        storeno, storename, latitude, longitude, address, introduce, operatingdate, operatinghours,
 	        totalreview, totalrating, likes, createdat, modifiedat, member_username, picture
@@ -238,7 +237,7 @@
 	</insert>
 	
 	<select id="getAllStores" resultMap="storeResultMap">
-		SELECT * FROM STORE ORDER BY #{createdAt} ASC
+		SELECT * FROM STORE
 	</select>
 
 	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap">
