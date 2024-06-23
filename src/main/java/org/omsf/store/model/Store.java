@@ -2,8 +2,6 @@ package org.omsf.store.model;
 
 import java.sql.Timestamp;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +12,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class Store {
-	private Integer storeNo;
+	private int storeNo;
 	private String storeName;
 	private Double latitude;
 	private Double longitude;
@@ -22,7 +20,6 @@ public class Store {
 	private String introduce;
 	private String operatingDate;
 	private String operatingHours;
-
 	private Integer totalReview;
 	private Double totalRating;
 	private Integer likes;
@@ -30,6 +27,5 @@ public class Store {
 	private Timestamp modifiedAt;
 	
 	private String username;
-	private MultipartFile picture;
-    private String picturePath;
+    private String picture;
 }

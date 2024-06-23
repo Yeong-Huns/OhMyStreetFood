@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
@@ -20,7 +19,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="./store">
+					<a class="nav-link" href="./store/list">
 						<i class="fas fa-store"></i><br>점포
 					</a>
 				</li>

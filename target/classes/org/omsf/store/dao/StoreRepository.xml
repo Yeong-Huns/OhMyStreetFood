@@ -4,24 +4,23 @@
     
 <mapper namespace="org.omsf.store.dao.StoreRepository">
 	
-<!--   	<resultMap id="storeResultMap" type="org.omsf.store.model.Store"> -->
-<!-- 	    <id property="storeNo" column="STORENO"/> -->
-<!-- 	    <result property="storeName" column="STORENAME"/> -->
-<!-- 	    <result property="latitude" column="LATITUDE"/> -->
-<!-- 	    <result property="longitude" column="LONGITUDE"/> -->
-<!-- 	    <result property="address" column="ADDRESS"/> -->
-<!-- 	    <result property="introduce" column="INTRODUCE"/> -->
-<!-- 	    <result property="operatingDate" column="OPERATINGDATE"/> -->
-<!-- 	    <result property="operatingHours" column="OPERATINGHOURS"/> -->
-<!-- 	    <result property="totalReview" column="TOTALREVIEW"/> -->
-<!-- 	    <result property="totalRating" column="TOTALRATING"/> -->
-<!-- 	    <result property="likes" column="LIKES"/> -->
-<!-- 	    <result property="createdAt" column="CREATEDAT"/> -->
-<!-- 	    <result property="modifiedAt" column="MODIFIEDAT"/> -->
-<!-- 	    <result property="username" column="MEMBER_USERNAME"/> -->
-<!-- 	    <result property="picture" column="PICTURE"/> -->
-<!-- 	</resultMap> -->
-  
+  	<resultMap id="storeResultMap" type="org.omsf.store.model.Store">
+	    <id property="storeNo" column="STORENO"/>
+	    <result property="storeName" column="STORENAME"/>
+	    <result property="latitude" column="LATITUDE"/>
+	    <result property="longitude" column="LONGITUDE"/>
+	    <result property="address" column="ADDRESS"/>
+	    <result property="introduce" column="INTRODUCE"/>
+	    <result property="operatingDate" column="OPERATINGDATE"/>
+	    <result property="operatingHours" column="OPERATINGHOURS"/>
+	    <result property="totalReview" column="TOTALREVIEW"/>
+	    <result property="totalRating" column="TOTALRATING"/>
+	    <result property="likes" column="LIKES"/>
+	    <result property="createdAt" column="CREATEDAT"/>
+	    <result property="modifiedAt" column="MODIFIEDAT"/>
+	    <result property="username" column="MEMBER_USERNAME"/>
+	    <result property="picture" column="PICTURE"/>
+	</resultMap>
 
 <!--   <select id="getStoreByposition" resultType="org.omsf.store.model.Store"> -->
 <!--   	<bind name="pattern" value="'%' + position + '%'" /> -->
@@ -163,11 +162,6 @@
 <!-- 		DELETE PHOTO WHERE PHOTO = #{PhotoNo} -->
 <!-- 	</update> -->
 	
-<!-- 	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap"> -->
-<!-- 		SELECT * -->
-<!-- 		FROM STORE -->
-<!-- 		WHERE STORENO = #{storeNo} -->
-<!-- 	</select> -->
 <!-- 	<update id="updateStore"> -->
 <!-- 	    UPDATE STORE -->
 <!-- 	    SET -->
@@ -215,11 +209,39 @@
 	</select> -->
 
 	<!-- jaeeun -->
-	<insert id="insertStore">
-	    INSERT INTO store (storeName, latitude, longitude, address, introduce, operatingDate, operatingHours,
-	                       totalReview, totalRating, likes, createdAt, modifiedAt, picturePath, member_username)
-	    VALUES (#{storeName}, #{latitude}, #{longitude}, #{address}, #{introduce}, #{operatingDate}, #{operatingHours},
-	            #{totalReview}, #{totalRating}, #{likes}, #{createdAt}, #{modifiedAt}, #{picturePath}, #{username})
+	<insert id="insertStore" parameterType="org.omsf.store.model.Store" useGeneratedKeys="true" keyProperty="storeNo">
+	    INSERT INTO store (
+	        storeno, storename, latitude, longitude, address, introduce, operatingdate, operatinghours,
+	        totalreview, totalrating, likes, createdat, modifiedat, member_username, picture
+	    )
+	    VALUES (
+	        STORE_SEQ.NEXTVAL, 
+	        #{storeName, jdbcType=VARCHAR}, 
+	        #{latitude, jdbcType=DOUBLE}, 
+	        #{longitude, jdbcType=DOUBLE}, 
+	        #{address, jdbcType=VARCHAR}, 
+	        #{introduce, jdbcType=VARCHAR}, 
+	        #{operatingDate, jdbcType=VARCHAR}, 
+	        #{operatingHours, jdbcType=VARCHAR}, 
+	        #{totalReview, jdbcType=INTEGER}, 
+	        #{totalRating, jdbcType=DOUBLE}, 
+	        #{likes, jdbcType=INTEGER}, 
+	        #{createdAt, jdbcType=TIMESTAMP}, 
+	        #{modifiedAt, jdbcType=TIMESTAMP}, 
+	        #{username, jdbcType=VARCHAR}, 
+	        #{picture, jdbcType=VARCHAR}
+	    )
+	    
+	    <selectKey keyProperty="storeNo" resultType="int" order="AFTER">
+       		SELECT STORE_SEQ.CURRVAL FROM DUAL
+   		</selectKey>
 	</insert>
 	
+	<select id="getAllStores" resultMap="storeResultMap">
+		SELECT * FROM STORE ORDER BY #{createdAt} ASC
+	</select>
+
+	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap">
+		SELECT * FROM STORE WHERE STORENO = #{storeNo}
+	</select>
 </mapper>

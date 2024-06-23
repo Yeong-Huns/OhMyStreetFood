@@ -6,12 +6,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
+import org.omsf.store.model.Menu;
 import org.omsf.store.model.Store;
+import org.omsf.store.service.MenuService;
 import org.omsf.store.service.StoreService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,8 +34,8 @@ public class StoreController {
 	private final String uploadDir = "upload";
 
 	private final StoreService storeService;
+	private final MenuService menuService;
 //	private final ReviewService reviewService;
-//	private final MenuService menuService;
 
 //	@GetMapping("/kakaomap")
 //	public String testKakaoMap() {
@@ -73,70 +78,84 @@ public class StoreController {
 	}
 
 	@PostMapping("/addbygeneral")
-    public String showAddStoreGeneralPage(
-            @RequestParam("storeName") String storeName,
-            @RequestParam("latitude") Double latitude,
-            @RequestParam("longitude") Double longitude,
-            @RequestParam("address") String address,
-            @RequestParam("introduce") String introduce,
-            @RequestParam("days") String[] selectedDays,
-            @RequestParam("startTime") String startTime,
-            @RequestParam("endTime") String endTime,
-            @RequestParam(value = "picture", required = false) MultipartFile picture,
-            RedirectAttributes redirectAttributes
-    ) {
-        try {
-            String operatingDate = String.join(",", selectedDays);
-            String operatingHours = startTime + " - " + endTime;
+	public String showAddStoreGeneralPage(
+	        @RequestParam("storeName") String storeName,
+	        @RequestParam("latitude") Double latitude,
+	        @RequestParam("longitude") Double longitude,
+	        @RequestParam("address") String address,
+	        @RequestParam(value = "introduce", required = false) String introduce,
+	        @RequestParam(value = "days", required = false) String[] selectedDays,
+	        @RequestParam(value = "startTime", required = false) String startTime,
+	        @RequestParam(value = "endTime", required = false) String endTime,
+	        @RequestParam(value = "picture", required = false) MultipartFile picture,
+	        @RequestParam(value = "menuName", required = false) String[] menuNames,
+	        @RequestParam(value = "menuPrice", required = false) long[] menuPrices,
+	        RedirectAttributes redirectAttributes
+	) {
+	    try {
+	        String operatingDate = (selectedDays != null) ? String.join(",", selectedDays) : null;
+	        String operatingHours = (startTime != null && endTime != null) ? startTime + " - " + endTime : null;
 
-            Store store = Store.builder()
-                    .storeName(storeName)
-                    .latitude(latitude)
-                    .longitude(longitude)
-                    .address(address)
-                    .introduce(introduce)
-                    .operatingDate(operatingDate)
-                    .operatingHours(operatingHours)
-                    .totalReview(0)
-                    .totalRating(0.0)
-                    .likes(0)
-                    .createdAt(new Timestamp(System.currentTimeMillis()))
-                    .modifiedAt(new Timestamp(System.currentTimeMillis()))
-                    .username("redjoun@gmail.com")
-                    .build();
+	        Store store = Store.builder()
+	                .storeName(storeName)
+	                .latitude(latitude)
+	                .longitude(longitude)
+	                .address(address)
+	                .introduce(introduce)
+	                .operatingDate(operatingDate)
+	                .operatingHours(operatingHours)
+	                .totalReview(0)
+	                .totalRating(0.0)
+	                .likes(0)
+	                .createdAt(new Timestamp(System.currentTimeMillis()))
+	                .modifiedAt(new Timestamp(System.currentTimeMillis()))
+	                .username("redjoun@gmail.com")
+	                .build();
 
-            // Handle picture upload if provided
-            if (picture != null && !picture.isEmpty()) {
-                String fileName = UUID.randomUUID().toString() + "_" + picture.getOriginalFilename();
-                Path filePath = Paths.get(uploadDir, fileName);
+	        if (picture != null && !picture.isEmpty()) {
+	            String fileName = UUID.randomUUID().toString() + "_" + picture.getOriginalFilename();
+	            Path filePath = Paths.get(uploadDir, fileName);
 
-                // 디렉토리가 존재하지 않으면 생성
-                File uploadDirFile = new File(uploadDir);
-                if (!uploadDirFile.exists()) {
-                    uploadDirFile.mkdirs();
-                }
+	            File uploadDirFile = new File(uploadDir);
+	            if (!uploadDirFile.exists()) {
+	                uploadDirFile.mkdirs();
+	            }
 
-                // 파일을 지정된 경로로 복사
-                Files.copy(picture.getInputStream(), filePath);
+	            Files.copy(picture.getInputStream(), filePath);
 
-                String picturePath = filePath.toString();
-                store.setPicturePath(picturePath);
-            }
+	            String picturePath = filePath.toString();
+	            store.setPicture(picturePath);
+	        }
 
-            // storeService를 사용하여 데이터베이스에 가게 정보 저장
-            storeService.addStore(store);
-
-            redirectAttributes.addFlashAttribute("successMessage", "가게 등록이 완료되었습니다.");
-            return "index";
-        } catch (IOException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "가게 등록 중 오류가 발생했습니다.");
-            return "index";
-        }
-    }
+	        storeService.addStore(store);
+	        int storeNo = store.getStoreNo();
+	        
+	        if (menuNames != null && menuPrices != null) {	        
+	        	menuService.addMenu(menuNames, menuPrices, storeNo);
+	        }
+	        
+	        redirectAttributes.addFlashAttribute("successMessage", "가게 등록이 완료되었습니다.");
+	        return "index";
+	    } catch (IOException e) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "가게 등록 중 오류가 발생했습니다.");
+	        return "index";
+	    }
+	}
 	
-	@GetMapping("/showStore")
-	public String showStorePage() {
+	@GetMapping("/list")
+	public String showStorePage(Model model) {
+	    List<Store> stores = storeService.getAllStores();
+	    model.addAttribute("stores", stores);
+	    return "store";
+	}
+	
+	@GetMapping("/{storeNo}")
+	public String showStoreDetailPage(@PathVariable Integer storeNo, Model model) {
+		Store store = storeService.getStoreByNo(storeNo);
+		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
+		
+		model.addAttribute("store", store);
+		model.addAttribute("menus", menu);
 	    return "store/showStore";
 	}
-
 }

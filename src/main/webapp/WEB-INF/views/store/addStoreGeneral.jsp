@@ -3,39 +3,29 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>OhMyStreetFood!</title>
-<!-- Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-<!-- Font Awesome CSS -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<!-- Google Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
-	rel="stylesheet">
-<!-- Jquery -->
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<!-- CSS -->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/styles.css">
-
-<!-- JavaScript -->
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
-
+	<meta charset="UTF-8">
+	<title>OhMyStreetFood!</title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	<!-- Font Awesome CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+	<!-- Jquery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<!-- CSS -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+	<!-- JavaScript -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
 </head>
 <body>
 	<div class="main">
 		<div class="row">
 			<div>
-				<a href="javascript:history.go(-1);"
-					style="text-decoration: none; color: inherit;"> <i
-					class="fas fa-arrow-left"></i>
+				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;">
+					<i class="fas fa-arrow-left"></i>
 				</a>
 			</div>
 			<div class="col-md-12 text-center" id="title">
@@ -51,32 +41,27 @@
 				</div>
 
 				<div class="form-group">
-					<label for="address">가게 주소</label> <input type="text"
-						class="form-control" id="address" name="address"
-						placeholder="가게 주소">
+					<label for="address">가게 주소<span style="color: red;">&nbsp;*&nbsp;</span></label>
+					<input type="text" class="form-control" id="address" name="address" placeholder="가게 주소">
 				</div>
 
-				<div class="form-group">
-					<label for="latitude">위도</label> <input type="text"
-						class="form-control" id="latitude" name="latitude"
-						placeholder="위도">
-				</div>
+ 				<div class="form-group">
+ 					<label for="latitude">위도</label>
+ 					<input type="text" class="form-control" id="latitude" name="latitude" placeholder="위도">
+ 				</div>
+				
+ 				<div class="form-group">
+ 					<label for="longitude">경도</label> 					<input type="text" class="form-control" id="longitude" name="longitude" placeholder="경도">
+ 				</div>
 				
 				<div class="form-group">
-					<label for="longitude">경도</label> <input type="text"
-						class="form-control" id="longitude" name="longitude"
-						placeholder="경도">
-				</div>
-				
-				<div class="form-group">
-					<label for="storeName">가게 이름</label> <input type="text"
-						class="form-control" id="storeName" name="storeName"
-						placeholder="가게 이름을 입력하세요">
+					<label for="storeName">가게 이름<span style="color: red;">&nbsp;*&nbsp;</span></label>
+					<input type="text" class="form-control" id="storeName" name="storeName" placeholder="가게 이름을 입력하세요">
 				</div>
 
 			    <div class="form-group">
 			        <label for="operatingDate">가게 운영일자</label>
-			        <div class="form-control" id="operatingDate" name="operatingDate" style="padding: 20px 0 0 0; border: none;">
+			        <span class="form-control" id="operatingDate" name="operatingDate" style="padding: 0 0 0 0; border: none;">
 			            <input type="checkbox" class="btn-check" id="btn-check-mon" name="days" value="월" autocomplete="off">
 			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-mon" data-value="월">월</label>
 
@@ -97,7 +82,7 @@
 			    
 			            <input type="checkbox" class="btn-check" id="btn-check-sun" name="days" value="일" autocomplete="off">
 			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-sun" data-value="일">일</label>
-			        </div>
+			        </span>
 			    </div>
 
 				<div class="form-group" style="margin-bottom: 15px;">
@@ -216,6 +201,7 @@
 	        $('#addMenuBtn').click(function() {
 	            var menuName = $('#menuName').val();
 	            var menuPrice = $('#menuPrice').val();
+	            
 	            // 입력값 유효성 검사
 	            if (menuName === '' || menuPrice === '') {
 	                alert('메뉴 이름과 가격을 모두 입력해주세요.');
@@ -223,13 +209,17 @@
 	            }
 	
 	            // 새로운 행 추가
-	            var newRow = '<tr>' +
-                    '<td>' + menuName + '</td>' +
-                    '<td>' + menuPrice + '</td>' +
-                    '<td><button type="button" class="btn btn-danger btn-sm deleteBtn" style="border-radius: 500px;">-</button></td>' +
+// 	            var newRow = '<tr>' +
+//                     '<td name="menuName">' + menuName + '</td>' +
+//                     '<td name="menuPrice">' + menuPrice + '</td>' +
+//                     '<td><button type="button" class="btn btn-danger btn-sm deleteBtn" style="border-radius: 500px;">-</button></td>' +
+//                  '</tr>';
+                 
+                 var newRow = '<tr>' +
+                 '<td><input type="text" name="menuName" value="' + menuName + '" style="border: none;" readonly></td>' +
+                 '<td><input type="number" name="menuPrice" value="' + menuPrice + '" style="border: none;" readonly></td>' +
+                 '<td><button type="button" class="btn btn-danger btn-sm deleteBtn" style="border-radius: 500px;">-</button></td>' +
                  '</tr>';
-	            
-	            console.log(newRow);
 	            
 	            $('#menuList').append(newRow);
 	

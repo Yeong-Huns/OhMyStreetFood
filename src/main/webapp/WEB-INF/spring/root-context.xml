@@ -16,8 +16,6 @@
 		class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName"
 			value="oracle.jdbc.OracleDriver" />
-		<!-- <property name="url" value="jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(PORT=1522)(HOST=adb.ap-chuncheon-1.oraclecloud.com))(CONNECT_DATA=(SERVICE_NAME=gc9b9883e39b10f_ohmystreetfood_high.adb.oraclecloud.com))(SECURITY=(SSL_SERVER_DN_MATCH=yes)))" 
-			/> -->
 		<property name="url"
 			value="jdbc:oracle:thin:@ohmystreetfood_high?TNS_ADMIN=C:/dev/wallet/Wallet_ohmystreetfood" />
 		<property name="username" value="ADMIN" />
