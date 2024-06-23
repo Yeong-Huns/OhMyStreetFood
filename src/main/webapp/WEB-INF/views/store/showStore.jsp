@@ -1,22 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>OhMyStreetFood!</title>
 <!-- Bootstrap CSS -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <!-- Font Awesome CSS -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 <!-- Jquery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!-- CSS -->
@@ -33,6 +29,11 @@
 				</a>
 			</div>
 			
+			<span style="display: flex; flex-direction: row; justify-content: space-between;">
+                <span><i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong></span>
+       			<span><a href="#">사장님과 채팅하기</a></span>
+        	</span>
+        	
 		    <div class="card" style="width: 100%; height: auto; border: none;">
 		        <div class="row g-0">
 		            <div class="col-md-3" style="padding: 0 20px;">
@@ -40,14 +41,17 @@
 		            </div>
 		            <div class="col-md-9 card-body" style="padding: 0 20px;">
 		                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
-			                    <span><h5 class="card-title">가게 이름</h5></span>
+			                    <span><h5 class="card-title">${store.storeName}</h5></span>
 			                    <span><i class="far fa-heart"></i></span>
 								<!-- <i class="fas fa-heart"></i> -->
 		                    </span>
-		                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-		            		<p><i class="fas fa-medal"></i>&nbsp;사장님 인증 상점&nbsp;</p>
-		            		<p><i class="fas fa-comments"></i>&nbsp;사장님과 채팅하기&nbsp;</p>
-		            		<span>2024.06.22 업데이트</span>
+		                    <p class="card-text">${store.introduce}</p>
+		                    <p class="card-text">
+			                		리뷰 ${store.totalReview}
+			                		평점 ${store.totalRating}
+			                		찜 ${store.likes}
+			                </p>
+		            		<span><small class="text-muted">업데이트 ${store.modifiedAt}</small></span>
 		            </div>
 		        </div>
 		    </div>
@@ -60,12 +64,12 @@
                  
                 <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
 			        <span>운영일자</span>
-			        <span>월 화 수 목 금 토 일</span>
+			        <span>${store.operatingDate}</span>
 			    </span>
 				
 				<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
 			        <span>운영시간</span>
-			        <span>14:00 - 20:00</span>
+			        <span>${store.operatingHours}</span>
 			    </span>
 			    
 			    <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
@@ -73,10 +77,12 @@
 			        <span>&nbsp;</span>
 			    </span>
 			    
-			    <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
-			        <span>- 닭꼬치</span>
-			        <span>5000</span>
-			    </span>
+			    <c:forEach items="${menus}" var="menu"> 
+				    <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
+				        <span>- ${menu.menuName}</span>
+				        <span>${menu.price}</span>
+				    </span>
+				 </c:forEach>
 		    </div>
 
 			<!-- KAKAO MAP API -->

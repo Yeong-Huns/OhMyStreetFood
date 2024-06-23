@@ -3,6 +3,7 @@ package org.omsf.store.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -12,7 +13,6 @@ import org.omsf.store.model.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 
 @Service
 //@RequiredArgsConstructor
@@ -25,12 +25,6 @@ public class StoreServiceImpl implements StoreService {
 //	public List<Store> getStoreByposition(String position) {
 //		return storeRepository.getStoreByposition(position);
 //	}
-
-	@Override
-	public Store getStoreByNo(int storeNo) {
-		Store store = storeRepository.getStoreByNo(storeNo).orElseThrow(() -> new NoSuchElementException("해당하는 상점을 찾을 수 없습니다"));
-		return store;
-	}
 
 	@Override
 	public int createStore(Store store) {
@@ -120,8 +114,21 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	// jaeeun
-		@Override
-		public void addStore(Store store) {
-			storeRepository.insertStore(store);
-		}
+	@Override
+	public int addStore(Store store) {
+	    storeRepository.insertStore(store);
+	    int storeNo = store.getStoreNo();
+		return storeNo;
+	}
+
+	@Override
+	public List<Store> getAllStores() {
+		return storeRepository.getAllStores();
+	}
+	
+	@Override
+	public Store getStoreByNo(int storeNo) {
+		Store store = storeRepository.getStoreByNo(storeNo).orElseThrow(() -> new NoSuchElementException("해당하는 상점을 찾을 수 없습니다"));
+		return store;
+	}
 }

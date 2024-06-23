@@ -34,13 +34,7 @@
        		SELECT MENU_SEQ.CURRVAL FROM DUAL
   		</selectKey>
     </insert>
-    
-    <select id="getMenusByStoreNo" resultMap="menuResultMap">
-    	SELECT *
-    	FROM MENU
-    	WHERE STORE_STORENO = #{storeNo}
-    </select>
-    
+
     <select id="getMenuByMenuNo" resultMap="menuResultMap">
     	SELECT *
     	FROM MENU
@@ -59,4 +53,14 @@
     	DELETE MENU
     	WHERE MENUNO = #{menuNO}
     </update>
+    
+    <!-- jaeeun -->
+    <insert id="insertMenu" parameterType="org.omsf.store.model.Menu">
+	    INSERT INTO MENU (MENUNAME, PRICE, CREATEDAT, MODIFIEDAT, STORE_STORENO)
+	    VALUES (#{menuName}, #{price}, #{createdAt, jdbcType=TIMESTAMP}, #{modifiedAt, jdbcType=TIMESTAMP}, #{storeNo})
+	</insert>
+	
+	<select id="getMenusByStoreNo" resultMap="menuResultMap">
+    	SELECT * FROM MENU WHERE STORE_STORENO = #{storeNo}
+    </select>
 </mapper>

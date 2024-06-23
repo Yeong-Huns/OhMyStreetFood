@@ -44,7 +44,14 @@
 
 			<div class="col-md-12">
                 <h5>인기 점포</h5>
-                <span class="d-flex flex-wrap">
+                <span class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
+                    <div class="card" style="width:180px; border: none;">
+                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
+                        <div class="card-body">
+                            <p class="card-title">Card title</p>
+                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                        </div>
+                    </div>
                     <div class="card" style="width:180px; border: none;">
                         <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
                         <div class="card-body">
@@ -75,7 +82,7 @@
                     </div>
                 </span>
             </div>
-
+		</div>
     </div>
     
     <!-- Menu -->

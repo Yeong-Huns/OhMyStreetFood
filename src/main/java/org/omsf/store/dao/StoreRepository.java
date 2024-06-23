@@ -10,10 +10,8 @@ public interface StoreRepository {
 	     
 	List<Store> selectAllStore();
 
-	// List<Store> getStoreByposition(@Param("position") String position);
-
 	
-	Optional<Store> getStoreByNo(int storeNo);
+	// List<Store> getStoreByposition(@Param("position") String position);
 	void createStore(Store store);
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
@@ -25,5 +23,6 @@ public interface StoreRepository {
 	
 	// jaeeun
 	void insertStore(Store store);
-
+	List<Store> getAllStores();
+	Optional<Store> getStoreByNo(int storeNo);
 }

@@ -1,5 +1,6 @@
 package org.omsf.store.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.omsf.store.dao.MenuRepository;
@@ -12,13 +13,7 @@ public class MenuServiceImpl implements MenuService {
 	
 	@Autowired
 	MenuRepository menuRepository;
-	
-	@Override
-	public List<Menu> getMenusByStoreNo(int storeNo) {
-		
-		return menuRepository.getMenusByStoreNo(storeNo);
-	}
-	
+
 	@Override
 	public Menu getMenuByMenuNo(int menuNo) {
 		Menu menu = menuRepository.getMenuByMenuNo(menuNo).get();
@@ -56,5 +51,27 @@ public class MenuServiceImpl implements MenuService {
 			dbMenu.setPrice(menu.getPrice());
 			menuRepository.updateMenu(dbMenu);
 		}
+	}
+
+	// jaeeun
+	@Override
+	public void addMenu(String[] menuNames, long[] menuPrices, int storeNo) {
+		// Menu 데이터 삽입
+        for (int i = 0; i < menuNames.length; i++) {
+            Menu menu = Menu.builder()
+                    .storeNo(storeNo)
+                    .menuName(menuNames[i])
+                    .price(menuPrices[i])
+                    .createdAt(new Timestamp(System.currentTimeMillis()))
+                    .modifiedAt(new Timestamp(System.currentTimeMillis()))
+                    .build();
+
+            menuRepository.insertMenu(menu);
+	    }
+	}
+	
+	@Override
+	public List<Menu> getMenusByStoreNo(int storeNo) {
+		return menuRepository.getMenusByStoreNo(storeNo);
 	}
 }
