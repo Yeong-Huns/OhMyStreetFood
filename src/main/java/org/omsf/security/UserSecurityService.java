@@ -1,4 +1,4 @@
-package org.omsf.user;
+package org.omsf.security;
 
 import java.util.ArrayList;
 import java.util.List;

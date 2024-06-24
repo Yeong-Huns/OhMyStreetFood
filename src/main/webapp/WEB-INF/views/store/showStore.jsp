@@ -141,6 +141,7 @@
 				<div class="col-md-12 text-center">
 					리뷰 더보기
 				</div>
+				<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
 		    </div>
 		    
 		</div>

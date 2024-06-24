@@ -131,4 +131,10 @@ public class StoreServiceImpl implements StoreService {
 		Store store = storeRepository.getStoreByNo(storeNo).orElseThrow(() -> new NoSuchElementException("해당하는 상점을 찾을 수 없습니다"));
 		return store;
 	}
+	
+	// yunbin
+	@Override
+	public String getStoreNameByStoreNo(int storeNo) {
+		return storeRepository.getStoreNameByStoreNo(storeNo);
+	}
 }

@@ -101,10 +101,6 @@ public class MemberController { // yunbin
 
 			ownerService.insertOwner(owner);
 			model.addAttribute("username", owner.getUsername());
-<<<<<<< HEAD
-=======
-			System.out.println(owner.getUsername());
->>>>>>> branch 'yunbin' of https://github.com/iamjaeeuncho/OhMyStreetFood.git
 			model.addAttribute("success", true);
 			
 		} catch (Exception e) {
@@ -171,7 +167,7 @@ public class MemberController { // yunbin
     }
     
     @PostMapping("/findPassword")
-    public String findPassword(String username) {
+    public String processFindPassword(String username) {
     	try {
 			emailService.sendEmail(username);
 		} catch (Exception e) {
@@ -179,6 +175,4 @@ public class MemberController { // yunbin
 		}
     	return "redirect:/signin";
     }
-    
-    
 }
