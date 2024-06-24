@@ -14,25 +14,25 @@
 						<i class="fas fa-home"></i><br>홈
 				</a></li>
 				<li class="nav-item">
-					<a class="nav-link" href="./search">
+					<a class="nav-link" href="/search">
 						<i class="fas fa-search"></i><br>검색
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="./store/list">
+					<a class="nav-link" href="/store/list">
 						<i class="fas fa-store"></i><br>점포
 					</a>
 				</li>
 				<sec:authorize access="isAnonymous()">
 					<li class="nav-item">
-						<a class="nav-link" href="./signin">
+						<a class="nav-link" href="/signin">
 							<i class="fas fa-user"></i><br>로그인
 						</a>
 					</li>
 				</sec:authorize>
 				<sec:authorize access="isAuthenticated()">
 					<li class="nav-item">
-						<a class="nav-link" href="./mypage">
+						<a class="nav-link" href="/mypage">
 							<i class="fas fa-user"></i><br>마이페이지
 						</a>
 					</li>

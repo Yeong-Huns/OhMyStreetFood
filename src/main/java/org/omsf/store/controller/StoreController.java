@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
+import org.omsf.review.model.RequestReview;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Store;
+import org.omsf.store.model.StorePagination;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.StoreService;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -142,20 +146,53 @@ public class StoreController {
 	    }
 	}
 	
+	@GetMapping("list/page")
+	@ResponseBody()
+	 public List<Store> storePageWithSorting(
+			 	@RequestParam(required = false, defaultValue = "likes") String order,
+			 	@RequestParam(defaultValue = "1" ) int page,
+			 	@RequestParam(required = false) String keyword,
+	            @RequestParam(required = false, defaultValue = "DESC") String sort) {
+        
+		StorePagination pageRequest = StorePagination.builder()
+                                    .currPageNo(page) 
+                                    .orderType(order)
+                                    .searchType("storeName")
+                                    .keyword(keyword)
+                                    .sortOrder(sort)
+                                    .build();
+
+        return storeService.getStoreList(pageRequest); 
+    }
+	
 	@GetMapping("/list")
-	public String showStorePage(Model model) {
-	    List<Store> stores = storeService.getAllStores();
+	public String showStorePage(Model model,
+			@RequestParam(required = false) String orderType) {
+		StorePagination pageRequest = StorePagination.builder()
+				.orderType(orderType)
+                .build();
+	    List<Store> stores = storeService.getStoreList(pageRequest);
 	    model.addAttribute("stores", stores);
+	    //처음 20개 스크롤 + 10개씩
 	    return "store";
 	}
 	
 	@GetMapping("/{storeNo}")
-	public String showStoreDetailPage(@PathVariable Integer storeNo, Model model) {
+	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
 		Store store = storeService.getStoreByNo(storeNo);
 		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
 		
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menu);
+		
+		// leejongseop - 리뷰 작성 폼 바인딩
+		if (!model.containsAttribute("requestReview")) {
+			RequestReview review = new RequestReview();
+			review.setStoreStoreNo(storeNo);
+			review.setMemberUsername(principal == null ? "" : principal.getName());
+            model.addAttribute("requestReview", review);
+        }
+		
 	    return "store/showStore";
 	}
 	

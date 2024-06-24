@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -17,6 +20,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
 <!-- JavaScript -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
 </head>
@@ -109,7 +113,7 @@
 			<div>
 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                   <span><h5>리뷰 정보</h5></span>
-                  <span>리뷰작성</span>
+                  <button id="openModalBtn">리뷰작성</button>
                  </span>
                  
                 <span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
@@ -146,9 +150,58 @@
 		    
 		</div>
 	</div>
+	
+	<!-- 모달 화면 -->
+	<div id="modal" class="modal" <c:if test="${modalOn}"> style="display: block;"</c:if>>
+        <div class="modal-content">
+			<div class="review-container">
+				<span class="close-button">&times;</span>
+				<h1>Write a Review</h1>
+				<form:form id="reviewForm" method="post" modelAttribute="requestReview" action="${pageContext.request.contextPath}/review/insert">
+					<p>
+						<form:hidden path="storeStoreNo" />
+						<form:errors path="storeStoreNo" id="error"/>
+					</p>
+					<label for="username">Name:</label>
+					<form:input path="memberUsername" disabled="true"/>
+					<form:hidden path="memberUsername" />
+					
+					<label for="rating">Rating:</label>
+					<div class="rating">
+						<form:radiobutton path="rating" value="1" id="star1"/>
+						<label for="star1" title="1 stars"><i class="fas fa-star"></i></label>
+						<form:radiobutton path="rating" value="2" id="star2"/>
+						<label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+						<form:radiobutton path="rating" value="3" id="star3"/>
+						<label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+						<form:radiobutton path="rating" value="4" id="star4"/>
+						<label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+						<form:radiobutton path="rating" value="5" id="star5"/>
+						<label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+					</div>
+					<label for="content">Review:</label>
+					<form:textarea path="content" rows="5" />
+					<c:if test="${not empty errors}">
+				        <ul>
+				            <c:forEach var="error" items="${errors}">
+				                <div style="text-align: center;">
+									<span id="error">${error.defaultMessage}</span>
+								</div>
+				            </c:forEach>
+				        </ul>
+				    </c:if>
+					<input id="review-btn" type="submit" value="등록" />
+				</form:form>
+			</div>
+        </div>
+    </div>
 
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
+
+	<!-- 리뷰 모달 -->
+	<script src="${pageContext.request.contextPath}/js/modal.js"></script>
+
 </body>
 </html>

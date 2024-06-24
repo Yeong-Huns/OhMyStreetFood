@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.omsf.store.dao.StoreRepository;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
+import org.omsf.store.model.StorePagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -136,5 +137,9 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public String getStoreNameByStoreNo(int storeNo) {
 		return storeRepository.getStoreNameByStoreNo(storeNo);
+
+	@Override
+	public List<Store> getStoreList(StorePagination page) {
+		return storeRepository.getStoreList(page);
 	}
 }

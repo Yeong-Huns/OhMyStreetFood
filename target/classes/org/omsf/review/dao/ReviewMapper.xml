@@ -88,4 +88,21 @@
 		FIRST 5 ROWS ONLY
 	</select>
 	
+		<!-- 가게별 리뷰 목록 가져오기 -->
+	<select id="getJSONReviewListByStoreId" resultType="org.omsf.review.model.Review">
+		SELECT
+			REVIEWNO AS "reviewNo",
+			RATING AS "rating",
+			CONTENT AS "content",
+			CREATEDAT AS "createdAt",
+			MODIFIEDAT AS "modifiedAt",
+			MEMBER_USERNAME AS "memberUsername",
+			STORE_STORENO AS "storeStoreNo"
+		FROM REVIEW
+		WHERE STORE_STORENO = #{storeNo}
+		ORDER BY CREATEDAT DESC
+		OFFSET 10*(#{page}-1) ROWS FETCH
+		FIRST 10 ROWS ONLY
+	</select>
+	
 </mapper>
