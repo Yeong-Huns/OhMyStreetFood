@@ -23,9 +23,9 @@
 			    <span class="dropdown mt-4">
 			        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">정렬기준</button>
 			        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-			            <li><a class="dropdown-item" href="#">최신순</a></li>
-			            <li><a class="dropdown-item" href="#">인기순</a></li>
-			            <li><a class="dropdown-item" href="#">거리순</a></li>
+			            <li><a class="dropdown-item" href="?orderType=createdAt">최신순</a></li>
+			            <li><a class="dropdown-item" href="?orderType=likes">인기순</a></li>
+			            <li><a class="dropdown-item" href="?orderType=">거리순</a></li>
 			        </ul>
 			    </span>
 			    <span class="mt-4">

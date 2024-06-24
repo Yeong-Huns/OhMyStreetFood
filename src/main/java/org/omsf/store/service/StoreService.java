@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.omsf.store.model.Store;
+import org.omsf.store.model.StorePagination;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface StoreService {
 
 //	List<Store> getStoreByposition(String position);
+	List<Store> getStoreList(StorePagination page);
 	
 	int createStore(Store store);
 	void updateStore(Store store);

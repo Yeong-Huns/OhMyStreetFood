@@ -10,6 +10,7 @@ import java.util.UUID;
 import org.omsf.store.dao.StoreRepository;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
+import org.omsf.store.model.StorePagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -130,5 +131,10 @@ public class StoreServiceImpl implements StoreService {
 	public Store getStoreByNo(int storeNo) {
 		Store store = storeRepository.getStoreByNo(storeNo).orElseThrow(() -> new NoSuchElementException("해당하는 상점을 찾을 수 없습니다"));
 		return store;
+	}
+
+	@Override
+	public List<Store> getStoreList(StorePagination page) {
+		return storeRepository.getStoreList(page);
 	}
 }
