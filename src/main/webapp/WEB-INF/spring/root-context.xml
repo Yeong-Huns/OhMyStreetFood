@@ -45,6 +45,29 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+	<!-- JavaMailSenderImpl 빈 등록 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	    <property name="host" value="smtp.naver.com"/>
+	    <property name="port" value="465" />
+	    <property name="username" value="ohmystreetfood@naver.com"/>
+	    <property name="password" value="Omsf3355!"/>
+	    <property name="defaultEncoding" value="utf-8" />
+	    <property name="javaMailProperties">
+	        <props>
+	            <prop key="mail.debug">true</prop>
+	            <prop key="mail.smtp.starttls.enable">true</prop>
+	            <prop key="mail.smtp.ssl.enable">true</prop> 
+	            <prop key="mail.smtp.auth">true</prop>
+	            <prop key="mail.smtp.socketFactory.port">465</prop>
+	            <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+	            <prop key="mail.smtp.ssl.trust">smtp.naver.com</prop>
+	            <prop key="mail.transport.protocol">smtp</prop>
+	            <prop key="mail.smtp.starttls.required">true</prop>
+	            <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+	        </props>
+	    </property>
+	</bean>
 
 	<tx:annotation-driven />
 

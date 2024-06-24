@@ -107,10 +107,9 @@
 				</div>
 
 				<div class="col-md-12">
-					<button type="button" class="btn btn-primary"
-=======
+					<button type="button" class="btn btn-primary"></button>
 				<h3>가게 정보 등록</h3>
-			</div>
+				</div>
 			<form method="post"
 				action="${pageContext.request.contextPath}/store/addbyowner">
 				

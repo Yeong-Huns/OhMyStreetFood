@@ -58,6 +58,9 @@
 			<div class="col-md-12 text-center">
 				<a href="${pageContext.request.contextPath}/signup/owner">가게 사장님 회원가입하기</a>
 			</div>
+			<div class="col-md-12 text-center">	
+				<a href="${pageContext.request.contextPath}/findPassword">비밀번호 찾기</a>				
+			</div>
 		</div>
 	</div>
 

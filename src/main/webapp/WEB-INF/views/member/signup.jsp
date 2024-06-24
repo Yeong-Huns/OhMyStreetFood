@@ -6,6 +6,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<!-- <meta name="_csrf" content="${_csrf.token}"/>
+<meta name="_csrf_header" content="${_csrf.headerName}"/> -->
 
 <title>OhMyStreetFood!</title>
 
@@ -22,11 +24,19 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-	var isIdDuplicateChecked = false;
-	var isNickNameDuplicateChecked = false;
+// 	var isIdDuplicateChecked = false;
+// 	var isNickNameDuplicateChecked = false;
 	
     $(document).ready(function() {
 
+    	var csrfToken = $('meta[name="_csrf"]').attr('content');
+        var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+//         $.ajaxSetup({
+//             beforeSend: function(xhr) {
+//                 xhr.setRequestHeader(csrfHeader, csrfToken);
+//             }
+//         });
         
     	//ID 중복 확인
     	$("#idDuplicateConfirm").click(function() {
@@ -48,7 +58,7 @@
     		
         	//Ajax로 전송
         	$.ajax({
-        		url : '/signup/confirmId',
+        		url : './confirmId',
         		data : {
         			username : id,
         			memberType : "${memberType}"
@@ -84,7 +94,7 @@
     		
         	//Ajax로 전송
         	$.ajax({
-        		url : '/signup/confirmNickName',
+        		url : './confirmNickName',
         		data : {
         			nickName : nickName
         		},
