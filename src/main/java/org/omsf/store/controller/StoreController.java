@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.omsf.review.model.RequestReview;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Store;
+import org.omsf.store.model.StorePagination;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.StoreService;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -144,10 +146,34 @@ public class StoreController {
 	    }
 	}
 	
+	@GetMapping("list/page")
+	@ResponseBody()
+	 public List<Store> storePageWithSorting(
+			 	@RequestParam(required = false, defaultValue = "likes") String order,
+			 	@RequestParam(defaultValue = "1" ) int page,
+			 	@RequestParam(required = false) String keyword,
+	            @RequestParam(required = false, defaultValue = "DESC") String sort) {
+        
+		StorePagination pageRequest = StorePagination.builder()
+                                    .currPageNo(page) 
+                                    .orderType(order)
+                                    .searchType("storeName")
+                                    .keyword(keyword)
+                                    .sortOrder(sort)
+                                    .build();
+
+        return storeService.getStoreList(pageRequest); 
+    }
+	
 	@GetMapping("/list")
-	public String showStorePage(Model model) {
-	    List<Store> stores = storeService.getAllStores();
+	public String showStorePage(Model model,
+			@RequestParam(required = false) String orderType) {
+		StorePagination pageRequest = StorePagination.builder()
+				.orderType(orderType)
+                .build();
+	    List<Store> stores = storeService.getStoreList(pageRequest);
 	    model.addAttribute("stores", stores);
+	    //처음 20개 스크롤 + 10개씩
 	    return "store";
 	}
 	
