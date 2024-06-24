@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
@@ -8,7 +7,7 @@
 <title>OhMyStreetFood!</title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light fixed-bottom" style="max-width: 800px; margin: 0 auto; padding: 0 20px; text-align: center; border-top: 1px solid #ccc;">
+	<nav class="navbar navbar-expand-lg navbar-light fixed-bottom" style="max-width: 800px; background-color: white; margin: 0 auto; padding: 0 20px; text-align: center; border-top: 1px solid #ccc;">
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav d-flex justify-content-between w-100">
 				<li class="nav-item active"><a class="nav-link" href="./">
@@ -20,7 +19,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="./store">
+					<a class="nav-link" href="./store/list">
 						<i class="fas fa-store"></i><br>점포
 					</a>
 				</li>

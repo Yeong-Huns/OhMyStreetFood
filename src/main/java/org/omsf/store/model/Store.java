@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class Store {
-	private Integer storeNo;
+	private int storeNo;
 	private String storeName;
 	private Double latitude;
 	private Double longitude;
@@ -20,12 +20,12 @@ public class Store {
 	private String introduce;
 	private String operatingDate;
 	private String operatingHours;
-	private int totalReview;
-	private double totalRating;
-	private int likes;
+	private Integer totalReview;
+	private Double totalRating;
+	private Integer likes;
 	private Timestamp createdAt;
 	private Timestamp modifiedAt;
-	private String picture;
 	
 	private String username;
+    private String picture;
 }

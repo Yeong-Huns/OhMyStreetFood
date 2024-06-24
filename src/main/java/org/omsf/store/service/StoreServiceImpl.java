@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @Service
 //@RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
@@ -22,22 +21,15 @@ public class StoreServiceImpl implements StoreService {
 	@Autowired
 	private StoreRepository storeRepository;
 	
-	@Override
-	public List<Store> getStoreByposition() {
-		
-		return null;
-	}
-
-	@Override
-	public Store getStoreByNo(int storeNo) {
-		Store store = storeRepository.getStoreByNo(storeNo).orElseThrow(() -> new NoSuchElementException("해당하는 상점을 찾을 수 없습니다"));
-		return store;
-	}
+//	@Override
+//	public List<Store> getStoreByposition(String position) {
+//		return storeRepository.getStoreByposition(position);
+//	}
 
 	@Override
 	public int createStore(Store store) {
 		storeRepository.createStore(store);
-		int storeNo = storeRepository.getStoreNo();
+		int storeNo = store.getStoreNo();
 		return storeNo;
 	}
 
@@ -73,11 +65,11 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public void UploadImage(ArrayList<MultipartFile> files, int storeNo) {
+	public int UploadImage(ArrayList<MultipartFile> files, int storeNo) {
 		String savedFileName = "";
 //		String uploadPath = servletContext.getRealPath("/uploaded_files/");
 		String uploadPath = "/temp/uploaded_files/";
-       
+		int photoNo = 0;
 		ArrayList<String> originalFileNameList = new ArrayList<String>();
         for(MultipartFile file : files) {
             String originalFileName = file.getOriginalFilename();
@@ -115,13 +107,28 @@ public class StoreServiceImpl implements StoreService {
       			  .build();
            
             storeRepository.createPhoto(photo);
+           photoNo = photo.getPhotoNo();
         }
+        
+        return photoNo;
+	}
+	
+	// jaeeun
+	@Override
+	public int addStore(Store store) {
+	    storeRepository.insertStore(store);
+	    int storeNo = store.getStoreNo();
+		return storeNo;
 	}
 
 	@Override
-	public void addStore(Store store) {
-		// TODO Auto-generated method stub
-		
+	public List<Store> getAllStores() {
+		return storeRepository.getAllStores();
 	}
-
+	
+	@Override
+	public Store getStoreByNo(int storeNo) {
+		Store store = storeRepository.getStoreByNo(storeNo).orElseThrow(() -> new NoSuchElementException("해당하는 상점을 찾을 수 없습니다"));
+		return store;
+	}
 }

@@ -98,7 +98,8 @@ public class MemberController { // yunbin
 			}
 
 			ownerService.insertOwner(owner);
-			model.addAttribute("owner", owner);
+			model.addAttribute("username", owner.getUsername());
+			System.out.println(owner.getUsername());
 			model.addAttribute("success", true);
 			
 		} catch (Exception e) {

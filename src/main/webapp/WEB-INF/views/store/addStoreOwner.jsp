@@ -38,85 +38,34 @@
 					class="fas fa-arrow-left"></i>
 				</a>
 			</div>
-			<div class="col-md-12 text-center" id="logo">
-
-				<h3>가게 정보</h3>
-			</div>
-			<form>
-				<div class="form-group">
-					<label for="exampleInputEmail1">가게 이름</label> <input type="email"
-						class="form-control" id="exampleInputEmail1"
-						aria-describedby="emailHelp" placeholder="Email">
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">가게 주소</label> <input type="email"
-						class="form-control" id="exampleInputEmail1"
-						aria-describedby="emailHelp" placeholder="Email"> 카카오 API
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">가게 대표 사진</label> <input
-						type="email" class="form-control" id="exampleInputEmail1"
-						aria-describedby="emailHelp" placeholder="Email">
-				</div>
-				<div class="form-group">
-					<label for="exampleInputEmail1">가게 운영일자</label>
-					<div class="buttons" style="padding: 20px 0 0 0">
-						<button type="button"
-							class="btn btn-outline-primary rounded-circle">월</button>
-						<button type="button"
-							class="btn btn-outline-primary rounded-circle">화</button>
-						<button type="button"
-							class="btn btn-outline-primary rounded-circle">수</button>
-						<button type="button"
-							class="btn btn-outline-primary rounded-circle">목</button>
-						<button type="button"
-							class="btn btn-outline-primary rounded-circle">금</button>
-						<button type="button"
-							class="btn btn-outline-primary rounded-circle">토</button>
-						<button type="button"
-							class="btn btn-outline-primary rounded-circle">일</button>
-					</div>
-				</div>
-				<div class="form-group" style="margin-bottom: 15px;">
-					<label for="exampleInputEmail1">가게 운영시간</label> <span
-						style="display: flex; align-items: center;"> <input
-						type="time" class="form-control" id="inputStartTime"
-						placeholder="시작 시간 선택" style="width: 280px; margin-right: 10px;">
-						<span>&nbsp;부터&nbsp;</span> <input type="time"
-						class="form-control" id="inputEndTime" placeholder="종료 시간 선택"
-						style="width: 280px; margin-right: 10px;"> <span>&nbsp;까지&nbsp;</span>
-					</span>
-				</div>
-				<div class="form-group">
-					<label for="exampleTextarea">가게 소개</label>
-					<textarea class="form-control" id="exampleTextarea" rows="5"></textarea>
-				</div>
-				<div class="form-group">
-					<label for="buttonText">메뉴 추가</label> <span
-						style="display: flex; align-items: center;"> <input
-						type="text" id="menuInput" class="form-control"
-						style="width: 300px; margin-right: 10px;" placeholder="메뉴를 입력하세요">
-						<input type="number" id="priceInput" class="form-control"
-						style="width: 300px; margin-right: 10px;" placeholder="가격을 입력하세요">
-						<button type="button" class="btn btn-primary" onclick="addMenu()">등록</button>
-					</span>
-
-				</div>
-				<div id="menuContainer" style="width: 100%;">
-					<!-- 동적 생성 -->
-				</div>
-
-				<div class="col-md-12">
-					<button type="button" class="btn btn-primary"
-=======
+			<div class="col-md-12 text-center" id="title">
 				<h3>가게 정보 등록</h3>
 			</div>
 			<form method="post"
-				action="${pageContext.request.contextPath}/store/addbyowner">
+				action="${pageContext.request.contextPath}/store/addbyowner"
+				enctype="multipart/form-data">
 				
 				<div>
 					<div class="col-md-12" id="map" style="width: 100%; height: 500px; border-radius: 20px"></div>
 					<div class="col-md-12" id="result"></div>
+				</div>
+
+				<div class="form-group">
+					<label for="address">가게 주소</label> <input type="text"
+						class="form-control" id="address" name="address"
+						placeholder="가게 주소">
+				</div>
+
+				<div class="form-group">
+					<label for="latitude">위도</label> <input type="text"
+						class="form-control" id="latitude" name="latitude"
+						placeholder="위도">
+				</div>
+				
+				<div class="form-group">
+					<label for="longitude">경도</label> <input type="text"
+						class="form-control" id="longitude" name="longitude"
+						placeholder="경도">
 				</div>
 				
 				<div class="form-group">
@@ -125,34 +74,12 @@
 						placeholder="가게 이름을 입력하세요">
 				</div>
 
-				<div class="form-group">
-					<label for="address">가게 주소</label> <input type="text"
-						class="form-control" id="address" name="address"
-						placeholder="가게 주소">
-				</div>
-				<div class="form-group">
-					<label for="latitude">위도</label> <input type="text"
-						class="form-control" id="latitude" name="latitude"
-						placeholder="위도">
-				</div>
-				<div class="form-group">
-					<label for="longitude">경도</label> <input type="text"
-						class="form-control" id="longitude" name="longitude"
-						placeholder="경도">
-				</div>
-				
-				<div class="form-group">
-					<label for="picture">가게 대표 사진</label> <input type="text"
-						class="form-control" id="picture" name="picture"
-						placeholder="가게 대표 사진">
-				</div>
-				
 			    <div class="form-group">
 			        <label for="operatingDate">가게 운영일자</label>
 			        <div class="form-control" id="operatingDate" name="operatingDate" style="padding: 20px 0 0 0; border: none;">
 			            <input type="checkbox" class="btn-check" id="btn-check-mon" name="days" value="월" autocomplete="off">
 			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-mon" data-value="월">월</label>
-			    
+
 			            <input type="checkbox" class="btn-check" id="btn-check-tue" name="days" value="화" autocomplete="off">
 			            <label class="btn btn-outline-primary rounded-circle" for="btn-check-tue" data-value="화">화</label>
 			    
@@ -173,17 +100,25 @@
 			        </div>
 			    </div>
 
-
 				<div class="form-group" style="margin-bottom: 15px;">
 					<label for="operatingHours">가게 운영시간</label> 
 					<span style="display: flex; align-items: center;">
 					<input type="time" class="form-control" id="startTime" name="startTime"
 							placeholder="시작 시간 선택" style="width: 280px; margin-right: 10px;">
-						<span>&nbsp;부터&nbsp;</span> 
+						<span>&nbsp;부터&nbsp;</span>
 					<input type="time" class="form-control" id="endTime" name="endTime"
 							placeholder="종료 시간 선택" style="width: 280px; margin-right: 10px;">
 						<span>&nbsp;까지&nbsp;</span>
 					</span>	
+				</div>
+				
+				<div class="form-group">
+				    <label for="picture">가게 대표 사진</label>
+				    <input class="form-control" id="picture" name="picture" type="file" accept="image/*">
+				
+				    <span id="preview">
+				        <img id="previewImg" src="" alt="이미지 미리보기" class="img-thumbnail" style="display: none; max-width: 100px;">
+				    </span>
 				</div>
 
 				<div class="form-group">
@@ -192,9 +127,7 @@
 				</div>
 
 				<div class="col-md-12">
-					<button type="submit" class="btn btn-primary"
-
-						style="height: 50px; width: 100%; margin-bottom: 10px;">등록하기</button>
+					<button type="submit" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">등록하기</button>
 				</div>
 			</form>
 		</div>
@@ -267,8 +200,45 @@
             document.getElementById('menuInput').value = "";
             document.getElementById('priceInput').value = "";
         }
-	</script>
+		
+		 // 파일 업로드를 위한 AJAX 함수
+        function uploadPicture() {
+            var formData = new FormData();
+            var fileInput = document.getElementById('picture');
+            var file = fileInput.files[0];
+            formData.append('picture', file);
 
+            // AJAX 요청 설정
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '${pageContext.request.contextPath}/store/uploadPicture', true);
+
+            // 업로드 완료 후 처리
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    alert('사진 업로드 성공!');
+                } else {
+                    alert('사진 업로드 실패');
+                }
+            };
+
+            // FormData 객체 전송
+            xhr.send(formData);
+        }
+	</script>
+	<script>
+    $(document).ready(function() {
+        $('#picture').on('change', function(event) {
+            const [file] = this.files;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#previewImg').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
