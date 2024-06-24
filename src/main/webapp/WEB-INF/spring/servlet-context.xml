@@ -64,7 +64,6 @@
 	
 	<!-- Validator 빈 등록 -->
     <beans:bean id="validator" class="org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean"/>
-	
 
 	<!-- 인터셉터 설정 -->
 	<!-- <interceptors> <interceptor> <mapping path="/file/**"/> <mapping path="/board/write/**"/> 
