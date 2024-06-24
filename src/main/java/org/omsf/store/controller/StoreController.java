@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
+import org.omsf.review.model.RequestReview;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Store;
 import org.omsf.store.service.MenuService;
@@ -150,12 +152,21 @@ public class StoreController {
 	}
 	
 	@GetMapping("/{storeNo}")
-	public String showStoreDetailPage(@PathVariable Integer storeNo, Model model) {
+	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
 		Store store = storeService.getStoreByNo(storeNo);
 		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
 		
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menu);
+		
+		// leejongseop - 리뷰 작성 폼 바인딩
+		if (!model.containsAttribute("requestReview")) {
+			RequestReview review = new RequestReview();
+			review.setStoreStoreNo(storeNo);
+			review.setMemberUsername(principal.getName());
+            model.addAttribute("requestReview", review);
+        }
+		
 	    return "store/showStore";
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Controller
 @Slf4j
-@RequestMapping("/test")
+@RequestMapping("/review")
 public class ReviewController {
 
 	private final ReviewService reviewServ;
@@ -33,17 +34,22 @@ public class ReviewController {
 		return "test/createReview";
 	}
 	
-	@PostMapping("review")
+	@PostMapping("insert")
 	public String testReviewInsert(@Valid @ModelAttribute("requestReview") RequestReview review,
 										Errors errors,
-										Model model) {
+										Model model,
+										RedirectAttributes redirectAttributes) {
 		log.info("RequestReview content : {}", review.toString());
 		
 		if(errors.hasErrors()) {
-			return "test/createReview";
+			redirectAttributes.addFlashAttribute("modalOn", true);
+			redirectAttributes.addFlashAttribute("requestReview", review);
+			redirectAttributes.addFlashAttribute("errors", errors.getAllErrors());
+			log.info("error 배열 : {}", errors.getAllErrors().toString());
+			return String.format("redirect:/store/%d", review.getStoreStoreNo());
 		}
 		reviewServ.createReview(review);
-		return "redirect:/test/review";
+		return String.format("redirect:/store/%d", review.getStoreStoreNo());
 	}
 	
 	@GetMapping("list/{storeId}")
