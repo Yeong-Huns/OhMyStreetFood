@@ -147,13 +147,16 @@ public class StoreController {
 	@GetMapping("list/page")
 	@ResponseBody()
 	 public List<Store> storePageWithSorting(
-			 	@RequestParam() String order,
+			 	@RequestParam(required = false, defaultValue = "likes") String order,
 			 	@RequestParam(defaultValue = "1" ) int page,
+			 	@RequestParam(required = false) String keyword,
 	            @RequestParam(required = false, defaultValue = "DESC") String sort) {
         
 		StorePagination pageRequest = StorePagination.builder()
                                     .currPageNo(page) 
                                     .orderType(order)
+                                    .searchType("storeName")
+                                    .keyword(keyword)
                                     .sortOrder(sort)
                                     .build();
 
