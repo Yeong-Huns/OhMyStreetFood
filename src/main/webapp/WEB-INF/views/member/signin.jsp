@@ -29,7 +29,7 @@
 					class="fas fa-arrow-left"></i>
 				</a>
 			</div>
-			<div class="col-md-12 text-center" id="logo">
+			<div class="col-md-12 text-center" id="title">
 				<h3>로그인</h3>
 			</div>
 			<form action="${pageContext.request.contextPath}/signin" method="post">

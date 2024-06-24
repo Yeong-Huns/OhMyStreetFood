@@ -11,7 +11,8 @@
 	
 	<http auto-config="true">
     	<csrf disabled="true"/>
-    
+		<csrf disabled="true"/>
+    	<intercept-url pattern="/secure/**" access="authenticated" />
 	    <intercept-url pattern="/**" access="permitAll" />
 	    
 	    <form-login

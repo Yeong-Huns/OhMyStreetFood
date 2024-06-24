@@ -10,6 +10,7 @@ import javax.servlet.ServletContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,5 +57,23 @@ public class FileUploadController {
         // model로 저장
         model.addAttribute("originalFileNameList", originalFileNameList);
         return"store/uploadtest/fileUploadMultipleResult";
+    }
+	
+	// jaeeun
+	@PostMapping("/uploadFile")
+    public String uploadFile(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return "Please select a file to upload";
+        }
+
+        try {
+            // Get the file and save it somewhere
+            byte[] bytes = file.getBytes();
+            // You can save bytes to a desired location here
+            return "File uploaded successfully: " + file.getOriginalFilename();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Failed to upload file";
+        }
     }
 }

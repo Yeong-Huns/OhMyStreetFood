@@ -101,6 +101,10 @@ public class MemberController { // yunbin
 
 			ownerService.insertOwner(owner);
 			model.addAttribute("username", owner.getUsername());
+<<<<<<< HEAD
+=======
+			System.out.println(owner.getUsername());
+>>>>>>> branch 'yunbin' of https://github.com/iamjaeeuncho/OhMyStreetFood.git
 			model.addAttribute("success", true);
 			
 		} catch (Exception e) {

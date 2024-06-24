@@ -1,6 +1,6 @@
 package org.omsf.store.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -15,8 +15,8 @@ public class Menu {
 	private int menuNo;
 	private String menuName;
 	private long price;
-	private Date createdAt;
-	private Date modifiedAt;
+	private Timestamp createdAt;
+	private Timestamp modifiedAt;
 	
-	private String storeNo;
+	private int storeNo;
 }

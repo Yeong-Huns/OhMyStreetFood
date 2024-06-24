@@ -7,10 +7,9 @@ import org.omsf.store.model.Store;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface StoreService {
+
+//	List<Store> getStoreByposition(String position);
 	
-	List<Store> getStoreByposition();
-	
-	Store getStoreByNo(int storeNo);
 	int createStore(Store store);
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
@@ -18,9 +17,11 @@ public interface StoreService {
 	Store updateTotalReview(Store store);
 	Store updateTotalRating(Store store);
 	Store updateLikes(Store store);
-
-	// jaeeun
-	void addStore(Store store);
 	
-	void UploadImage(ArrayList<MultipartFile> files, int storeNo);
+	int UploadImage(ArrayList<MultipartFile> files, int storeNo);
+	
+	// jaeeun
+	int addStore(Store store);
+	List<Store> getAllStores();
+	Store getStoreByNo(int storeNo);
 }

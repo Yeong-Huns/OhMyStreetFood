@@ -24,9 +24,8 @@
 	<resources location="/WEB-INF/resources/assets/" mapping="/assets/**" />
 
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="maxUploadSize">
-			<beans:value>50000000</beans:value>
-		</beans:property>
+		<beans:property name="maxUploadSize" value="50000000"/>
+		<beans:property name="maxUploadSizePerFile" value="50000000"/>
 	</beans:bean>
 
 	<!-- use-default-filters -->

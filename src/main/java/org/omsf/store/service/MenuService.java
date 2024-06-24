@@ -7,8 +7,14 @@ import org.omsf.store.model.Menu;
 
 public interface MenuService {
 	
-	List<Menu> getMenusByStoreNo(int storeNo);
-	void createMenu(Menu menu);
+	Menu getMenuByMenuNo(int menuNo);
+	int createMenu(Menu menu);
 	void updateMenu(Menu menu);
-	void deleteMenu(int MenuNo);   
+	void deleteMenu(int MenuNo);
+	
+	void updateMenus(int storeNo, List<Menu> menus);
+	
+	// jaeeun
+	void addMenu(String[] menuNames, long[] menuPrices, int storeNo);
+	List<Menu> getMenusByStoreNo(int storeNo);
 }

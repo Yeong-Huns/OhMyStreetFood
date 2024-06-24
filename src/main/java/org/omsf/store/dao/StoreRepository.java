@@ -9,11 +9,10 @@ import org.omsf.store.model.Store;
 public interface StoreRepository {
 	     
 	List<Store> selectAllStore();
-	List<Store> getStoreByposition();
+
 	
-	Optional<Store> getStoreByNo(int storeNo);
+	// List<Store> getStoreByposition(@Param("position") String position);
 	void createStore(Store store);
-	int getStoreNo();
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
 	
@@ -21,4 +20,9 @@ public interface StoreRepository {
 	void updateLikes(Store store);
 	void createPhoto(Photo photo);
 	void deletePhoto(int PhotoNo);
+	
+	// jaeeun
+	void insertStore(Store store);
+	List<Store> getAllStores();
+	Optional<Store> getStoreByNo(int storeNo);
 }

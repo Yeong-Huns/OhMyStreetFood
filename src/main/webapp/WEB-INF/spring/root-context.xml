@@ -10,20 +10,19 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
 	<!-- DataSource 설정 -->
 	<bean id="dataSource"
 		class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName"
 			value="oracle.jdbc.OracleDriver" />
-		<!-- <property name="url" value="jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(PORT=1522)(HOST=adb.ap-chuncheon-1.oraclecloud.com))(CONNECT_DATA=(SERVICE_NAME=gc9b9883e39b10f_ohmystreetfood_high.adb.oraclecloud.com))(SECURITY=(SSL_SERVER_DN_MATCH=yes)))" 
-			/> -->
 		<property name="url"
 			value="jdbc:oracle:thin:@ohmystreetfood_high?TNS_ADMIN=C:/dev/wallet/Wallet_ohmystreetfood" />
 		<property name="username" value="ADMIN" />
 		<property name="password" value="Ohmystreetfood1" />
 	</bean>
 
-
+	<!-- JdbcTemplate 설정 -->
 	<bean id="jdbcTemplate"
 		class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
@@ -71,17 +70,26 @@
 
 	<tx:annotation-driven />
 
-	<!-- DAO나 Service 클래스 등의 Component 스캔 -->
+	<!-- Component 스캔 설정 -->
 	<context:component-scan base-package="org.omsf">
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 
+	<!-- AOP 설정 -->
 	<aop:aspectj-autoproxy />
-
-	<!-- 지금 당장은 필요없어서 주석처리 <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver"> 
-		<property name="exceptionMappings"> <props> <prop key="java.lang.RuntimeException"> 
-		error/runtime </prop> </props> </property> <property name="defaultErrorView" 
-		value="error/default"/> </bean> -->
-
+	
+	<!-- 예외 리졸버 -->
+<!-- 	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.lang.RuntimeException">
+					error/runtime
+				</prop>
+			</props>
+		</property>
+		<property name="defaultErrorView" value="error/default" />
+	</bean> -->
+	
 </beans>
