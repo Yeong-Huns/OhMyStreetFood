@@ -24,7 +24,7 @@ window.onclick = function(event) {
 document.addEventListener('DOMContentLoaded', function() {
     const ratingInputs = document.querySelectorAll('.rating input');
     const labels = document.querySelectorAll('.rating label');
-
+	console.log("화면 로드");
 	
     const checkedRadio = document.querySelector('.rating input:checked');
     if (checkedRadio) {
@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function colorStars(index) {
         labels.forEach((innerLabel, innerIndex) => {
             if (innerIndex <= index) {
+				console.log("innerIndex 값 : " + innerIndex);
                 innerLabel.style.color = '#f5b301';
             } else {
                 innerLabel.style.color = '#ccc';

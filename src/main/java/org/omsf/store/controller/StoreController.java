@@ -163,7 +163,7 @@ public class StoreController {
 		if (!model.containsAttribute("requestReview")) {
 			RequestReview review = new RequestReview();
 			review.setStoreStoreNo(storeNo);
-			review.setMemberUsername(principal.getName());
+			review.setMemberUsername(principal == null ? "" : principal.getName());
             model.addAttribute("requestReview", review);
         }
 		

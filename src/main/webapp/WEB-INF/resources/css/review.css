@@ -175,3 +175,17 @@ textarea {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+
+/* 리뷰 상세화면 */
+.review-detail {
+    display: block; /* 기본적으로 모달을 숨깁니다 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+}
