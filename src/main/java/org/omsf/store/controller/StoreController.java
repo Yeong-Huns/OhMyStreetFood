@@ -24,7 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @RequestMapping("/store")
 @RequiredArgsConstructor
@@ -177,6 +179,13 @@ public class StoreController {
         }
 		
 	    return "store/showStore";
+	}
+	
+	@ResponseBody
+	@GetMapping("api")
+	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position){
+		log.info("api 요청 완료");
+		return storeService.getStoresByPosition(position);
 	}
 	
 }

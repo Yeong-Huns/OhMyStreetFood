@@ -30,5 +30,8 @@ public interface StoreService {
 	
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);
+	
+	// leejongseop
+	List<Store> getStoresByPosition(String position);
 
 }
