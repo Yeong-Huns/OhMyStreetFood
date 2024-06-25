@@ -1,6 +1,7 @@
 package org.omsf.store.dao;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.omsf.store.model.Photo;
@@ -26,7 +27,8 @@ public interface StoreRepository {
 	// jaeeun
 	List<Store> getAllStores();
 	Optional<Store> getStoreByNo(int storeNo);
-	
+	List<Store> searchByKeyword(Map<String, Object> params);
+
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);
 }

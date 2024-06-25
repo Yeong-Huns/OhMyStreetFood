@@ -27,8 +27,8 @@ public interface StoreService {
 	// jaeeun
 	List<Store> getAllStores();
 	Store getStoreByNo(int storeNo);
+	List<Store> searchByKeyword(String keyword, int offset, int limit);
 	
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);
-
 }

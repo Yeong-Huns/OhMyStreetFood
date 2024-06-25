@@ -184,10 +184,19 @@
 		SELECT * FROM STORE WHERE STORENO = #{storeNo}
 	</select>
 	
+	<select id="searchByKeyword" parameterType="map" resultType="org.omsf.store.model.Store">
+	    SELECT * 
+        FROM store 
+        WHERE storeName LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%'
+        ORDER BY storeNo
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+	
 	<!-- yunbin -->
 	<select id="getStoreNameByStoreNo" resultType="String">
 		SELECT storename AS storeName FROM WHERE STORENO = #{storeNo}
 	</select>
+	
 	<delete id="deleteStore">
 		DELETE FROM store WHERE storeno=#{storeNo} 
 	</delete>

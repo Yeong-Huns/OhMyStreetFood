@@ -21,15 +21,9 @@
 			<div class="col-md-12 text-center" style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 10px; text-decoration: underline; text-decoration-color: #007bff;" id="logo">
 				<h3>Oh My Street Food!</h3>
 			</div>
-		
-			<div class="col-md-12">
-				<form class="input-group">
-					<input type="text" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
-					<button class="btn btn-primary" type="button" id="button-addon2">
-						<i class="fas fa-search" style="color: white;"></i>
-					</button>
-				</form>
-			</div>
+
+			<!-- Search -->
+            <jsp:include page="search.jsp" />
 		
 			<!-- KAKAO MAP API -->
 			<div class="col-md-12">
@@ -38,7 +32,8 @@
 			
 			<div class="col-md-12">
 				<span style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#e2f0fe; border-radius:10px;">
-			    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="#">사장님 모드</a></strong>
+			    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="${pageContext.request.contextPath}/signin">사장님 모드</a></strong>
+			</div>
 				</span>
 			</div>
 

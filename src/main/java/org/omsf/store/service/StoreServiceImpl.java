@@ -2,7 +2,9 @@ package org.omsf.store.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -122,6 +124,16 @@ public class StoreServiceImpl implements StoreService {
 		return store;
 	}
 	
+	@Override
+	public List<Store> searchByKeyword(String keyword, int offset, int limit) {
+		Map<String, Object> params = new HashMap<>();
+        params.put("keyword", keyword);
+        params.put("offset", offset);
+        params.put("limit", limit);
+        
+		return storeRepository.searchByKeyword(params);
+	}
+	
 	// yunbin
 	@Override
 	public String getStoreNameByStoreNo(int storeNo) {
@@ -132,4 +144,6 @@ public class StoreServiceImpl implements StoreService {
 	public List<Store> getStoreList(StorePagination page) {
 		return storeRepository.getStoreList(page);
 	}
+
+
 }
