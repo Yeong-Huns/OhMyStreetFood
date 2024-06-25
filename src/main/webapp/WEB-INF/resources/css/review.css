@@ -166,6 +166,7 @@ textarea {
     border-radius: 50%;
     animation: spin 1s linear infinite;
     position: fixed;
+    z-index: 1;
     /* top: 50%; */
     left: 50%;
     transform: translate(-50%, -50%);
@@ -189,3 +190,46 @@ textarea {
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
 }
+
+
+#update-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#update-submit {
+	display: none;
+	
+	width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#delete-submit {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+
+

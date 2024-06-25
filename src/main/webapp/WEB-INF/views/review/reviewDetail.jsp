@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -21,16 +22,16 @@
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
-
+<!-- 리뷰 수정 및 삭제 -->
+<script src="${pageContext.request.contextPath}/js/reviewEdit.js"></script>
 </head>
 <body>			
-	<!-- 모달 화면 -->
 	<div id="review-detail" class="review-detail">
         <div class="modal-content">
 			<div class="review-container">
 				<span class="close-button">&times;</span>
 				<h1>Review</h1>
-				<form:form id="reviewForm" modelAttribute="review">
+				<form:form id="reviewForm" modelAttribute="review" method="post" action="${pageContext.request.contextPath}/review/command">
 					<p>
 						<form:hidden path="storeStoreNo" />
 						<form:errors path="storeStoreNo" id="error"/>
@@ -54,8 +55,16 @@
 					</div>
 					<label for="content">Review:</label>
 					<form:textarea path="content" rows="5" disabled="true"/>
-<!-- 					<input id="review-btn" type="submit" value="등록" /> -->
+						<input type="hidden" name="command" id="command" value="" />
+						<input type="hidden" name="reviewNo" id="reviewNo" value="${reviewNo}" />
+						<sec:authorize access="authentication.name == '${memberUsername}'">
+							<button id="update-submit" onclick="updateCommand()">수정</button>
+							<button id="delete-submit" onclick="deleteCommand()">삭제</button>
+						</sec:authorize>
 				</form:form>
+				<sec:authorize access="authentication.name == '${memberUsername}'">
+					<button id="update-btn" onclick="enableEditing()" >수정하기</button>
+				</sec:authorize>
 			</div>
         </div>
     </div>
