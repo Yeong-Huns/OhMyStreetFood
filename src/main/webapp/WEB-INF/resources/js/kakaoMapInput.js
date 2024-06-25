@@ -51,13 +51,22 @@ async function displayLocation() {
 
     marker.setMap(map);
 
+
+	function searchDetailAddrFromCoords(coords, callback) {
+        var geocoder = new kakao.maps.services.Geocoder();
+        geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+    }
+
 	// 맨 처음 화면 나왔을때 중심 좌표 주소 출력
     searchDetailAddrFromCoords(map.getCenter(), function(result, status) {
         if (status === kakao.maps.services.Status.OK) {
             var detailAddr = result[0].address.address_name;
-			detailAddr += map.getCenter();
-            var resultDiv = document.getElementById('kakaoMap');  
-            resultDiv.innerHTML = detailAddr;
+            document.getElementById('address').value = detailAddr;
+            document.getElementById('latitude').value = map.getCenter().getLat();
+            document.getElementById('longitude').value = map.getCenter().getLng();
+//			detailAddr += map.getCenter();
+//            var resultDiv = document.getElementById('kakaoMap');  
+//            resultDiv.innerHTML = detailAddr;
         }   
     });
 
@@ -70,9 +79,12 @@ async function displayLocation() {
         searchDetailAddrFromCoords(latlng, function(result, status) {
             if (status === kakao.maps.services.Status.OK) {
                 var detailAddr = result[0].address.address_name;
-			detailAddr += latlng;
-                var resultDiv = document.getElementById('kakaoMap');  
-                resultDiv.innerHTML = detailAddr;
+                document.getElementById('address').value = detailAddr;
+            	document.getElementById('latitude').value = latlng.getLat();
+            	document.getElementById('longitude').value = latlng.getLng();
+//			detailAddr += latlng;
+//                var resultDiv = document.getElementById('kakaoMap');  
+//                resultDiv.innerHTML = detailAddr;
             }   
         });
     });
