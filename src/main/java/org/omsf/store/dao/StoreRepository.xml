@@ -131,10 +131,10 @@
 	    WHERE
 	        STORENO = #{storeNo}
 	</update>
-	<update id="deleteStore" parameterType="int">
-	      DELETE FROM store
-    		WHERE storeNo = #{storeNo}
-	</update>
+<!-- 	<update id="deleteStore" parameterType="int"> -->
+<!-- 	      DELETE FROM store -->
+<!--     		WHERE storeNo = #{storeNo} -->
+<!-- 	</update> -->
 	
 	<update id="updateTotalReviewAndRating">
 	    UPDATE STORE

@@ -137,7 +137,8 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public String getStoreNameByStoreNo(int storeNo) {
 		return storeRepository.getStoreNameByStoreNo(storeNo);
-
+	}
+	
 	@Override
 	public List<Store> getStoreList(StorePagination page) {
 		return storeRepository.getStoreList(page);
