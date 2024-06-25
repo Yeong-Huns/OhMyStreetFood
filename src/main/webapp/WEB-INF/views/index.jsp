@@ -14,6 +14,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <!-- CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spinner.css">
 </head>
 <body>
     <div class="main">
@@ -92,11 +93,18 @@
         </div>
     </div>
 
+	<!-- spinner -->
+	<div id="spinner-wrapper">
+        <div id="spinner"></div>
+        <div id="spinner-text">현재 위치를 기반으로 주위 상점을 알아보고 있습니다</div>
+    </div> 
+	
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMap.js"></script>
+
 </body>
 </html>

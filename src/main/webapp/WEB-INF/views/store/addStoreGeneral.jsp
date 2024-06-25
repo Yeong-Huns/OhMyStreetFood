@@ -41,16 +41,16 @@
 				<div class="form-group">
 					<label for="address">가게 주소<span style="color: red;">&nbsp;*&nbsp;</span></label>
 					<input type="text" class="form-control" id="address" name="address" placeholder="가게 주소">
+ 					<input type="hidden" class="form-control" id="latitude" name="latitude" placeholder="위도">
+ 					<input type="hidden" class="form-control" id="longitude" name="longitude" placeholder="경도">
 				</div>
 
- 				<div class="form-group">
- 					<label for="latitude">위도</label>
- 					<input type="text" class="form-control" id="latitude" name="latitude" placeholder="위도">
- 				</div>
+<!--  				<div class="form-group"> -->
+<!--  					<label for="latitude">위도</label> -->
+<!--  				</div> -->
 				
- 				<div class="form-group">
- 					<label for="longitude">경도</label> 					<input type="text" class="form-control" id="longitude" name="longitude" placeholder="경도">
- 				</div>
+<!--  				<div class="form-group"> --><!--  					<label for="longitude">경도</label> -->
+<!--  				</div> -->
 				
 				<div class="form-group">
 					<label for="storeName">가게 이름<span style="color: red;">&nbsp;*&nbsp;</span></label>

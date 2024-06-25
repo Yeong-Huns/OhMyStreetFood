@@ -191,4 +191,14 @@
 	<delete id="deleteStore">
 		DELETE FROM store WHERE storeno=#{storeNo} 
 	</delete>
+	
+	<!-- leejongseop -->
+	<select id="getStoresByPosition" resultType="org.omsf.store.model.Store">
+		<bind name="pattern" value="'%' + position + '%'" />
+		SELECT 
+			* 
+		FROM STORE 
+		WHERE ADDRESS LIKE #{pattern}
+	</select>
+	
 </mapper>
