@@ -52,4 +52,9 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDao.getReviewListOnStore(storeNo);
 	}
 
+	@Override
+	public List<Review> getJSONReviewListByStoreId(int storeNo, int page) {
+		return reviewDao.getJSONReviewListByStoreId(storeNo, page);
+	}
+
 }

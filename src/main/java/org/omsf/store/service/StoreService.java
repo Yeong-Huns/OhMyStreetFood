@@ -27,4 +27,7 @@ public interface StoreService {
 	int addStore(Store store);
 	List<Store> getAllStores();
 	Store getStoreByNo(int storeNo);
+	
+	// yunbin
+	String getStoreNameByStoreNo(int storeNo);
 }

@@ -29,4 +29,7 @@ public interface ReviewService {
 	// 가게별 최근 리뷰 5개 가져오기
 	List<Review> getReviewListOnStore(int storeNo);
 	
+	// 가게별 리뷰 목록 가져오기 - 무한 스크롤
+	List<Review> getJSONReviewListByStoreId(@Param("storeNo") int storeNo, @Param("page") int page);
+	
 }

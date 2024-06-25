@@ -4,6 +4,7 @@ import javax.validation.Valid;
 
 import org.omsf.member.model.GeneralMember;
 import org.omsf.member.model.Owner;
+import org.omsf.member.service.EmailService;
 import org.omsf.member.service.GeneralMemberService;
 import org.omsf.member.service.OwnerService;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,8 @@ public class MemberController { // yunbin
 	
 	private final GeneralMemberService generalMemberService;
 	private final OwnerService ownerService;
-	
+	private final EmailService emailService;
+
 	@GetMapping("/signin")
     public String showSignInPage() {
         return "member/signin";
@@ -99,7 +101,6 @@ public class MemberController { // yunbin
 
 			ownerService.insertOwner(owner);
 			model.addAttribute("username", owner.getUsername());
-			System.out.println(owner.getUsername());
 			model.addAttribute("success", true);
 			
 		} catch (Exception e) {
@@ -109,7 +110,7 @@ public class MemberController { // yunbin
         return "store/addStoreOwner";
     }
     
-    @PostMapping("/signup/confirmId")
+    @PostMapping({"/signup/confirmId", "/findPassword/confirmId"})
     @ResponseBody
     public ResponseEntity<Boolean> comfirmId(String username, String memberType) {
     	boolean result = true;
@@ -119,7 +120,7 @@ public class MemberController { // yunbin
 		} else {
 			if (memberType.equals("general")) {
 				if (generalMemberService.checkMemberId(username)) {
-					result = false;
+					result = false; 
 				} else {
 					result = true;
 				}
@@ -157,7 +158,21 @@ public class MemberController { // yunbin
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage")
     public String showMypage() {
-    	return "/member/mypage";
+    	return "member/mypage";
+    }
+
+    @GetMapping("/findPassword")
+    public String showFindPasswordPage() {
+    	return "member/findPassword";
     }
     
+    @PostMapping("/findPassword")
+    public String processFindPassword(String username) {
+    	try {
+			emailService.sendEmail(username);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return "redirect:/signin";
+    }
 }

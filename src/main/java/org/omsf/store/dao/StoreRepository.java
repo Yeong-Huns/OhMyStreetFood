@@ -27,4 +27,7 @@ public interface StoreRepository {
 	void insertStore(Store store);
 	List<Store> getAllStores();
 	Optional<Store> getStoreByNo(int storeNo);
+	
+	// yunbin
+	String getStoreNameByStoreNo(int storeNo);
 }

@@ -22,4 +22,10 @@
 		FROM MEMBER
 		WHERE USERNAME = #{username}
 	</select>
+	
+	<update id="updatePassword" parameterType="map">
+		UPDATE member 
+		SET password=#{temporaryPassword}
+		WHERE username=#{username}
+	</update>
 </mapper>

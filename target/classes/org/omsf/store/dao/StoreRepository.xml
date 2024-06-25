@@ -131,10 +131,10 @@
 	    WHERE
 	        STORENO = #{storeNo}
 	</update>
-	<update id="deleteStore" parameterType="int">
-	      DELETE FROM store
-    		WHERE storeNo = #{storeNo}
-	</update>
+<!-- 	<update id="deleteStore" parameterType="int"> -->
+<!-- 	      DELETE FROM store -->
+<!--     		WHERE storeNo = #{storeNo} -->
+<!-- 	</update> -->
 	
 	<update id="updateTotalReviewAndRating">
 	    UPDATE STORE
@@ -210,4 +210,12 @@
 	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap">
 		SELECT * FROM STORE WHERE STORENO = #{storeNo}
 	</select>
+	
+	<!-- yunbin -->
+	<select id="getStoreNameByStoreNo" resultType="String">
+		SELECT storename AS storeName FROM WHERE STORENO = #{storeNo}
+	</select>
+	<delete id="deleteStore">
+		DELETE FROM store WHERE storeno=#{storeNo} 
+	</delete>
 </mapper>

@@ -1,11 +1,11 @@
 -- 멤버 테이블
 CREATE TABLE member (
     username    VARCHAR2(255 CHAR) NOT NULL,
-    nickname    VARCHAR2(255) NOT NULL,
-    password    VARCHAR2(255) NOT NULL,
+    nickname    VARCHAR2(255) NULL,
+    password    VARCHAR2(255) NOT NULL DEFAULT 'x',
     membertype  VARCHAR2(50) NOT NULL,
     logintype   VARCHAR2(50) NOT NULL,
-    bankaccount VARCHAR2(50 CHAR),
+    bankaccount VARCHAR2(50 CHAR) DEFAULT 'x',
     createdat   DATE NOT NULL,
     modifiedat  DATE
 );
@@ -161,5 +161,44 @@ CREATE OR REPLACE TRIGGER chatroommember_chatroommember_ BEFORE
     WHEN ( new.chatroommember_id IS NULL )
 BEGIN
     :new.chatroommember_id := chatroommember_chatroommember_.nextval;
+END;
+/
+
+-- 신고 테이블 
+create table report(
+    reportno NUMBER PRIMARY KEY,	
+    storeno NUMBER NOT NULL,
+    username VARCHAR2(255) NOT NULL,
+    title VARCHAR2(100) NOT NULL,
+    content	VARCHAR2(500)NOT NULL,
+    createdat DATE NOT NULL
+);
+
+ALTER TABLE report
+    ADD CONSTRAINT report_store_fk FOREIGN KEY ( storeno )
+        REFERENCES store ( storeno ) CASECADE;
+        
+ALTER TABLE report
+    ADD CONSTRAINT report_member_fk FOREIGN KEY ( username )
+        REFERENCES member ( username ) CASECADE;
+
+CREATE SEQUENCE REPORT_SEQ
+START WITH 1 -- 시작 값
+INCREMENT BY 1 -- 증가 값
+MINVALUE 1 -- 최소 값
+CACHE 20
+NOCYCLE;
+/
+
+create or replace TRIGGER REPORT_TRG 
+BEFORE INSERT ON REPORT
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.REPORTNO IS NULL THEN
+      SELECT REPORT_SEQ.NEXTVAL INTO :NEW.REPORTNO FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
 END;
 /

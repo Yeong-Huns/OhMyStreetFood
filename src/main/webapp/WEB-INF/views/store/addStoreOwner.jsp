@@ -38,9 +38,82 @@
 					class="fas fa-arrow-left"></i>
 				</a>
 			</div>
-			<div class="col-md-12 text-center" id="title">
-				<h3>가게 정보 등록</h3>
+<<<<<<< HEAD
+			<div class="col-md-12 text-center" id="logo">
+
+				<h3>가게 정보</h3>
 			</div>
+			<form>
+				<div class="form-group">
+					<label for="exampleInputEmail1">가게 이름</label> <input type="email"
+						class="form-control" id="exampleInputEmail1"
+						aria-describedby="emailHelp" placeholder="Email">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail1">가게 주소</label> <input type="email"
+						class="form-control" id="exampleInputEmail1"
+						aria-describedby="emailHelp" placeholder="Email"> 카카오 API
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail1">가게 대표 사진</label> <input
+						type="email" class="form-control" id="exampleInputEmail1"
+						aria-describedby="emailHelp" placeholder="Email">
+				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail1">가게 운영일자</label>
+					<div class="buttons" style="padding: 20px 0 0 0">
+						<button type="button"
+							class="btn btn-outline-primary rounded-circle">월</button>
+						<button type="button"
+							class="btn btn-outline-primary rounded-circle">화</button>
+						<button type="button"
+							class="btn btn-outline-primary rounded-circle">수</button>
+						<button type="button"
+							class="btn btn-outline-primary rounded-circle">목</button>
+						<button type="button"
+							class="btn btn-outline-primary rounded-circle">금</button>
+						<button type="button"
+							class="btn btn-outline-primary rounded-circle">토</button>
+						<button type="button"
+							class="btn btn-outline-primary rounded-circle">일</button>
+					</div>
+				</div>
+				<div class="form-group" style="margin-bottom: 15px;">
+					<label for="exampleInputEmail1">가게 운영시간</label> <span
+						style="display: flex; align-items: center;"> <input
+						type="time" class="form-control" id="inputStartTime"
+						placeholder="시작 시간 선택" style="width: 280px; margin-right: 10px;">
+						<span>&nbsp;부터&nbsp;</span> <input type="time"
+						class="form-control" id="inputEndTime" placeholder="종료 시간 선택"
+						style="width: 280px; margin-right: 10px;"> <span>&nbsp;까지&nbsp;</span>
+					</span>
+				</div>
+				<div class="form-group">
+					<label for="exampleTextarea">가게 소개</label>
+					<textarea class="form-control" id="exampleTextarea" rows="5"></textarea>
+				</div>
+				<div class="form-group">
+					<label for="buttonText">메뉴 추가</label> <span
+						style="display: flex; align-items: center;"> <input
+						type="text" id="menuInput" class="form-control"
+						style="width: 300px; margin-right: 10px;" placeholder="메뉴를 입력하세요">
+						<input type="number" id="priceInput" class="form-control"
+						style="width: 300px; margin-right: 10px;" placeholder="가격을 입력하세요">
+						<button type="button" class="btn btn-primary" onclick="addMenu()">등록</button>
+					</span>
+
+				</div>
+				<div id="menuContainer" style="width: 100%;">
+					<!-- 동적 생성 -->
+				</div>
+
+				<div class="col-md-12">
+					<button type="button" class="btn btn-primary"></button>
+=======
+			<div class="col-md-12 text-center" id="title">
+>>>>>>> branch 'yunbin' of https://github.com/iamjaeeuncho/OhMyStreetFood.git
+				<h3>가게 정보 등록</h3>
+				</div>
 			<form method="post"
 				action="${pageContext.request.contextPath}/store/addbyowner"
 				enctype="multipart/form-data">
