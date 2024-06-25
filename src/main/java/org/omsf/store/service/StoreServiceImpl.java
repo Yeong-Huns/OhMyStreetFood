@@ -112,13 +112,6 @@ public class StoreServiceImpl implements StoreService {
 	
 	// jaeeun
 	@Override
-	public int addStore(Store store) {
-	    storeRepository.insertStore(store);
-	    int storeNo = store.getStoreNo();
-		return storeNo;
-	}
-
-	@Override
 	public List<Store> getAllStores() {
 		return storeRepository.getAllStores();
 	}

@@ -24,7 +24,6 @@ public interface StoreRepository {
 	void deletePhoto(int PhotoNo);
 	
 	// jaeeun
-	void insertStore(Store store);
 	List<Store> getAllStores();
 	Optional<Store> getStoreByNo(int storeNo);
 	

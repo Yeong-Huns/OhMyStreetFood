@@ -175,33 +175,6 @@
 	</select>
 	
 	<!-- jaeeun -->
-	<insert id="insertStore" parameterType="org.omsf.store.model.Store">
-	    INSERT INTO store (
-	        storeno, storename, latitude, longitude, address, introduce, operatingdate, operatinghours,
-	        totalreview, totalrating, likes, createdat, modifiedat, member_username, picture
-	    )
-	    VALUES (
-	        STORE_SEQ.NEXTVAL, 
-	        #{storeName, jdbcType=VARCHAR}, 
-	        #{latitude, jdbcType=DOUBLE}, 
-	        #{longitude, jdbcType=DOUBLE}, 
-	        #{address, jdbcType=VARCHAR}, 
-	        #{introduce, jdbcType=VARCHAR}, 
-	        #{operatingDate, jdbcType=VARCHAR}, 
-	        #{operatingHours, jdbcType=VARCHAR}, 
-	        #{totalReview, jdbcType=INTEGER}, 
-	        #{totalRating, jdbcType=DOUBLE}, 
-	        #{likes, jdbcType=INTEGER}, 
-	        #{createdAt, jdbcType=TIMESTAMP}, 
-	        #{modifiedAt, jdbcType=TIMESTAMP}, 
-	        #{username, jdbcType=VARCHAR}, 
-	        #{picture, jdbcType=VARCHAR}
-	    )
-	    
-	    <selectKey keyProperty="storeNo" resultType="int" order="AFTER">
-       		SELECT STORE_SEQ.CURRVAL FROM DUAL
-   		</selectKey>
-	</insert>
 	
 	<select id="getAllStores" resultMap="storeResultMap">
 		SELECT * FROM STORE

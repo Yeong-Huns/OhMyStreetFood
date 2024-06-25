@@ -13,6 +13,7 @@ public interface StoreService {
 //	List<Store> getStoreByposition(String position);
 	List<Store> getStoreList(StorePagination page);
 	
+
 	int createStore(Store store);
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
@@ -24,10 +25,10 @@ public interface StoreService {
 	int UploadImage(ArrayList<MultipartFile> files, int storeNo) throws IOException;
 	
 	// jaeeun
-	int addStore(Store store);
 	List<Store> getAllStores();
 	Store getStoreByNo(int storeNo);
 	
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);
+
 }

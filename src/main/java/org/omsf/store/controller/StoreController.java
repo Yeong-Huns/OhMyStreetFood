@@ -1,14 +1,10 @@
 package org.omsf.store.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.omsf.review.model.RequestReview;
 import org.omsf.store.model.Menu;
@@ -41,11 +37,6 @@ public class StoreController {
 	private final MenuService menuService;
 //	private final ReviewService reviewService;
 
-//	@GetMapping("/kakaomap")
-//	public String testKakaoMap() {
-//		return "store/kakaomap";
-//	}
-//	
 //	@PostMapping("/create")
 //	@Transactional
 //	public String createStore(HttpServletRequest request, Store store, ArrayList<MultipartFile> files) {
@@ -56,7 +47,7 @@ public class StoreController {
 //		
 //		if (files != null) {
 //			int pictureNo = storeService.UploadImage(files, storeNo);
-//			store.setPicture(pictureNo);
+//			
 //			storeService.updateStore(store);
 //		}
 //		
@@ -91,15 +82,16 @@ public class StoreController {
 	        @RequestParam(value = "days", required = false) String[] selectedDays,
 	        @RequestParam(value = "startTime", required = false) String startTime,
 	        @RequestParam(value = "endTime", required = false) String endTime,
-	        @RequestParam(value = "picture", required = false) MultipartFile picture,
-	        @RequestParam(value = "menuName", required = false) String[] menuNames,
-	        @RequestParam(value = "menuPrice", required = false) long[] menuPrices,
+	        @RequestParam(value = "picture", required = false) ArrayList<MultipartFile> picture,
+	        @RequestParam(value = "menus", required = false) ArrayList<Menu> menus,
+	        Principal principal,
 	        RedirectAttributes redirectAttributes
 	) {
 	    try {
 	        String operatingDate = (selectedDays != null) ? String.join(",", selectedDays) : null;
 	        String operatingHours = (startTime != null && endTime != null) ? startTime + " - " + endTime : null;
-
+	   
+	        
 	        Store store = Store.builder()
 	                .storeName(storeName)
 	                .latitude(latitude)
@@ -113,35 +105,25 @@ public class StoreController {
 	                .likes(0)
 	                .createdAt(new Timestamp(System.currentTimeMillis()))
 	                .modifiedAt(new Timestamp(System.currentTimeMillis()))
-	                .username("redjoun@gmail.com")
+	                .username("User123@naver.com")
 	                .build();
 
-	        if (picture != null && !picture.isEmpty()) {
-	            String fileName = UUID.randomUUID().toString() + "_" + picture.getOriginalFilename();
-	            Path filePath = Paths.get(uploadDir, fileName);
-
-	            File uploadDirFile = new File(uploadDir);
-	            if (!uploadDirFile.exists()) {
-	                uploadDirFile.mkdirs();
-	            }
-
-	            Files.copy(picture.getInputStream(), filePath);
-
-	            String picturePath = filePath.toString();
-	            //store.setPicture(picturePath);
-	        }
-
-	        storeService.addStore(store);
+	        storeService.createStore(store);
 	        int storeNo = store.getStoreNo();
-	        
-	        if (menuNames != null && menuPrices != null) {	        
-	        	menuService.addMenu(menuNames, menuPrices, storeNo);
+	        if (picture != null && !picture.isEmpty()) {
+	        	int photoNo = storeService.UploadImage(picture, storeNo);
+	        	store.setPicture(photoNo);
+	        	storeService.updateStore(store);
+	        }
+
+	        if (menus.size() != 0) {	
+	        	for (Menu menu : menus) {	        		
+	        		menuService.createMenu(menu);
+	        	}
 	        }
 	        
-	        redirectAttributes.addFlashAttribute("successMessage", "가게 등록이 완료되었습니다.");
 	        return "index";
 	    } catch (IOException e) {
-	        redirectAttributes.addFlashAttribute("errorMessage", "가게 등록 중 오류가 발생했습니다.");
 	        return "index";
 	    }
 	}
@@ -173,6 +155,7 @@ public class StoreController {
                 .build();
 	    List<Store> stores = storeService.getStoreList(pageRequest);
 	    model.addAttribute("stores", stores);
+	    
 	    //처음 20개 스크롤 + 10개씩
 	    return "store";
 	}
