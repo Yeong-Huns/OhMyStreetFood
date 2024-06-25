@@ -128,7 +128,7 @@ public class StoreController {
 	            Files.copy(picture.getInputStream(), filePath);
 
 	            String picturePath = filePath.toString();
-	            store.setPicture(picturePath);
+	            //store.setPicture(picturePath);
 	        }
 
 	        storeService.addStore(store);

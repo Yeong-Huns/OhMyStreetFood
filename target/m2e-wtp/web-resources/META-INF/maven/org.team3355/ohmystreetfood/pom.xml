@@ -257,6 +257,11 @@
 	        <version>5.3.28</version>
     	</dependency>
     	
+		<!-- AWS S3 -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.12.12</version>
     	<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-context-support</artifactId>
