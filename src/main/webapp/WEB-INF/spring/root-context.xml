@@ -69,4 +69,7 @@
 		<property name="defaultErrorView" value="error/default" />
 	</bean> -->
 	
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<property name="locations" value="/WEB-INF/spring/key.properties" />
+	</bean>
 </beans>

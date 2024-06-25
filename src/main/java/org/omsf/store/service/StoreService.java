@@ -1,5 +1,6 @@
 package org.omsf.store.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface StoreService {
 	Store updateTotalRating(Store store);
 	Store updateLikes(Store store);
 	
-	int UploadImage(ArrayList<MultipartFile> files, int storeNo);
+	int UploadImage(ArrayList<MultipartFile> files, int storeNo) throws IOException;
 	
 	// jaeeun
 	int addStore(Store store);

@@ -3,6 +3,8 @@ package org.omsf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -13,10 +15,12 @@ import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
 import org.omsf.store.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @WebAppConfiguration
 @SpringJUnitConfig(locations = {"file:**/*-context.xml"})
@@ -30,7 +34,7 @@ public class StoreTests {
 	StoreRepository storeRepository;
 	
 	private int storeNo; 
-
+	
     @BeforeEach
     public void setup() {
         Store store = Store.builder()
@@ -54,20 +58,20 @@ public class StoreTests {
 		
 	}
 	
-//	@Test
-//	public void uploadTest() {
-//		
-//		byte[] content = "Hello World!".getBytes();
-//        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", content);
-//		ArrayList<MultipartFile> files = new ArrayList<>();
-//	    files.add(file);
-//		Store store = storeService.getStoreByNo(storeNo);
-//		int photoNo = storeService.UploadImage(files, storeNo);
-//		store.setPicture(photoNo);
-//		storeService.updateStore(store);
-//		Store dbStore = storeRepository.getStoreByNo(storeNo).get();
-//		assertEquals(photoNo, dbStore.getPicture());
-//	}
+	@Test
+	public void uploadTest() throws IOException {
+		
+		byte[] content = "Hello World!".getBytes();
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", content);
+		ArrayList<MultipartFile> files = new ArrayList<>();
+	    files.add(file);
+		Store store = storeService.getStoreByNo(storeNo);
+		int photoNo = storeService.UploadImage(files, storeNo);
+		store.setPicture(photoNo);
+		storeService.updateStore(store);
+		Store dbStore = storeRepository.getStoreByNo(storeNo).get();
+		assertEquals(photoNo, dbStore.getPicture());
+	}
 	
 	@Test
 	public void updateTest() {
@@ -101,4 +105,5 @@ public class StoreTests {
 			System.out.println(store);
 		}
 	}
+	
 }

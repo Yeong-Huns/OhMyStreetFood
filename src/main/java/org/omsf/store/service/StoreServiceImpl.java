@@ -1,6 +1,5 @@
 package org.omsf.store.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +11,12 @@ import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 
 @Service
 //@RequiredArgsConstructor
@@ -21,6 +24,10 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Autowired
 	private StoreRepository storeRepository;
+	@Autowired
+	private AmazonS3 s3Client;
+	@Value("${aws.bucketname}")
+	private String bucketName;
 	
 //	@Override
 //	public List<Store> getStoreByposition(String position) {
@@ -66,48 +73,37 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public int UploadImage(ArrayList<MultipartFile> files, int storeNo) {
+	public int UploadImage(ArrayList<MultipartFile> files, int storeNo) throws IOException {
 		String savedFileName = "";
-//		String uploadPath = servletContext.getRealPath("/uploaded_files/");
-		String uploadPath = "/temp/uploaded_files/";
+		String uploadPath = "store/";
 		int photoNo = 0;
+		
 		ArrayList<String> originalFileNameList = new ArrayList<String>();
         for(MultipartFile file : files) {
             String originalFileName = file.getOriginalFilename();
             originalFileNameList.add(originalFileName);
             
-            UUID uuid = UUID.randomUUID();
             // 확장자 추출
             String fileExtension = "";
             if (originalFileName != null && originalFileName.contains(".")) {
                 fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
             }
+            UUID uuid = UUID.randomUUID();
             savedFileName = uuid.toString() + fileExtension;
-
-            File file1 = new File(uploadPath + savedFileName);
-           
-            if (!file1.getParentFile().exists()) {
-                file1.getParentFile().mkdirs();
-            }
-            //서버로 전송
-            try {
-				file.transferTo(file1);
-			} catch (IllegalStateException e) {
-				
-				e.printStackTrace();
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
             
+            //파일경로: 업로드폴더 + uuid.확장자
+    		String filePath = uploadPath + savedFileName;
+    		s3Client.putObject(new PutObjectRequest(bucketName, filePath, file.getInputStream(), null));
+    		String url = s3Client.getUrl(bucketName, filePath).toString();
+ 
             Photo photo = Photo.builder()
       			  .contentType(file.getContentType())
       			  .fileSize(file.getSize())
-      			  .picture(uploadPath + savedFileName)
+      			  .picture(url)
       			  .storeNo(storeNo)
       			  .build();
            
-            storeRepository.createPhoto(photo);
+           storeRepository.createPhoto(photo);
            photoNo = photo.getPhotoNo();
         }
         
