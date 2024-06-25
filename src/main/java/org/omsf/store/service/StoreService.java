@@ -30,5 +30,4 @@ public interface StoreService {
 	
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);
-
 }

@@ -19,4 +19,11 @@ public class Menu {
 	private Timestamp modifiedAt;
 	
 	private int storeNo;
+	
+	public Menu(int menuNo, String menuName, long price,
+			Timestamp createdAt, Timestamp modifiedAt, int storeNo) {
+    }
+	public Menu() {
+		
+	}
 }
