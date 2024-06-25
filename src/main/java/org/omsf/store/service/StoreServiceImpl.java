@@ -28,7 +28,6 @@ public class StoreServiceImpl implements StoreService {
 	private AmazonS3 s3Client;
 	@Value("${aws.bucketname}")
 	private String bucketName;
-	
 //	@Override
 //	public List<Store> getStoreByposition(String position) {
 //		return storeRepository.getStoreByposition(position);
