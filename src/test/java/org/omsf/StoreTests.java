@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -100,8 +101,8 @@ public class StoreTests {
 							   .keyword("조재")
 							   .build();
 		
-		List<Store> storeList = storeService.getStoreList(page);
-		for (Store store : storeList) {
+		List<Map<String, Object>> storeList = storeService.getStoreList(page);
+		for (Map<String, Object> store : storeList) {
 			System.out.println(store);
 		}
 	}

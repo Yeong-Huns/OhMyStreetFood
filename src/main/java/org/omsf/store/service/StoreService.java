@@ -25,6 +25,7 @@ public interface StoreService {
 	Store updateLikes(Store store);
 	
 	int UploadImage(ArrayList<MultipartFile> files, int storeNo) throws IOException;
+	void deleteImage(int PhotoNo);
 	
 	// jaeeun
 	List<Store> getAllStores();
