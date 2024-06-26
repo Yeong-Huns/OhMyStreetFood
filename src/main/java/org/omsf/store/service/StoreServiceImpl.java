@@ -30,7 +30,6 @@ public class StoreServiceImpl implements StoreService {
 	private AmazonS3 s3Client;
 	@Value("${aws.bucketname}")
 	private String bucketName;
-	
 //	@Override
 //	public List<Store> getStoreByposition(String position) {
 //		return storeRepository.getStoreByposition(position);
@@ -145,5 +144,12 @@ public class StoreServiceImpl implements StoreService {
 		return storeRepository.getStoreList(page);
 	}
 
-
+	// leejongseop
+	@Override
+	public List<Store> getStoresByPosition(String position) {
+		String[] locationArray = position.split(" ");
+		// 서울일때는 "구", 지방일때는 "시" 기준
+		String pos = locationArray[1];
+		return storeRepository.getStoresByPosition(pos);
+	}
 }

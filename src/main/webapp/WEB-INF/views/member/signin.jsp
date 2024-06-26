@@ -30,7 +30,7 @@
 				</a>
 			</div>
 			<div class="col-md-12 text-center" id="title">
-				<h3>일반 로그인</h3>
+				<h3>로그인</h3>
 			</div>
 			<form action="${pageContext.request.contextPath}/signin" method="post">
 				<div class="form-group">
