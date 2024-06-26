@@ -28,4 +28,9 @@
 		SET password=#{temporaryPassword}
 		WHERE username=#{username}
 	</update>
+	
+	<delete id="deleteMember" >
+		DELETE member
+		WHERE username=#{username}
+	</delete>
 </mapper>

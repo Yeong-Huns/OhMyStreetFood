@@ -1,8 +1,8 @@
 package org.omsf.main;
 
 import java.util.List;
+import java.util.Map;
 
-import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
 import org.omsf.store.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class MenuController {
     	StorePagination pageRequest = StorePagination.builder()
 				.orderType(orderType)
                 .build();
-	    List<Store> stores = storeService.getStoreList(pageRequest);
+    	List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);
 	    model.addAttribute("stores", stores);
 	    //처음 20개 스크롤 + 10개씩
     	return "search";

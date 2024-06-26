@@ -14,7 +14,7 @@
 		<result property="password" column="password" />
 		<result property="memberType" column="membertype" />
 		<result property="loginType" column="logintype" />
-		<result property="bankaccount" column="bankaccount" />
+		<result property="bankAccount" column="bankaccount" />
 		<result property="createdAt" column="createdat" />
 		<result property="modifiedAt" column="modifiedat" />
 	</resultMap>
@@ -24,4 +24,17 @@
 		FROM MEMBER
 		WHERE USERNAME = #{username}
 	</select>
+	
+	<update id="updateMember">
+	    update member
+	    <set>
+	        <trim suffixOverrides=",">
+	            <if test="password != null and password != ''">
+	                password = #{password,jdbcType=VARCHAR},
+	                modifiedat = SYSDATE
+	            </if>
+	        </trim>
+	    </set>
+	    where username = #{username,jdbcType=VARCHAR}
+	</update>
 </mapper>

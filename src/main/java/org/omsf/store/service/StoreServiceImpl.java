@@ -1,9 +1,10 @@
 package org.omsf.store.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -12,8 +13,12 @@ import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 
 @Service
 //@RequiredArgsConstructor
@@ -21,7 +26,12 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Autowired
 	private StoreRepository storeRepository;
-	
+	@Autowired
+	private StoreService storeService;
+	@Autowired
+	private AmazonS3 s3Client;
+	@Value("${aws.bucketname}")
+	private String bucketName;
 //	@Override
 //	public List<Store> getStoreByposition(String position) {
 //		return storeRepository.getStoreByposition(position);
@@ -66,48 +76,37 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public int UploadImage(ArrayList<MultipartFile> files, int storeNo) {
+	public int UploadImage(ArrayList<MultipartFile> files, int storeNo) throws IOException {
 		String savedFileName = "";
-//		String uploadPath = servletContext.getRealPath("/uploaded_files/");
-		String uploadPath = "/temp/uploaded_files/";
+		String uploadPath = "store/";
 		int photoNo = 0;
+		
 		ArrayList<String> originalFileNameList = new ArrayList<String>();
         for(MultipartFile file : files) {
             String originalFileName = file.getOriginalFilename();
             originalFileNameList.add(originalFileName);
             
-            UUID uuid = UUID.randomUUID();
             // 확장자 추출
             String fileExtension = "";
             if (originalFileName != null && originalFileName.contains(".")) {
                 fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
             }
+            UUID uuid = UUID.randomUUID();
             savedFileName = uuid.toString() + fileExtension;
-
-            File file1 = new File(uploadPath + savedFileName);
-           
-            if (!file1.getParentFile().exists()) {
-                file1.getParentFile().mkdirs();
-            }
-            //서버로 전송
-            try {
-				file.transferTo(file1);
-			} catch (IllegalStateException e) {
-				
-				e.printStackTrace();
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
             
+            //파일경로: 업로드폴더 + uuid.확장자
+    		String filePath = uploadPath + savedFileName;
+    		s3Client.putObject(new PutObjectRequest(bucketName, filePath, file.getInputStream(), null));
+    		String url = s3Client.getUrl(bucketName, filePath).toString();
+ 
             Photo photo = Photo.builder()
       			  .contentType(file.getContentType())
       			  .fileSize(file.getSize())
-      			  .picture(uploadPath + savedFileName)
+      			  .picture(url)
       			  .storeNo(storeNo)
       			  .build();
            
-            storeRepository.createPhoto(photo);
+           storeRepository.createPhoto(photo);
            photoNo = photo.getPhotoNo();
         }
         
@@ -115,13 +114,6 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	// jaeeun
-	@Override
-	public int addStore(Store store) {
-	    storeRepository.insertStore(store);
-	    int storeNo = store.getStoreNo();
-		return storeNo;
-	}
-
 	@Override
 	public List<Store> getAllStores() {
 		return storeRepository.getAllStores();
@@ -133,6 +125,16 @@ public class StoreServiceImpl implements StoreService {
 		return store;
 	}
 	
+	@Override
+	public List<Store> searchByKeyword(String keyword, int offset, int limit) {
+		Map<String, Object> params = new HashMap<>();
+        params.put("keyword", keyword);
+        params.put("offset", offset);
+        params.put("limit", limit);
+        
+		return storeRepository.searchByKeyword(params);
+	}
+	
 	// yunbin
 	@Override
 	public String getStoreNameByStoreNo(int storeNo) {
@@ -140,7 +142,40 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	@Override
-	public List<Store> getStoreList(StorePagination page) {
-		return storeRepository.getStoreList(page);
+	public List<Map<String, Object>> getStoreList(StorePagination page) {
+		List<Store> stores =  storeRepository.getStoreList(page);
+		List<Map<String, Object>> storeWithPhotoList = new ArrayList<>();
+	    for (Store store : stores) {
+	        Map<String, Object> storeWithPhotoMap = new HashMap<>();
+	        storeWithPhotoMap.put("store", store);
+	        if (store.getPicture() != null) {
+	            Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	            storeWithPhotoMap.put("photo", photo);
+	        } else {
+	            storeWithPhotoMap.put("photo", null);
+	        }
+	        storeWithPhotoList.add(storeWithPhotoMap);
+	    }
+	    return storeWithPhotoList; 
+	}
+
+	// leejongseop
+	@Override
+	public List<Store> getStoresByPosition(String position) {
+		String[] locationArray = position.split(" ");
+		// 서울일때는 "구", 지방일때는 "시" 기준
+		String pos = locationArray[1];
+		return storeRepository.getStoresByPosition(pos);
+	}
+
+	@Override
+	public Photo getPhotoByPhotoNo(int photoNo) {
+		return storeRepository.getPhotoByPhotoNo(photoNo);
+	}
+
+	@Override
+	public List<Photo> getStorePhotos(int storeNo) {
+		Store store = storeService.getStoreByNo(storeNo);
+		return storeRepository.getStorePhotos(store);	
 	}
 }

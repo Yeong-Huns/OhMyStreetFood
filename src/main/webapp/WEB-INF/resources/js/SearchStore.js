@@ -1,3 +1,5 @@
+import urls from './config.js';
+
 const searchButton = document.querySelector('.searchButton');
 const dropdownItems = document.querySelectorAll('.dropdown-item');
 const storeList = document.getElementById('storeList');
@@ -60,20 +62,26 @@ function renderStoreList(data) {
 	 storeList.innerHTML = ''; 
 	 } 
 	 
-	 data.forEach(store => {
+	 data.forEach(storedata => {
+		const store = storedata.store;
+		const photo = storedata.photo;
+		
+		const storeNo = store.storeNo;
+        const storeName = store.storeName;
 		const totalReview = store.totalReview ?? 0;
         const totalRating = store.totalRating ?? 0;
         const likes = store.likes ?? 0;
         const introduce = store.introduce ?? '';
+        const pictureUrl = photo ? photo.picture : urls.defaultImageUrl;
         
         const storeCard = `
-            <div class="card" style="width: 100%; height: 200px; cursor: pointer; margin-bottom: 20px;" onclick="location.href='store/${store.storeNo}'">
+            <div class="card" style="width: 100%; height: 200px; cursor: pointer; margin-bottom: 20px;" onclick="location.href='store/${storeNo}'">
                 <div class="row g-0">
                     <div class="col-md-3" style="padding: 0 20px;">
-                        <img src="$/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+                        <img src="${pictureUrl}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
                     </div>
                     <div class="col-md-9 card-body" style="padding: 0 20px;">
-                        <h5 class="card-title">${store.storeName}</h5>
+                        <h5 class="card-title">${storeName}</h5>
                         <p class="card-text">${introduce}</p>
                         <p class="card-text">
                             <small class="text-muted">
