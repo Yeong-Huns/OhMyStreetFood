@@ -1,6 +1,6 @@
 package org.omsf.store.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public class Photo {
 	private String contentType;
 	private long fileSize;
 	private String picture;
-	private Date createdAt;
+	private Timestamp createdAt;
 	
 	private int storeNo;
 }

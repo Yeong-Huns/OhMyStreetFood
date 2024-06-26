@@ -21,6 +21,14 @@
 	    <result property="username" column="MEMBER_USERNAME"/>
 	    <result property="picture" column="PICTURE"/>
 	</resultMap>
+	 <resultMap id="photoResultMap" type="org.omsf.store.model.Photo">
+        <id property="photoNo" column="PHOTONO"/>
+        <result property="contentType" column="CONTENTTYPE"/>
+        <result property="fileSize" column="FILESIZE"/>
+        <result property="picture" column="PICTURE"/>
+        <result property="createdAt" column="CREATEDAT"/>
+        <result property="storeNo" column="STORE_STORENO" jdbcType="NUMERIC"/> 
+    </resultMap>
 
 <!--   <select id="getStoreByposition" resultType="org.omsf.store.model.Store"> -->
 <!--   	<bind name="pattern" value="'%' + position + '%'" /> -->
@@ -112,8 +120,17 @@
        		SELECT PHOTO_SEQ.CURRVAL FROM DUAL
   		</selectKey>
 	</insert>
+	<select id="getPhotoByPhotoNo">
+		SELECT * FROM PHOTO 
+		WHERE PHOTONO = #{photoNo}
+	</select>
+	<select id="getStorePhotos">
+		SELECT * FROM PHOTO 
+		WHERE STORE_STORENO = #{storeNo}
+		 AND PHOTONO != #{picture}
+	</select>
 	<update id="deletePhoto" parameterType="int">
-		DELETE PHOTO WHERE PHOTO = #{PhotoNo}
+		DELETE PHOTO WHERE PHOTO = #{photoNo}
 	</update>
 	
 	<update id="updateStore">

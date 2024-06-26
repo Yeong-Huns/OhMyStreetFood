@@ -2,7 +2,9 @@ package org.omsf.store.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -24,6 +26,8 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Autowired
 	private StoreRepository storeRepository;
+	@Autowired
+	private StoreService storeService;
 	@Autowired
 	private AmazonS3 s3Client;
 	@Value("${aws.bucketname}")
@@ -128,8 +132,21 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	@Override
-	public List<Store> getStoreList(StorePagination page) {
-		return storeRepository.getStoreList(page);
+	public List<Map<String, Object>> getStoreList(StorePagination page) {
+		List<Store> stores =  storeRepository.getStoreList(page);
+		List<Map<String, Object>> storeWithPhotoList = new ArrayList<>();
+	    for (Store store : stores) {
+	        Map<String, Object> storeWithPhotoMap = new HashMap<>();
+	        storeWithPhotoMap.put("store", store);
+	        if (store.getPicture() != null) {
+	            Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	            storeWithPhotoMap.put("photo", photo);
+	        } else {
+	            storeWithPhotoMap.put("photo", null);
+	        }
+	        storeWithPhotoList.add(storeWithPhotoMap);
+	    }
+	    return storeWithPhotoList; 
 	}
 
 	// leejongseop
@@ -139,5 +156,16 @@ public class StoreServiceImpl implements StoreService {
 		// 서울일때는 "구", 지방일때는 "시" 기준
 		String pos = locationArray[1];
 		return storeRepository.getStoresByPosition(pos);
+	}
+
+	@Override
+	public Photo getPhotoByPhotoNo(int photoNo) {
+		return storeRepository.getPhotoByPhotoNo(photoNo);
+	}
+
+	@Override
+	public List<Photo> getStorePhotos(int storeNo) {
+		Store store = storeService.getStoreByNo(storeNo);
+		return storeRepository.getStorePhotos(store);	
 	}
 }

@@ -21,8 +21,7 @@
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
-<!-- JavaScript -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
+
 </head>
 <body>
 	<div class="main">

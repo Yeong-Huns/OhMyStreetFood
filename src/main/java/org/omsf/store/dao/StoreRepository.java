@@ -21,7 +21,9 @@ public interface StoreRepository {
 	void updateTotalReviewAndRating(Store store);
 	void updateLikes(Store store);
 	void createPhoto(Photo photo);
-	void deletePhoto(int PhotoNo);
+	Photo getPhotoByPhotoNo(int photoNo);
+	List<Photo> getStorePhotos(Store store);
+	void deletePhoto(int photoNo);
 	
 	// jaeeun
 	List<Store> getAllStores();
