@@ -71,7 +71,7 @@ ALTER TABLE menu ADD CONSTRAINT menu_pk PRIMARY KEY ( menuno );
 
 ALTER TABLE menu
     ADD CONSTRAINT menu_store_fk FOREIGN KEY ( store_storeno )
-        REFERENCES store ( storeno );
+        REFERENCES store ( storeno ) ON DELETE CASCADE ENABLE;
 
 
 -- 리뷰 테이블
@@ -89,11 +89,11 @@ ALTER TABLE review ADD CONSTRAINT review_pk PRIMARY KEY ( reviewno );
 
 ALTER TABLE review
     ADD CONSTRAINT review_member_fk FOREIGN KEY ( member_username )
-        REFERENCES member ( username );
+        REFERENCES member ( username ) ON DELETE CASCADE ENABLE;
 
 ALTER TABLE review
     ADD CONSTRAINT review_store_fk FOREIGN KEY ( store_storeno )
-        REFERENCES store ( storeno );
+        REFERENCES store ( storeno ) ON DELETE CASCADE ENABLE;
 
 
 -- 사진 테이블
@@ -110,61 +110,35 @@ ALTER TABLE photo ADD CONSTRAINT photo_pk PRIMARY KEY ( photono );
 
 ALTER TABLE photo
     ADD CONSTRAINT photo_store_fk FOREIGN KEY ( store_storeno )
-        REFERENCES store ( storeno );
+        REFERENCES store ( storeno ) ON DELETE CASCADE ENABLE;
 
 
 -- 채팅 테이블
-CREATE TABLE chatroom (
-    chatroomno NUMBER NOT NULL,
-    createdat  DATE NOT NULL
+drop table chatroom CASCADE CONSTRAINTS purge;
+
+CREATE TABLE ChatRoom (
+    chatRoomNo NUMBER GENERATED AS IDENTITY PRIMARY KEY,
+    customer VARCHAR2(255),
+    storeNo NUMBER,
+    ownerVisible CHAR(1) DEFAULT '0' NOT NULL,
+    customerVisible CHAR(1) DEFAULT '0' NOT NULL,
+    updatedAt DATE DEFAULT SYSDATE NOT NULL,
+    CONSTRAINT fk_customer FOREIGN KEY (customer) REFERENCES MEMBER(userName) ON DELETE CASCADE,
+    CONSTRAINT fk_storeNo FOREIGN KEY (storeNo) REFERENCES STORE(storeno) ON DELETE CASCADE
 );
-
-ALTER TABLE chatroom ADD CONSTRAINT chatroom_pk PRIMARY KEY ( chatroomno );
-
 
 -- 메세지 테이블
-CREATE TABLE message (
-    messageno                NUMBER NOT NULL,
-    content                  VARCHAR2(1000 CHAR) NOT NULL,
-    createdat                DATE NOT NULL,
-    roommember_roommember_id NUMBER NOT NULL
+drop table message CASCADE CONSTRAINTS purge;
+CREATE TABLE Message (
+    messageNo NUMBER GENERATED AS IDENTITY PRIMARY KEY,
+    content VARCHAR2(1000 CHAR) NOT NULL,
+    senderId VARCHAR2(255),
+    chatRoomNo NUMBER,
+    isReceived CHAR(1) DEFAULT '0' NOT NULL,
+    createdAt DATE DEFAULT SYSDATE NOT NULL,
+    CONSTRAINT fk_sender FOREIGN KEY (senderId) REFERENCES MEMBER(userName) ON DELETE CASCADE,
+    CONSTRAINT fk_chatRoomNo FOREIGN KEY (chatRoomNo) REFERENCES CHATROOM(chatRoomNo) ON DELETE CASCADE
 );
-
-ALTER TABLE message ADD CONSTRAINT message_pk PRIMARY KEY ( messageno );
-
-ALTER TABLE message
-    ADD CONSTRAINT message_chatroommember_fk FOREIGN KEY ( roommember_roommember_id )
-        REFERENCES chatroommember ( chatroommember_id );
-
-
--- 채팅방 테이블
-CREATE TABLE chatroommember (
-    chatroommember_id   NUMBER NOT NULL,
-    member_username     VARCHAR2(255 CHAR) NOT NULL,
-    chatroom_chatroomno NUMBER NOT NULL,
-    isvisible           CHAR(1) NOT NULL
-);
-
-ALTER TABLE chatroommember ADD CONSTRAINT chatroommember_pk PRIMARY KEY ( chatroommember_id );
-
-ALTER TABLE chatroommember
-    ADD CONSTRAINT chatroommember_chatroom_fk FOREIGN KEY ( chatroom_chatroomno )
-        REFERENCES chatroom ( chatroomno );
-
-ALTER TABLE chatroommember
-    ADD CONSTRAINT chatroommember_member_fk FOREIGN KEY ( member_username )
-        REFERENCES member ( username );
-
-CREATE SEQUENCE chatroommember_chatroommember_ START WITH 1 NOCACHE ORDER;
-
-CREATE OR REPLACE TRIGGER chatroommember_chatroommember_ BEFORE
-    INSERT ON chatroommember
-    FOR EACH ROW
-    WHEN ( new.chatroommember_id IS NULL )
-BEGIN
-    :new.chatroommember_id := chatroommember_chatroommember_.nextval;
-END;
-/
 
 -- 신고 테이블 
 create table report(
@@ -178,11 +152,11 @@ create table report(
 
 ALTER TABLE report
     ADD CONSTRAINT report_store_fk FOREIGN KEY ( storeno )
-        REFERENCES store ( storeno ) CASECADE;
+        REFERENCES store ( storeno ) ON DELETE CASCADE ENABLE;
         
 ALTER TABLE report
     ADD CONSTRAINT report_member_fk FOREIGN KEY ( username )
-        REFERENCES member ( username ) CASECADE;
+        REFERENCES member ( username ) ON DELETE CASCADE ENABLE;
 
 CREATE SEQUENCE REPORT_SEQ
 START WITH 1 -- 시작 값

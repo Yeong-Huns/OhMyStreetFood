@@ -15,10 +15,10 @@
 	    <intercept-url pattern="/**" access="permitAll" />
 	    
 	    <form-login
-	        login-page="/signin"
-	        login-processing-url="/signin"
-	        authentication-success-handler-ref="myAuthenticationSuccessHandler"
-	        authentication-failure-url="/signin?error=true" />
+            login-page="/signin"
+            login-processing-url="/signin"
+            authentication-success-handler-ref="myAuthenticationSuccessHandler"
+            authentication-failure-url="/signin?error=true" />
 	        
 	    <logout
 	        logout-url="/logout"

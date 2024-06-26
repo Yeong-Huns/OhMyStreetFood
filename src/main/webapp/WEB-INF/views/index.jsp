@@ -37,7 +37,7 @@
 			<sec:authorize access="isAnonymous()">
 				<div class="col-md-12">
 					<span style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#e2f0fe; border-radius:10px;">
-				    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="${pageContext.request.contextPath}/signin/owner">사장님 모드</a></strong>
+				    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="${pageContext.request.contextPath}/signup/owner">사장님 모드</a></strong>
 					</span>
 				</div>
 			</sec:authorize>

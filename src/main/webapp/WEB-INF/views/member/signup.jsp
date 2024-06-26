@@ -226,7 +226,14 @@
 				</a>
 			</div>
 			<div class="col-md-12 text-center" id="title">
-				<h3>회원가입</h3>
+				<c:choose>
+				    <c:when test="${member.memberType eq 'owner'}">
+				        <h3>사장님 회원가입</h3>
+				    </c:when>
+				    <c:otherwise>
+				        <h3>회원가입</h3>
+				    </c:otherwise>
+				</c:choose>
 			</div>
 
 			<form:form modelAttribute="member" id="signupForm" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
