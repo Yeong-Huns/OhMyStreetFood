@@ -1,5 +1,6 @@
 package org.omsf.review.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -7,9 +8,8 @@ import javax.validation.Valid;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
-import org.omsf.store.model.Store;
+import org.omsf.review.validator.UserValidator;
 import org.omsf.store.service.StoreService;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -33,6 +33,19 @@ public class ReviewController {
 
 	private final ReviewService reviewServ;
 	private final StoreService storeService;
+
+	private final UserValidator userValidator;
+
+	// 리뷰 등록
+	@PostMapping("insert")
+	public String reviewInsert(Principal principal, @Valid @ModelAttribute("requestReview") RequestReview review, Errors errors, Model model,
+			RedirectAttributes redirectAttributes) {
+		log.info("RequestReview content : {}", review.toString());
+
+		userValidator.validate(review, principal, errors);
+		
+		if (errors.hasErrors()) {
+
 	
 	@GetMapping("review")
 	public String testReview(Model model) {
@@ -87,6 +100,40 @@ public class ReviewController {
 		model.addAttribute("review", reviewServ.getReviewByReviewNo(reviewNo));
 		return "review/reviewDetail";
 	}
+
+
+	// 리뷰 커맨드패턴 처리
+	@PostMapping("command")
+	public String reviewCommand(Principal principal, @ModelAttribute("requestReview") RequestReview review,
+			@RequestParam("command") String command, @RequestParam("reviewNo") int reviewNo, Errors errors,
+			RedirectAttributes redirectAttributes) {
+		log.info("요청 커맨드 : {}", command);
+		
+		userValidator.validate(review, principal, errors);
+		if (errors.hasErrors()) {
+			redirectAttributes.addFlashAttribute("requestReview", review);
+			redirectAttributes.addFlashAttribute("errors", errors.getAllErrors());
+			log.info("error 배열 : {}", errors.getAllErrors().toString());
+			return String.format("redirect:/review/%d", reviewNo);
+		}
+		
+		if (command.equals("update")) {
+			// update 요청
+			reviewServ.updateReview(reviewNo, review);
+			return String.format("redirect:/review/%d", reviewNo);
+		} else {
+			// delete 요청
+			if (!command.equals("delete")) {
+				// delete요청이 아닐 때
+				return String.format("redirect:/review/%d", reviewNo);
+			}
+			reviewServ.deleteReview(reviewNo);
+			return String.format("redirect:/review/list/%d", review.getStoreStoreNo());
+		}
+	}
+
+
 	
 	
+
 }

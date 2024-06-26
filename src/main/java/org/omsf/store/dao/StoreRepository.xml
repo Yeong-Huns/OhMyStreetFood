@@ -222,7 +222,7 @@
 	</delete>
 	
 	<!-- leejongseop -->
-	<select id="getStoresByPosition" resultType="org.omsf.store.model.Store">
+	<select id="getStoresByPosition" resultMap="storeResultMap">
 		<bind name="pattern" value="'%' + position + '%'" />
 		SELECT 
 			* 

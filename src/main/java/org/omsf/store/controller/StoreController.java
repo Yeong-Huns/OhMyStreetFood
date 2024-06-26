@@ -7,18 +7,25 @@ import java.util.List;
 import java.util.Map;
 
 import org.omsf.review.model.RequestReview;
+import org.omsf.store.model.Like;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
+import org.omsf.store.service.LikeService;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.StoreService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,6 +47,7 @@ public class StoreController {
 	private final MenuService menuService;
 //	private final ReviewService reviewService;
 	private ObjectMapper objectMapper = new ObjectMapper();
+	private final LikeService likeService;
 
 	@GetMapping("/addbygeneral")
 	public String showAddStoreGeneralPage() {
@@ -174,5 +182,42 @@ public class StoreController {
 	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position){
 		log.info("api 요청 완료");
 		return storeService.getStoresByPosition(position);
-	}	
+	}
+	
+	// leejongseop - like 기능
+	@PreAuthorize("isAuthenticated()")
+	@ResponseBody
+	@PostMapping("like/insert")
+	public String insertLike(Principal principal, @RequestBody Like like, Errors errors) {
+		log.info("like insert api 요청 완료");
+		log.info("like 정보 : {}", like.toString());
+		like.setMemberUsername(principal.getName());
+		likeService.insertLike(like);
+		return "찜 목록에 등록";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@ResponseBody
+	@DeleteMapping("like/delete")
+	public String deleteLike(Principal principal, @RequestBody Like like, Errors errors) {
+		log.info("like delete api 요청 완료");
+		log.info("like 정보 : {}", like.toString());
+		like.setMemberUsername(principal.getName());
+		likeService.deleteLike(like);
+		return "찜 목록에 제외";
+	}
+	
+	// LIKE돼 있는 지 확인 하는 메소드
+	@PreAuthorize("isAuthenticated()")
+	@ResponseBody
+	@GetMapping("like/check")
+	public ResponseEntity<Integer> isLike(Principal principal, Like like, Errors errors) {
+		log.info("like check api 요청 완료");
+		log.info("like 정보 : {}", like.toString());
+		like.setMemberUsername(principal.getName());
+		int count = likeService.isLike(like);
+		log.info("count 개수 : {}", count);
+		return new ResponseEntity<>(count, HttpStatus.OK);
+	}
+
 }
