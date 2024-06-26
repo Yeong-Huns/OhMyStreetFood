@@ -42,7 +42,7 @@ public class StoreController {
 
 	@GetMapping("/addbygeneral")
 	public String showAddStoreGeneralPage() {
-	    return "store/addStoreGeneral";
+	    return "store/addStore";
 	}
 
 	@PostMapping("/createstore")

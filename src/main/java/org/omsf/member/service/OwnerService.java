@@ -8,4 +8,6 @@ public interface OwnerService extends MemberService<Owner> {
 
 	void updateMember(Owner owner);
 
+	boolean checkBusinessRegistrationNumber(String businessRegistrationNumber);
+
 }
