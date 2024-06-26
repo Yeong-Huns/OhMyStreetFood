@@ -34,7 +34,6 @@
 			<div class="col-md-12">
 				<span style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#e2f0fe; border-radius:10px;">
 			    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="${pageContext.request.contextPath}/signin">사장님 모드</a></strong>
-			</div>
 				</span>
 			</div>
 
@@ -88,7 +87,7 @@
         </div>
     </div>
 
-	<!-- spinner -->
+	<!-- Spinner -->
 	<div id="spinner-wrapper">
         <div id="spinner"></div>
         <div id="spinner-text">현재 위치를 기반으로 주위 상점을 알아보고 있습니다</div>
@@ -97,7 +96,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-	<!-- kakaoMap API key -->
+	<!-- KakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMap.js"></script>
 

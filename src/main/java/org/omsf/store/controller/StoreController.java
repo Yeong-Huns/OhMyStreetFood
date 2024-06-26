@@ -123,6 +123,11 @@ public class StoreController {
 	}
 	
 	@GetMapping("/search")
+    public String searchPage() {
+        return "search/searchTag";
+    }
+	
+	@GetMapping("/search/list")
     public String searchPage(
         @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
         Model model) {
@@ -133,7 +138,7 @@ public class StoreController {
         return "search/searchList";
     }
 	
-	@GetMapping("/search/list")
+	@GetMapping("/search/lists")
     public String searchStores(
         @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
         @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,

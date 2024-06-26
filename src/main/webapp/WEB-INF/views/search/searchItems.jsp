@@ -16,6 +16,8 @@
                           찜 ${store.likes}
                       </small>
                   </p>
+                  <p class="card-text">${store.storeNo}</p>
+                  <p class="card-text">${store.modifiedAt}</p>
               </div>
           </div>
       </div>
