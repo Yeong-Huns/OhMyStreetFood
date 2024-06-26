@@ -35,26 +35,6 @@ public class ReviewController {
 	private final StoreService storeService;
 
 	private final UserValidator userValidator;
-
-	// 리뷰 등록
-	@PostMapping("insert")
-	public String reviewInsert(Principal principal, @Valid @ModelAttribute("requestReview") RequestReview review, Errors errors, Model model,
-			RedirectAttributes redirectAttributes) {
-		log.info("RequestReview content : {}", review.toString());
-
-		userValidator.validate(review, principal, errors);
-		
-		if (errors.hasErrors()) {
-
-	
-	@GetMapping("review")
-	public String testReview(Model model) {
-		RequestReview review = new RequestReview();
-		review.setStoreStoreNo(20);
-		review.setMemberUsername("test10@naver.com");
-		model.addAttribute("requestReview", review);
-		return "test/createReview";
-	}
 	
 	// 리뷰 등록
 	@PostMapping("insert")
@@ -97,7 +77,10 @@ public class ReviewController {
 	@GetMapping("{reviewNo}")
 	public String getReviewDetail(@PathVariable("reviewNo") int reviewNo,
 									Model model) {
-		model.addAttribute("review", reviewServ.getReviewByReviewNo(reviewNo));
+		Review review = reviewServ.getReviewByReviewNo(reviewNo);
+		model.addAttribute("review", review);
+		model.addAttribute("reviewNo", reviewNo);
+		model.addAttribute("memberUsername", review.getMemberUsername());
 		return "review/reviewDetail";
 	}
 
