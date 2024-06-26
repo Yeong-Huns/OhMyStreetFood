@@ -6,4 +6,6 @@ public interface OwnerService extends MemberService<Owner> {
 
 	void insertOwner(Owner owner);
 
+	void updateMember(Owner owner);
+
 }

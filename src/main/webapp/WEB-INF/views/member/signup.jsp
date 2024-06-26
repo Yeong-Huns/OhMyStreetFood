@@ -65,8 +65,7 @@
 	        $.ajax({
 	        	url : './confirmId',
 	            data : {
-	            	username : id,
-	                memberType : "${memberType}"
+	            	username : id
 	            },
 	            type : 'POST',
 	            dataType : 'json',

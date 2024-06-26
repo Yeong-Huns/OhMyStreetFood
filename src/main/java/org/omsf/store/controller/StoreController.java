@@ -44,7 +44,7 @@ public class StoreController {
 	public String showAddStoreGeneralPage() {
 	    return "store/addStoreGeneral";
 	}
-	
+
 	@PostMapping("/createstore")
 	@ResponseBody
 	public ResponseEntity<String> createStore(

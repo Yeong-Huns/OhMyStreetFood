@@ -1,16 +1,18 @@
 -- 멤버 테이블
 CREATE TABLE member (
     username    VARCHAR2(255 CHAR) NOT NULL,
-    nickname    VARCHAR2(255) NULL,
+    nickname    VARCHAR2(255),
     password    VARCHAR2(255) NOT NULL DEFAULT 'x',
     membertype  VARCHAR2(50) NOT NULL,
     logintype   VARCHAR2(50) NOT NULL,
-    bankaccount VARCHAR2(50 CHAR) DEFAULT 'x',
+    businessregistrationnumber VARCHAR2(10),
     createdat   DATE NOT NULL,
     modifiedat  DATE
 );
 
-ALTER TABLE member ADD CONSTRAINT member_pk PRIMARY KEY ( username );
+ALTER TABLE member ADD CONSTRAINT member_pk PRIMARY KEY (username);
+ALTER TABLE member ADD CONSTRAINT member_nickname_uk UNIQUE (nickname);
+ALTER TABLE member ADD CONSTRAINT member_businessregistrationnumber_uk UNIQUE (businessregistrationnumber);
 
 
 -- 점포 테이블
