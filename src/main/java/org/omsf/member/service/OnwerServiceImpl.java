@@ -52,4 +52,9 @@ public class OnwerServiceImpl implements OwnerService {
 		ownerRepository.updateMember(owner);
 	}
 
+	@Override
+	public boolean checkBusinessRegistrationNumber(String businessRegistrationNumber) {
+		return ownerRepository.checkBusinessRegistrationNumber(businessRegistrationNumber);
+	}
+
 }
