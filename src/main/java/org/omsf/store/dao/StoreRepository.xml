@@ -21,6 +21,14 @@
 	    <result property="username" column="MEMBER_USERNAME"/>
 	    <result property="picture" column="PICTURE"/>
 	</resultMap>
+	 <resultMap id="photoResultMap" type="org.omsf.store.model.Photo">
+        <id property="photoNo" column="PHOTONO"/>
+        <result property="contentType" column="CONTENTTYPE"/>
+        <result property="fileSize" column="FILESIZE"/>
+        <result property="picture" column="PICTURE"/>
+        <result property="createdAt" column="CREATEDAT"/>
+        <result property="storeNo" column="STORE_STORENO" jdbcType="NUMERIC"/> 
+    </resultMap>
 
 <!--   <select id="getStoreByposition" resultType="org.omsf.store.model.Store"> -->
 <!--   	<bind name="pattern" value="'%' + position + '%'" /> -->
@@ -112,8 +120,17 @@
        		SELECT PHOTO_SEQ.CURRVAL FROM DUAL
   		</selectKey>
 	</insert>
+	<select id="getPhotoByPhotoNo">
+		SELECT * FROM PHOTO 
+		WHERE PHOTONO = #{photoNo}
+	</select>
+	<select id="getStorePhotos">
+		SELECT * FROM PHOTO 
+		WHERE STORE_STORENO = #{storeNo}
+		 AND PHOTONO != #{picture}
+	</select>
 	<update id="deletePhoto" parameterType="int">
-		DELETE PHOTO WHERE PHOTO = #{PhotoNo}
+		DELETE PHOTO WHERE PHOTO = #{photoNo}
 	</update>
 	
 	<update id="updateStore">
@@ -175,33 +192,6 @@
 	</select>
 	
 	<!-- jaeeun -->
-	<insert id="insertStore" parameterType="org.omsf.store.model.Store">
-	    INSERT INTO store (
-	        storeno, storename, latitude, longitude, address, introduce, operatingdate, operatinghours,
-	        totalreview, totalrating, likes, createdat, modifiedat, member_username, picture
-	    )
-	    VALUES (
-	        STORE_SEQ.NEXTVAL, 
-	        #{storeName, jdbcType=VARCHAR}, 
-	        #{latitude, jdbcType=DOUBLE}, 
-	        #{longitude, jdbcType=DOUBLE}, 
-	        #{address, jdbcType=VARCHAR}, 
-	        #{introduce, jdbcType=VARCHAR}, 
-	        #{operatingDate, jdbcType=VARCHAR}, 
-	        #{operatingHours, jdbcType=VARCHAR}, 
-	        #{totalReview, jdbcType=INTEGER}, 
-	        #{totalRating, jdbcType=DOUBLE}, 
-	        #{likes, jdbcType=INTEGER}, 
-	        #{createdAt, jdbcType=TIMESTAMP}, 
-	        #{modifiedAt, jdbcType=TIMESTAMP}, 
-	        #{username, jdbcType=VARCHAR}, 
-	        #{picture, jdbcType=VARCHAR}
-	    )
-	    
-	    <selectKey keyProperty="storeNo" resultType="int" order="AFTER">
-       		SELECT STORE_SEQ.CURRVAL FROM DUAL
-   		</selectKey>
-	</insert>
 	
 	<select id="getAllStores" resultMap="storeResultMap">
 		SELECT * FROM STORE
@@ -211,11 +201,30 @@
 		SELECT * FROM STORE WHERE STORENO = #{storeNo}
 	</select>
 	
+	<select id="searchByKeyword" parameterType="map" resultType="org.omsf.store.model.Store">
+	    SELECT * 
+        FROM store 
+        WHERE storeName LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%'
+        ORDER BY storeNo
+        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	</select>
+	
 	<!-- yunbin -->
 	<select id="getStoreNameByStoreNo" resultType="String">
 		SELECT storename AS storeName FROM WHERE STORENO = #{storeNo}
 	</select>
+	
 	<delete id="deleteStore">
 		DELETE FROM store WHERE storeno=#{storeNo} 
 	</delete>
+	
+	<!-- leejongseop -->
+	<select id="getStoresByPosition" resultType="org.omsf.store.model.Store">
+		<bind name="pattern" value="'%' + position + '%'" />
+		SELECT 
+			* 
+		FROM STORE 
+		WHERE ADDRESS LIKE #{pattern}
+	</select>
+	
 </mapper>

@@ -12,7 +12,8 @@ import lombok.ToString;
 @ToString
 @Builder
 public class Store {
-	private int storeNo;
+	
+	private Integer storeNo;
 	private String storeName;
 	private Double latitude;
 	private Double longitude;
@@ -27,5 +28,29 @@ public class Store {
 	private Timestamp modifiedAt;
 	
 	private String username;
-    private String picture;
+    private Integer picture;
+    
+    public Store() {
+    	
+    }
+    
+    public Store(Integer storeNo, String storeName, Double latitude, Double longitude, String address, String introduce,
+    		String operatingDate, String operatingHours, Integer totalReview, Double totalRating, Integer likes,
+    		Timestamp createdAt, Timestamp modifiedAt, String username, Integer picture) {
+    	this.storeNo = storeNo;
+    	this.storeName = storeName;
+    	this.latitude = latitude;
+    	this.longitude = longitude;
+    	this.address = address;
+    	this.introduce = introduce;
+    	this.operatingDate = operatingDate;
+    	this.operatingHours = operatingHours;
+    	this.totalReview = totalReview;
+    	this.totalRating = totalRating;
+    	this.likes = likes;
+    	this.createdAt = createdAt;
+    	this.modifiedAt = modifiedAt;
+    	this.username = username;
+    	this.picture = picture;
+    }
 }

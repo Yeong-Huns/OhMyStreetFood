@@ -80,5 +80,7 @@
 		<beans:value>classpath:i18n/member</beans:value> </beans:list> </beans:property> 
 		<beans:property name="defaultEncoding" value="UTF-8" /> </beans:bean> <beans:bean 
 		id="localeResolver" class="org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver" /> -->
-		
+	<beans:bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    	<beans:property name="locations" value="/WEB-INF/spring/key.properties" />
+	</beans:bean>
 </beans:beans>

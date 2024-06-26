@@ -3,7 +3,8 @@
  */
 
 document.querySelector('.close-button').onclick = function() {
-    javascript:history.go(-1);
+    const storeNo = document.querySelector('#storeStoreNo').value;
+    location.href = '/review/list/' + storeNo;
 };
 
 document.addEventListener('DOMContentLoaded', function() {
