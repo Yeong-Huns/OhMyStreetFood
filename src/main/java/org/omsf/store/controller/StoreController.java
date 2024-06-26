@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.omsf.review.model.RequestReview;
 import org.omsf.store.model.Menu;
+import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
 import org.omsf.store.service.MenuService;
@@ -107,9 +108,16 @@ public class StoreController {
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
 		Store store = storeService.getStoreByNo(storeNo);
 		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
+		Photo storePhoto = null;
+		if (store.getPicture() != null) {
+			storePhoto = storeService.getPhotoByPhotoNo(store.getPicture());
+		}
+		List<Photo> gallery = storeService.getStorePhotos(storeNo);
 		
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menu);
+		model.addAttribute("storePhoto", storePhoto);
+		model.addAttribute("gallery", gallery);
 		
 		// leejongseop - 리뷰 작성 폼 바인딩
 		if (!model.containsAttribute("requestReview")) {
@@ -121,6 +129,16 @@ public class StoreController {
 		
 	    return "store/showStore";
 	}
+	
+
+    @GetMapping("/{storeNo}/update")
+    public String showStoreEditForm(@PathVariable("storeNo") int storeId, Model model,
+    		Principal principal) {
+    	String username = principal.getName();
+        Store store = storeService.getStoreByNo(storeId);
+        model.addAttribute("store", store);
+        return "store-edit-form"; 
+    }
 	
 	@GetMapping("/search")
     public String searchPage() {
