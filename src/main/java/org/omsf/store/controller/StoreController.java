@@ -94,7 +94,7 @@ public class StoreController {
 	        @RequestParam(value = "picture", required = false) MultipartFile picture,
 	        @RequestParam(value = "menuName", required = false) String[] menuNames,
 	        @RequestParam(value = "menuPrice", required = false) long[] menuPrices,
-	        RedirectAttributes redirectAttributes
+	        RedirectAttributes redirectAttributes, Principal principal
 	) {
 	    try {
 	        String operatingDate = (selectedDays != null) ? String.join(",", selectedDays) : null;
@@ -113,7 +113,7 @@ public class StoreController {
 	                .likes(0)
 	                .createdAt(new Timestamp(System.currentTimeMillis()))
 	                .modifiedAt(new Timestamp(System.currentTimeMillis()))
-	                .username("redjoun@gmail.com")
+	                .username(principal.getName())
 	                .build();
 
 	        if (picture != null && !picture.isEmpty()) {

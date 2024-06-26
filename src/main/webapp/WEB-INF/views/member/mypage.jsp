@@ -80,8 +80,7 @@
 			</div>
 			
 			<div class="col-md-12 text-center">
-				<a href="#">회원 정보 수정</a><br>
-				<a href="#">회원 탈퇴</a>
+				<a href="${pageContext.request.contextPath}/modifyMember">회원 정보 수정</a><br>
 				<a href="${pageContext.request.contextPath}/logout">로그아웃</a>
 			</div>
 			

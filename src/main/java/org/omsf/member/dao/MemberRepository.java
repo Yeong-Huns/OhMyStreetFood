@@ -9,4 +9,5 @@ public interface MemberRepository<T extends Member> {
 	boolean checkMemberId(String username);
 	Optional<T> findByUsername(String username);
 	void updatePassword(@Param("username") String username, @Param("temporaryPassword") String temporaryPassword);
+	void deleteMember(String username);
 }
