@@ -3,7 +3,9 @@ package org.omsf.store.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface StoreService {
 
 //	List<Store> getStoreByposition(String position);
-	List<Store> getStoreList(StorePagination page);
+	List<Map<String, Object>> getStoreList(StorePagination page);
 	
 
 	int createStore(Store store);
@@ -34,4 +36,7 @@ public interface StoreService {
 
 	// leejongseop
 	List<Store> getStoresByPosition(String position);
+	
+	Photo getPhotoByPhotoNo(int photoNo);
+	List<Photo> getStorePhotos(int storeNo);
 }
