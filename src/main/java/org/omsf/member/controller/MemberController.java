@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.omsf.member.model.GeneralMember;
@@ -22,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -46,9 +49,8 @@ public class MemberController { // yunbin
 
 	private final PasswordEncoder passwordEncoder;
 
-	@GetMapping("/signin/{memberType}")
-	public String showSignInPage(@PathVariable String memberType, Model model) {
-		model.addAttribute("memberType", memberType);
+	@GetMapping("/signin")
+	public String showSignInPage(Model model) {
 		return "member/signin";
 	}
 
@@ -134,7 +136,7 @@ public class MemberController { // yunbin
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	@PostMapping({"/signup/confirmNickName", "/modifyMember/confirmNickName"})
+	@PostMapping({ "/signup/confirmNickName", "/modifyMember/confirmNickName" })
 	@ResponseBody
 	public ResponseEntity<Boolean> comfirmNickName(String nickName) {
 		boolean result = true;
@@ -151,7 +153,7 @@ public class MemberController { // yunbin
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/signup/confirmBusinessRegistrationNumber")
 	@ResponseBody
 	public ResponseEntity<Boolean> comfirmBusinessRegistrationNumber(String businessRegistrationNumber) {
@@ -229,27 +231,27 @@ public class MemberController { // yunbin
 				}
 			}
 		}
-		
 
 		return "member/modify";
 	}
 
 	@PostMapping("/modifyMember/general")
-	public String processModifyMember(@Valid @ModelAttribute("member") GeneralMember generalMember, BindingResult result, Model model) {
-		
-		if(generalMember.getPassword() != null && !generalMember.getPassword().isEmpty()) {
+	public String processModifyMember(@Valid @ModelAttribute("member") GeneralMember generalMember,
+			BindingResult result, Model model) {
+
+		if (generalMember.getPassword() != null && !generalMember.getPassword().isEmpty()) {
 			if (result.hasErrors()) {
 				model.addAttribute("member", generalMember);
 				return "member/modify";
 			}
-			
+
 			if (!generalMember.getPassword().equals(generalMember.getPasswordConfirm())) {
-		        result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
-		        model.addAttribute("member", generalMember);
-		        return "member/modify";
-		    }
+				result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
+				model.addAttribute("member", generalMember);
+				return "member/modify";
+			}
 		}
-		
+
 		generalMemberService.updateMember(generalMember);
 
 		return "redirect:/mypage";
@@ -257,18 +259,18 @@ public class MemberController { // yunbin
 
 	@PostMapping("/modifyMember/owner")
 	public String processModifyMember(@Valid @ModelAttribute("member") Owner owner, BindingResult result, Model model) {
-		
-		if(owner.getPassword() != null && !owner.getPassword().isEmpty()) {
+
+		if (owner.getPassword() != null && !owner.getPassword().isEmpty()) {
 			if (result.hasErrors()) {
 				model.addAttribute("member", owner);
 				return "member/modify";
 			}
-			
+
 			if (!owner.getPassword().equals(owner.getPasswordConfirm())) {
-		        result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
-		        model.addAttribute("member", owner);
-		        return "member/modify";
-		    }
+				result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
+				model.addAttribute("member", owner);
+				return "member/modify";
+			}
 		}
 		ownerService.updateMember(owner);
 
@@ -276,29 +278,19 @@ public class MemberController { // yunbin
 	}
 
 	@GetMapping("/withdrawal")
-	@ResponseBody
-	public Boolean handleWithdrawal(@RequestParam("username") String username) {
-		for (String authority : currentUserAuthority()) {
-			if (authority.equals("ROLE_USER")) {
-				try {
-					generalMemberService.deleteMember(username);
-					return true;
-				} catch (Exception e) {
-					e.printStackTrace();
-					return false;
-				}
-
-			} else if (authority.equals("ROLE_OWNER")) {
-				try {
-					ownerService.deleteMember(username);
-					return true;
-				} catch (Exception e) {
-					e.printStackTrace();
-					return false;
-				}
-			}
+	public String processWithdrawal(Principal principal, Model model, HttpServletRequest request, HttpServletResponse response) {
+		try {
+			memberService.deleteMember(principal.getName());
+			
+			SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+            logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+            
+			return "redirect:/signin?withdrawalSuccess";
+		} catch (Exception e) {
+			model.addAttribute("error", "서버 오류입니다. 다시 시도해 주세요.");
+			return "redirect:/modify";
 		}
-		return false;
+		
 	}
 
 	private List<String> currentUserAuthority() {

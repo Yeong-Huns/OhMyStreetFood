@@ -13,7 +13,7 @@
 	$(document).ready(function(){
 		$("#withdrawal").click(function(){
 			if (confirm("정말로 탈퇴하시겠습니까?") == true){
-				//window.location.href = './witdrawal?username=' + principalUsername;
+				window.location.href = './witdrawal';
 			} else {
 				return;
 			}
@@ -56,7 +56,11 @@
         	   $("#nickNameAlertLabel").empty();
         	   isNickNameDuplicateChecked = false;
            });
-		});      
+		});
+		
+		if ("${error}" != '' ) {
+			alert(error);
+		}
 	});
 </script>
 </head>

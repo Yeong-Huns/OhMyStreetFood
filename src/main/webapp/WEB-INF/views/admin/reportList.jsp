@@ -85,7 +85,7 @@
 				            	alert("삭제가 완료되었습니다.");
 				            	$button.closest('.report-container').remove();
 				            } else {
-				            	alert("오류");
+				            	alert("서버 오류입니다. 다시 시도해 주세요.");
 				            }
 				        },
 				        error: function(xhr, status, error) {

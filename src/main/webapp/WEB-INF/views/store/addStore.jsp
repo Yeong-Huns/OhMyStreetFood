@@ -29,7 +29,7 @@
 			<div class="col-md-12 text-center" id="title">
 				<h3>가게 정보 등록</h3>
 			</div>
-			<form method="post"
+			<form action="${pageContext.request.contextPath}/createstore" method="post"
 				id="storeForm"
 				enctype="multipart/form-data">
 				
