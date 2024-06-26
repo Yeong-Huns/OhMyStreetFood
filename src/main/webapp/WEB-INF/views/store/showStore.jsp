@@ -21,9 +21,14 @@
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
 <!-- JavaScript -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
+
+
 </head>
 <body>
 	<div class="main">
@@ -42,7 +47,14 @@
 		    <div class="card" style="width: 100%; height: auto; border: none;">
 		        <div class="row g-0">
 		            <div class="col-md-3" style="padding: 0 20px;">
-		                <img src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+		           		 <c:choose>
+					        <c:when test="${storePhoto.picture != null}">
+					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+					        </c:when>
+					        <c:otherwise>
+					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+					        </c:otherwise>
+					    </c:choose>
 		            </div>
 		            <div class="col-md-9 card-body" style="padding: 0 20px;">
 		                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
@@ -56,7 +68,17 @@
 			                		평점 ${store.totalRating}
 			                		찜 ${store.likes}
 			                </p>
-		            		<span><small class="text-muted">업데이트 ${store.modifiedAt}</small></span>
+		            		<span><small class="text-muted">
+		            			업데이트
+		            		 	<c:choose>
+							        <c:when test="${store.modifiedAt != null}">
+							            ${store.modifiedAt}
+							        </c:when>
+							        <c:otherwise>
+							            ${store.createdAt}
+							        </c:otherwise>
+							    </c:choose>
+		            		 </small></span>
 		            </div>
 		        </div>
 		    </div>
@@ -96,21 +118,8 @@
 				<div class="col-md-12" id="result"></div>
 			</div>
 			
-			<div>
-		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                  <span><h5>사진 갤러리</h5></span>
-                  <span>더보기</span>
-                 </span>
-                 
-               <span class="gallery-container">
-		  	    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 1" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 2" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 3" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 4" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 5" class="gallery-img"></span>
-			  </span>
-			</div>
-
+			<jsp:include page="gallery.jsp" />
+			
 			<div>
 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                   <span><h5>리뷰 정보</h5></span>
@@ -205,6 +214,7 @@
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/storeDetail.js"></script>
 
 	<!-- 리뷰 모달 -->
 	<script src="${pageContext.request.contextPath}/js/modal.js"></script>

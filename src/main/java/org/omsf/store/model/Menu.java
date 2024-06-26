@@ -22,6 +22,12 @@ public class Menu {
 	
 	public Menu(int menuNo, String menuName, long price,
 			Timestamp createdAt, Timestamp modifiedAt, int storeNo) {
+		this.menuNo = menuNo;
+        this.menuName = menuName;
+        this.price = price;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.storeNo = storeNo;
     }
 	public Menu() {
 		

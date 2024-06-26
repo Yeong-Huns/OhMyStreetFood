@@ -2,7 +2,9 @@ package org.omsf.store.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 @Service
@@ -24,6 +27,8 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Autowired
 	private StoreRepository storeRepository;
+	@Autowired
+	private StoreService storeService;
 	@Autowired
 	private AmazonS3 s3Client;
 	@Value("${aws.bucketname}")
@@ -47,7 +52,19 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public void deleteStore(int storeNo) {
+		Store store = storeService.getStoreByNo(storeNo);
+		List<Photo> photos = storeRepository.getStorePhotos(store);
+		if (store.getPicture() != null) {			
+			photos.add(storeService.getPhotoByPhotoNo(store.getPicture()));
+		}
+		for (Photo photo : photos) {
+			String fileName = photo.getPicture();
+			fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+			s3Client.deleteObject(new DeleteObjectRequest(bucketName + "store/" , fileName));
+			storeRepository.deletePhoto(photo.getPhotoNo());
+		}
 		storeRepository.deleteStore(storeNo);
+		
 	}
 
 	@Override
@@ -109,6 +126,11 @@ public class StoreServiceImpl implements StoreService {
         return photoNo;
 	}
 	
+	@Override
+	public void deleteImage(int PhotoNo) {
+		storeRepository.deletePhoto(PhotoNo);
+	}
+	
 	// jaeeun
 	@Override
 	public List<Store> getAllStores() {
@@ -121,6 +143,16 @@ public class StoreServiceImpl implements StoreService {
 		return store;
 	}
 	
+	@Override
+	public List<Store> searchByKeyword(String keyword, int offset, int limit) {
+		Map<String, Object> params = new HashMap<>();
+        params.put("keyword", keyword);
+        params.put("offset", offset);
+        params.put("limit", limit);
+        
+		return storeRepository.searchByKeyword(params);
+	}
+	
 	// yunbin
 	@Override
 	public String getStoreNameByStoreNo(int storeNo) {
@@ -128,8 +160,21 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	@Override
-	public List<Store> getStoreList(StorePagination page) {
-		return storeRepository.getStoreList(page);
+	public List<Map<String, Object>> getStoreList(StorePagination page) {
+		List<Store> stores =  storeRepository.getStoreList(page);
+		List<Map<String, Object>> storeWithPhotoList = new ArrayList<>();
+	    for (Store store : stores) {
+	        Map<String, Object> storeWithPhotoMap = new HashMap<>();
+	        storeWithPhotoMap.put("store", store);
+	        if (store.getPicture() != null) {
+	            Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	            storeWithPhotoMap.put("photo", photo);
+	        } else {
+	            storeWithPhotoMap.put("photo", null);
+	        }
+	        storeWithPhotoList.add(storeWithPhotoMap);
+	    }
+	    return storeWithPhotoList; 
 	}
 
 	// leejongseop
@@ -140,4 +185,18 @@ public class StoreServiceImpl implements StoreService {
 		String pos = locationArray[1];
 		return storeRepository.getStoresByPosition(pos);
 	}
+
+	@Override
+	public Photo getPhotoByPhotoNo(int photoNo) {
+		Photo photo = storeRepository.getPhotoByPhotoNo(photoNo);
+		
+		return photo;
+	}
+
+	@Override
+	public List<Photo> getStorePhotos(int storeNo) {
+		Store store = storeService.getStoreByNo(storeNo);
+		return storeRepository.getStorePhotos(store);	
+	}
+
 }

@@ -28,10 +28,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
-	var isIdDuplicateChecked = false;
-	var isNickNameDuplicateChecked = false;
 
-   
     $(document).ready(function() {
 
 //     	var csrfToken = $('meta[name="_csrf"]').attr('content');
@@ -42,6 +39,10 @@
 //                 xhr.setRequestHeader(csrfHeader, csrfToken);
 //             }
 //         });
+
+		var isIdDuplicateChecked = false;
+		var isNickNameDuplicateChecked = false;
+		var isBusinessRegistrationNumberChecked = false;
         
 		//ID 중복 확인
 		$("#idDuplicateConfirm").click(function() {
@@ -65,8 +66,7 @@
 	        $.ajax({
 	        	url : './confirmId',
 	            data : {
-	            	username : id,
-	                memberType : "${memberType}"
+	            	username : id
 	            },
 	            type : 'POST',
 	            dataType : 'json',
@@ -87,15 +87,24 @@
         	
     	});
        
-		// 닉네임 중복 확인 
+		// 닉네임 중복 확인
         $("#nickNameDuplicateConfirm").click(function() {
           
         	var nickName = $("#nickName").val();
+        	var nickNamePattern = /^[a-zA-Z가-힣0-9]{2,20}$/;
           
             if(nickName == '' || nickName.length == 0) {
             	$("#nickNameAlertLabel").css("color", "red").text("공백은 닉네임으로 사용할 수 없습니다.");
+            	isNickNameDuplicateChecked = false;
              	return false;
           	}
+            
+         	// 닉네임 형식 확인
+		    if (!nickNamePattern.test(nickName)) {
+		    	$("#nickNameAlertLabel").css("color", "red").text("2~20자의 닉네임만 가능합니다.");
+		        isNickNameDuplicateChecked = false;
+		        return false; 
+		    }
           
             //Ajax로 전송
             $.ajax({
@@ -122,6 +131,51 @@
            });
            
        });
+		
+       // 사업자 등록 번호 중복 확인 
+       $("#businessRegistrationNumberConfirm").click(function() {
+          
+        	var businessRegistrationNumber = $("#businessRegistrationNumber").val();
+        	var businessRegistrationNumberPattern = /^\d{10}$/;
+        	
+            if(businessRegistrationNumber == '' || businessRegistrationNumber.length == 0) {
+            	$("#businessRegistrationNumberAlertLabel").css("color", "red").text("공백은 등록할 수 없습니다.");
+            	isBusinessRegistrationNumberDuplicateChecked = false;
+             	return false;
+          	}
+            
+         	// 사업자 등록 번호 형식 확인
+		    if (!businessRegistrationNumberPattern.test(businessRegistrationNumber)) {
+		    	$("#businessRegistrationNumberAlertLabel").css("color", "red").text("10자리 숫자만 입력 가능합니다.");
+		        isBusinessRegistrationNumberDuplicateChecked = false;
+		        return false; 
+		    }
+          
+            //Ajax로 전송
+            $.ajax({
+            	url : './confirmBusinessRegistrationNumber',
+                data : {
+                	businessRegistrationNumber : businessRegistrationNumber
+              	},
+                type : 'POST',
+                dataType : 'json',
+                success : function(result) {
+                	if (result == true) {
+                    	$("#businessRegistrationNumberAlertLabel").css("color", "black").text("등록 가능한 사업자 등록 번호입니다.");
+                    	isBusinessRegistrationNumberDuplicateChecked = true;
+                 	} else{
+                 		$("#businessRegistrationNumberAlertLabel").css("color", "red").text("이미 등록된 사업자 등록 번호입니다.");
+                    	$("#businessRegistrationNumber").val('');
+                    	isBusinessRegistrationNumberDuplicateChecked = false;
+                 	}
+              	},
+	            error: function(xhr, status, error) {
+	            	console.error("AJAX Error: " + status + error);
+	                isBusinessRegistrationNumberDuplicateChecked = false;
+	            }
+           });
+           
+       });
        
        // 중복 확인 후 수정했을 때 중복 확인 다시 해야 함
        $("#username").on('input', function() {
@@ -134,15 +188,27 @@
            isNickNameDuplicateChecked = false;
         });
        
+       $("#businessRegistrationNumber").on('input', function() {
+           $("#businessRegistrationNumberAlertLabel").empty();
+           isBusinessRegistrationNumberDuplicateChecked = false;
+        });
+       
        // 중복 확인 안했을 때 폼 제출 막기
-       $("#generalMember").submit(function(event) {
+       $("#signupForm").submit(function(event) {
+    	   	var memberType = "${member.memberType}";
+    	   	
             if (!isIdDuplicateChecked) {
                 alert("아이디 중복 확인을 해주세요.");
                 event.preventDefault();
             }
             
-            if (!isNickNameDuplicateChecked) {
+            if (memberType == 'general' && !isNickNameDuplicateChecked) {
                 alert("닉네임 중복 확인을 해주세요.");
+                event.preventDefault();
+            }
+            
+            if (memberType == 'owner' && !isBusinessRegistrationNumberDuplicateChecked) {
+                alert("사업자 등록 번호 중복 확인을 해주세요.");
                 event.preventDefault();
             }
             
@@ -163,7 +229,7 @@
 				<h3>회원가입</h3>
 			</div>
 
-			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
+			<form:form modelAttribute="member" id="signupForm" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
 				<div class="form-group">
 					<label for="username">아이디(이메일 주소)</label> 
 					<span style="display: flex; align-items: center;"> 
@@ -182,6 +248,17 @@
 						</span> 
 						<label id="nickNameAlertLabel"></label>
 						<form:errors path="nickName" cssClass="text-danger" />
+					</div>
+				</c:if>
+				<c:if test="${member.memberType == 'owner'}">
+					<div class="form-group" id="businessRegistrationNumberGroup">
+						<label for="businessRegistrationNumber">사업자 등록 번호</label> 
+						<span style="display: flex; align-items: center;"> 
+						<form:input type="text" path="businessRegistrationNumber" class="form-control" placeholder="businessRegistrationNumber" /> 
+						<input type="button" id="businessRegistrationNumberConfirm" class="btn btn-primary" value="중복 확인" />
+						</span> 
+						<label id="businessRegistrationNumberAlertLabel"></label>
+						<form:errors path="businessRegistrationNumber" cssClass="text-danger" />
 					</div>
 				</c:if>
 				<div class="form-group">

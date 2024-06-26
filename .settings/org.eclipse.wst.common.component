@@ -23,6 +23,7 @@
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+                
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/target/generated-sources/annotations"/>
                                                 
         
@@ -48,3 +49,4 @@
 
 
 </project-modules>
+

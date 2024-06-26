@@ -33,6 +33,7 @@ public class ReviewController {
 
 	private final ReviewService reviewServ;
 	private final StoreService storeService;
+
 	private final UserValidator userValidator;
 
 	// 리뷰 등록
@@ -44,6 +45,26 @@ public class ReviewController {
 		userValidator.validate(review, principal, errors);
 		
 		if (errors.hasErrors()) {
+
+	
+	@GetMapping("review")
+	public String testReview(Model model) {
+		RequestReview review = new RequestReview();
+		review.setStoreStoreNo(20);
+		review.setMemberUsername("test10@naver.com");
+		model.addAttribute("requestReview", review);
+		return "test/createReview";
+	}
+	
+	// 리뷰 등록
+	@PostMapping("insert")
+	public String reviewInsert(@Valid @ModelAttribute("requestReview") RequestReview review,
+										Errors errors,
+										Model model,
+										RedirectAttributes redirectAttributes) {
+		log.info("RequestReview content : {}", review.toString());
+		
+		if(errors.hasErrors()) {
 			redirectAttributes.addFlashAttribute("modalOn", true);
 			redirectAttributes.addFlashAttribute("requestReview", review);
 			redirectAttributes.addFlashAttribute("errors", errors.getAllErrors());
@@ -53,7 +74,7 @@ public class ReviewController {
 		reviewServ.createReview(review);
 		return String.format("redirect:/store/%d", review.getStoreStoreNo());
 	}
-
+	
 	// 리뷰 목록
 	@GetMapping("list/{storeId}")
 	public String reviewList(@PathVariable("storeId") int storeId, Model model) {
@@ -61,25 +82,25 @@ public class ReviewController {
 		model.addAttribute("store", storeService.getStoreByNo(storeId));
 		return "review/reviewList";
 	}
-
+	
 	// 무한 스크롤 응답
 	@GetMapping("api/{storeId}")
 	@ResponseBody
-	public List<Review> getReviewList(@PathVariable("storeId") int storeId,
-			@RequestParam(value = "page", defaultValue = "2") int page, Model model) {
+	public List<Review> getReviewList(@PathVariable("storeId") int storeId, 
+										@RequestParam(value = "page", defaultValue = "2") int page, Model model) {
 		List<Review> reviews = reviewServ.getJSONReviewListByStoreId(storeId, page);
 		return reviews;
 	}
-
+	
+	
 	// 리뷰 상세 페이지
 	@GetMapping("{reviewNo}")
-	public String getReviewDetail(@PathVariable("reviewNo") int reviewNo, Model model) {
-		Review review = reviewServ.getReviewByReviewNo(reviewNo);
-		model.addAttribute("review", review);
-		model.addAttribute("reviewNo", reviewNo);
-		model.addAttribute("memberUsername", review.getMemberUsername());
+	public String getReviewDetail(@PathVariable("reviewNo") int reviewNo,
+									Model model) {
+		model.addAttribute("review", reviewServ.getReviewByReviewNo(reviewNo));
 		return "review/reviewDetail";
 	}
+
 
 	// 리뷰 커맨드패턴 처리
 	@PostMapping("command")
@@ -110,5 +131,9 @@ public class ReviewController {
 			return String.format("redirect:/review/list/%d", review.getStoreStoreNo());
 		}
 	}
+
+
+	
+	
 
 }

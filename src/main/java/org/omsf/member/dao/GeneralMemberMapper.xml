@@ -30,4 +30,21 @@
 		FROM MEMBER
 		WHERE USERNAME = #{username}
 	</select>
+	
+	<update id="updateMember">
+	    update member
+	    <set>
+	        <trim suffixOverrides=",">
+	            <if test="password != null and password != ''">
+	                password = #{password,jdbcType=VARCHAR},
+	            </if>
+	            <if test="nickName != null and nickName != ''">
+	                nickname = #{nickName,jdbcType=VARCHAR},
+	            </if>
+	            modifiedat = SYSDATE
+	        </trim>
+	    </set>
+	    where username = #{username,jdbcType=VARCHAR}
+	</update>
+
 </mapper>

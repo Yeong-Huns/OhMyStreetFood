@@ -50,15 +50,12 @@
 				<div class="col-md-12">
 					<button type="submit" class="btn btn-primary"
 						style="height: 50px; width: 100%; margin-bottom: 20px;">로그인하기</button>
-					<button type="button" onclick="window.location.href='${pageContext.request.contextPath}/signup/general';" class="btn btn-outline-primary"
+					<button type="button" onclick="window.location.href='${pageContext.request.contextPath}/signup/${memberType}';" class="btn btn-outline-primary"
 						style="height: 50px; width: 100%; margin-bottom: 20px;">회원가입하기</button>
 				</div>
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 			</form>
-			<div class="col-md-12 text-center">
-				<a href="${pageContext.request.contextPath}/signup/owner">가게 사장님 회원가입하기</a>
-			</div>
-			<div class="col-md-12 text-center">	
+			<div class="col-md-12 text-center">		
 				<a href="${pageContext.request.contextPath}/findPassword">비밀번호 찾기</a>				
 			</div>
 		</div>

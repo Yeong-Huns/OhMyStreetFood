@@ -4,9 +4,9 @@
 <mapper namespace="org.omsf.member.dao.OwnerRepository">
 	<insert id="insertOwner">
 		INSERT INTO member(
-		username, password, membertype, logintype, createdat, modifiedat)
+		username, password, membertype, logintype, businessregistrationnumber, createdat, modifiedat)
 		VALUES (
-		#{username}, #{password}, #{memberType}, #{loginType}, SYSDATE, SYSDATE)
+		#{username}, #{password}, #{memberType}, #{loginType}, #{businessRegistrationNumber}, SYSDATE, SYSDATE)
 	</insert>
 	
 	<resultMap id="ownerMap" type="org.omsf.member.model.Owner">
@@ -14,14 +14,33 @@
 		<result property="password" column="password" />
 		<result property="memberType" column="membertype" />
 		<result property="loginType" column="logintype" />
-		<result property="bankaccount" column="bankaccount" />
+		<result property="businessRegistrationNumber" column="businessregistrationnumber" />
 		<result property="createdAt" column="createdat" />
 		<result property="modifiedAt" column="modifiedat" />
 	</resultMap>
 	
 	<select id="findByUsername" resultMap="ownerMap">
-		SELECT username, password, membertype, logintype, bankaccount, createdat, modifiedat
+		SELECT username, password, membertype, logintype, businessregistrationnumber, createdat, modifiedat
 		FROM MEMBER
 		WHERE USERNAME = #{username}
+	</select>
+	
+	<update id="updateMember">
+	    update member
+	    <set>
+	        <trim suffixOverrides=",">
+	            <if test="password != null and password != ''">
+	                password = #{password,jdbcType=VARCHAR},
+	                modifiedat = SYSDATE
+	            </if>
+	        </trim>
+	    </set>
+	    where username = #{username,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="checkBusinessRegistrationNumber" resultType="boolean">
+		select count(*)
+		from member
+		where businessregistrationnumber=#{businessRegistrationNumber}
 	</select>
 </mapper>
