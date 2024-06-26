@@ -69,7 +69,7 @@
 	        });
 	
 	        function loadMoreStores(offset) {
-	            var url = '${pageContext.request.contextPath}/store/search/list';
+	            var url = '${pageContext.request.contextPath}/store/search/lists';
 	            var keyword = '${keyword}';
 	            var limit = 5; 
 
