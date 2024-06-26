@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -43,43 +45,26 @@
 			<div class="col-md-12">
                 <h5>인기 점포</h5>
                 <span class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
+                <c:forEach items="${stores}" var="store">
+				    <div class="card" style="width:180px; border: none; cursor: pointer;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
+				        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
+				        <div class="card-body">
+				            <p class="card-title">${store.storeName}</p>
+				            <c:set var="addressWords" value="${fn:split(store.address, ' ')}" />
+				            <p class="card-title">${addressWords[0]} ${addressWords[1]}</p>
+				            <p class="card-text">
+				                <small class="text-muted">
+				                    리뷰 ${store.totalReview}<br>
+				                    평점 ${store.totalRating}<br>
+				                    찜 ${store.likes}<br>
+				                </small>
+				            </p>
+				        </div>
+				    </div>
+				</c:forEach>
                 </span>
             </div>
+            
 		</div>
     </div>
     
