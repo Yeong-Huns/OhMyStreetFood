@@ -35,7 +35,7 @@
 				</li>
 				<sec:authorize access="isAnonymous()">
 					<li class="nav-item">
-						<a class="nav-link" href="${pageContext.request.contextPath}/signin">
+						<a class="nav-link" href="${pageContext.request.contextPath}/signin/general">
 							<i class="fas fa-user"></i><br>로그인
 						</a>
 					</li>

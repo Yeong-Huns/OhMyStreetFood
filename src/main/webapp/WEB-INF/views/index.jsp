@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -33,11 +34,13 @@
 				<div id="map" style="width: 100%; height: 400px; border-radius: 20px"></div>
 			</div>
 			
-			<div class="col-md-12">
-				<span style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#e2f0fe; border-radius:10px;">
-			    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="${pageContext.request.contextPath}/signin">사장님 모드</a></strong>
-				</span>
-			</div>
+			<sec:authorize access="isAnonymous()">
+				<div class="col-md-12">
+					<span style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#e2f0fe; border-radius:10px;">
+				    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="${pageContext.request.contextPath}/signin/owner">사장님 모드</a></strong>
+					</span>
+				</div>
+			</sec:authorize>
 
 			<div class="col-md-12">
                 <h5>인기 점포</h5>

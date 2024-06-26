@@ -46,8 +46,9 @@ public class MemberController { // yunbin
 
 	private final PasswordEncoder passwordEncoder;
 
-	@GetMapping("/signin")
-	public String showSignInPage() {
+	@GetMapping("/signin/{memberType}")
+	public String showSignInPage(@PathVariable String memberType, Model model) {
+		model.addAttribute("memberType", memberType);
 		return "member/signin";
 	}
 
@@ -112,7 +113,7 @@ public class MemberController { // yunbin
 			e.printStackTrace();
 		}
 
-		return "store/addStoreOwner";
+		return "store/addStore";
 	}
 
 	@PostMapping({ "/signup/confirmId", "/findPassword/confirmId" })
@@ -123,19 +124,6 @@ public class MemberController { // yunbin
 		if (username.trim().isEmpty()) {
 			result = false;
 		} else {
-//			if (memberType.equals("general")) {
-//				if (generalMemberService.checkMemberId(username)) {
-//					result = false;
-//				} else {
-//					result = true;
-//				}
-//			} else {
-//				if (ownerService.checkMemberId(username)) {
-//					result = false;
-//				} else {
-//					result = true;
-//				}
-//			}
 			if (memberService.checkMemberId(username)) {
 				result = false;
 			} else {
@@ -155,6 +143,24 @@ public class MemberController { // yunbin
 			result = false;
 		} else {
 			if (generalMemberService.checkMemberNickName(nickName)) {
+				result = false;
+			} else {
+				result = true;
+			}
+		}
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@PostMapping("/signup/confirmBusinessRegistrationNumber")
+	@ResponseBody
+	public ResponseEntity<Boolean> comfirmBusinessRegistrationNumber(String businessRegistrationNumber) {
+		boolean result = true;
+
+		if (businessRegistrationNumber.trim().isEmpty()) {
+			result = false;
+		} else {
+			if (ownerService.checkBusinessRegistrationNumber(businessRegistrationNumber)) {
 				result = false;
 			} else {
 				result = true;

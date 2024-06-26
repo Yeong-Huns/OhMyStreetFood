@@ -127,8 +127,11 @@
 	<select id="getStorePhotos">
 		SELECT * FROM PHOTO 
 		WHERE STORE_STORENO = #{storeNo}
-		 AND PHOTONO != #{picture}
+		<if test="picture != null">
+        	AND PHOTONO != #{picture}
+    	</if>
 	</select>
+	
 	<update id="deletePhoto" parameterType="int">
 		DELETE PHOTO WHERE PHOTO = #{photoNo}
 	</update>
@@ -234,7 +237,7 @@
 	</delete>
 	
 	<!-- leejongseop -->
-	<select id="getStoresByPosition" resultType="org.omsf.store.model.Store">
+	<select id="getStoresByPosition" resultMap="storeResultMap">
 		<bind name="pattern" value="'%' + position + '%'" />
 		SELECT 
 			* 

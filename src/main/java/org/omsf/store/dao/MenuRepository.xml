@@ -14,7 +14,7 @@
 	</resultMap>
     
     <insert id="createMenu">
-        INSERT INTO menu 
+        INSERT INTO MENU
         	(
         		MENUNO,
         		MENUNAME,
