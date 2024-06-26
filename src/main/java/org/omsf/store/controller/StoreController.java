@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.omsf.review.model.RequestReview;
+import org.omsf.review.model.Review;
+import org.omsf.review.service.ReviewService;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
@@ -37,7 +39,8 @@ public class StoreController {
 	
 	private final StoreService storeService;
 	private final MenuService menuService;
-//	private final ReviewService reviewService;
+	private final ReviewService reviewService;
+	
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@GetMapping("/addbygeneral")
@@ -108,8 +111,6 @@ public class StoreController {
 		Store store = storeService.getStoreByNo(storeNo);
 		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
 		
-		model.addAttribute("store", store);
-		model.addAttribute("menus", menu);
 		
 		// leejongseop - 리뷰 작성 폼 바인딩
 		if (!model.containsAttribute("requestReview")) {
@@ -119,7 +120,13 @@ public class StoreController {
             model.addAttribute("requestReview", review);
         }
 		
-	    return "store/showStore";
+		List<Review> review = reviewService.getReviewListOnStore(storeNo);
+		
+		model.addAttribute("store", store);
+		model.addAttribute("menus", menu);
+		model.addAttribute("reviews", review);
+		
+		return "store/showStore";
 	}
 	
 	@GetMapping("/search")
@@ -128,28 +135,32 @@ public class StoreController {
     }
 	
 	@GetMapping("/search/list")
-    public String searchPage(
-        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-        Model model) {
-		
-        List<Store> initialStores = storeService.searchByKeyword(keyword, 0, 5);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("stores", initialStores);
-        return "search/searchList";
-    }
-	
+	public String searchPage(
+	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+	    @RequestParam(value = "position", defaultValue = "서울 종로구") String position,
+	    Model model) {
+	    
+	    List<Store> initialStores = storeService.searchByKeyword(keyword, orderType, 0, 5);
+	    model.addAttribute("keyword", keyword);
+	    model.addAttribute("stores", initialStores);
+	    model.addAttribute("orderType", orderType);
+	    return "search/searchList";
+	}
+
 	@GetMapping("/search/lists")
-    public String searchStores(
-        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-        @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
-        @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
-        Model model) {
-		
-        List<Store> stores = storeService.searchByKeyword(keyword, offset, limit);
-        model.addAttribute("stores", stores);
-        
-        return "search/searchItems";
-    }
+	public String searchStores(
+	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+	    @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
+	    @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
+	    Model model) {
+	    
+	    List<Store> stores = storeService.searchByKeyword(keyword, orderType, offset, limit);
+	    model.addAttribute("stores", stores);
+	    
+	    return "search/searchItems";
+	}
 	
 	@ResponseBody
 	@GetMapping("api")

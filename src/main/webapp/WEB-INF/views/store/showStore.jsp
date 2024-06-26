@@ -125,26 +125,25 @@
 				    </span>
 				</span>
 				
-				<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-			    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-				    	<span>닉네임</span>
-				    	<span>작성일자</span>
-				    </span>
-					<span>내가 먹었던 붕어빵 중에서 가장 맛있었음다. 겉바속촉.. 존맛탱.. 슈크림붕어빵이 진리임니다리.. 사장님이 친절하고 붕어빵이 맛있어요 냠냠</span>
-				</div>			    
+				<c:forEach items="${reviews}" var="review">
+					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
+					    	<span>${review.memberUsername}</span>
+					    	<span>${review.createdAt}</span>
+					    </span>
+						<span>${review.content}</span>
+					</div>			    
+				</c:forEach>
 				
-				<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-			    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-				    	<span>닉네임</span>
-				    	<span>작성일자</span>
+				<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#007bff; color: #ffffff; border-radius:10px; margin-bottom: 20px;">
+				    <span style="padding: 20px">
+					    리뷰 더보기
 				    </span>
-					<span>내가 먹었던 붕어빵 중에서 가장 맛있었음다. 겉바속촉.. 존맛탱.. 슈크림붕어빵이 진리임니다리.. 사장님이 친절하고 붕어빵이 맛있어요 냠냠</span>
-				</div>
+				</span>
 				
 				<div class="col-md-12 text-center">
-					리뷰 더보기
+					<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
 				</div>
-				<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
 		    </div>
 		    
 		</div>

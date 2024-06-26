@@ -115,8 +115,8 @@ public class StoreServiceImpl implements StoreService {
 	
 	// jaeeun
 	@Override
-	public List<Store> getAllStores() {
-		return storeRepository.getAllStores();
+	public List<Store> getPopularStores() {
+		return storeRepository.getPopularStores();
 	}
 	
 	@Override
@@ -126,14 +126,16 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	@Override
-	public List<Store> searchByKeyword(String keyword, int offset, int limit) {
-		Map<String, Object> params = new HashMap<>();
-        params.put("keyword", keyword);
-        params.put("offset", offset);
-        params.put("limit", limit);
-        
-		return storeRepository.searchByKeyword(params);
+	public List<Store> searchByKeyword(String keyword, String orderType, int offset, int limit) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("keyword", keyword);
+	    params.put("orderType", orderType);
+	    params.put("offset", offset);
+	    params.put("limit", limit);
+	    
+	    return storeRepository.searchByKeyword(params);
 	}
+
 	
 	// yunbin
 	@Override
