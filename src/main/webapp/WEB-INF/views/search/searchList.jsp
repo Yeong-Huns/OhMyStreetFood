@@ -21,12 +21,13 @@
 <body>
     <div class="main">
         <div class="row">
+            			
             <!-- Search -->
-            <jsp:include page="../search.jsp" />
+           	<jsp:include page="../search.jsp" />
 
             <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
 			    <span class="mt-4">
-			        <p>검색어: ${keyword}</p>
+			    	<button class="btn btn-outline-primary" type="button" onclick="window.location.href='${pageContext.request.contextPath}/store/createstore'">점포등록</button>
 			    </span>
 			    <span class="dropdown mt-4">
 			        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">정렬기준</button>
@@ -89,7 +90,7 @@
 	                success: function(response) {
 	                    if (response.trim() === "") {
 	                        endOfData = true;
-	                        $('#storeList').append("<p id='endOfDataMessage' style='text-align:center;'>더 이상 데이터가 없습니다.</p>");
+	                        $('#storeList').append("<p id='endOfDataMessage' style='text-align:center;'>더 이상 데이터가 없습니다</p>");
 	                    } else {
 	                        $('#storeList').append(response);
 	                    }

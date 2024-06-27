@@ -55,7 +55,7 @@ public class StoreController {
 	private final LikeService likeService;
 	private final SearchService searchService;
 
-	@GetMapping("/addbygeneral")
+	@GetMapping("/createstore")
 	public String showAddStoreGeneralPage() {
 	    return "store/addStore";
 	}
@@ -158,7 +158,7 @@ public class StoreController {
         model.addAttribute("store", store);
         return "store-edit-form"; 
     }
-	
+
     @GetMapping("/search")
     public String searchPage(Model model) {
         List<Map<String, Object>> search = searchService.getAllKeywords();
