@@ -77,10 +77,10 @@
     </div>
 
 	<!-- Spinner -->
-	<div id="spinner-wrapper">
-        <div id="spinner"></div>
-        <div id="spinner-text">현재 위치를 기반으로 주위 상점을 알아보고 있습니다</div>
-    </div> 
+<!-- 	<div id="spinner-wrapper"> -->
+<!--         <div id="spinner"></div> -->
+<!--         <div id="spinner-text">현재 위치를 기반으로 주위 상점을 알아보고 있습니다</div> -->
+<!--     </div>  -->
 	
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

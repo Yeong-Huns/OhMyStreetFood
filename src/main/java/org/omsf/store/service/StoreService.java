@@ -34,6 +34,7 @@ public interface StoreService {
 	
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);
+	void deleteStoreByUsername(String username);
 
 	// leejongseop
 	List<Store> getStoresByPosition(String position);

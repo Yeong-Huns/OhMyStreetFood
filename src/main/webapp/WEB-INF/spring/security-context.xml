@@ -32,7 +32,7 @@
     
     <beans:bean id="myAuthenticationSuccessHandler" class="org.omsf.security.MyAuthenticationSuccessHandler"/>
     
-    <authentication-manager>
+    <authentication-manager alias="authenticationManager">
         <authentication-provider user-service-ref="customUserDetailsService">
             <password-encoder ref="passwordEncoder"/>
         </authentication-provider>
