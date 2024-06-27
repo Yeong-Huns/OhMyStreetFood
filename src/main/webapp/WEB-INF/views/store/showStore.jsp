@@ -3,7 +3,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ include file="../chat/chatHandler.jsp" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -124,18 +126,21 @@
 			
 			<div>
 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                  <span><h5>리뷰 정보</h5></span>
-                  <button id="openModalBtn">리뷰작성</button>
+                  <span><h5><spring:message code="review.info" /></h5></span>
+                  <button id="openModalBtn"><spring:message code="review.write" /></button>
                  </span>
                  
 				<c:if test="${!empty reviews}">
 					<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 					    <span style="padding: 20px">
-						    <i class="fas fa-star"></i>
-						    <i class="fas fa-star"></i>
-						    <i class="fas fa-star"></i>
-						    <i class="fas fa-star"></i>
-						    <i class="fas fa-star"></i>
+					    	<c:forEach begin="1" end="${store.totalRating}">
+					    		<i class="fas fa-star" style="color:#f5b301;"></i>
+					    	</c:forEach>
+						    <c:if test="${5 - store.totalRating >= 1}">
+						    	<c:forEach begin="1" end="${6 - store.totalRating >= 5 ? 5 : 6 - store.totalRating}">
+					    			<i class="fas fa-star"></i>
+					    		</c:forEach>
+						    </c:if>
 					    </span>
 					</span>
 				
@@ -153,22 +158,24 @@
 				<c:if test="${empty reviews}">
 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-					    	<span>등록된 리뷰가 없습니다.</span>
+					    	<span><spring:message code="review.nothing" /></span>
 					    </span>
 					</div>	
 				</c:if>
 
 				<div class="col-md-12 text-center">
-					<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}">
-						<spring:message code="review.more" />
-					</a>
+					<c:if test="${store.totalReview > 5}">
+						<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}">
+							<spring:message code="review.more" />
+						</a>
+					</c:if>
 					<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
 				</div>
 		    </div>
 		    
 		    <!-- 찜 목록 효과 -->
-		    <div id="notification-insert" class="notification">찜 목록에 추가되었습니다.</div>
-		    <div id="notification-delete" class="notification">찜 목록에 제외되었습니다.</div>
+		    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
+		    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
 		</div>
 	</div>
 	
@@ -225,23 +232,9 @@
 	<!-- 리뷰 모달 -->
 	<script src="${pageContext.request.contextPath}/js/modal.js"></script>
 	
-	<!-- like 요청 -->
-	<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
-	
-	<script>
-	// JavaScript 코드를 사용하여 별 평점을 동적으로 설정
-	const starRating = document.querySelector('.star-rating');
-	const averageRating = parseFloat(document.querySelector('.average-rating').textContent); // 평점 가져오기
-	const starsTotal = 5; // 별의 총 개수
-
-	// 평점을 별의 퍼센티지로 변환
-	const starPercentage = (averageRating / starsTotal) * 100;
-
-	// stars-inner 요소를 찾아서 너비를 설정하여 별의 색을 적용
-	const starsInner = starRating.querySelector('.stars-inner');
-	starsInner.style.width = `${starPercentage}%`;
-	
-	</script>
-
+	<sec:authorize access="isAuthenticated()">
+		<!-- like 요청 -->
+		<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
+	</sec:authorize>
 </body>
 </html>

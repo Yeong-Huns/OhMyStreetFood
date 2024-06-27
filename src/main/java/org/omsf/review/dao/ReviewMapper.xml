@@ -6,9 +6,9 @@
 	<!-- 리뷰 생성 -->
 	<insert id="createReview">
 		INSERT INTO REVIEW
-			(RATING, CONTENT, CREATEDAT, MEMBER_USERNAME, STORE_STORENO)
+			(REVIEWNO, RATING, CONTENT, CREATEDAT, MEMBER_USERNAME, STORE_STORENO)
 		VALUES
-			(#{rating}, #{content}, sysdate, #{memberUsername}, #{storeStoreNo})
+			(REVIEW_SEQ.NEXTVAL, #{rating}, #{content}, sysdate, #{memberUsername}, #{storeStoreNo})
 	</insert>
 	
 	<!-- 가게별 리뷰 목록 가져오기 -->
