@@ -64,9 +64,10 @@
 		                    </span>
 		                    <p class="card-text">${store.introduce}</p>
 		                    <p class="card-text">
-			                		리뷰 ${store.totalReview}
-			                		평점 ${store.totalRating}
-			                		찜 ${store.likes}
+			                		리뷰 <span id="now-review">${store.totalReview}</span>
+			                		평점 <span id="now-rating">${store.totalRating}</span>
+			                		찜 <span id="now-like">${store.likes}</span>
+			                		<div id="fireworks-container"></div>
 			                </p>
 		            		<span><small class="text-muted">
 		            			업데이트
@@ -126,25 +127,35 @@
                   <button id="openModalBtn">리뷰작성</button>
                  </span>
                  
-                <span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-				    <span style="padding: 20px">
-					    <i class="fas fa-star"></i>
-					    <i class="fas fa-star"></i>
-					    <i class="fas fa-star"></i>
-					    <i class="far fa-star"></i>
-					    <i class="far fa-star"></i>
-				    </span>
-				</span>
+				<c:if test="${!empty reviews}">
+					<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+					    <span style="padding: 20px">
+						    <i class="fas fa-star"></i>
+						    <i class="fas fa-star"></i>
+						    <i class="fas fa-star"></i>
+						    <i class="fas fa-star"></i>
+						    <i class="fas fa-star"></i>
+					    </span>
+					</span>
 				
-				<c:forEach items="${reviews}" var="review">
+					<c:forEach items="${reviews}" var="review">
+						<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+					    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
+						    	<span>${review.memberUsername}</span>
+						    	<span>${review.createdAt}</span>
+						    </span>
+							<span>${review.content}</span>
+						</div>			    
+					</c:forEach>
+				</c:if>
+				
+				<c:if test="${empty reviews}">
 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-					    	<span>${review.memberUsername}</span>
-					    	<span>${review.createdAt}</span>
+					    	<span>등록된 리뷰가 없습니다.</span>
 					    </span>
-						<span>${review.content}</span>
-					</div>			    
-				</c:forEach>
+					</div>	
+				</c:if>
 
 				<div class="col-md-12 text-center">
 					<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}">
@@ -215,6 +226,21 @@
 	
 	<!-- like 요청 -->
 	<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
+	
+	<script>
+	// JavaScript 코드를 사용하여 별 평점을 동적으로 설정
+	const starRating = document.querySelector('.star-rating');
+	const averageRating = parseFloat(document.querySelector('.average-rating').textContent); // 평점 가져오기
+	const starsTotal = 5; // 별의 총 개수
+
+	// 평점을 별의 퍼센티지로 변환
+	const starPercentage = (averageRating / starsTotal) * 100;
+
+	// stars-inner 요소를 찾아서 너비를 설정하여 별의 색을 적용
+	const starsInner = starRating.querySelector('.stars-inner');
+	starsInner.style.width = `${starPercentage}%`;
+	
+	</script>
 
 </body>
 </html>

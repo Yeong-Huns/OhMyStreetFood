@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const sendDataButton = document.getElementById("like-btn");
     const notificationInsert = document.getElementById("notification-insert");
     const notificationDelete = document.getElementById("notification-delete");
+    const nowLikeElement = document.getElementById("now-like");
+    const fireworksContainer = document.getElementById('fireworks-container');
     
 	sendDataButton.addEventListener("click", handleClick);
 	
@@ -98,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // 추가적인 성공 처리 로직
         	sendDataButton.className = "fas fa-heart";
 			sendDataButton.style.color = "red";
+			eventNowLike('insert');
 			showNotificationInsert();
 			
         })
@@ -127,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // 추가적인 성공 처리 로직
 			sendDataButton.className = "far fa-heart";
 			sendDataButton.style.color = "";
+			eventNowLike('delete');
 			showNotificationDelete();
 			
         })
@@ -173,4 +177,63 @@ document.addEventListener("DOMContentLoaded", function() {
             // 추가적인 에러 처리 로직
         });
     }
+    
+    
+    function eventNowLike(command){
+		let nowLike = 0;
+		try{
+			let currentCount = Number(nowLikeElement.textContent);
+			nowLike = currentCount;
+			console.log("현재 like수 : " + nowLike);
+		} catch (err){
+			console.log("숫자로 변환할 수 없는 문자입니다.");
+			return;
+		}
+		
+		if(command === 'insert'){
+			console.log("insert명령");
+			console.log(nowLike + 1);
+			let updateVal = nowLike + 1;
+			nowLikeElement.textContent = updateVal.toString(); 
+//			insertEvent();
+		}else if(command === 'delete'){
+			console.log("delete명령");
+			console.log(nowLike - 1);
+			let updateVal = nowLike - 1;
+			nowLikeElement.textContent = updateVal.toString();
+		}else{
+			console.log("잘못된 명령입니다.");
+			return;
+		}
+		
+	}
+	
+	function insertEvent(){
+		const numberOfFireworks = 10;
+        for (let i = 0; i < numberOfFireworks; i++) {
+            createFirework();
+        }
+
+        // Remove fireworks after animation
+       setTimeout(() => {
+            while (fireworksContainer.firstChild) {
+                fireworksContainer.removeChild(fireworksContainer.firstChild);
+            }
+        }, 1000); // Duration of the fireworks effect
+	}
+	
+	function createFirework() {
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+        firework.style.backgroundColor = getRandomColor();
+        firework.style.top = (Math.random() * 100 - 50) + '%';
+        firework.style.left = (Math.random() * 100 - 50) + '%';
+        nowLikeElement.appendChild(firework);
+    }
+
+    function getRandomColor() {
+        const colors = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+    
 });
