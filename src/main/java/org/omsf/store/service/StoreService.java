@@ -25,11 +25,12 @@ public interface StoreService {
 	Store updateLikes(Store store);
 	
 	int UploadImage(ArrayList<MultipartFile> files, int storeNo) throws IOException;
+	void deleteImage(int PhotoNo);
 	
 	// jaeeun
-	List<Store> getAllStores();
+	List<Store> getPopularStores();
 	Store getStoreByNo(int storeNo);
-	List<Store> searchByKeyword(String keyword, int offset, int limit);
+	List<Store> searchByKeyword(String keyword, String ordertype, int offset, int limit);
 	
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);

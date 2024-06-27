@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 @Service
@@ -51,7 +52,19 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public void deleteStore(int storeNo) {
+		Store store = storeService.getStoreByNo(storeNo);
+		List<Photo> photos = storeRepository.getStorePhotos(store);
+		if (store.getPicture() != null) {			
+			photos.add(storeService.getPhotoByPhotoNo(store.getPicture()));
+		}
+		for (Photo photo : photos) {
+			String fileName = photo.getPicture();
+			fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+			s3Client.deleteObject(new DeleteObjectRequest(bucketName + "store/" , fileName));
+			storeRepository.deletePhoto(photo.getPhotoNo());
+		}
 		storeRepository.deleteStore(storeNo);
+		
 	}
 
 	@Override
@@ -113,10 +126,15 @@ public class StoreServiceImpl implements StoreService {
         return photoNo;
 	}
 	
+	@Override
+	public void deleteImage(int PhotoNo) {
+		storeRepository.deletePhoto(PhotoNo);
+	}
+	
 	// jaeeun
 	@Override
-	public List<Store> getAllStores() {
-		return storeRepository.getAllStores();
+	public List<Store> getPopularStores() {
+		return storeRepository.getPopularStores();
 	}
 	
 	@Override
@@ -126,14 +144,16 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	@Override
-	public List<Store> searchByKeyword(String keyword, int offset, int limit) {
-		Map<String, Object> params = new HashMap<>();
-        params.put("keyword", keyword);
-        params.put("offset", offset);
-        params.put("limit", limit);
-        
-		return storeRepository.searchByKeyword(params);
+	public List<Store> searchByKeyword(String keyword, String orderType, int offset, int limit) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("keyword", keyword);
+	    params.put("orderType", orderType);
+	    params.put("offset", offset);
+	    params.put("limit", limit);
+	    
+	    return storeRepository.searchByKeyword(params);
 	}
+
 	
 	// yunbin
 	@Override
@@ -170,7 +190,9 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public Photo getPhotoByPhotoNo(int photoNo) {
-		return storeRepository.getPhotoByPhotoNo(photoNo);
+		Photo photo = storeRepository.getPhotoByPhotoNo(photoNo);
+		
+		return photo;
 	}
 
 	@Override
@@ -178,4 +200,5 @@ public class StoreServiceImpl implements StoreService {
 		Store store = storeService.getStoreByNo(storeNo);
 		return storeRepository.getStorePhotos(store);	
 	}
+
 }

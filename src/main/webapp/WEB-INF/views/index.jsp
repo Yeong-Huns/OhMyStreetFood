@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -43,43 +45,26 @@
 			<div class="col-md-12">
                 <h5>인기 점포</h5>
                 <span class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
-                    <div class="card" style="width:180px; border: none;">
-                        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-                        <div class="card-body">
-                            <p class="card-title">Card title</p>
-                            <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                        </div>
-                    </div>
+                <c:forEach items="${stores}" var="store">
+				    <div class="card" style="width:180px; border: none; cursor: pointer;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
+				        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
+				        <div class="card-body">
+				            <p class="card-title">${store.storeName}</p>
+				            <c:set var="addressWords" value="${fn:split(store.address, ' ')}" />
+				            <p class="card-title">${addressWords[0]} ${addressWords[1]}</p>
+				            <p class="card-text">
+				                <small class="text-muted">
+				                    리뷰 ${store.totalReview}<br>
+				                    평점 ${store.totalRating}<br>
+				                    찜 ${store.likes}<br>
+				                </small>
+				            </p>
+				        </div>
+				    </div>
+				</c:forEach>
                 </span>
             </div>
+            
 		</div>
     </div>
     
@@ -90,7 +75,7 @@
         </div>
     </div>
 
-	<!-- spinner -->
+	<!-- Spinner -->
 	<div id="spinner-wrapper">
         <div id="spinner"></div>
         <div id="spinner-text">현재 위치를 기반으로 주위 상점을 알아보고 있습니다</div>
@@ -99,7 +84,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-	<!-- kakaoMap API key -->
+	<!-- KakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMap.js"></script>
 

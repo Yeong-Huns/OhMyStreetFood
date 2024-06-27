@@ -25,18 +25,18 @@
             <jsp:include page="../search.jsp" />
 
             <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
-                <span class="mt-4">
-                    <p>검색어: ${keyword}</p>
-                </span>
-                <span class="dropdown mt-4">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">정렬기준</button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="?orderType=createdAt">최신순</a></li>
-                        <li><a class="dropdown-item" href="?orderType=likes">인기순</a></li>
-                        <li><a class="dropdown-item" href="?orderType=">거리순</a></li>
-                    </ul>
-                </span>
-            </div>
+			    <span class="mt-4">
+			        <p>검색어: ${keyword}</p>
+			    </span>
+			    <span class="dropdown mt-4">
+			        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">정렬기준</button>
+			        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			            <li><a class="dropdown-item" href="?orderType=createdAt">최신순</a></li>
+			            <li><a class="dropdown-item" href="?orderType=likes">인기순</a></li>
+			            <li><a class="dropdown-item" href="?orderType=distance">거리순</a></li>
+			        </ul>
+			    </span>
+			</div>
 
             <div class="col-md-12" id="storeList">
                 <jsp:include page="searchItems.jsp" />
@@ -69,8 +69,9 @@
 	        });
 	
 	        function loadMoreStores(offset) {
-	            var url = '${pageContext.request.contextPath}/store/search/list';
+	            var url = '${pageContext.request.contextPath}/store/search/lists';
 	            var keyword = '${keyword}';
+	            var orderType = '${param.orderType}';
 	            var limit = 5; 
 
 	            $.ajax({
@@ -78,6 +79,7 @@
 	                method: 'GET',
 	                data: {
 	                    keyword: keyword,
+	                    orderType: orderType,
 	                    offset: offset,
 	                    limit: limit
 	                },
@@ -96,6 +98,7 @@
 	                }
 	            });
 	        }
+
 	    });
 	</script>
 

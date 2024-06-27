@@ -1,39 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-
 	<!-- DataSource 설정 -->
 	<bean id="dataSource"
-		class="org.apache.commons.dbcp2.BasicDataSource">
+		  class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName"
-			value="oracle.jdbc.OracleDriver" />
+				  value="oracle.jdbc.OracleDriver" />
+		<!-- <property name="url" value="jdbc:oracle:thin:@(DESCRIPTION=(ADDRESS=(PROTOCOL=tcps)(PORT=1522)(HOST=adb.ap-chuncheon-1.oraclecloud.com))(CONNECT_DATA=(SERVICE_NAME=gc9b9883e39b10f_ohmystreetfood_high.adb.oraclecloud.com))(SECURITY=(SSL_SERVER_DN_MATCH=yes)))"
+			/> -->
 		<property name="url"
-			value="jdbc:oracle:thin:@ohmystreetfood_high?TNS_ADMIN=C:/dev/wallet/Wallet_ohmystreetfood" />
+				  value="jdbc:oracle:thin:@ohmystreetfood_high?TNS_ADMIN=C:/dev/wallet/Wallet_ohmystreetfood" />
 		<property name="username" value="ADMIN" />
 		<property name="password" value="Ohmystreetfood1" />
 	</bean>
 
-	<!-- JdbcTemplate 설정 -->
+
 	<bean id="jdbcTemplate"
-		class="org.springframework.jdbc.core.JdbcTemplate">
+		  class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
 	<!-- MyBatis SqlSessionFactory 설정 -->
 	<bean id="sqlSessionFactory"
-		class="org.mybatis.spring.SqlSessionFactoryBean">
+		  class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations"
-			value="classpath:org/omsf/**/*.xml" />
+				  value="classpath*:org/omsf/**/dao/*.xml" />
 	</bean>
 
 	<!-- MyBatis Mapper 인터페이스 스캔 -->
@@ -41,58 +40,49 @@
 
 	<!-- 트랜잭션 관리 설정 -->
 	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
+
 	<!-- JavaMailSenderImpl 빈 등록 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-	    <property name="host" value="smtp.naver.com"/>
-	    <property name="port" value="465" />
-	    <property name="username" value="ohmystreetfood@naver.com"/>
-	    <property name="password" value="Omsf3355!"/>
-	    <property name="defaultEncoding" value="utf-8" />
-	    <property name="javaMailProperties">
-	        <props>
-	            <prop key="mail.debug">true</prop>
-	            <prop key="mail.smtp.starttls.enable">true</prop>
-	            <prop key="mail.smtp.ssl.enable">true</prop> 
-	            <prop key="mail.smtp.auth">true</prop>
-	            <prop key="mail.smtp.socketFactory.port">465</prop>
-	            <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
-	            <prop key="mail.smtp.ssl.trust">smtp.naver.com</prop>
-	            <prop key="mail.transport.protocol">smtp</prop>
-	            <prop key="mail.smtp.starttls.required">true</prop>
-	            <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
-	        </props>
-	    </property>
+		<property name="host" value="smtp.naver.com"/>
+		<property name="port" value="465" />
+		<property name="username" value="ohmystreetfood@naver.com"/>
+		<property name="password" value="Omsf3355!"/>
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.debug">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.ssl.enable">true</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.socketFactory.port">465</prop>
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+				<prop key="mail.smtp.ssl.trust">smtp.naver.com</prop>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.starttls.required">true</prop>
+				<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+			</props>
+		</property>
 	</bean>
 
 	<tx:annotation-driven />
 
-	<!-- Component 스캔 설정 -->
+	<aop:aspectj-autoproxy />
+	<!-- DAO나 Service 클래스 등의 Component 스캔
 	<context:component-scan base-package="org.omsf">
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
+-->
 
-	<!-- AOP 설정 -->
-	<aop:aspectj-autoproxy />
-	
-	<!-- 예외 리졸버 -->
-<!-- 	<bean id="exceptionResolver"
-		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-		<property name="exceptionMappings">
-			<props>
-				<prop key="java.lang.RuntimeException">
-					error/runtime
-				</prop>
-			</props>
-		</property>
-		<property name="defaultErrorView" value="error/default" />
-	</bean> -->
-	
+
+	<!-- 지금 당장은 필요없어서 주석처리 <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings"> <props> <prop key="java.lang.RuntimeException">
+		error/runtime </prop> </props> </property> <property name="defaultErrorView"
+		value="error/default"/> </bean> -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    	<property name="locations" value="/WEB-INF/spring/key.properties" />
+		<property name="locations" value="/WEB-INF/spring/key.properties" />
 	</bean>
 </beans>

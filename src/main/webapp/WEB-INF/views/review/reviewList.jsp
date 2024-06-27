@@ -28,7 +28,7 @@
 	<div class="main">
 		<div class="row">
 			<div>
-				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
+				<a href="${pageContext.request.contextPath}/store/${store.storeNo}" style="text-decoration: none; color: inherit;"> 
 					<i class="fas fa-arrow-left"></i>
 				</a>
 			</div>
@@ -169,20 +169,32 @@
 	        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
 	            window.removeEventListener('scroll', handleScroll);
 
-	            spinner.style.display = 'block'; // 스피너 표시
+	            showSpinner(); // 스피너 표시
 
 	            console.log("스크롤 이벤트 발생");
+	            setTimeout(async () => { // 3초 지연
 	            fetchReviews(page).then(reviews => {
 	                addReviews(reviews);
 	                page++;
-	                spinner.style.display = 'none'; // 스피너 숨김
+	                hideSpinner(); // 스피너 숨김
 	                window.addEventListener('scroll', handleScroll);
 	            }).catch(error => {
 	                console.error('Error fetching reviews:', error);
-	                spinner.style.display = 'none'; // 스피너 숨김
+	                hideSpinner(); // 스피너 숨김
 	                window.addEventListener('scroll', handleScroll);
-	            });
+	            })
+	            }, 2000);
 	        }
+	    }
+	    
+	 	// 스피너 표시 함수
+	    function showSpinner() {
+	    	document.getElementById('spinner').style.display = 'block';
+	    }
+
+	    // 스피너 숨김 함수
+	    function hideSpinner() {
+	    	document.getElementById('spinner').style.display = 'none';
 	    }
 
 	    // 스크롤 이벤트 리스너 추가

@@ -22,12 +22,19 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
+<!-- JavaScript -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
+
+
 </head>
 <body>
 	<div class="main">
 		<div class="row">
 			<div>
-				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
+				<a href="${pageContext.request.contextPath}/store/list" style="text-decoration: none; color: inherit;"> 
 					<i class="fas fa-arrow-left"></i>
 				</a>
 			</div>
@@ -40,12 +47,19 @@
 		    <div class="card" style="width: 100%; height: auto; border: none;">
 		        <div class="row g-0">
 		            <div class="col-md-3" style="padding: 0 20px;">
-		                <img src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+		           		 <c:choose>
+					        <c:when test="${storePhoto.picture != null}">
+					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+					        </c:when>
+					        <c:otherwise>
+					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+					        </c:otherwise>
+					    </c:choose>
 		            </div>
 		            <div class="col-md-9 card-body" style="padding: 0 20px;">
 		                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
 			                    <span><h5 class="card-title">${store.storeName}</h5></span>
-			                    <span><i class="far fa-heart"></i></span>
+			                    <span><i id="like-btn" class="far fa-heart"></i></span>
 								<!-- <i class="fas fa-heart"></i> -->
 		                    </span>
 		                    <p class="card-text">${store.introduce}</p>
@@ -54,7 +68,17 @@
 			                		평점 ${store.totalRating}
 			                		찜 ${store.likes}
 			                </p>
-		            		<span><small class="text-muted">업데이트 ${store.modifiedAt}</small></span>
+		            		<span><small class="text-muted">
+		            			업데이트
+		            		 	<c:choose>
+							        <c:when test="${store.modifiedAt != null}">
+							            ${store.modifiedAt}
+							        </c:when>
+							        <c:otherwise>
+							            ${store.createdAt}
+							        </c:otherwise>
+							    </c:choose>
+		            		 </small></span>
 		            </div>
 		        </div>
 		    </div>
@@ -94,21 +118,8 @@
 				<div class="col-md-12" id="result"></div>
 			</div>
 			
-			<div>
-		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                  <span><h5>사진 갤러리</h5></span>
-                  <span>더보기</span>
-                 </span>
-                 
-               <span class="gallery-container">
-		  	    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 1" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 2" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 3" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 4" class="gallery-img"></span>
-			    <span class="gallery-item"><img src="https://via.placeholder.com/140" alt="사진 5" class="gallery-img"></span>
-			  </span>
-			</div>
-
+			<jsp:include page="gallery.jsp" />
+			
 			<div>
 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                   <span><h5>리뷰 정보</h5></span>
@@ -125,28 +136,27 @@
 				    </span>
 				</span>
 				
-				<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-			    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-				    	<span>닉네임</span>
-				    	<span>작성일자</span>
-				    </span>
-					<span>내가 먹었던 붕어빵 중에서 가장 맛있었음다. 겉바속촉.. 존맛탱.. 슈크림붕어빵이 진리임니다리.. 사장님이 친절하고 붕어빵이 맛있어요 냠냠</span>
-				</div>			    
-				
-				<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-			    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-				    	<span>닉네임</span>
-				    	<span>작성일자</span>
-				    </span>
-					<span>내가 먹었던 붕어빵 중에서 가장 맛있었음다. 겉바속촉.. 존맛탱.. 슈크림붕어빵이 진리임니다리.. 사장님이 친절하고 붕어빵이 맛있어요 냠냠</span>
-				</div>
-				
+				<c:forEach items="${reviews}" var="review">
+					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
+					    	<span>${review.memberUsername}</span>
+					    	<span>${review.createdAt}</span>
+					    </span>
+						<span>${review.content}</span>
+					</div>			    
+				</c:forEach>
+
 				<div class="col-md-12 text-center">
-					리뷰 더보기
+					<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}">
+						<spring:message code="review.more" />
+					</a>
+					<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
 				</div>
-				<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
 		    </div>
 		    
+		    <!-- 찜 목록 효과 -->
+		    <div id="notification-insert" class="notification">찜 목록에 추가되었습니다.</div>
+		    <div id="notification-delete" class="notification">찜 목록에 제외되었습니다.</div>
 		</div>
 	</div>
 	
@@ -155,17 +165,17 @@
         <div class="modal-content">
 			<div class="review-container">
 				<span class="close-button">&times;</span>
-				<h1>Write a Review</h1>
+				<h1><spring:message code="review.write" /></h1>
 				<form:form id="reviewForm" method="post" modelAttribute="requestReview" action="${pageContext.request.contextPath}/review/insert">
 					<p>
 						<form:hidden path="storeStoreNo" />
 						<form:errors path="storeStoreNo" id="error"/>
 					</p>
-					<label for="username">Name:</label>
+					<label for="username"><spring:message code="user" /></label>
 					<form:input path="memberUsername" disabled="true"/>
 					<form:hidden path="memberUsername" />
 					
-					<label for="rating">Rating:</label>
+					<label for="rating"><spring:message code="rating" /></label>
 					<div class="rating">
 						<form:radiobutton path="rating" value="1" id="star1"/>
 						<label for="star1" title="1 stars"><i class="fas fa-star"></i></label>
@@ -178,7 +188,7 @@
 						<form:radiobutton path="rating" value="5" id="star5"/>
 						<label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
 					</div>
-					<label for="content">Review:</label>
+					<label for="content"><spring:message code="review.content" /></label>
 					<form:textarea path="content" rows="5" />
 					<c:if test="${not empty errors}">
 				        <ul>
@@ -189,7 +199,7 @@
 				            </c:forEach>
 				        </ul>
 				    </c:if>
-					<input id="review-btn" type="submit" value="등록" />
+					<input id="review-btn" type="submit" value="<spring:message code="write.btn" />" />
 				</form:form>
 			</div>
         </div>
@@ -198,9 +208,13 @@
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/storeDetail.js"></script>
 
 	<!-- 리뷰 모달 -->
 	<script src="${pageContext.request.contextPath}/js/modal.js"></script>
+	
+	<!-- like 요청 -->
+	<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 
 </body>
 </html>

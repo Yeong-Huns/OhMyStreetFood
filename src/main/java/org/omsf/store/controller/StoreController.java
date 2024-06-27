@@ -7,17 +7,27 @@ import java.util.List;
 import java.util.Map;
 
 import org.omsf.review.model.RequestReview;
+import org.omsf.review.model.Review;
+import org.omsf.review.service.ReviewService;
+import org.omsf.store.model.Like;
 import org.omsf.store.model.Menu;
+import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
+import org.omsf.store.service.LikeService;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.StoreService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,8 +47,10 @@ public class StoreController {
 	
 	private final StoreService storeService;
 	private final MenuService menuService;
-//	private final ReviewService reviewService;
+	private final ReviewService reviewService;
+	
 	private ObjectMapper objectMapper = new ObjectMapper();
+	private final LikeService likeService;
 
 	@GetMapping("/addbygeneral")
 	public String showAddStoreGeneralPage() {
@@ -107,9 +119,16 @@ public class StoreController {
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
 		Store store = storeService.getStoreByNo(storeNo);
 		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
-		
+		Photo storePhoto = null;
+		if (store.getPicture() != null) {
+			storePhoto = storeService.getPhotoByPhotoNo(store.getPicture());
+		}
+		List<Photo> gallery = storeService.getStorePhotos(storeNo);
+
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menu);
+		model.addAttribute("storePhoto", storePhoto);
+		model.addAttribute("gallery", gallery);
 		
 		// leejongseop - 리뷰 작성 폼 바인딩
 		if (!model.containsAttribute("requestReview")) {
@@ -119,37 +138,99 @@ public class StoreController {
             model.addAttribute("requestReview", review);
         }
 		
-	    return "store/showStore";
+		List<Review> review = reviewService.getReviewListOnStore(storeNo);
+		
+		model.addAttribute("store", store);
+		model.addAttribute("menus", menu);
+		model.addAttribute("reviews", review);
+		
+		return "store/showStore";
 	}
 	
+
+    @GetMapping("/{storeNo}/update")
+    public String showStoreEditForm(@PathVariable("storeNo") int storeId, Model model,
+    		Principal principal) {
+    	String username = principal.getName();
+        Store store = storeService.getStoreByNo(storeId);
+        model.addAttribute("store", store);
+        return "store-edit-form"; 
+    }
+	
 	@GetMapping("/search")
-    public String searchPage(
-        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-        Model model) {
-		
-        List<Store> initialStores = storeService.searchByKeyword(keyword, 0, 5);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("stores", initialStores);
-        return "search/searchList";
+    public String searchPage() {
+        return "search/searchTag";
     }
 	
 	@GetMapping("/search/list")
-    public String searchStores(
-        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-        @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
-        @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
-        Model model) {
-		
-        List<Store> stores = storeService.searchByKeyword(keyword, offset, limit);
-        model.addAttribute("stores", stores);
-        
-        return "search/searchItems";
-    }
+	public String searchPage(
+	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+	    @RequestParam(value = "position", defaultValue = "서울 종로구") String position,
+	    Model model) {
+	    
+	    List<Store> initialStores = storeService.searchByKeyword(keyword, orderType, 0, 5);
+	    model.addAttribute("keyword", keyword);
+	    model.addAttribute("stores", initialStores);
+	    model.addAttribute("orderType", orderType);
+	    return "search/searchList";
+	}
+
+	@GetMapping("/search/lists")
+	public String searchStores(
+	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+	    @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
+	    @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
+	    Model model) {
+	    
+	    List<Store> stores = storeService.searchByKeyword(keyword, orderType, offset, limit);
+	    model.addAttribute("stores", stores);
+	    
+	    return "search/searchItems";
+	}
 	
 	@ResponseBody
 	@GetMapping("api")
 	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position){
 		log.info("api 요청 완료");
 		return storeService.getStoresByPosition(position);
-	}	
+	}
+	
+	// leejongseop - like 기능
+	@PreAuthorize("isAuthenticated()")
+	@ResponseBody
+	@PostMapping("like/insert")
+	public String insertLike(Principal principal, @RequestBody Like like, Errors errors) {
+		log.info("like insert api 요청 완료");
+		log.info("like 정보 : {}", like.toString());
+		like.setMemberUsername(principal.getName());
+		likeService.insertLike(like);
+		return "찜 목록에 등록";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@ResponseBody
+	@DeleteMapping("like/delete")
+	public String deleteLike(Principal principal, @RequestBody Like like, Errors errors) {
+		log.info("like delete api 요청 완료");
+		log.info("like 정보 : {}", like.toString());
+		like.setMemberUsername(principal.getName());
+		likeService.deleteLike(like);
+		return "찜 목록에 제외";
+	}
+	
+	// LIKE돼 있는 지 확인 하는 메소드
+	@PreAuthorize("isAuthenticated()")
+	@ResponseBody
+	@GetMapping("like/check")
+	public ResponseEntity<Integer> isLike(Principal principal, Like like, Errors errors) {
+		log.info("like check api 요청 완료");
+		log.info("like 정보 : {}", like.toString());
+		like.setMemberUsername(principal.getName());
+		int count = likeService.isLike(like);
+		log.info("count 개수 : {}", count);
+		return new ResponseEntity<>(count, HttpStatus.OK);
+	}
 }
+

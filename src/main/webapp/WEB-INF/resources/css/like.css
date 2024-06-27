@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+.notification {
+	visibility: hidden;
+	opacity: 0;
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	transition: opacity 0.5s linear;
+	z-index: 1000; /* 다른 요소 위에 나타나도록 z-index 설정 */
+	display: flex; /* Flexbox 사용 */
+	justify-content: center; /* 수평 가운데 정렬 */
+	align-items: center; /* 수직 가운데 정렬 */
+}
+
+/* 알림 문구가 보이는 상태 */
+.show {
+	visibility: visible;
+	opacity: 1;
+}
