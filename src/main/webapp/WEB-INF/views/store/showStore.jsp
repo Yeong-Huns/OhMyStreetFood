@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -24,7 +25,7 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
 <!-- JavaScript -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
 
@@ -59,8 +60,10 @@
 		            <div class="col-md-9 card-body" style="padding: 0 20px;">
 		                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
 			                    <span><h5 class="card-title">${store.storeName}</h5></span>
-			                    <span><i id="like-btn" class="far fa-heart"></i></span>
-								<!-- <i class="fas fa-heart"></i> -->
+			                    <sec:authorize access="hasRole('ROLE_USER')">
+			                    	<span><i id="like-btn" class="far fa-heart"></i></span>
+									<!-- <i class="fas fa-heart"></i> -->
+								</sec:authorize>
 		                    </span>
 		                    <p class="card-text">${store.introduce}</p>
 		                    <p class="card-text">

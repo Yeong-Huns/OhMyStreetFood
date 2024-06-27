@@ -198,7 +198,7 @@ public class StoreController {
 	}
 	
 	// leejongseop - like 기능
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@PostMapping("like/insert")
 	public String insertLike(Principal principal, @RequestBody Like like, Errors errors) {
@@ -209,7 +209,7 @@ public class StoreController {
 		return "찜 목록에 등록";
 	}
 	
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@DeleteMapping("like/delete")
 	public String deleteLike(Principal principal, @RequestBody Like like, Errors errors) {
@@ -221,7 +221,7 @@ public class StoreController {
 	}
 	
 	// LIKE돼 있는 지 확인 하는 메소드
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@GetMapping("like/check")
 	public ResponseEntity<Integer> isLike(Principal principal, Like like, Errors errors) {
