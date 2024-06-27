@@ -3,9 +3,12 @@ package org.omsf.store.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.omsf.member.model.Member;
+import org.omsf.member.service.MemberService;
 import org.omsf.review.model.RequestReview;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Photo;
@@ -13,9 +16,11 @@ import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.StoreService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +43,7 @@ public class StoreController {
 	
 	private final StoreService storeService;
 	private final MenuService menuService;
+	private final MemberService<Member> memberService;
 //	private final ReviewService reviewService;
 	private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -109,10 +115,8 @@ public class StoreController {
 		Store store = storeService.getStoreByNo(storeNo);
 		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
 		Photo storePhoto = null;
-		if (store.getPicture() != null) {
-			storePhoto = storeService.getPhotoByPhotoNo(store.getPicture());
-		}
-		List<Photo> gallery = storeService.getStorePhotos(storeNo);
+		storePhoto = storeService.getPhotoByPhotoNo(store.getPicture());
+		List<Photo> gallery = storeService.getStoreGallery(storeNo);
 		
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menu);
@@ -130,14 +134,30 @@ public class StoreController {
 	    return "store/showStore";
 	}
 	
-
+	
     @GetMapping("/{storeNo}/update")
-    public String showStoreEditForm(@PathVariable("storeNo") int storeId, Model model,
+    public String showStoreEditForm(@PathVariable("storeNo") int storeNo, Model model,
     		Principal principal) {
     	String username = principal.getName();
-        Store store = storeService.getStoreByNo(storeId);
+    	Store store = storeService.getStoreByNo(storeNo);
+    	
+    	if (store.getUsername() != null) {	
+    		Member member = (Member) memberService.findByUsername(store.getUsername()).get();
+    		if (member.getMemberType() == "owner" && (store.getUsername() != username)) {
+    			return "redirect:/error";
+    		}
+    	}
+    	
+    	List<Menu> menus = menuService.getMenusByStoreNo(storeNo);
+    	List<Photo> gallery = storeService.getUpdateStoreGallery(storeNo, username);
+    	Photo storePhoto = storeService.getPhotoByPhotoNo(store.getPicture());
+    	
+    	//상점정보
         model.addAttribute("store", store);
-        return "store-edit-form"; 
+        model.addAttribute("menus", menus);
+        model.addAttribute("gallery", gallery);
+        model.addAttribute("storePhoto", storePhoto);
+        return "store/updateStore"; 
     }
 	
 	@GetMapping("/search")
@@ -175,4 +195,43 @@ public class StoreController {
 		log.info("api 요청 완료");
 		return storeService.getStoresByPosition(position);
 	}	
+	
+	@ResponseBody
+    @DeleteMapping("/{storeNo}/{photoNo}")
+    public ResponseEntity<?> deleteStoreGallery(@PathVariable int storeNo,
+    		@PathVariable int photoNo,
+    		Principal principal) {
+        String username = principal.getName();
+        Photo photo = storeService.getPhotoByPhotoNo(photoNo);
+        Store store = storeService.getStoreByNo(storeNo);
+        String memberType = null;
+        if (store.getUsername() != null) {        	
+        	memberType = memberService.findByUsername(store.getUsername()).get().getMemberType();
+        }
+        
+        //사장
+        if (store.getUsername() == username && memberType == "owner") {
+        	storeService.deleteImage(photoNo);
+        	return ResponseEntity.status(HttpStatus.ACCEPTED).body("사진을 삭제하였습니다.");
+        	   
+        }
+        //일반인
+        if (photo == null || !photo.getUsername().equals(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");
+        }
+        storeService.deleteImage(photoNo);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("사진을 삭제하였습니다.");
+    }
+	
+ @PostMapping("/{storeNo}/upload-photo")
+    public ResponseEntity<Map<String, String>> uploadStorePicture(@PathVariable int storeNo, @RequestParam("file") ArrayList<MultipartFile> photos) {
+        try {
+   
+            int newPhotoNo = storeService.UploadImage(photos, storeNo);
+            Map<String, String> response = new HashMap<>();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

@@ -38,6 +38,8 @@ public interface StoreService {
 	// leejongseop
 	List<Store> getStoresByPosition(String position);
 	
-	Photo getPhotoByPhotoNo(int photoNo);
+	Photo getPhotoByPhotoNo(Integer photoNo);
 	List<Photo> getStorePhotos(int storeNo);
+	List<Photo> getStoreGallery(int storeNo);
+	List<Photo> getUpdateStoreGallery(int storeNo, String username);
 }

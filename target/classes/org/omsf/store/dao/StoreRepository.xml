@@ -28,6 +28,7 @@
         <result property="picture" column="PICTURE"/>
         <result property="createdAt" column="CREATEDAT"/>
         <result property="storeNo" column="STORE_STORENO" jdbcType="NUMERIC"/> 
+        <result property="username" column="USERNAME"/> 
     </resultMap>
 
 <!--   <select id="getStoreByposition" resultType="org.omsf.store.model.Store"> -->
@@ -127,13 +128,17 @@
 	<select id="getStorePhotos">
 		SELECT * FROM PHOTO 
 		WHERE STORE_STORENO = #{storeNo}
+	</select>
+	<select id="getStoreGallery">
+		SELECT * FROM PHOTO 
+		WHERE STORE_STORENO = #{storeNo}
 		<if test="picture != null">
         	AND PHOTONO != #{picture}
     	</if>
 	</select>
 	
 	<update id="deletePhoto" parameterType="int">
-		DELETE PHOTO WHERE PHOTO = #{photoNo}
+		DELETE PHOTO WHERE PHOTONO = #{photoNo}
 	</update>
 	
 	<update id="updateStore">

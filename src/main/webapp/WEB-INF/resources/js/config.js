@@ -1,3 +1,5 @@
+export {urls};
+
 const urls = {
     mainUrl: '/',
     storeListUrl: '/store/list',
@@ -5,7 +7,7 @@ const urls = {
     mypageUrl: '/mypage',
     
     createStoreUrl: '/store/createstore',
+    ImageUrl: '/store/',
     defaultImageUrl: 'https://mystreetfood.s3.ap-northeast-2.amazonaws.com/upload/defaultImage.jpg',
 };
 
-export default urls;

@@ -23,7 +23,8 @@ public interface StoreRepository {
 	void updateLikes(Store store);
 	void createPhoto(Photo photo);
 	Photo getPhotoByPhotoNo(int photoNo);
-	List<Photo> getStorePhotos(Store store);
+	List<Photo> getStorePhotos(int storeNo);
+	List<Photo> getStoreGallery(Store store);
 	void deletePhoto(int photoNo);
 	
 	// jaeeun
