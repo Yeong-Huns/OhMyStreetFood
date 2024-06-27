@@ -178,3 +178,12 @@ BEGIN
   END COLUMN_SEQUENCES;
 END;
 /
+
+
+-- 검색 테이블
+CREATE TABLE search (
+    userIp VARCHAR2(255) NOT NULL,
+    keyword VARCHAR2(255) NOT NULL,
+    createdAt TIMESTAMP
+);
+
