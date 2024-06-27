@@ -143,7 +143,7 @@
 		</div>
 	</div>
 	
-	<script type="module" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
+	<script type="module" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
