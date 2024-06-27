@@ -1,0 +1,81 @@
+#playBtn {
+    width: 180px;
+    height: 60px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: tomato;
+    color: white;
+    border-style: none;
+    border-radius: 8px;
+    margin: 30px 0px;
+    cursor: pointer;
+}
+
+#msg {
+    margin: 0 auto;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 20px;
+    width: 300px;
+    height: 80px;
+    color: tomato;
+}
+
+#imgTd {
+    width: 50px;
+}
+#scoreTd {
+    text-align: center;
+    width: 50px;
+    font-size: 30px;
+    font-weight: bold;
+}
+#playTd {
+    text-align: right;
+}
+
+#header {
+    margin: 0 auto;
+    margin-top: 30px;
+    text-align: center;
+    width: 700px;
+    height: 200px;
+}
+#appleTd{
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+        font-size: 24px;
+        padding: 0px;
+        border-spacing: 0px;
+}
+#content {
+    margin: 0 auto;
+    text-align: left;
+}
+
+#appleImg {
+    width: 50px;
+}
+
+#snake {
+    border-collapse: collapse;
+    width: 600px;
+    height: 600px;
+}
+
+#snake td {
+    border: 1px solid lightgray;
+    background-color: rgb(245, 244, 244);
+}
+
+#snake .snakeBody {
+    background-color: rgb(2, 191, 2);
+}
+#snake .snakeHead {
+    background-color: rgba(15, 117, 4, 0.84);
+}
+#snake .item {
+    background-color: tomato;
+}
