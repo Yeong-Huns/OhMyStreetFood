@@ -27,7 +27,7 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
 <!-- JavaScript -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
 

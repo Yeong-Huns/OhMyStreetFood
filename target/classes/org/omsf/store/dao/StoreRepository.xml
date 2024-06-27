@@ -236,6 +236,10 @@
 		DELETE FROM store WHERE storeno=#{storeNo} 
 	</delete>
 	
+	<delete id="deleteStoreByUsername">
+		delete from store where member_username=#{username}
+	</delete>
+	
 	<!-- leejongseop -->
 	<select id="getStoresByPosition" resultMap="storeResultMap">
 		<bind name="pattern" value="'%' + position + '%'" />
