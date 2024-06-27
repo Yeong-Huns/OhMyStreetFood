@@ -119,7 +119,16 @@ function hideSpinner() {
 	searchDetailAddrFromCoords(map.getCenter(), function(result, status) {
 		if (status === kakao.maps.services.Status.OK) {
 			var detailAddr = result[0].address.address_name;
-			fetchPositionsByAddress(detailAddr); // 주소를 사용하여 서버에 요청
+			console.log("위도 : " + map.getCenter().getLng().toString());
+			console.log("경도 : " + map.getCenter().getLat().toString());
+			address = {
+				longitude: map.getCenter().getLng().toString(),
+				latitude: map.getCenter().getLat().toString()
+			};
+			const queryStr = new URLSearchParams(address).toString();
+			console.log(queryStr);
+			fetchPositionsByAddress(queryStr); // 주소를 사용하여 서버에 요청
+//			fetchPositionsByAddress(detailAddr);
 		}
 	});
 
