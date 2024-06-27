@@ -33,69 +33,69 @@
 				</a>
 			</div>
 			
-			<span style="display: flex; flex-direction: row; justify-content: space-between;">
-                <span><i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong></span>
-       			<span><a href="#">사장님과 채팅하기</a></span>
-        	</span>
+<!-- 			<span style="display: flex; flex-direction: row; justify-content: space-between;"> -->
+<!--                 <span><i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong></span> -->
+<!--        			<span><a href="#">사장님과 채팅하기</a></span> -->
+<!--         	</span> -->
         	
-		    <div class="card" style="width: 100%; height: auto; border: none;">
-		        <div class="row g-0">
-		            <div class="col-md-3" style="padding: 0 20px;">
-		                <img src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
-		            </div>
-		            <div class="col-md-9 card-body" style="padding: 0 20px;">
-		                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
-			                    <span><h5 class="card-title">${store.storeName}</h5></span>
-			                    <span><i class="far fa-heart"></i></span>
-								<!-- <i class="fas fa-heart"></i> -->
-		                    </span>
-		                    <p class="card-text">${store.introduce}</p>
-		                    <p class="card-text">
-			                		리뷰 ${store.totalReview}
-			                		평점 ${store.totalRating}
-			                		찜 ${store.likes}
-			                </p>
-		            		<span><small class="text-muted">업데이트 ${store.modifiedAt}</small></span>
-		            </div>
-		        </div>
-		    </div>
+<!-- 		    <div class="card" style="width: 100%; height: auto; border: none;"> -->
+<!-- 		        <div class="row g-0"> -->
+<!-- 		            <div class="col-md-3" style="padding: 0 20px;"> -->
+<%-- 		                <img src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;"> --%>
+<!-- 		            </div> -->
+<!-- 		            <div class="col-md-9 card-body" style="padding: 0 20px;"> -->
+<!-- 		                    <span style="display: flex; flex-direction: row; justify-content: space-between;"> -->
+<%-- 			                    <span><h5 class="card-title">${store.storeName}</h5></span> --%>
+<!-- 			                    <span><i class="far fa-heart"></i></span> -->
+<!-- 								<i class="fas fa-heart"></i> -->
+<!-- 		                    </span> -->
+<%-- 		                    <p class="card-text">${store.introduce}</p> --%>
+<!-- 		                    <p class="card-text"> -->
+<%-- 			                		리뷰 ${store.totalReview} --%>
+<%-- 			                		평점 ${store.totalRating} --%>
+<%-- 			                		찜 ${store.likes} --%>
+<!-- 			                </p> -->
+<%-- 		            		<span><small class="text-muted">업데이트 ${store.modifiedAt}</small></span> --%>
+<!-- 		            </div> -->
+<!-- 		        </div> -->
+<!-- 		    </div> -->
 		    
-		    <div>
-		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                  <span><h5>가게 정보</h5></span>
-                  <span>정보 수정</span>
-                 </span>
+<!-- 		    <div> -->
+<!-- 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;"> -->
+<!--                   <span><h5>가게 정보</h5></span> -->
+<!--                   <span>정보 수정</span> -->
+<!--                  </span> -->
                  
-                <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
-			        <span>운영일자</span>
-			        <span>${store.operatingDate}</span>
-			    </span>
+<!--                 <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;"> -->
+<!-- 			        <span>운영일자</span> -->
+<%-- 			        <span>${store.operatingDate}</span> --%>
+<!-- 			    </span> -->
 				
-				<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
-			        <span>운영시간</span>
-			        <span>${store.operatingHours}</span>
-			    </span>
+<!-- 				<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;"> -->
+<!-- 			        <span>운영시간</span> -->
+<%-- 			        <span>${store.operatingHours}</span> --%>
+<!-- 			    </span> -->
 			    
-		    </div>
+<!-- 		    </div> -->
 
 			<div id="reviewContainer">
 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                  <span><h5>리뷰 정보</h5></span>
+                  <span><h5><spring:message code="review.list" /></h5></span>
                  </span>
                  
-                <span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-				    <span style="padding: 20px">
-					    <i class="fas fa-star"></i>
-					    <i class="fas fa-star"></i>
-					    <i class="fas fa-star"></i>
-					    <i class="far fa-star"></i>
-					    <i class="far fa-star"></i>
-				    </span>
-				</span>
+<!--                 <span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
+<!-- 				    <span style="padding: 20px"> -->
+<!-- 					    <i class="fas fa-star"></i> -->
+<!-- 					    <i class="fas fa-star"></i> -->
+<!-- 					    <i class="fas fa-star"></i> -->
+<!-- 					    <i class="far fa-star"></i> -->
+<!-- 					    <i class="far fa-star"></i> -->
+<!-- 				    </span> -->
+<!-- 				</span> -->
 				<c:if test="${empty reviews }">
 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 			    	<span style="display: flex; flex-direction: row; justify-content: space-between;"></span>
-					<span>등록된 리뷰가 없습니다.</span>
+					<span><spring:message code="review.nothing" /></span>
 				</div>
 				</c:if>
 				<c:if test="${!empty reviews }">
