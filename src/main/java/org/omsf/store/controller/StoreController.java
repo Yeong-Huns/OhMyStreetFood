@@ -227,7 +227,11 @@ public class StoreController {
 	
 	@ResponseBody
 	@GetMapping("api")
-	public List<Store> getStoresByPosition(@RequestParam(value = "position") String position){
+
+	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position,
+									@RequestParam("latitude") String latitude,
+									@RequestParam("longitude") String longitude){
+		log.info("위도 : {}, 경도 : {}", latitude, longitude);
 		log.info("api 요청 완료");
 		log.info("position : {}" , position);
 		return storeService.getStoresByPosition(position);

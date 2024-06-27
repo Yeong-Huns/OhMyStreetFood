@@ -23,3 +23,32 @@
 	visibility: visible;
 	opacity: 1;
 }
+
+#fireworks-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.firework {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    opacity: 0;
+    animation: explode 0.6s ease-out forwards;
+}
+
+@keyframes explode {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
