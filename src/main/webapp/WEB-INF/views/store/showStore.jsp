@@ -36,8 +36,8 @@
 <body>
 	<div class="main">
 		<div class="row">
-			<div>
-				<a href="${pageContext.request.contextPath}/store/list" style="text-decoration: none; color: inherit;"> 
+			<div id="back">
+				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
 					<i class="fas fa-arrow-left"></i>
 				</a>
 			</div>
@@ -231,10 +231,43 @@
 
 	<!-- 리뷰 모달 -->
 	<script src="${pageContext.request.contextPath}/js/modal.js"></script>
+
+	<!-- like 요청 -->
+	<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 	
+	<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var backElement = document.getElementById('back');
+
+        // Handle the close button click event
+        var closeButton = document.querySelector('.close-button');
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                updateBackLink();
+            });
+        }
+
+        // Handle the form submit event
+        var reviewForm = document.getElementById('reviewForm');
+        if (reviewForm) {
+            reviewForm.addEventListener('submit', function() {
+                updateBackLink();
+            });
+        }
+
+        function updateBackLink() {
+            backElement.innerHTML = `
+                <a href="${pageContext.request.contextPath}/store/list" style="text-decoration: none; color: inherit;"> 
+                    <i class="fas fa-arrow-left"></i>
+                </a>`;
+        }
+    });
+	</script>
+
 	<sec:authorize access="isAuthenticated()">
 		<!-- like 요청 -->
 		<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 	</sec:authorize>
+
 </body>
 </html>

@@ -33,7 +33,12 @@
 			    </span>
 			</div>
 
-			<jsp:include page="store/storeList.jsp" />
+			<div class="col-md-12" id="storeList">
+				<jsp:include page="store/listStore.jsp">
+                    <jsp:param name="stores" value="${stores}" />
+                    <jsp:param name="pictures" value="${pictures}" />
+                </jsp:include>
+            </div>
             
 		</div>
     </div>

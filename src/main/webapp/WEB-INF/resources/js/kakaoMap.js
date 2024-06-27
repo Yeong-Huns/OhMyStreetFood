@@ -118,6 +118,7 @@ function hideSpinner() {
 	// 맨 처음 화면 나왔을 때 중심 좌표 주소 출력 및 서버에 요청
 	searchDetailAddrFromCoords(map.getCenter(), function(result, status) {
 		if (status === kakao.maps.services.Status.OK) {
+
 			var detailAddr = result[0].address.address_name;
 			console.log("위도 : " + map.getCenter().getLng().toString());
 			console.log("경도 : " + map.getCenter().getLat().toString());

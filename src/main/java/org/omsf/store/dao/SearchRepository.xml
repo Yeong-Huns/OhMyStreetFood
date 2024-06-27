@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="org.omsf.store.dao.SearchRepository">
+
+    <insert id="insertKeyword" parameterType="map">
+        INSERT INTO search (userIp, keyword, createdAt)
+        VALUES (#{userIp}, #{keyword}, SYSDATE)
+    </insert>
+
+    <select id="getAllKeywords" resultType="map">
+        SELECT keyword, COUNT(keyword) as searchCount FROM search GROUP BY keyword ORDER BY searchCount DESC
+    </select>
+
+</mapper>

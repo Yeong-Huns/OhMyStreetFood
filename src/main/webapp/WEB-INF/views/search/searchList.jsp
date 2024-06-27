@@ -31,15 +31,18 @@
 			    <span class="dropdown mt-4">
 			        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">정렬기준</button>
 			        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-			            <li><a class="dropdown-item" href="?orderType=createdAt">최신순</a></li>
-			            <li><a class="dropdown-item" href="?orderType=likes">인기순</a></li>
-			            <li><a class="dropdown-item" href="?orderType=distance">거리순</a></li>
+			            <li><a class="dropdown-item" href="?keyword=${keyword}&orderType=createdAt">최신순</a></li>
+			            <li><a class="dropdown-item" href="?keyword=${keyword}&orderType=likes">인기순</a></li>
+			            <li><a class="dropdown-item" href="?keyword=${keyword}&orderType=distance">거리순</a></li>
 			        </ul>
 			    </span>
 			</div>
 
             <div class="col-md-12" id="storeList">
-                <jsp:include page="searchItems.jsp" />
+                <jsp:include page="searchItems.jsp">
+                    <jsp:param name="stores" value="${stores}" />
+                    <jsp:param name="pictures" value="${pictures}" />
+                </jsp:include>
             </div>
 
         </div>
@@ -69,7 +72,7 @@
 	        });
 	
 	        function loadMoreStores(offset) {
-	            var url = '${pageContext.request.contextPath}/store/search/lists';
+	            var url = '${pageContext.request.contextPath}/store/lists';
 	            var keyword = '${keyword}';
 	            var orderType = '${param.orderType}';
 	            var limit = 5; 

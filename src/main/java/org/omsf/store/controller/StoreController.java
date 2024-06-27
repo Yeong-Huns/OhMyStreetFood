@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
@@ -13,9 +15,9 @@ import org.omsf.store.model.Like;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
-import org.omsf.store.model.StorePagination;
 import org.omsf.store.service.LikeService;
 import org.omsf.store.service.MenuService;
+import org.omsf.store.service.SearchService;
 import org.omsf.store.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +53,7 @@ public class StoreController {
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private final LikeService likeService;
+	private final SearchService searchService;
 
 	@GetMapping("/addbygeneral")
 	public String showAddStoreGeneralPage() {
@@ -83,37 +86,37 @@ public class StoreController {
         return ResponseEntity.ok("");
 	}
 	
-	@GetMapping("list/page")
-	@ResponseBody()
-	 public List<Map<String, Object>> storePageWithSorting(
-			 	@RequestParam(required = false, defaultValue = "likes") String order,
-			 	@RequestParam(defaultValue = "1" ) int page,
-			 	@RequestParam(required = false) String keyword,
-	            @RequestParam(required = false, defaultValue = "DESC") String sort) {
-        
-		StorePagination pageRequest = StorePagination.builder()
-                                    .currPageNo(page) 
-                                    .orderType(order)
-                                    .searchType("storeName")
-                                    .keyword(keyword)
-                                    .sortOrder(sort)
-                                    .build();
-		List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);  
-		return stores; 
-    }
-	
-	@GetMapping("/list")
-	public String showStorePage(Model model,
-			@RequestParam(required = false) String orderType) {
-		StorePagination pageRequest = StorePagination.builder()
-				.orderType(orderType)
-                .build();
-		List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);
-	    model.addAttribute("stores", stores);
-	    
-	    //처음 20개 스크롤 + 10개씩
-	    return "store";
-	}
+//	@GetMapping("list/page")
+//	@ResponseBody()
+//	 public List<Map<String, Object>> storePageWithSorting(
+//			 	@RequestParam(required = false, defaultValue = "likes") String order,
+//			 	@RequestParam(defaultValue = "1" ) int page,
+//			 	@RequestParam(required = false) String keyword,
+//	            @RequestParam(required = false, defaultValue = "DESC") String sort) {
+//        
+//		StorePagination pageRequest = StorePagination.builder()
+//                                    .currPageNo(page) 
+//                                    .orderType(order)
+//                                    .searchType("storeName")
+//                                    .keyword(keyword)
+//                                    .sortOrder(sort)
+//                                    .build();
+//		List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);  
+//		return stores; 
+//    }
+//	
+//	@GetMapping("/list")
+//	public String showStorePage(Model model,
+//			@RequestParam(required = false) String orderType) {
+//		StorePagination pageRequest = StorePagination.builder()
+//				.orderType(orderType)
+//                .build();
+//		List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);
+//	    model.addAttribute("stores", stores);
+//	    
+//	    //처음 20개 스크롤 + 10개씩
+//	    return "store";
+//	}
 	
 	@GetMapping("/{storeNo}")
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
@@ -146,7 +149,6 @@ public class StoreController {
 		
 		return "store/showStore";
 	}
-	
 
     @GetMapping("/{storeNo}/update")
     public String showStoreEditForm(@PathVariable("storeNo") int storeId, Model model,
@@ -157,26 +159,59 @@ public class StoreController {
         return "store-edit-form"; 
     }
 	
-	@GetMapping("/search")
-    public String searchPage() {
+    @GetMapping("/search")
+    public String searchPage(Model model) {
+        List<Map<String, Object>> search = searchService.getAllKeywords();
+        
+        model.addAttribute("searchs", search);
         return "search/searchTag";
     }
-	
-	@GetMapping("/search/list")
+
+	@GetMapping("/list")
 	public String searchPage(
 	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
 	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
-	    @RequestParam(value = "position", defaultValue = "서울 종로구") String position,
+//	    @RequestParam(value = "position") String position,
+	    HttpServletRequest request,
 	    Model model) {
-	    
+		
 	    List<Store> initialStores = storeService.searchByKeyword(keyword, orderType, 0, 5);
-	    model.addAttribute("keyword", keyword);
-	    model.addAttribute("stores", initialStores);
-	    model.addAttribute("orderType", orderType);
+	    
+	    List<Photo> pictures = new ArrayList<>();
+	    for (Store store : initialStores) {
+	    	if (store.getPicture() != null) {
+	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());	    		
+	    		pictures.add(photo);
+	    	}
+	    }
+	    
+//	    System.out.println("test" + storeService.getStoresByPosition(position));
+
+	    // ip 주소 설정
+	    String userIp = "";
+	    
+        if (request != null) {
+        	userIp = request.getHeader("X-FORWARDED-FOR");
+            if (userIp == null || "".equals(userIp)) {
+            	userIp = request.getRemoteAddr();
+            }
+        }
+        
+    	// 검증 로직 추가
+        boolean isValidKeyword = keyword.matches("^[^ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㄳㅄ]*$");
+    	
+        if (isValidKeyword && keyword != null && !keyword.isEmpty()) {            
+            searchService.insertKeyword(userIp, keyword);
+        }
+	    
+        model.addAttribute("stores", initialStores);
+        model.addAttribute("pictures", pictures);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("orderType", orderType);
 	    return "search/searchList";
 	}
 
-	@GetMapping("/search/lists")
+	@GetMapping("/lists")
 	public String searchStores(
 	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
 	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
@@ -192,11 +227,13 @@ public class StoreController {
 	
 	@ResponseBody
 	@GetMapping("api")
+
 	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position,
 									@RequestParam("latitude") String latitude,
 									@RequestParam("longitude") String longitude){
 		log.info("위도 : {}, 경도 : {}", latitude, longitude);
 		log.info("api 요청 완료");
+		log.info("position : {}" , position);
 		return storeService.getStoresByPosition(position);
 	}
 	
