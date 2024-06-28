@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 
 import org.omsf.member.model.Member;
 import org.omsf.member.service.MemberService;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
@@ -19,7 +17,6 @@ import org.omsf.store.model.Like;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
-import org.omsf.store.model.StorePagination;
 import org.omsf.store.service.LikeService;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.SearchService;
@@ -30,9 +27,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-
 import org.springframework.validation.Errors;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -348,7 +343,7 @@ public class StoreController {
             Photo photo = storeService.getPhotoByPhotoNo(newPhotoNo);           
             return ResponseEntity.ok(photo);
     }
-	}
+	
 	
 	// leejongseop - like 기능
 	@PreAuthorize("hasRole('ROLE_USER')")
