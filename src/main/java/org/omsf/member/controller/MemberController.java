@@ -2,10 +2,14 @@ package org.omsf.member.controller;
 
 import java.security.Principal;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.omsf.member.model.GeneralMember;
@@ -15,21 +19,26 @@ import org.omsf.member.service.EmailService;
 import org.omsf.member.service.GeneralMemberService;
 import org.omsf.member.service.MemberService;
 import org.omsf.member.service.OwnerService;
+import org.omsf.store.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -43,12 +52,13 @@ public class MemberController { // yunbin
 	private final OwnerService ownerService;
 	private final MemberService<Member> memberService;
 	private final EmailService emailService;
+	private final StoreService storeService;
 
 	private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
 
-	@GetMapping("/signin/{memberType}")
-	public String showSignInPage(@PathVariable String memberType, Model model) {
-		model.addAttribute("memberType", memberType);
+	@GetMapping("/signin")
+	public String showSignInPage(Model model) {
 		return "member/signin";
 	}
 
@@ -67,7 +77,7 @@ public class MemberController { // yunbin
 
 	@PostMapping("/signup/general")
 	public String processSignUp(@Valid @ModelAttribute("member") GeneralMember generalMember, BindingResult result,
-			Model model, RedirectAttributes redirectAttributes) {
+			Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 		try {
 			if (!generalMember.getPasswordConfirm().isEmpty()
 					&& !generalMember.getPassword().equals(generalMember.getPasswordConfirm())) {
@@ -80,19 +90,22 @@ public class MemberController { // yunbin
 				model.addAttribute("member", generalMember);
 				return "member/signup";
 			}
-
+			String rawPassword = generalMember.getPassword();
+			
 			generalMemberService.insertGeneralMember(generalMember);
 			redirectAttributes.addFlashAttribute("success", true);
+			
+			authenticateUserAndSetSession(generalMember.getUsername(), rawPassword, request);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return "redirect:/signin";
+		return "redirect:/";
 	}
 
 	@PostMapping("/signup/owner")
-	public String processSignUp(@Valid @ModelAttribute("member") Owner owner, BindingResult result, Model model) {
+	public String processSignUp(@Valid @ModelAttribute("member") Owner owner, BindingResult result, Model model, HttpServletRequest request) {
 		try {
 			if (!owner.getPasswordConfirm().isEmpty() && !owner.getPassword().equals(owner.getPasswordConfirm())) {
 				result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
@@ -105,9 +118,12 @@ public class MemberController { // yunbin
 				return "member/signup";
 			}
 
+			String rawPassword = owner.getPassword();
+			
 			ownerService.insertOwner(owner);
-			model.addAttribute("username", owner.getUsername());
 			model.addAttribute("success", true);
+			
+			authenticateUserAndSetSession(owner.getUsername(), rawPassword, request);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -134,7 +150,7 @@ public class MemberController { // yunbin
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	@PostMapping({"/signup/confirmNickName", "/modifyMember/confirmNickName"})
+	@PostMapping({ "/signup/confirmNickName", "/modifyMember/confirmNickName" })
 	@ResponseBody
 	public ResponseEntity<Boolean> comfirmNickName(String nickName) {
 		boolean result = true;
@@ -151,7 +167,7 @@ public class MemberController { // yunbin
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/signup/confirmBusinessRegistrationNumber")
 	@ResponseBody
 	public ResponseEntity<Boolean> comfirmBusinessRegistrationNumber(String businessRegistrationNumber) {
@@ -229,27 +245,27 @@ public class MemberController { // yunbin
 				}
 			}
 		}
-		
 
 		return "member/modify";
 	}
 
 	@PostMapping("/modifyMember/general")
-	public String processModifyMember(@Valid @ModelAttribute("member") GeneralMember generalMember, BindingResult result, Model model) {
-		
-		if(generalMember.getPassword() != null && !generalMember.getPassword().isEmpty()) {
+	public String processModifyMember(@Valid @ModelAttribute("member") GeneralMember generalMember,
+			BindingResult result, Model model) {
+
+		if (generalMember.getPassword() != null && !generalMember.getPassword().isEmpty()) {
 			if (result.hasErrors()) {
 				model.addAttribute("member", generalMember);
 				return "member/modify";
 			}
-			
+
 			if (!generalMember.getPassword().equals(generalMember.getPasswordConfirm())) {
-		        result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
-		        model.addAttribute("member", generalMember);
-		        return "member/modify";
-		    }
+				result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
+				model.addAttribute("member", generalMember);
+				return "member/modify";
+			}
 		}
-		
+
 		generalMemberService.updateMember(generalMember);
 
 		return "redirect:/mypage";
@@ -257,48 +273,49 @@ public class MemberController { // yunbin
 
 	@PostMapping("/modifyMember/owner")
 	public String processModifyMember(@Valid @ModelAttribute("member") Owner owner, BindingResult result, Model model) {
-		
-		if(owner.getPassword() != null && !owner.getPassword().isEmpty()) {
+
+		if (owner.getPassword() != null && !owner.getPassword().isEmpty()) {
 			if (result.hasErrors()) {
 				model.addAttribute("member", owner);
 				return "member/modify";
 			}
-			
+
 			if (!owner.getPassword().equals(owner.getPasswordConfirm())) {
-		        result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
-		        model.addAttribute("member", owner);
-		        return "member/modify";
-		    }
+				result.rejectValue("passwordConfirm", "passwordInCorrect", "비밀번호가 일치하지 않습니다.");
+				model.addAttribute("member", owner);
+				return "member/modify";
+			}
 		}
 		ownerService.updateMember(owner);
 
 		return "redirect:/mypage";
 	}
 
-	@GetMapping("/withdrawal")
+	@PostMapping("/withdrawal")
 	@ResponseBody
-	public Boolean handleWithdrawal(@RequestParam("username") String username) {
-		for (String authority : currentUserAuthority()) {
-			if (authority.equals("ROLE_USER")) {
-				try {
-					generalMemberService.deleteMember(username);
-					return true;
-				} catch (Exception e) {
-					e.printStackTrace();
-					return false;
-				}
-
-			} else if (authority.equals("ROLE_OWNER")) {
-				try {
-					ownerService.deleteMember(username);
-					return true;
-				} catch (Exception e) {
-					e.printStackTrace();
-					return false;
+	@Transactional
+	public ResponseEntity<?> processWithdrawal(Principal principal, HttpServletRequest request, HttpServletResponse response) {
+	    try {
+	        
+	        for (String authority : currentUserAuthority()) {
+	        	if (authority.equals("ROLE_OWNER")) {
+					storeService.deleteStoreByUsername(principal.getName());
 				}
 			}
-		}
-		return false;
+	        
+	        memberService.deleteMember(principal.getName());
+
+	        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+	        logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+
+	        Map<String, String> responseBody = new HashMap<>();
+	        responseBody.put("redirectUrl", "/signin?withdrawalSuccess");
+	        return ResponseEntity.ok().body(responseBody);
+	    } catch (Exception e) {
+	        Map<String, String> errorResponse = new HashMap<>();
+	        errorResponse.put("error", "서버 오류입니다. 다시 시도해 주세요.");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+	    }
 	}
 
 	private List<String> currentUserAuthority() {
@@ -311,5 +328,17 @@ public class MemberController { // yunbin
 				.collect(Collectors.toList());
 
 		return authorityList;
+	}
+	
+	private void authenticateUserAndSetSession(String username, String rawPassword, HttpServletRequest request) {
+	    try {
+	        UsernamePasswordAuthenticationToken authToken = 
+	                new UsernamePasswordAuthenticationToken(username, rawPassword);
+			Authentication authentication = authenticationManager.authenticate(authToken);
+	        SecurityContextHolder.getContext().setAuthentication(authentication);
+	        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
 }

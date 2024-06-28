@@ -16,7 +16,7 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-	<form class="input-group" id="searchForm" action="/store/search/list" method="get">
+	<form class="input-group" id="searchForm" action="/store/list" method="get">
 		<input type="text" class="form-control" id="searchInput" name="keyword" placeholder="Search"
 			aria-label="Search" aria-describedby="button-addon2">
 		<button class="btn btn-primary" type="submit" id="button-addon2">

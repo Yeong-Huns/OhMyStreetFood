@@ -6,25 +6,39 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 import org.omsf.member.model.Member;
 import org.omsf.member.service.MemberService;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.omsf.review.model.RequestReview;
+import org.omsf.review.model.Review;
+import org.omsf.review.service.ReviewService;
+import org.omsf.store.model.Like;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
+import org.omsf.store.service.LikeService;
 import org.omsf.store.service.MenuService;
+import org.omsf.store.service.SearchService;
 import org.omsf.store.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+
+import org.springframework.validation.Errors;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,10 +60,13 @@ public class StoreController {
 	private final StoreService storeService;
 	private final MenuService menuService;
 	private final MemberService<Member> memberService;
-//	private final ReviewService reviewService;
+	private final ReviewService reviewService;
+	
 	private ObjectMapper objectMapper = new ObjectMapper();
+	private final LikeService likeService;
+	private final SearchService searchService;
 
-	@GetMapping("/addbygeneral")
+	@GetMapping("/createstore")
 	public String showAddStoreGeneralPage() {
 	    return "store/addStore";
 	}
@@ -80,46 +97,16 @@ public class StoreController {
         return ResponseEntity.ok("");
 	}
 	
-	@GetMapping("list/page")
-	@ResponseBody()
-	 public List<Map<String, Object>> storePageWithSorting(
-			 	@RequestParam(required = false, defaultValue = "likes") String order,
-			 	@RequestParam(defaultValue = "1" ) int page,
-			 	@RequestParam(required = false) String keyword,
-	            @RequestParam(required = false, defaultValue = "DESC") String sort) {
-        
-		StorePagination pageRequest = StorePagination.builder()
-                                    .currPageNo(page) 
-                                    .orderType(order)
-                                    .searchType("storeName")
-                                    .keyword(keyword)
-                                    .sortOrder(sort)
-                                    .build();
-		List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);  
-		return stores; 
-    }
-	
-	@GetMapping("/list")
-	public String showStorePage(Model model,
-			@RequestParam(required = false) String orderType) {
-		StorePagination pageRequest = StorePagination.builder()
-				.orderType(orderType)
-                .build();
-		List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);
-	    model.addAttribute("stores", stores);
-	    
-	    //처음 20개 스크롤 + 10개씩
-	    return "store";
-	}
 	
 	@GetMapping("/{storeNo}")
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
 		Store store = storeService.getStoreByNo(storeNo);
 		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
 		Photo storePhoto = null;
+    
 		storePhoto = storeService.getPhotoByPhotoNo(store.getPicture());
 		List<Photo> gallery = storeService.getStoreGallery(storeNo);
-		
+
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menu);
 		model.addAttribute("storePhoto", storePhoto);
@@ -133,9 +120,15 @@ public class StoreController {
             model.addAttribute("requestReview", review);
         }
 		
-	    return "store/showStore";
+		List<Review> review = reviewService.getReviewListOnStore(storeNo);
+		
+		model.addAttribute("store", store);
+		model.addAttribute("menus", menu);
+		model.addAttribute("reviews", review);
+		
+		return "store/showStore";
 	}
-	
+
     @GetMapping("/{storeNo}/update")
     public String showStoreEditForm(@PathVariable("storeNo") int storeNo, Model model,
     		Principal principal) {
@@ -189,42 +182,92 @@ public class StoreController {
 		
 	    return "store/{storeNo}";
 	}
-    
-    
-    
-	@GetMapping("/search")
-    public String searchPage() {
+
+    @GetMapping("/search")
+    public String searchPage(Model model) {
+        List<Map<String, Object>> search = searchService.getAllKeywords();
+        
+        model.addAttribute("searchs", search);
         return "search/searchTag";
     }
-	
-	@GetMapping("/search/list")
-    public String searchPage(
-        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-        Model model) {
-		
-        List<Store> initialStores = storeService.searchByKeyword(keyword, 0, 5);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("stores", initialStores);
-        return "search/searchList";
-    }
-	
-	@GetMapping("/search/lists")
-    public String searchStores(
-        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-        @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
-        @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
-        Model model) {
-		
-        List<Store> stores = storeService.searchByKeyword(keyword, offset, limit);
-        model.addAttribute("stores", stores);
+
+	@GetMapping("/list")
+	public String searchPage(
+	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+	    @RequestParam(value = "latitude", required = false) String latitude,
+		@RequestParam(value = "longitude", required = false) String longitude,
+	    HttpServletRequest request,
+	    Model model) {
+		log.info("위도 : {}, 경도 : {}", latitude, longitude);
+	    List<Store> initialStores = storeService.searchByKeyword(keyword, orderType, 0, 5);
+	    
+	    List<Photo> pictures = new ArrayList<>();
+	    for (Store store : initialStores) {
+	    	if (store.getPicture() != null) {
+	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		pictures.add(photo);
+	    	}
+	    }
         
-        return "search/searchItems";
+        String userIp = "";
+        if (request != null) {
+            userIp = request.getHeader("X-FORWARDED-FOR");
+            if (userIp == null || userIp.isEmpty()) {
+                userIp = request.getRemoteAddr();
+            }
+        }
+
+        boolean isValidKeyword = keyword.matches("^[^ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㄳㅄ]*$");
+        if (isValidKeyword && !keyword.isEmpty()) {
+            searchService.insertKeyword(userIp, keyword);
+        }
+        
+        model.addAttribute("stores", initialStores);
+        model.addAttribute("pictures", pictures);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("orderType", orderType);
+        
+        if (keyword == null || keyword.isEmpty()) {
+            return "store";
+        } else {
+            return "search/searchList"; 
+        }
     }
+
+	@GetMapping("/lists")
+	public String searchStores(
+	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+	    @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
+	    @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
+	    Model model) {
+	    
+	    List<Store> stores = storeService.searchByKeyword(keyword, orderType, offset, limit);
+	    
+	    List<Photo> pictures = new ArrayList<>();
+	    for (Store store : stores) {
+	    	if (store.getPicture() != null) {
+	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		pictures.add(photo);
+	    	}
+	    }
+	    
+	    model.addAttribute("stores", stores);
+	    model.addAttribute("pictures", pictures);
+	    
+	    return "search/searchItems";
+	}
 	
 	@ResponseBody
 	@GetMapping("api")
-	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position){
+
+	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position,
+									@RequestParam(value = "latitude", defaultValue = "1") String latitude,
+									@RequestParam(value = "longitude", defaultValue = "1") String longitude){
+		log.info("위도 : {}, 경도 : {}", latitude, longitude);
 		log.info("api 요청 완료");
+		log.info("position : {}" , position);
 		return storeService.getStoresByPosition(position);
 	}	
 	
@@ -305,4 +348,42 @@ public class StoreController {
             Photo photo = storeService.getPhotoByPhotoNo(newPhotoNo);           
             return ResponseEntity.ok(photo);
     }
+	}
+	
+	// leejongseop - like 기능
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@ResponseBody
+	@PostMapping("like/insert")
+	public String insertLike(Principal principal, @RequestBody Like like, Errors errors) {
+		log.info("like insert api 요청 완료");
+		log.info("like 정보 : {}", like.toString());
+		like.setMemberUsername(principal.getName());
+		likeService.insertLike(like);
+		return "찜 목록에 등록";
+	}
+	
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@ResponseBody
+	@DeleteMapping("like/delete")
+	public String deleteLike(Principal principal, @RequestBody Like like, Errors errors) {
+		log.info("like delete api 요청 완료");
+		log.info("like 정보 : {}", like.toString());
+		like.setMemberUsername(principal.getName());
+		likeService.deleteLike(like);
+		return "찜 목록에 제외";
+	}
+	
+	// LIKE돼 있는 지 확인 하는 메소드
+	@PreAuthorize("hasRole('ROLE_USER')")
+	@ResponseBody
+	@GetMapping("like/check")
+	public ResponseEntity<Integer> isLike(Principal principal, Like like, Errors errors) {
+		log.info("like check api 요청 완료");
+		log.info("like 정보 : {}", like.toString());
+		like.setMemberUsername(principal.getName());
+		int count = likeService.isLike(like);
+		log.info("count 개수 : {}", count);
+		return new ResponseEntity<>(count, HttpStatus.OK);
+	}
 }
+

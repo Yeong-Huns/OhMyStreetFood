@@ -31,12 +31,8 @@ public class OnwerServiceImpl implements OwnerService {
 	}
 
 	@Override
-	@Transactional
 	public void deleteMember(String username) {
-		memberRepository.deleteMember(username);
-		// 가게 삭제
-		// 메뉴 삭제
-		// 리뷰 삭제
+
 	}
 
 	@Override

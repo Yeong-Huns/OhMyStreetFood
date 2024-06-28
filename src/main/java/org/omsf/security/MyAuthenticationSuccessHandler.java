@@ -21,22 +21,24 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        authorities.forEach(authority -> {
+        boolean isAdmin = false;
+        boolean isUserOrOwner = false;
+
+        for (GrantedAuthority authority : authorities) {
             if (authority.getAuthority().equals("ROLE_ADMIN")) {
-                try {
-                    response.sendRedirect("./admin");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                isAdmin = true;
+                break;
             } else if (authority.getAuthority().equals("ROLE_USER") || authority.getAuthority().equals("ROLE_OWNER")) {
-                try {
-                    response.sendRedirect("./");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                throw new IllegalStateException();
+                isUserOrOwner = true;
             }
-        });
+        }
+
+        if (isAdmin) {
+            response.sendRedirect(request.getContextPath() + "/admin");
+        } else if (isUserOrOwner) {
+            response.sendRedirect(request.getContextPath() + "/");
+        } else {
+            throw new IllegalStateException("Unknown authority");
+        }
     }
 }

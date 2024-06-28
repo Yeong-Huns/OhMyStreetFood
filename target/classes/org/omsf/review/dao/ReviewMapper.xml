@@ -3,13 +3,13 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.omsf.review.dao.ReviewRepository">
 
-	<!-- 리뷰 생성 -->
-	<insert id="createReview">
-		INSERT INTO REVIEW
-			(RATING, CONTENT, CREATEDAT, MEMBER_USERNAME, STORE_STORENO)
-		VALUES
-			(#{rating}, #{content}, sysdate, #{memberUsername}, #{storeStoreNo})
-	</insert>
+   <!-- 리뷰 생성 -->
+   <insert id="createReview">
+      INSERT INTO REVIEW
+         (REVIEWNO, RATING, CONTENT, CREATEDAT, MEMBER_USERNAME, STORE_STORENO)
+      VALUES
+         (REVIEW_SEQ.NEXTVAL, #{rating}, #{content}, sysdate, #{memberUsername}, #{storeStoreNo})
+   </insert>
 	
 	<!-- 가게별 리뷰 목록 가져오기 -->
 	<select id="getReviewListByStoreId" resultType="org.omsf.review.model.Review">

@@ -15,7 +15,6 @@ public interface StoreService {
 //	List<Store> getStoreByposition(String position);
 	List<Map<String, Object>> getStoreList(StorePagination page);
 	
-
 	int createStore(Store store);
 	void updateStore(Store store);
 	void updatePicture(Store store);
@@ -28,20 +27,22 @@ public interface StoreService {
 	
 	int UploadImage(ArrayList<MultipartFile> files, int storeNo, String username) throws IOException;
 	void deleteImage(int PhotoNo);
-	
-	// jaeeun
-	List<Store> getAllStores();
-	Store getStoreByNo(int storeNo);
-	List<Store> searchByKeyword(String keyword, int offset, int limit);
-	
-	// yunbin
-	String getStoreNameByStoreNo(int storeNo);
-
-	// leejongseop
-	List<Store> getStoresByPosition(String position);
-	
+  
 	Photo getPhotoByPhotoNo(Integer photoNo);
 	List<Photo> getStorePhotos(int storeNo);
 	List<Photo> getStoreGallery(int storeNo);
 	List<Photo> getUpdateStoreGallery(int storeNo, String username);
+  
+	// jaeeun
+	List<Store> getPopularStores();
+	Store getStoreByNo(int storeNo);
+	List<Store> searchByKeyword(String keyword, String ordertype, int offset, int limit);
+	
+	// yunbin
+	String getStoreNameByStoreNo(int storeNo);
+	void deleteStoreByUsername(String username);
+
+	// leejongseop
+	List<Store> getStoresByPosition(String position);
+
 }

@@ -26,7 +26,7 @@ public class MemberServiceImpl implements MemberService<Member> {
 
 	@Override
 	public void deleteMember(String username) {
-		
+		memberRepository.deleteMember(username);
 	}
 
 }

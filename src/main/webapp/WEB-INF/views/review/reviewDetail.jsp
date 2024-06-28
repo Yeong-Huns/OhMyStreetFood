@@ -30,17 +30,17 @@
         <div class="modal-content">
 			<div class="review-container">
 				<span class="close-button">&times;</span>
-				<h1>Review</h1>
+				<h1><spring:message code="review" /></h1>
 				<form:form id="reviewForm" modelAttribute="review" method="post" action="${pageContext.request.contextPath}/review/command">
 					<p>
 						<form:hidden path="storeStoreNo" />
 						<form:errors path="storeStoreNo" id="error"/>
 					</p>
-					<label for="username">Name:</label>
+					<label for="username"><spring:message code="user" /></label>
 					<form:input path="memberUsername" disabled="true"/>
 					<form:hidden path="memberUsername" />
 					
-					<label for="rating">Rating:</label>
+					<label for="rating"><spring:message code="rating" /></label>
 					<div class="rating">
 						<form:radiobutton path="rating" value="1" id="star1" disabled="true"/>
 						<label for="star1" title="1 stars"><i class="fas fa-star"></i></label>
@@ -53,17 +53,26 @@
 						<form:radiobutton path="rating" value="5" id="star5" disabled="true"/>
 						<label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
 					</div>
-					<label for="content">Review:</label>
+					<label for="content"><spring:message code="review.content" /></label>
 					<form:textarea path="content" rows="5" disabled="true"/>
+					<c:if test="${not empty errors}">
+				        <ul>
+				            <c:forEach var="error" items="${errors}">
+				                <div style="text-align: center;">
+									<span id="error">${error.defaultMessage}</span>
+								</div>
+				            </c:forEach>
+				        </ul>
+				    </c:if>
 						<input type="hidden" name="command" id="command" value="" />
 						<input type="hidden" name="reviewNo" id="reviewNo" value="${reviewNo}" />
 						<sec:authorize access="authentication.name == '${memberUsername}'">
-							<button id="update-submit" onclick="updateCommand()">수정</button>
-							<button id="delete-submit" onclick="deleteCommand()">삭제</button>
+							<button id="delete-submit" onclick="deleteCommand()"><spring:message code="delete.btn" /></button>
+							<button id="update-submit" onclick="updateCommand()"><spring:message code="update.btn" /></button>
 						</sec:authorize>
 				</form:form>
 				<sec:authorize access="authentication.name == '${memberUsername}'">
-					<button id="update-btn" onclick="enableEditing()" >수정하기</button>
+					<button id="update-btn" onclick="enableEditing()" ><spring:message code="update.enable" /></button>
 				</sec:authorize>
 			</div>
         </div>

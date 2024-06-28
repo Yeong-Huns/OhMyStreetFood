@@ -36,11 +36,9 @@ function createStore() {
     });
 }
 
-
 function pictureForm(formData) {
 	 const pictureInput = document.getElementById('picture');
     if (pictureInput.files.length > 0) {
         formData.append('photo', pictureInput.files[0]);
     }
 }
-

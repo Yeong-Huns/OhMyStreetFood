@@ -29,12 +29,13 @@ public interface StoreRepository {
 	void deletePhoto(int photoNo);
 	
 	// jaeeun
-	List<Store> getAllStores();
+	List<Store> getPopularStores();
 	Optional<Store> getStoreByNo(int storeNo);
 	List<Store> searchByKeyword(Map<String, Object> params);
 
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);
+	void deleteStoreByUsername(String username);
 	
 	// leejongseop
 	List<Store> getStoresByPosition(String position);

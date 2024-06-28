@@ -49,7 +49,8 @@
 <!--  					<label for="latitude">위도</label> -->
 <!--  				</div> -->
 				
-<!--  				<div class="form-group"> --><!--  					<label for="longitude">경도</label> -->
+<!--  				<div class="form-group"> -->
+<!--  					<label for="longitude">경도</label> -->
 <!--  				</div> -->
 				
 				<div class="form-group">

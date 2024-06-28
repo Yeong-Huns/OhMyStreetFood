@@ -38,6 +38,7 @@ public class StoreServiceImpl implements StoreService {
 	private AmazonS3 s3Client;
 	@Value("${aws.bucketname}")
 	private String bucketName;
+	
 //	@Override
 //	public List<Store> getStoreByposition(String position) {
 //		return storeRepository.getStoreByposition(position);
@@ -150,8 +151,8 @@ public class StoreServiceImpl implements StoreService {
 	
 	// jaeeun
 	@Override
-	public List<Store> getAllStores() {
-		return storeRepository.getAllStores();
+	public List<Store> getPopularStores() {
+		return storeRepository.getPopularStores();
 	}
 	
 	@Override
@@ -161,19 +162,14 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	@Override
-	public List<Store> searchByKeyword(String keyword, int offset, int limit) {
-		Map<String, Object> params = new HashMap<>();
-        params.put("keyword", keyword);
-        params.put("offset", offset);
-        params.put("limit", limit);
-        
-		return storeRepository.searchByKeyword(params);
-	}
-	
-	// yunbin
-	@Override
-	public String getStoreNameByStoreNo(int storeNo) {
-		return storeRepository.getStoreNameByStoreNo(storeNo);
+	public List<Store> searchByKeyword(String keyword, String orderType, int offset, int limit) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("keyword", keyword);
+	    params.put("orderType", orderType);
+	    params.put("offset", offset);
+	    params.put("limit", limit);
+	    
+	    return storeRepository.searchByKeyword(params);
 	}
 	
 	@Override
@@ -192,6 +188,17 @@ public class StoreServiceImpl implements StoreService {
 	        storeWithPhotoList.add(storeWithPhotoMap);
 	    }
 	    return storeWithPhotoList; 
+	}
+	
+	// yunbin
+	@Override
+	public String getStoreNameByStoreNo(int storeNo) {
+		return storeRepository.getStoreNameByStoreNo(storeNo);
+	}
+	
+	@Override
+	public void deleteStoreByUsername(String username) {
+		storeRepository.deleteStoreByUsername(username);
 	}
 
 	// leejongseop
@@ -252,7 +259,5 @@ public class StoreServiceImpl implements StoreService {
 	public void updatePicture(Store store) {
 		storeRepository.updatePicture(store);	
 	}
-	
-	
 
 }

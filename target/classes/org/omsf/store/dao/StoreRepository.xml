@@ -223,8 +223,9 @@
 	
 	<!-- jaeeun -->
 	
-	<select id="getAllStores" resultMap="storeResultMap">
-		SELECT * FROM STORE
+	<select id="getPopularStores" resultType="org.omsf.store.model.Store">
+		SELECT * FROM STORE 
+		ORDER BY totalReview DESC, totalRating DESC, likes DESC FETCH FIRST 10 ROWS ONLY
 	</select>
 
 	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap">
@@ -233,10 +234,24 @@
 	
 	<select id="searchByKeyword" parameterType="map" resultType="org.omsf.store.model.Store">
 	    SELECT * 
-        FROM store 
-        WHERE storeName LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%'
-        ORDER BY storeNo
-        OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
+	    FROM store 
+	    WHERE storeName LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%'
+	    ORDER BY 
+	    <choose>
+	        <when test="orderType == 'createdAt'">
+	            createdAt DESC
+	        </when>
+	        <when test="orderType == 'likes'">
+	            likes DESC
+	        </when>
+<!-- 	        <when test="orderType == 'distance'"> -->
+<!-- 	            distance DESC -->
+<!-- 	        </when> -->
+	        <otherwise>
+	            storeNo DESC
+	        </otherwise>
+	    </choose>
+	    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
 	
 	<!-- yunbin -->
@@ -248,8 +263,12 @@
 		DELETE FROM store WHERE storeno=#{storeNo} 
 	</delete>
 	
+	<delete id="deleteStoreByUsername">
+		delete from store where member_username=#{username}
+	</delete>
+	
 	<!-- leejongseop -->
-	<select id="getStoresByPosition" resultType="org.omsf.store.model.Store">
+	<select id="getStoresByPosition" resultMap="storeResultMap">
 		<bind name="pattern" value="'%' + position + '%'" />
 		SELECT 
 			* 
