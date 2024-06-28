@@ -29,7 +29,7 @@ CREATE TABLE store (
     totalrating     NUMBER(5, 3) DEFAULT 0.0,
     createdat       DATE NOT NULL,
     modifiedat      DATE,
-    member_username VARCHAR2(255 CHAR) NOT NULL
+    member_username VARCHAR2(255 CHAR)
 );
 
 CREATE UNIQUE INDEX store__idx ON store ( member_username ASC );
@@ -38,7 +38,7 @@ ALTER TABLE store ADD CONSTRAINT store_pk PRIMARY KEY ( storeno );
 
 ALTER TABLE store
     ADD CONSTRAINT store_member_fk FOREIGN KEY ( member_username )
-        REFERENCES member ( username );
+        REFERENCES member ( username ) ON DELETE SET NULL;
 
 CREATE SEQUENCE store_seq
     START WITH 1
@@ -81,7 +81,7 @@ CREATE TABLE review (
     content         VARCHAR2(1000 CHAR),
     createdat       DATE NOT NULL,
     modifiedat      DATE,
-    member_username VARCHAR2(255 CHAR) NOT NULL,
+    member_username VARCHAR2(255 CHAR),
     store_storeno   NUMBER NOT NULL
 );
 
@@ -89,7 +89,7 @@ ALTER TABLE review ADD CONSTRAINT review_pk PRIMARY KEY ( reviewno );
 
 ALTER TABLE review
     ADD CONSTRAINT review_member_fk FOREIGN KEY ( member_username )
-        REFERENCES member ( username ) ON DELETE CASCADE ENABLE;
+        REFERENCES member ( username ) ON DELETE SET NULL ENABLE;
 
 ALTER TABLE review
     ADD CONSTRAINT review_store_fk FOREIGN KEY ( store_storeno )
@@ -178,3 +178,12 @@ BEGIN
   END COLUMN_SEQUENCES;
 END;
 /
+
+
+-- 검색 테이블
+CREATE TABLE search (
+    userIp VARCHAR2(255) NOT NULL,
+    keyword VARCHAR2(255) NOT NULL,
+    createdAt TIMESTAMP
+);
+

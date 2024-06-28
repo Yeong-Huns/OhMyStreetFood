@@ -13,10 +13,18 @@
 	$(document).ready(function(){
 		$("#withdrawal").click(function(){
 			if (confirm("정말로 탈퇴하시겠습니까?") == true){
-				window.location.href = './witdrawal';
-			} else {
-				return;
+				$.ajax({
+                    url: './withdrawal',
+                    type: 'POST',
+                    success: function(response) {
+                        window.location.href = response.redirectUrl;
+                    },
+                    error: function(xhr, status, error) {
+                        alert("서버 오류입니다. 다시 시도해 주세요.");
+                    }
+                });
 			}
+				
 		});
 		
 		$("#nickNameDuplicateConfirm").click(function() {
@@ -57,10 +65,6 @@
         	   isNickNameDuplicateChecked = false;
            });
 		});
-		
-		if ("${error}" != '' ) {
-			alert(error);
-		}
 	});
 </script>
 </head>
@@ -85,6 +89,6 @@
 		<input type="hidden" name="username" value="${member.username }">
 		<input type="hidden" name="memberType" value="${member.memberType }">
 	</form:form>
-	<a href="${pageContext.request.contextPath}/withdrawal" id="withdrawal">회원 탈퇴</a>
+	<a href="#" id="withdrawal">회원 탈퇴</a>
 </body>
 </html>

@@ -27,7 +27,7 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
 <!-- JavaScript -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
 
@@ -35,44 +35,42 @@
 </head>
 <body>
 	<div class="main">
-		<div class="row">
-			<div>
-				<a href="${pageContext.request.contextPath}/store/list" style="text-decoration: none; color: inherit;"> 
-					<i class="fas fa-arrow-left"></i>
-				</a>
-			</div>
-			
-			<span style="display: flex; flex-direction: row; justify-content: space-between;">
-                <span><i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong></span>
-       			<span><a href="#">사장님과 채팅하기</a></span>
-        	</span>
-        	
-		    <div class="card" style="width: 100%; height: auto; border: none;">
-		        <div class="row g-0">
-		            <div class="col-md-3" style="padding: 0 20px;">
-		           		 <c:choose>
-					        <c:when test="${storePhoto.picture != null}">
-					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
-					        </c:when>
-					        <c:otherwise>
-					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
-					        </c:otherwise>
-					    </c:choose>
-		            </div>
-		            <div class="col-md-9 card-body" style="padding: 0 20px;">
-		                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
-			                    <span><h5 class="card-title">${store.storeName}</h5></span>
-			                    <span><i id="like-btn" class="far fa-heart"></i></span>
-								<!-- <i class="fas fa-heart"></i> -->
-		                    </span>
-		                    <p class="card-text">${store.introduce}</p>
-		                    <p class="card-text">
-			                		리뷰 <span id="now-review">${store.totalReview}</span>
-			                		평점 <span id="now-rating">${store.totalRating}</span>
-			                		찜 <span id="now-like">${store.likes}</span>
-			                		<div id="fireworks-container"></div>
-			                </p>
-		            		<span><small class="text-muted">
+
+		<div id="back" style="padding: 20px 0;">
+			<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
+				<i class="fas fa-arrow-left"></i>
+			</a>
+		</div>
+		
+		<span style="display: flex; flex-direction: row; justify-content: space-between;">
+               <span><i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong></span>
+      			<span><a href="#">사장님과 채팅하기</a></span>
+       	</span>
+       	
+	    <div class="card" style="width: 100%; height: auto; border: none;">
+	        <div class="row g-0">
+	            <div class="col-md-3" style="padding: 0 20px;">
+	           		 <c:choose>
+				        <c:when test="${storePhoto.picture != null}">
+				            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+				        </c:when>
+				        <c:otherwise>
+				            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+				        </c:otherwise>
+				    </c:choose>
+	            </div>
+	            <div class="col-md-9 card-body" style="padding: 0 20px;">
+	                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
+		                    <span><h5 class="card-title">${store.storeName}</h5></span>
+		                    <span><i id="like-btn" class="far fa-heart"></i></span>
+	                    </span>
+	                    <p class="card-text">${store.introduce}</p>
+	                    <p class="card-text">
+	                		리뷰 <span id="now-review">${store.totalReview}</span>
+	                		평점 <span id="now-rating">${store.totalRating}</span>
+	                		찜 <span id="now-like">${store.likes}</span>
+		            		<p>
+		            		<small class="text-muted">
 		            			업데이트
 		            		 	<c:choose>
 							        <c:when test="${store.modifiedAt != null}">
@@ -82,101 +80,105 @@
 							            ${store.createdAt}
 							        </c:otherwise>
 							    </c:choose>
-		            		 </small></span>
-		            </div>
-		        </div>
-		    </div>
+		            		 </small>
+		            		 </p>
+		                </p>
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <div>
+	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
+                 <span><h5>가게 정보</h5></span>
+                 <span><a href="${pageContext.request.contextPath}/store/${store.storeNo}/update">정보 수정</a></span>
+            </span>
+            
+            <!-- KAKAO MAP API -->
+			<div class="col-md-12" id="map" style="width: 100%; height: 200px; border-radius: 20px"></div>
+			<div class="col-md-12" id="result"></div>
+				
+            <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
+		        <span>주&nbsp;&nbsp;&nbsp;&nbsp;소</span>
+		        <span>${store.address}</span>
+		    </span>
 		    
-		    <div>
-		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                  <span><h5>가게 정보</h5></span>
-                  <span>정보 수정</span>
-                 </span>
-                 
-                <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
-			        <span>운영일자</span>
-			        <span>${store.operatingDate}</span>
-			    </span>
-				
-				<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
-			        <span>운영시간</span>
-			        <span>${store.operatingHours}</span>
-			    </span>
-			    
+               <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
+		        <span>운영일자</span>
+		        <span>${store.operatingDate}</span>
+		    </span>
+			
+			<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
+		        <span>운영시간</span>
+		        <span>${store.operatingHours}</span>
+		    </span>
+		    
+		    <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
+		        <span>메&nbsp;&nbsp;&nbsp;&nbsp;뉴</span>
+		        <span>&nbsp;</span>
+		    </span>
+		    
+		    <c:forEach items="${menus}" var="menu"> 
 			    <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
-			        <span>메뉴</span>
-			        <span>&nbsp;</span>
+			        <span>- ${menu.menuName}</span>
+			        <span>${menu.price}원</span>
 			    </span>
-			    
-			    <c:forEach items="${menus}" var="menu"> 
-				    <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
-				        <span>- ${menu.menuName}</span>
-				        <span>${menu.price}</span>
-				    </span>
-				 </c:forEach>
-		    </div>
+			 </c:forEach>
+	    </div>
 
-			<!-- KAKAO MAP API -->
-			<div>
-				<div class="col-md-12" id="map" style="width: 100%; height: 200px; border-radius: 20px"></div>
-				<div class="col-md-12" id="result"></div>
-			</div>
+		<jsp:include page="gallery.jsp" />
+		
+		<div>
+	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
+                 <span><h5><spring:message code="review.info" /></h5></span>
+                 <button id="openModalBtn"><spring:message code="review.write" /></button>
+                </span>
+                
+			<c:if test="${!empty reviews}">
+				<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+				    <span style="padding: 20px">
+				    	<c:forEach begin="1" end="${store.totalRating}">
+				    		<i class="fas fa-star" style="color:#f5b301;"></i>
+				    	</c:forEach>
+					    <c:if test="${5 - store.totalRating >= 1}">
+					    	<c:forEach begin="1" end="${6 - store.totalRating >= 5 ? 5 : 6 - store.totalRating}">
+				    			<i class="fas fa-star"></i>
+				    		</c:forEach>
+					    </c:if>
+				    </span>
+				</span>
 			
-			<jsp:include page="gallery.jsp" />
-			
-			<div>
-		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                  <span><h5><spring:message code="review.info" /></h5></span>
-                  <button id="openModalBtn"><spring:message code="review.write" /></button>
-                 </span>
-                 
-				<c:if test="${!empty reviews}">
-					<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-					    <span style="padding: 20px">
-					    	<c:forEach begin="1" end="${store.totalRating}">
-					    		<i class="fas fa-star" style="color:#f5b301;"></i>
-					    	</c:forEach>
-						    <c:if test="${5 - store.totalRating >= 1}">
-						    	<c:forEach begin="1" end="${6 - store.totalRating >= 5 ? 5 : 6 - store.totalRating}">
-					    			<i class="fas fa-star"></i>
-					    		</c:forEach>
-						    </c:if>
-					    </span>
-					</span>
-				
-					<c:forEach items="${reviews}" var="review">
-						<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-					    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-						    	<span>${review.memberUsername}</span>
-						    	<span>${review.createdAt}</span>
-						    </span>
-							<span>${review.content}</span>
-						</div>			    
-					</c:forEach>
-				</c:if>
-				
-				<c:if test="${empty reviews}">
+				<c:forEach items="${reviews}" var="review">
 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-					    	<span><spring:message code="review.nothing" /></span>
+					    	<span>${review.memberUsername}</span>
+					    	<span>${review.createdAt}</span>
 					    </span>
-					</div>	
-				</c:if>
+						<span>${review.content}</span>
+					</div>			    
+				</c:forEach>
+			</c:if>
+			
+			<c:if test="${empty reviews}">
+				<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+			    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
+				    	<span><spring:message code="review.nothing" /></span>
+				    </span>
+				</div>	
+			</c:if>
 
-				<div class="col-md-12 text-center">
-					<c:if test="${store.totalReview > 5}">
-						<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}">
-							<spring:message code="review.more" />
-						</a>
-					</c:if>
-					<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
-				</div>
-		    </div>
-		    
-		    <!-- 찜 목록 효과 -->
-		    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
-		    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
-		</div>
+			<div class="col-md-12 text-center">
+				<c:if test="${store.totalReview > 5}">
+					<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}">
+						<spring:message code="review.more" />
+					</a>
+				</c:if>
+				<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
+			</div>
+	    </div>
+	    
+	    <!-- 찜 목록 효과 -->
+	    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
+	    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
 	</div>
 	
 	<!-- 모달 화면 -->
@@ -231,10 +233,43 @@
 
 	<!-- 리뷰 모달 -->
 	<script src="${pageContext.request.contextPath}/js/modal.js"></script>
+
+	<!-- like 요청 -->
+	<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 	
+	<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var backElement = document.getElementById('back');
+
+        // Handle the close button click event
+        var closeButton = document.querySelector('.close-button');
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                updateBackLink();
+            });
+        }
+
+        // Handle the form submit event
+        var reviewForm = document.getElementById('reviewForm');
+        if (reviewForm) {
+            reviewForm.addEventListener('submit', function() {
+                updateBackLink();
+            });
+        }
+
+        function updateBackLink() {
+            backElement.innerHTML = `
+                <a href="${pageContext.request.contextPath}/store/list" style="text-decoration: none; color: inherit;"> 
+                    <i class="fas fa-arrow-left"></i>
+                </a>`;
+        }
+    });
+	</script>
+
 	<sec:authorize access="isAuthenticated()">
 		<!-- like 요청 -->
 		<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 	</sec:authorize>
+
 </body>
 </html>

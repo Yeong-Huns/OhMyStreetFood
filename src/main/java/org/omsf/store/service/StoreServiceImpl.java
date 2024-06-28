@@ -153,13 +153,6 @@ public class StoreServiceImpl implements StoreService {
 	    
 	    return storeRepository.searchByKeyword(params);
 	}
-
-	
-	// yunbin
-	@Override
-	public String getStoreNameByStoreNo(int storeNo) {
-		return storeRepository.getStoreNameByStoreNo(storeNo);
-	}
 	
 	@Override
 	public List<Map<String, Object>> getStoreList(StorePagination page) {
@@ -177,6 +170,17 @@ public class StoreServiceImpl implements StoreService {
 	        storeWithPhotoList.add(storeWithPhotoMap);
 	    }
 	    return storeWithPhotoList; 
+	}
+	
+	// yunbin
+	@Override
+	public String getStoreNameByStoreNo(int storeNo) {
+		return storeRepository.getStoreNameByStoreNo(storeNo);
+	}
+	
+	@Override
+	public void deleteStoreByUsername(String username) {
+		storeRepository.deleteStoreByUsername(username);
 	}
 
 	// leejongseop

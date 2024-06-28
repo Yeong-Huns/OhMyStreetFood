@@ -33,6 +33,7 @@ public interface StoreRepository {
 
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);
+	void deleteStoreByUsername(String username);
 	
 	// leejongseop
 	List<Store> getStoresByPosition(String position);

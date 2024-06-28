@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -24,20 +25,12 @@
 
 			<div class="col-md-12">
 				인기 검색어
-				<p style="padding: 20px 0;">
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;닭꼬치&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;떡볶이&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
-					<button type="button" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">&nbsp;오뎅&nbsp;</button>
+			      <p style="padding: 20px 0;">
+					<c:forEach items="${searchs}" var="search">               
+						<a href="${pageContext.request.contextPath}/store/list?keyword=${search.KEYWORD}" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">
+				            &nbsp;${search.KEYWORD}&nbsp;
+				        </a>
+					</c:forEach>
 				</p>
 			</div>
 			
