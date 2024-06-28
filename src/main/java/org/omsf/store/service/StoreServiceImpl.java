@@ -33,6 +33,7 @@ public class StoreServiceImpl implements StoreService {
 	private AmazonS3 s3Client;
 	@Value("${aws.bucketname}")
 	private String bucketName;
+	
 //	@Override
 //	public List<Store> getStoreByposition(String position) {
 //		return storeRepository.getStoreByposition(position);
@@ -204,5 +205,7 @@ public class StoreServiceImpl implements StoreService {
 		Store store = storeService.getStoreByNo(storeNo);
 		return storeRepository.getStorePhotos(store);	
 	}
+
+	
 
 }

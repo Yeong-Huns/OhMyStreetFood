@@ -15,7 +15,6 @@ public interface StoreService {
 //	List<Store> getStoreByposition(String position);
 	List<Map<String, Object>> getStoreList(StorePagination page);
 	
-
 	int createStore(Store store);
 	void updateStore(Store store);
 	void deleteStore(int storeNo);
@@ -41,4 +40,12 @@ public interface StoreService {
 	
 	Photo getPhotoByPhotoNo(int photoNo);
 	List<Photo> getStorePhotos(int storeNo);
+
+
+
+
+
+
+
+
 }

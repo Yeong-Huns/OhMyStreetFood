@@ -26,13 +26,13 @@
 	</div>
 
 	<!-- Search -->
-          <jsp:include page="search.jsp" />
+      <jsp:include page="search.jsp" />
 
 	<!-- KAKAO MAP API -->
 	<div class="col-md-12">
 		<div id="map" style="width: 100%; height: 400px; border-radius: 20px"></div>
 	</div>
-	
+
 	<sec:authorize access="isAnonymous()">
 		<div class="col-md-12">
 			<span style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#e2f0fe; border-radius:10px;">
@@ -42,27 +42,27 @@
 	</sec:authorize>
 
 	<div class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
-          <h5>인기 점포</h5>
-          <span class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
-           <c:forEach items="${stores}" var="store">
-			    <div class="card" style="width:180px; cursor: pointer; margin: 5px; border: none;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
-			        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
-			        <div class="card-body">
-			            <p class="card-title">${store.storeName}</p>
-			            <c:set var="addressWords" value="${fn:split(store.address, ' ')}" />
-			            <p class="card-title">${addressWords[0]} ${addressWords[1]}</p>
-			            <p class="card-text">
-			                <small class="text-muted">
-			                    리뷰 ${store.totalReview}<br>
-			                    평점 ${store.totalRating}<br>
-			                    찜 ${store.likes}<br>
-			                </small>
-			            </p>
-			        </div>
-			    </div>
-			</c:forEach>
-          </span>
-      </div>
+         <h5>인기 점포</h5>
+         <span class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
+          <c:forEach items="${stores}" var="store">
+		    <div class="card" style="width:180px; cursor: pointer; margin: 5px; border: none;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
+		        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
+		        <div class="card-body">
+		            <p class="card-title">${store.storeName}</p>
+		            <c:set var="addressWords" value="${fn:split(store.address, ' ')}" />
+		            <p class="card-title">${addressWords[0]} ${addressWords[1]}</p>
+		            <p class="card-text">
+		                <small class="text-muted">
+		                    리뷰 ${store.totalReview}<br>
+		                    평점 ${store.totalRating}<br>
+		                    찜 ${store.likes}<br>
+		                </small>
+		            </p>
+		        </div>
+		    </div>
+		</c:forEach>
+         </span>
+     </div>
     
     <!-- Menu -->
     <div class="row">

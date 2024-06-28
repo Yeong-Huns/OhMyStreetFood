@@ -167,49 +167,48 @@ public class StoreController {
         return "search/searchTag";
     }
 
-	@GetMapping("/list")
-	public String searchPage(
-	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
-//	    @RequestParam(value = "position") String position,
-	    HttpServletRequest request,
-	    Model model) {
-		
-	    List<Store> initialStores = storeService.searchByKeyword(keyword, orderType, 0, 5);
-	    
-	    List<Photo> pictures = new ArrayList<>();
+    @GetMapping("/list")
+    public String searchPage(
+        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+        @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+    //  @RequestParam(value = "position") String position,
+        HttpServletRequest request,
+        Model model) {
+
+        List<Store> initialStores = storeService.searchByKeyword(keyword, orderType, 0, 5);
+        
+        List<Photo> pictures = new ArrayList<>();
 	    for (Store store : initialStores) {
 	    	if (store.getPicture() != null) {
-	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());	    		
+	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
 	    		pictures.add(photo);
 	    	}
 	    }
-	    
-//	    System.out.println("test" + storeService.getStoresByPosition(position));
-
-	    // ip 주소 설정
-	    String userIp = "";
-	    
+        
+        String userIp = "";
         if (request != null) {
-        	userIp = request.getHeader("X-FORWARDED-FOR");
-            if (userIp == null || "".equals(userIp)) {
-            	userIp = request.getRemoteAddr();
+            userIp = request.getHeader("X-FORWARDED-FOR");
+            if (userIp == null || userIp.isEmpty()) {
+                userIp = request.getRemoteAddr();
             }
         }
-        
-    	// 검증 로직 추가
+
         boolean isValidKeyword = keyword.matches("^[^ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎㄳㅄ]*$");
-    	
-        if (isValidKeyword && keyword != null && !keyword.isEmpty()) {            
+        if (isValidKeyword && !keyword.isEmpty()) {
             searchService.insertKeyword(userIp, keyword);
         }
-	    
+        
         model.addAttribute("stores", initialStores);
         model.addAttribute("pictures", pictures);
         model.addAttribute("keyword", keyword);
         model.addAttribute("orderType", orderType);
-	    return "search/searchList";
-	}
+        
+        if (keyword == null || keyword.isEmpty()) {
+            return "store";
+        } else {
+            return "search/searchList"; 
+        }
+    }
 
 	@GetMapping("/lists")
 	public String searchStores(
@@ -220,7 +219,17 @@ public class StoreController {
 	    Model model) {
 	    
 	    List<Store> stores = storeService.searchByKeyword(keyword, orderType, offset, limit);
+	    
+	    List<Photo> pictures = new ArrayList<>();
+	    for (Store store : stores) {
+	    	if (store.getPicture() != null) {
+	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		pictures.add(photo);
+	    	}
+	    }
+	    
 	    model.addAttribute("stores", stores);
+	    model.addAttribute("pictures", pictures);
 	    
 	    return "search/searchItems";
 	}
