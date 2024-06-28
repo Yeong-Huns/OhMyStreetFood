@@ -29,7 +29,7 @@
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <li><a class="dropdown-item" href="?orderType=createdAt">최신순</a></li>
             <li><a class="dropdown-item" href="?orderType=likes">인기순</a></li>
-            <li><a class="dropdown-item" href="?orderType=distance">거리순</a></li>
+            <li><a class="dropdown-item" id="distance" href="?orderType=distance">거리순</a></li>
         </ul>
     </span>
 	</div>

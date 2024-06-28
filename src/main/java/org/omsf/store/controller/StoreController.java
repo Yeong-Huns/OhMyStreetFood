@@ -256,7 +256,6 @@ public class StoreController {
 	
 	@ResponseBody
 	@GetMapping("api")
-
 	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position,
 									@RequestParam(value = "latitude", defaultValue = "1") String latitude,
 									@RequestParam(value = "longitude", defaultValue = "1") String longitude){
@@ -353,36 +352,35 @@ public class StoreController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@PostMapping("like/insert")
-	public String insertLike(Principal principal, @RequestBody Like like, Errors errors) {
-		log.info("like insert api 요청 완료");
-		log.info("like 정보 : {}", like.toString());
+	public ResponseEntity<?> insertLike(Principal principal, @RequestBody Like like) {
 		like.setMemberUsername(principal.getName());
+		int count = likeService.isLike(like);
+		if (count >= 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 찜 목록에 등록돼 있습니다.");
 		likeService.insertLike(like);
-		return "찜 목록에 등록";
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@DeleteMapping("like/delete")
-	public String deleteLike(Principal principal, @RequestBody Like like, Errors errors) {
-		log.info("like delete api 요청 완료");
-		log.info("like 정보 : {}", like.toString());
+	public ResponseEntity<?> deleteLike(Principal principal, @RequestBody Like like) {
 		like.setMemberUsername(principal.getName());
+		int count = likeService.isLike(like);
+		if (count < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("찜 목록에 등록돼 있지 않습니다.");
 		likeService.deleteLike(like);
-		return "찜 목록에 제외";
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	// LIKE돼 있는 지 확인 하는 메소드
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@GetMapping("like/check")
-	public ResponseEntity<Integer> isLike(Principal principal, Like like, Errors errors) {
-		log.info("like check api 요청 완료");
-		log.info("like 정보 : {}", like.toString());
+	public ResponseEntity<Integer> isLike(Principal principal, Like like) {
 		like.setMemberUsername(principal.getName());
 		int count = likeService.isLike(like);
-		log.info("count 개수 : {}", count);
-		return new ResponseEntity<>(count, HttpStatus.OK);
+		if(count == 1)
+			return new ResponseEntity<>(count, HttpStatus.OK);			
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }
 
