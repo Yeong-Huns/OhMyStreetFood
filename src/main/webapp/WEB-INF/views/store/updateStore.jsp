@@ -105,6 +105,8 @@
 				
 				<div id="galleryList" class="mb-3">
 				    <h5>갤러리 사진들</h5>
+				    <input type="file" id="pictureInput" class="form-control mb-2" style="display: none;">
+					<button type="button" id="addPhotoBtn" class="btn btn-primary">갤러리 사진 추가</button>
 				    <ul id="sortable" class="list-group">
 				        
 				        <c:forEach var="gallery" items="${gallery}">
@@ -115,7 +117,9 @@
 				        </c:forEach>
 				    </ul>
 				</div>
-
+			
+			
+			
 				<div class="form-group">
 					<label for="introduce">가게 소개</label>
 					<textarea class="form-control" id="introduce" name="introduce" rows="5">${store.introduce}</textarea>
@@ -155,7 +159,7 @@
 			    </div>
 				
 				<div class="col-md-12">
-					<button type="submit" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">수정하기</button>
+					<button type="submit" class="updateStoreBtn btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">수정하기</button>
 				</div>
 			</form>
 		</div>

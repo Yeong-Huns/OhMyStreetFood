@@ -67,7 +67,7 @@ public class StoreTests {
 		ArrayList<MultipartFile> files = new ArrayList<>();
 	    files.add(file);
 		Store store = storeService.getStoreByNo(storeNo);
-		int photoNo = storeService.UploadImage(files, storeNo);
+		int photoNo = storeService.UploadImage(files, storeNo, "admin@ohmystreetfood.com");
 		store.setPicture(photoNo);
 		storeService.updateStore(store);
 		Store dbStore = storeRepository.getStoreByNo(storeNo).get();

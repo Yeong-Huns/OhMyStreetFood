@@ -1,4 +1,4 @@
-export {addMenuInputForm, storeForm, menuForm};
+export {addMenuInputForm, storeForm, menuForm, galleryForm};
 
 function addMenuInputForm() {
 	 $('#addMenuBtn').click(function() {
@@ -53,4 +53,13 @@ function menuForm(formData) {
             });
             
 	 formData.append('menus', JSON.stringify(menus));
+}
+
+function galleryForm(formData) {
+	const photoOrder = [];
+    $('#sortable li').each(function() {
+        const photoNo = $(this).data('id');
+        photoOrder.push(photoNo);
+    });
+    formData.append('photo', JSON.stringify(photoOrder));
 }

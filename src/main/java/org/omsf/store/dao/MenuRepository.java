@@ -11,7 +11,7 @@ public interface MenuRepository {
 	void createMenu(Menu menu);
 	void updateMenu(Menu menu);
 	void deleteMenu(int MenuNo);
-	
+	void deleteMenusByStoreNo(int StoreNo);
 	// jaeeun
 	void insertMenu(Menu menu);
 	Optional<Menu> getMenuByMenuNo(int menuNo);	

@@ -106,7 +106,8 @@
         FILESIZE,
         PICTURE,
         CREATEDAT,
-        STORE_STORENO
+        STORE_STORENO,
+        USERNAME
     )
     VALUES
     (	
@@ -115,7 +116,8 @@
         #{fileSize},
         #{picture},
         sysdate,
-        #{storeNo}
+        #{storeNo},
+        #{username}
     )
    		 <selectKey keyProperty="photoNo" resultType="int" order="AFTER">
        		SELECT PHOTO_SEQ.CURRVAL FROM DUAL
@@ -128,6 +130,7 @@
 	<select id="getStorePhotos">
 		SELECT * FROM PHOTO 
 		WHERE STORE_STORENO = #{storeNo}
+		ORDER BY PHOTONO
 	</select>
 	<select id="getStoreGallery">
 		SELECT * FROM PHOTO 
@@ -135,12 +138,23 @@
 		<if test="picture != null">
         	AND PHOTONO != #{picture}
     	</if>
+    	ORDER BY PHOTONO
 	</select>
 	
 	<update id="deletePhoto" parameterType="int">
 		DELETE PHOTO WHERE PHOTONO = #{photoNo}
 	</update>
-	
+	<update id="updatePhoto">
+	    UPDATE PHOTO
+	    SET PHOTONO = #{photoNo},
+	        contentType = #{contentType},
+	        fileSize = #{fileSize},
+	        picture = #{picture},
+	        createdAt = sysdate,
+	        USERNAME = #{username}
+	    WHERE photoNo = #{photoNo}
+	</update>
+
 	<update id="updateStore">
 	    UPDATE STORE
 	    SET
@@ -152,6 +166,14 @@
 	        OPERATINGDATE = #{operatingDate},
 	        OPERATINGHOURS = #{operatingHours},
 	        MODIFIEDAT = sysdate,
+	        PICTURE = #{picture, jdbcType=NUMERIC}
+	    WHERE
+	        STORENO = #{storeNo}
+	</update>
+	
+	<update id="updatePicture">
+	    UPDATE STORE
+	    SET
 	        PICTURE = #{picture, jdbcType=NUMERIC}
 	    WHERE
 	        STORENO = #{storeNo}

@@ -88,7 +88,7 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public int UploadImage(ArrayList<MultipartFile> files, int storeNo) throws IOException {
+	public int UploadImage(ArrayList<MultipartFile> files, int storeNo, String username) throws IOException {
 		String savedFileName = "";
 		String uploadPath = "store/";
 		int photoNo = 0;
@@ -116,6 +116,7 @@ public class StoreServiceImpl implements StoreService {
       			  .fileSize(file.getSize())
       			  .picture(url)
       			  .storeNo(storeNo)
+      			  .username(username)
       			  .build();
            
            storeRepository.createPhoto(photo);
@@ -132,6 +133,19 @@ public class StoreServiceImpl implements StoreService {
 		fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
 		s3Client.deleteObject(new DeleteObjectRequest(bucketName + "/store" , fileName));
 		storeRepository.deletePhoto(PhotoNo);
+	}
+	
+	@Override
+	public void updatePhotoOrder(List<Integer> photoOrder, int storeNo, String username) {
+		List<Photo> photos = storeService.getStoreGallery(storeNo);
+
+		for (int i = 0; i < photoOrder.size(); i++) {
+	       int photoNo = photoOrder.get(i);
+	       Photo photo = photos.get(i);
+	       photo.setPhotoNo(photoNo);
+	       photo.setUsername(username);
+	       storeRepository.updatePhoto(photo); 
+	    }
 	}
 	
 	// jaeeun
@@ -196,12 +210,14 @@ public class StoreServiceImpl implements StoreService {
 		
 		return photo;
 	}
-
+	
+	//가게의 전체사진
 	@Override
 	public List<Photo> getStorePhotos(int storeNo) {
 		return storeRepository.getStorePhotos(storeNo);	
 	}
 
+	//가제의 대표사진 제외
 	@Override
 	public List<Photo> getStoreGallery(int storeNo) {
 		Store store = storeService.getStoreByNo(storeNo);
@@ -230,6 +246,11 @@ public class StoreServiceImpl implements StoreService {
 		}
 
 		
+	}
+
+	@Override
+	public void updatePicture(Store store) {
+		storeRepository.updatePicture(store);	
 	}
 	
 	

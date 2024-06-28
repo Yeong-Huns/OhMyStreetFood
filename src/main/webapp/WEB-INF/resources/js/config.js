@@ -2,6 +2,7 @@ export {urls};
 
 const urls = {
     mainUrl: '/',
+    storeUrl: '/store/',
     storeListUrl: '/store/list',
     searchUrl: '/search',
     mypageUrl: '/mypage',

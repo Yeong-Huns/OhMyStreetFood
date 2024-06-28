@@ -38,18 +38,11 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public void updateMenus(int storeNo, List<Menu> menues) {
+		menuRepository.deleteMenusByStoreNo(storeNo);
 		
-		List<Menu> dbMenus = menuRepository.getMenusByStoreNo(storeNo);
-		if (dbMenus.size() != menues.size()) {
-			throw new IllegalArgumentException("메뉴의 수가 일치하지 않습니다.");
-		}
-		
-		for (int i=0; i<menues.size(); i++) {
-			Menu dbMenu = dbMenus.get(i);
-			Menu menu = menues.get(i);
-			dbMenu.setMenuName(menu.getMenuName());
-			dbMenu.setPrice(menu.getPrice());
-			menuRepository.updateMenu(dbMenu);
+		for (Menu menu : menues) {
+			menu.setStoreNo(storeNo);
+			menuRepository.createMenu(menu);
 		}
 	}
 
