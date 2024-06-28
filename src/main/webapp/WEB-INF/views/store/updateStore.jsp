@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -14,6 +16,8 @@
 	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 	<!-- Jquery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<!-- jQuery UI CDN -->
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 	<!-- CSS -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 	
@@ -30,7 +34,7 @@
 				<h3>가게 정보 수정</h3>
 			</div>
 			<form method="post"
-				id="storeForm"
+				id="storeEditForm"
 				enctype="multipart/form-data">
 				
 				<div>
@@ -40,22 +44,14 @@
 
 				<div class="form-group">
 					<label for="address">가게 주소<span style="color: red;">&nbsp;*&nbsp;</span></label>
-					<input type="text" class="form-control" id="address" name="address" placeholder="가게 주소">
+					<input type="text" class="form-control" id="address" name="address" value="${store.address}">
  					<input type="hidden" class="form-control" id="latitude" name="latitude" placeholder="위도">
  					<input type="hidden" class="form-control" id="longitude" name="longitude" placeholder="경도">
 				</div>
-
-<!--  				<div class="form-group"> -->
-<!--  					<label for="latitude">위도</label> -->
-<!--  				</div> -->
-				
-<!--  				<div class="form-group"> -->
-<!--  					<label for="longitude">경도</label> -->
-<!--  				</div> -->
 				
 				<div class="form-group">
 					<label for="storeName">가게 이름<span style="color: red;">&nbsp;*&nbsp;</span></label>
-					<input type="text" class="form-control" id="storeName" name="storeName" placeholder="가게 이름을 입력하세요">
+					<input type="text" class="form-control" id="storeName" name="storeName" value="${store.storeName}">
 				</div>
 
 			    <div class="form-group">
@@ -96,18 +92,37 @@
 					</span>	
 				</div>
 				
-				<div class="form-group">
-				    <label for="picture">가게 대표 사진</label>
-				    <input class="form-control" id="picture" name="picture" type="file" accept="image/*">
+				<div class="container mt-5">
+			        <div class="form-group">
+			            <span>가게 대표 사진</span>
+			            <input class="form-control" id="picture" name="picture" type="file" accept="image/*" style="display: none;">
+			            <div>
+			            	<img id="storePicture" src="${storePhoto.picture}" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				            <button id="updateStorePhoto" class="btn btn-primary mt-2">수정</button>
+			            </div>
+			        </div>
+			    </div>
 				
-				    <span id="preview">
-				        <img id="previewImg" src="" alt="이미지 미리보기" class="img-thumbnail" style="display: none; max-width: 100px;">
-				    </span>
+				<div id="galleryList" class="mb-3">
+				    <h5>갤러리 사진들</h5>
+				    <input type="file" id="pictureInput" class="form-control mb-2" style="display: none;">
+					<button type="button" id="addPhotoBtn" class="btn btn-primary">갤러리 사진 추가</button>
+				    <ul id="sortable" class="list-group">
+				        
+				        <c:forEach var="gallery" items="${gallery}">
+				            <li class="list-group-item" data-id="${gallery.photoNo}">
+				                <img src="${gallery.picture}" class="img-thumbnail" style="max-width: 100px;">
+				                <button type="button" class="btn btn-danger btn-sm float-end deleteBtn">삭제</button>
+				            </li>
+				        </c:forEach>
+				    </ul>
 				</div>
-
+			
+			
+			
 				<div class="form-group">
 					<label for="introduce">가게 소개</label>
-					<textarea class="form-control" id="introduce" name="introduce" rows="5"></textarea>
+					<textarea class="form-control" id="introduce" name="introduce" rows="5">${store.introduce}</textarea>
 				</div>
 				
 			    <div class="form-group">
@@ -132,20 +147,52 @@
 				    </thead>
 				    <tbody id="menuList">
 				      <!-- 동적 추가 -->
+				       	<c:forEach var="menu" items="${menus}">
+			                <tr>
+			                    <td><input type="text" name="menuName" value="${menu.menuName}" style="border: none;" readonly></td>
+			                    <td><input type="number" name="menuPrice" value="${menu.price}" style="border: none;" readonly></td>
+			                    <td><button type="button" class="btn btn-danger btn-sm deleteBtn" style="border-radius: 500px;">-</button></td>
+			                </tr>
+			            </c:forEach>
 				    </tbody>
 				  </table>
 			    </div>
 				
 				<div class="col-md-12">
-					<button type="submit" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">등록하기</button>
+					<button type="submit" class="updateStoreBtn btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">수정하기</button>
 				</div>
 			</form>
 		</div>
 	</div>
 	
-	<script type="module" src="${pageContext.request.contextPath}/js/addStoreOwner.js"></script>
+	<script type="module" src="${pageContext.request.contextPath}/js/updateStore.js"></script>
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
+	<script>
+	    $(document).ready(function() {
+	        
+	        var operatingDays = "${store.operatingDate}";
+	
+	        if (operatingDays !== 'null') {
+	            // 각 요일 체크박스 상태 설정
+	            operatingDays = operatingDays.split(", ");
+	            operatingDays.forEach(function(day) {
+	                $('input[name="days"][value="' + day + '"]').prop('checked', true);
+	            });
+	        }
+	        
+	        
+	        var timeRange = "${store.operatingHours}"; // 모델에서 받은 시간 범위 문자열
+	        if (timeRange) {
+	            var times = timeRange.split(" - "); // 시간 범위를 분리하여 배열로 저장
+	            
+	            if (times.length === 2) {
+	                $('#startTime').val(times[0]); // 첫 번째 시간을 시작 시간 입력 필드에 설정
+	                $('#endTime').val(times[1]);   // 두 번째 시간을 종료 시간 입력 필드에 설정
+	            }
+	        }
+	    });
+	</script>
 </body>
 </html>

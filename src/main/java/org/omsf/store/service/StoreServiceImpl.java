@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.omsf.member.model.Member;
+import org.omsf.member.service.MemberService;
 import org.omsf.store.dao.StoreRepository;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
@@ -29,6 +32,8 @@ public class StoreServiceImpl implements StoreService {
 	private StoreRepository storeRepository;
 	@Autowired
 	private StoreService storeService;
+	@Autowired
+	private MemberService<Member> memberService;
 	@Autowired
 	private AmazonS3 s3Client;
 	@Value("${aws.bucketname}")
@@ -53,16 +58,10 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public void deleteStore(int storeNo) {
-		Store store = storeService.getStoreByNo(storeNo);
-		List<Photo> photos = storeRepository.getStorePhotos(store);
-		if (store.getPicture() != null) {			
-			photos.add(storeService.getPhotoByPhotoNo(store.getPicture()));
-		}
+		List<Photo> photos = storeRepository.getStorePhotos(storeNo);
+
 		for (Photo photo : photos) {
-			String fileName = photo.getPicture();
-			fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
-			s3Client.deleteObject(new DeleteObjectRequest(bucketName + "store/" , fileName));
-			storeRepository.deletePhoto(photo.getPhotoNo());
+			storeService.deleteImage(photo.getPhotoNo());
 		}
 		storeRepository.deleteStore(storeNo);
 		
@@ -90,7 +89,7 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public int UploadImage(ArrayList<MultipartFile> files, int storeNo) throws IOException {
+	public int UploadImage(ArrayList<MultipartFile> files, int storeNo, String username) throws IOException {
 		String savedFileName = "";
 		String uploadPath = "store/";
 		int photoNo = 0;
@@ -118,6 +117,7 @@ public class StoreServiceImpl implements StoreService {
       			  .fileSize(file.getSize())
       			  .picture(url)
       			  .storeNo(storeNo)
+      			  .username(username)
       			  .build();
            
            storeRepository.createPhoto(photo);
@@ -129,7 +129,24 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Override
 	public void deleteImage(int PhotoNo) {
+		Photo photo = storeService.getPhotoByPhotoNo(PhotoNo);
+		String fileName = photo.getPicture();
+		fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+		s3Client.deleteObject(new DeleteObjectRequest(bucketName + "/store" , fileName));
 		storeRepository.deletePhoto(PhotoNo);
+	}
+	
+	@Override
+	public void updatePhotoOrder(List<Integer> photoOrder, int storeNo, String username) {
+		List<Photo> photos = storeService.getStoreGallery(storeNo);
+
+		for (int i = 0; i < photoOrder.size(); i++) {
+	       int photoNo = photoOrder.get(i);
+	       Photo photo = photos.get(i);
+	       photo.setPhotoNo(photoNo);
+	       photo.setUsername(username);
+	       storeRepository.updatePhoto(photo); 
+	    }
 	}
 	
 	// jaeeun
@@ -194,18 +211,53 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public Photo getPhotoByPhotoNo(int photoNo) {
-		Photo photo = storeRepository.getPhotoByPhotoNo(photoNo);
+	public Photo getPhotoByPhotoNo(Integer photoNo) {
+		if (photoNo == null) {return null;}
+ 		Photo photo = storeRepository.getPhotoByPhotoNo(photoNo);
 		
 		return photo;
 	}
-
+	
+	//가게의 전체사진
 	@Override
 	public List<Photo> getStorePhotos(int storeNo) {
-		Store store = storeService.getStoreByNo(storeNo);
-		return storeRepository.getStorePhotos(store);	
+		return storeRepository.getStorePhotos(storeNo);	
 	}
 
-	
+	//가제의 대표사진 제외
+	@Override
+	public List<Photo> getStoreGallery(int storeNo) {
+		Store store = storeService.getStoreByNo(storeNo);
+		return storeRepository.getStoreGallery(store);
+	}
+
+	@Override
+	public List<Photo> getUpdateStoreGallery(int storeNo, String username) {
+		Store store = storeService.getStoreByNo(storeNo);
+		String storeUsername = store.getUsername();
+		String memberType = null;
+		//memberType 확인
+		if (storeUsername != null) {
+			Member member = (Member) memberService.findByUsername(storeUsername).get();
+			memberType = member.getMemberType();
+		}
+		// 사장이면 모두수정 아니면 내가 올린 사진만
+		if (memberType == "owner" && storeUsername == username) {
+			return storeRepository.getStoreGallery(store);
+		} else {
+			List<Photo> storeGallery = storeRepository.getStoreGallery(store);
+			storeGallery = storeGallery.stream()
+					.filter(photo -> username.equals(photo.getUsername()))
+					.collect(Collectors.toList());	
+			return storeGallery;
+		}
+
+		
+	}
+
+	@Override
+	public void updatePicture(Store store) {
+		storeRepository.updatePicture(store);	
+	}
 
 }

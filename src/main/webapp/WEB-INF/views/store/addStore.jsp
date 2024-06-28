@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -30,7 +29,7 @@
 			<div class="col-md-12 text-center" id="title">
 				<h3>가게 정보 등록</h3>
 			</div>
-			<form action="${pageContext.request.contextPath}/createstore" method="post"
+			<form method="post"
 				id="storeForm"
 				enctype="multipart/form-data">
 				
