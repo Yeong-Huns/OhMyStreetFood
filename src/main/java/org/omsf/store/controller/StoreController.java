@@ -315,7 +315,9 @@ public class StoreController {
         
         //사장
         if (store.getUsername() == username && "owner".equals(memberType)) {
-        	storeService.deleteImage(photoNo);
+        	if (photoNo != 0 && storePhoto != null) {       		
+        		storeService.deleteImage(photoNo);
+        	}
         	int newPhotoNo = storeService.UploadImage(photo, storeNo, username);
         	store.setPicture(newPhotoNo);
         	storeService.updatePicture(store);
@@ -323,11 +325,13 @@ public class StoreController {
         	   
         }
         //일반인
-        if (storePhoto == null || (storePhoto.getUsername() != null &&!username.equals(storePhoto.getUsername()))  ) {
+        if (storePhoto != null && storePhoto.getUsername() != null &&!username.equals(storePhoto.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");
         }
         
-        storeService.deleteImage(photoNo);
+        if (photoNo != 0 && storePhoto != null) {       		
+    		storeService.deleteImage(photoNo);
+    	}
         int newPhotoNo = storeService.UploadImage(photo, storeNo, username);
     	store.setPicture(newPhotoNo);
     	storeService.updatePicture(store);
