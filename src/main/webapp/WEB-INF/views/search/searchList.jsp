@@ -34,7 +34,7 @@
 			        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 			            <li><a class="dropdown-item" href="?keyword=${keyword}&orderType=createdAt">최신순</a></li>
 			            <li><a class="dropdown-item" href="?keyword=${keyword}&orderType=likes">인기순</a></li>
-			            <li><a class="dropdown-item" href="?keyword=${keyword}&orderType=distance">거리순</a></li>
+			            <li><a class="dropdown-item" id="distance" href="?keyword=${keyword}&orderType=distance">거리순</a></li>
 			        </ul>
 			    </span>
 			</div>
@@ -106,5 +106,7 @@
 	    });
 	</script>
 
+	<!-- 위도, 경도값 적용 JS -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/sessionStorage.js"></script>
 </body>
 </html>

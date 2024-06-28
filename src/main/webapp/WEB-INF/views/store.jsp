@@ -19,7 +19,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	
+
     <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
     <span class="mt-4">
     	<button class="btn btn-outline-primary" type="button" onclick="window.location.href='${pageContext.request.contextPath}/store/createstore'">점포등록</button>
@@ -50,6 +50,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
 	    $(document).ready(function() {
 	        var offset = ${stores.size()};
@@ -97,6 +98,9 @@
 
 	    });
 	</script>
+
+    <!-- 위도, 경도값 적용 JS -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/sessionStorage.js"></script>
 
 </body>
 </html>

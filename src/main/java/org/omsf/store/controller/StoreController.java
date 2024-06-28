@@ -15,6 +15,7 @@ import org.omsf.store.model.Like;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
+import org.omsf.store.model.StorePagination;
 import org.omsf.store.service.LikeService;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.SearchService;
@@ -86,6 +87,42 @@ public class StoreController {
         return ResponseEntity.ok("");
 	}
 	
+
+	@GetMapping("list/page")
+	@ResponseBody()
+	 public List<Map<String, Object>> storePageWithSorting(
+			 	@RequestParam(required = false, defaultValue = "likes") String order,
+			 	@RequestParam(defaultValue = "1" ) int page,
+			 	@RequestParam(required = false) String keyword,
+	            @RequestParam(required = false, defaultValue = "DESC") String sort) {
+        
+		StorePagination pageRequest = StorePagination.builder()
+                                    .currPageNo(page) 
+                                    .orderType(order)
+                                    .searchType("storeName")
+                                    .keyword(keyword)
+                                    .sortOrder(sort)
+                                    .build();
+		List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);  
+		return stores; 
+    }
+	
+//	@GetMapping("/list")
+//	public String showStorePage(Model model,
+//			@RequestParam(required = false) String orderType,
+//			@RequestParam(value = "latitude", required = false) String latitude,
+//			@RequestParam(value = "longitude", required = false) String longitude) {
+//		StorePagination pageRequest = StorePagination.builder()
+//				.orderType(orderType)
+//                .build();
+//		log.info("위도 : {}, 경도 : {}", latitude, longitude);
+//		List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);
+//	    model.addAttribute("stores", stores);
+//	    
+//	    //처음 20개 스크롤 + 10개씩
+//	    return "store";
+//	}
+
 //	@GetMapping("list/page")
 //	@ResponseBody()
 //	 public List<Map<String, Object>> storePageWithSorting(
@@ -117,6 +154,7 @@ public class StoreController {
 //	    //처음 20개 스크롤 + 10개씩
 //	    return "store";
 //	}
+
 	
 	@GetMapping("/{storeNo}")
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
@@ -167,17 +205,18 @@ public class StoreController {
         return "search/searchTag";
     }
 
-    @GetMapping("/list")
-    public String searchPage(
-        @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-        @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
-    //  @RequestParam(value = "position") String position,
-        HttpServletRequest request,
-        Model model) {
-
-        List<Store> initialStores = storeService.searchByKeyword(keyword, orderType, 0, 5);
-        
-        List<Photo> pictures = new ArrayList<>();
+	@GetMapping("/list")
+	public String searchPage(
+	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+	    @RequestParam(value = "latitude", required = false) String latitude,
+		@RequestParam(value = "longitude", required = false) String longitude,
+	    HttpServletRequest request,
+	    Model model) {
+		log.info("위도 : {}, 경도 : {}", latitude, longitude);
+	    List<Store> initialStores = storeService.searchByKeyword(keyword, orderType, 0, 5);
+	    
+	    List<Photo> pictures = new ArrayList<>();
 	    for (Store store : initialStores) {
 	    	if (store.getPicture() != null) {
 	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
@@ -238,8 +277,8 @@ public class StoreController {
 	@GetMapping("api")
 
 	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position,
-									@RequestParam("latitude") String latitude,
-									@RequestParam("longitude") String longitude){
+									@RequestParam(value = "latitude", defaultValue = "1") String latitude,
+									@RequestParam(value = "longitude", defaultValue = "1") String longitude){
 		log.info("위도 : {}, 경도 : {}", latitude, longitude);
 		log.info("api 요청 완료");
 		log.info("position : {}" , position);
