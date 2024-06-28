@@ -10,8 +10,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	sendDataButton.addEventListener("click", handleClick);
 	
 	function handleClick(event) {
+		console.log("클릭이벤트");
+		event.stopImmediatePropagation();
         const target = event.target;
-
         if (target.className === "far fa-heart") {
             insertLike();
         } else if (target.className === "fas fa-heart") {
