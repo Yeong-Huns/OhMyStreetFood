@@ -25,7 +25,7 @@
 			        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 			            <li><a class="dropdown-item" href="?orderType=createdAt">최신순</a></li>
 			            <li><a class="dropdown-item" href="?orderType=likes">인기순</a></li>
-			            <li><a class="dropdown-item" href="?orderType=">거리순</a></li>
+			            <li><a class="dropdown-item" id="distance" href="?orderType=">거리순</a></li>
 			        </ul>
 			    </span>
 			    <span class="mt-4">
@@ -52,5 +52,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 위도, 경도값 적용 JS -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/sessionStorage.js"></script>
 </body>
 </html>
