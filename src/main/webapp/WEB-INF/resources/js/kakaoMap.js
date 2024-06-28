@@ -40,10 +40,26 @@ function hideSpinner() {
 	document.getElementById('spinner-wrapper').style.display = 'none';
 }
 
+// 세션 스토리지 저장
+function saveLatitudeAndLongitude(latitude, longitude){
+	
+	if(sessionStorage.getItem('latitude') !== null || 
+		sessionStorage.getItem('longitude') !== null){
+			console.log("이미 세션스토리지에 값이 있습니다.");
+			return;
+	}
+	
+	sessionStorage.setItem('latitude', latitude);
+	sessionStorage.setItem('longitude', longitude);
+	console.log("현재 위도 값 : " + latitude);
+	console.log("현재 경도 값 : " + longitude);
+}
+
 (async () => {
 	const location = await displayLocation();
 	var gps_lat = location.gps_lat;
 	var gps_lng = location.gps_lng;
+	saveLatitudeAndLongitude(gps_lat, gps_lng);
 
 	console.log('위도(gps_lat) : ' + gps_lat + ', 경도(gps_lng) : ' + gps_lng);
 
@@ -83,7 +99,7 @@ function hideSpinner() {
 			} finally {
 				hideSpinner(); // 스피너 숨김
 			}
-		}, 3000);
+		}, 1500);
 	}
 
 	// 마커 렌더링
@@ -119,17 +135,31 @@ function hideSpinner() {
 	searchDetailAddrFromCoords(map.getCenter(), function(result, status) {
 		if (status === kakao.maps.services.Status.OK) {
 			var detailAddr = result[0].address.address_name;
-			console.log("위도 : " + map.getCenter().getLng().toString());
-			console.log("경도 : " + map.getCenter().getLat().toString());
-			address = {
-				longitude: map.getCenter().getLng().toString(),
-				latitude: map.getCenter().getLat().toString()
-			};
-			const queryStr = new URLSearchParams(address).toString();
-			console.log(queryStr);
-			fetchPositionsByAddress(queryStr); // 주소를 사용하여 서버에 요청
-//			fetchPositionsByAddress(detailAddr);
+//			console.log("위도 : " + map.getCenter().getLng().toString());
+//			console.log("경도 : " + map.getCenter().getLat().toString());
+//			address = {
+//				longitude: map.getCenter().getLng().toString(),
+//				latitude: map.getCenter().getLat().toString()
+//			};
+//			const queryStr = new URLSearchParams(address).toString();
+//			console.log(queryStr);
+//			fetchPositionsByAddress(queryStr); // 주소를 사용하여 서버에 요청
+			fetchPositionsByAddress(detailAddr);
 		}
 	});
+	
+	// 마우스 드래그로 지도 이동이 완료되었을 때 중심 좌표 주소 출력
+    kakao.maps.event.addListener(map, 'idle', function() {        
+        var latlng = map.getCenter();
+
+        searchDetailAddrFromCoords(latlng, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var detailAddr = result[0].address.address_name;
+                
+                console.log(detailAddr);
+				fetchPositionsByAddress(detailAddr);
+            }   
+        });
+    });
 
 })();

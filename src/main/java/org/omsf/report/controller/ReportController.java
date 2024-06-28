@@ -2,8 +2,10 @@ package org.omsf.report.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 import org.omsf.report.model.Report;
+import org.omsf.report.service.LogStoreService;
 import org.omsf.report.service.ReportService;
 import org.omsf.store.service.StoreService;
 import org.springframework.stereotype.Controller;
@@ -14,13 +16,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class ReportController {	
 	// yunbin
 	private final ReportService reportService;
 	private final StoreService storeService;
+	
+	// leejongseop
+	private final LogStoreService logStoreService;
 	
 	@GetMapping("/store/report/{storeNo}")
 	public String showStoreReportPage(@PathVariable Integer storeNo, Model model) {
@@ -54,4 +61,13 @@ public class ReportController {
 			return false;
 		}
 	}
+	
+	// leejongseop
+	@GetMapping("/store/log/{storeId}")
+	public String showLogList(@PathVariable("storeId") int storeId, Model model) {
+		List<Map<String, Object>> list = logStoreService.getLogListByStoreNo(storeId);
+		return "";
+	}
+	
+	
 }

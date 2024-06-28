@@ -104,10 +104,13 @@ public class StoreController {
 	
 	@GetMapping("/list")
 	public String showStorePage(Model model,
-			@RequestParam(required = false) String orderType) {
+			@RequestParam(required = false) String orderType,
+			@RequestParam(value = "latitude", required = false) String latitude,
+			@RequestParam(value = "longitude", required = false) String longitude) {
 		StorePagination pageRequest = StorePagination.builder()
 				.orderType(orderType)
                 .build();
+		log.info("위도 : {}, 경도 : {}", latitude, longitude);
 		List<Map<String,Object>> stores = storeService.getStoreList(pageRequest);
 	    model.addAttribute("stores", stores);
 	    
@@ -193,8 +196,8 @@ public class StoreController {
 	@ResponseBody
 	@GetMapping("api")
 	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position,
-									@RequestParam("latitude") String latitude,
-									@RequestParam("longitude") String longitude){
+									@RequestParam(value = "latitude", defaultValue = "1") String latitude,
+									@RequestParam(value = "longitude", defaultValue = "1") String longitude){
 		log.info("위도 : {}, 경도 : {}", latitude, longitude);
 		log.info("api 요청 완료");
 		return storeService.getStoresByPosition(position);
