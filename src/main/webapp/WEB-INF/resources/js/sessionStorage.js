@@ -45,13 +45,14 @@ async function getLatitudeAndLongitude(){
 	console.log("현재 경도 값 : " + longitude);
 	
 	address = {
-		orderType: 'distance',
-		longitude: latitude,
-		latitude: longitude
+		latitude: latitude,
+		longitude: longitude
 	};
 	const queryStr = new URLSearchParams(address).toString();
 	
-	document.getElementById("distance").href = 'list?' + queryStr;
+	const nowHref = document.getElementById("distance").href;
+	
+	document.getElementById("distance").href = nowHref + '&' + queryStr;
 	
 }
 
