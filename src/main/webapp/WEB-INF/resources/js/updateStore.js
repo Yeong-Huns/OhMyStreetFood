@@ -78,7 +78,11 @@ function updateStore() {
 function updateStorePhoto() {
 	const input = $('#picture')[0];
    	const storeNo = getStoreNOFromUrl();
-   	const photoNo = $('#storePicture').data('id');
+   	let photoNo = $('#storePicture').data('id');
+   	
+   	if (photoNo == '' || photoNo == null) {
+		photoNo = 0;
+	}
     
     if (input.files && input.files[0]) {
         const formData = new FormData();
