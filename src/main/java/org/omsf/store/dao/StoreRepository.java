@@ -31,7 +31,7 @@ public interface StoreRepository {
 	// jaeeun
 	List<Store> getPopularStores();
 	Optional<Store> getStoreByNo(int storeNo);
-	List<Store> searchByKeyword(Map<String, Object> params);
+	List<Store> showStoreList(Map<String, Object> params);
 
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);

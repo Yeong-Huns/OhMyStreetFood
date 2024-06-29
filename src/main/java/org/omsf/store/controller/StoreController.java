@@ -27,7 +27,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -190,12 +189,14 @@ public class StoreController {
 	public String searchPage(
 	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
 	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
-	    @RequestParam(value = "latitude", required = false) String latitude,
-		@RequestParam(value = "longitude", required = false) String longitude,
+	    @RequestParam(value = "latitude", required = false, defaultValue = "") Double latitude,
+        @RequestParam(value = "longitude", required = false, defaultValue = "") Double longitude,
 	    HttpServletRequest request,
 	    Model model) {
-		log.info("위도 : {}, 경도 : {}", latitude, longitude);
-	    List<Store> initialStores = storeService.searchByKeyword(keyword, orderType, 0, 5);
+        
+        System.out.println("Received latitude: " + latitude + ", longitude: " + longitude);
+        
+	    List<Store> initialStores = storeService.showStoreList(keyword, orderType, latitude, longitude, 0, 5);
 	    
 	    List<Photo> pictures = new ArrayList<>();
 	    for (Store store : initialStores) {
@@ -234,11 +235,13 @@ public class StoreController {
 	public String searchStores(
 	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
 	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+	    @RequestParam(value = "latitude", required = false, defaultValue = "") Double latitude,
+        @RequestParam(value = "longitude", required = false, defaultValue = "") Double longitude,
 	    @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
 	    @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
 	    Model model) {
 	    
-	    List<Store> stores = storeService.searchByKeyword(keyword, orderType, offset, limit);
+		List<Store> stores = storeService.showStoreList(keyword, orderType, latitude, longitude, offset, limit);
 	    
 	    List<Photo> pictures = new ArrayList<>();
 	    for (Store store : stores) {

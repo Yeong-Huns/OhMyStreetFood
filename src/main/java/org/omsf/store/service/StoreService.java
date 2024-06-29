@@ -36,7 +36,7 @@ public interface StoreService {
 	// jaeeun
 	List<Store> getPopularStores();
 	Store getStoreByNo(int storeNo);
-	List<Store> searchByKeyword(String keyword, String ordertype, int offset, int limit);
+	List<Store> showStoreList(String keyword, String orderType, Double latitude, Double longitude, int offset, int limit);
 	
 	// yunbin
 	String getStoreNameByStoreNo(int storeNo);
@@ -44,5 +44,7 @@ public interface StoreService {
 
 	// leejongseop
 	List<Store> getStoresByPosition(String position);
+
+
 
 }

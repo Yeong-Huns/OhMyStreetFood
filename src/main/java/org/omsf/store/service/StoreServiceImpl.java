@@ -162,14 +162,16 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	@Override
-	public List<Store> searchByKeyword(String keyword, String orderType, int offset, int limit) {
-	    Map<String, Object> params = new HashMap<>();
+	public List<Store> showStoreList(String keyword, String orderType, Double latitude, Double longitude, int offset, int limit) {
+		Map<String, Object> params = new HashMap<>();
 	    params.put("keyword", keyword);
 	    params.put("orderType", orderType);
+	    params.put("latitude", latitude);
+	    params.put("longitude", longitude);
 	    params.put("offset", offset);
 	    params.put("limit", limit);
 	    
-	    return storeRepository.searchByKeyword(params);
+	    return storeRepository.showStoreList(params);
 	}
 	
 	@Override
@@ -259,5 +261,7 @@ public class StoreServiceImpl implements StoreService {
 	public void updatePicture(Store store) {
 		storeRepository.updatePicture(store);	
 	}
+
+	
 
 }

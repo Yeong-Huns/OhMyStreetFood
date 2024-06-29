@@ -11,7 +11,10 @@
                 </c:forEach>
             </div>
             <div class="col-md-9 card-body" style="padding: 0 20px;">
-                <h5 class="card-title">${store.storeName}</h5>
+            	<span style="display: flex; flex-direction: row; justify-content: space-between;">
+	                <h5 class="card-title">${store.storeName}</h5>
+	                <small class="text-muted"><i class="fas fa-location-arrow"></i><strong>&nbsp;${store.distance}</strong></small>
+	            </span>
                 <p class="card-text">${store.introduce}</p>
                 <p class="card-text">
                     리뷰 ${store.totalReview}

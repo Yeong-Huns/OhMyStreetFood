@@ -52,50 +52,49 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-	    $(document).ready(function() {
-	        var offset = ${stores.size()};
-	        var isLoading = false;
-	        var endOfData = false; 
-	
-	        $(window).scroll(function() {
-	            if ($(window).scrollTop() + $(window).height() >= $(document).height() - 10 && !isLoading && !endOfData) {
-	                isLoading = true;
-	                loadMoreStores(offset);
-	                offset += 5;
-	            }
-	        });
-	
-	        function loadMoreStores(offset) {
-	            var url = '${pageContext.request.contextPath}/store/lists';
-	            var keyword = '${keyword}';
-	            var orderType = '${param.orderType}';
-	            var limit = 5; 
+    document.addEventListener('DOMContentLoaded', function() {
+        var offset = ${stores.size()};
+        var isLoading = false;
+        var endOfData = false; 
+        var latitude = sessionStorage.getItem('latitude');
+        var longitude = sessionStorage.getItem('longitude');
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 10 && !isLoading && !endOfData) {
+                isLoading = true;
+                loadMoreStores(offset);
+                offset += 5;
+            }
+        });
 
-	            $.ajax({
-	                url: url,
-	                method: 'GET',
-	                data: {
-	                    keyword: keyword,
-	                    orderType: orderType,
-	                    offset: offset,
-	                    limit: limit
-	                },
-	                success: function(response) {
-	                    if (response.trim() === "") {
-	                        endOfData = true;
-	                        $('#storeList').append("<p id='endOfDataMessage' style='text-align:center;'>더 이상 데이터가 없습니다</p>");
-	                    } else {
-	                        $('#storeList').append(response);
-	                    }
-	                    isLoading = false;
-	                },
-	                error: function(xhr, status, error) {
-	                    console.error('Error loading more stores:', error);
-	                    isLoading = false;
-	                }
-	            });
+        function loadMoreStores(offset) {
+            var url = '/store/lists';
+            var keyword = '${keyword}';
+            var orderType = '${param.orderType}';
+            var limit = 5;
+
+            fetch(url + '?keyword=' + keyword + '&orderType=' + orderType + '&latitude=' + latitude + '&longitude=' + longitude + '&offset=' + offset + '&limit=' + limit)
+                .then(function(response) {
+                    return response.text();
+                })
+                .then(function(data) {
+                    if (data.trim() === "") {
+                        endOfData = true;
+                        var endOfDataMessage = document.createElement('p');
+                        endOfDataMessage.id = 'endOfDataMessage';
+                        endOfDataMessage.style.textAlign = 'center';
+                        endOfDataMessage.textContent = '더 이상 데이터가 없습니다';
+                        document.getElementById('storeList').appendChild(endOfDataMessage);
+                    } else {
+                        document.getElementById('storeList').insertAdjacentHTML('beforeend', data);
+                    }
+                    isLoading = false;
+                })
+                .catch(function(error) {
+                    console.error('Error loading more stores:', error);
+                    isLoading = false;
+                });
 	        }
-
 	    });
 	</script>
 

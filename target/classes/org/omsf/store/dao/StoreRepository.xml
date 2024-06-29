@@ -232,9 +232,12 @@
 		SELECT * FROM STORE WHERE STORENO = #{storeNo}
 	</select>
 	
-	<select id="searchByKeyword" parameterType="map" resultType="org.omsf.store.model.Store">
-	    SELECT * 
-	    FROM store 
+	<select id="showStoreList" parameterType="map" resultType="org.omsf.store.model.StoreDistance">
+	    SELECT s.*, ROUND(SDO_GEOM.SDO_DISTANCE(
+	               SDO_GEOMETRY(2001, NULL, SDO_POINT_TYPE(#{longitude}, #{latitude}, NULL), NULL, NULL),
+	               SDO_GEOMETRY(2001, NULL, SDO_POINT_TYPE(s.longitude, s.latitude, NULL), NULL, NULL),
+	               1)) AS distance
+	    FROM store s
 	    WHERE storeName LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%'
 	    ORDER BY 
 	    <choose>
@@ -244,9 +247,9 @@
 	        <when test="orderType == 'likes'">
 	            likes DESC
 	        </when>
-<!-- 	        <when test="orderType == 'distance'"> -->
-<!-- 	            distance DESC -->
-<!-- 	        </when> -->
+	        <when test="orderType == 'distance'">
+	            distance ASC
+	        </when>
 	        <otherwise>
 	            storeNo DESC
 	        </otherwise>

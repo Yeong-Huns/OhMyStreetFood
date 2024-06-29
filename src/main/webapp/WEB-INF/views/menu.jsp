@@ -29,7 +29,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="${pageContext.request.contextPath}/store/list">
+					<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/store/list">
 						<i class="fas fa-store"></i><br>점포
 					</a>
 				</li>
@@ -50,5 +50,9 @@
 			</ul>
 		</div>
 	</nav>
+	
+	<!-- 위도, 경도값 적용 JS -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/sessionStorage.js"></script>
+	
 </body>
 </html>
