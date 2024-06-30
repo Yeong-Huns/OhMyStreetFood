@@ -3,6 +3,64 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.omsf.chatRoom.dao.ChatRepository">
 
+    <!-- isOwner -->
+    <select id="isOwner" resultType="boolean">
+        SELECT CASE
+                   WHEN LOWER(memberType) = 'owner' THEN 1
+                   ELSE 0
+                   END
+        FROM member
+        WHERE username = #{username}
+    </select>
+
+    <!-- getOwnerAddress -->
+    <select id="getOwnerAddress" resultType="String">
+        SELECT storeNo AS subscription
+        FROM store
+        WHERE member_username = #{username}
+    </select>
+
+    <!-- getUserSubscriptions-->
+    <select id="getUserSubscriptions" resultType="org.omsf.chatRoom.model.ChatRoomVO">
+        SELECT chatroomNo, customer, storeNo, ownerVisible, customerVisible, updatedAt
+        FROM chatroom
+        WHERE customer = #{address}
+           OR (storeNo = TO_NUMBER(NULLIF(#{address}, 'invalid')) AND REGEXP_LIKE(#{address}, '^[0-9]+$'))
+    </select>
+
+    <!-- getSubscriptionByChatRoomNo -->
+    <select id="getSubscriptionByChatRoomNo" resultType="java.lang.String">
+        SELECT
+            c.customer || c.storeNo AS subscription
+        FROM
+            ChatRoom c
+        WHERE
+            c.chatRoomNo = #{chatRoomNo}
+    </select>
+
+
+
+
+    <!-- owner Store List -->
+    <select id="findStoreListByAddress" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT storeno
+        FROM STORE
+        WHERE member_username = (
+            SELECT member_username
+            FROM STORE
+            WHERE TO_CHAR(storeno) = #{address}
+            FETCH FIRST 1 ROWS ONLY
+        )
+    </select>
+    <!-- create ChatRoom -->
+    <insert id="saveChatRoom">
+        INSERT INTO CHATROOM (CUSTOMER, STORENO)
+        VALUES (#{address}, #{storeNo})
+    </insert>
+
+    <!-- update Visible-->
+
+
 
     <select id="isSubscribed" resultType="int">
         SELECT COUNT(*)

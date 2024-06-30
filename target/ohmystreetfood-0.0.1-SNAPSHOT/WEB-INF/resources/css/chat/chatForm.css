@@ -1,0 +1,163 @@
+.chatroom-container {
+    max-width: 100%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative; /* Ensure the modal can be positioned */
+}
+.chatroom-header {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    cursor: move; /* Indicate draggable area */
+}
+.chatroom-list {
+    max-height: 600px;
+    overflow-y: auto;
+}
+.chatroom-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+.chatroom-item:hover {
+    background-color: #f1f1f1;
+}
+.chatroom-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #fff;
+    flex-shrink: 0;
+}
+.chatroom-content {
+    flex-grow: 1;
+    overflow: hidden;
+}
+.chatroom-name {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.chatroom-last-message {
+    color: #888;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;  /* 최대 3줄까지만 표시 */
+    -webkit-box-orient: vertical;
+}
+.chatroom-time {
+    white-space: nowrap;
+    color: #888;
+    flex-shrink: 0;
+}
+.chat-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+}
+.chat-messages {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.chat-message {
+    display: flex;
+    margin-bottom: 10px;
+}
+.chat-message .message-content {
+    max-width: 70%;
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+}
+.chat-message .message-content:before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+.chat-message.sent {
+    justify-content: flex-end;
+}
+.chat-message.sent .message-content {
+    background-color: #d1e7dd;
+    border-bottom-right-radius: 0;
+}
+.chat-message.sent .message-content:before {
+    right: -10px;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent #d1e7dd;
+}
+.chat-message.received {
+    justify-content: flex-start;
+}
+.chat-message.received .message-content {
+    background-color: #fff3cd;
+    border-bottom-left-radius: 0;
+}
+.chat-message.received .message-content:before {
+    left: -10px;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent #fff3cd transparent transparent;
+}
+.chat-footer {
+    display: flex;
+    padding: 10px;
+    background-color: #e9ecef;
+}
+
+.chat-footer input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.chat-footer button {
+    flex-shrink: 0;
+    white-space: nowrap; /* Prevent line break */
+    padding: 10px 20px; /* Adjust padding */
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+@media (max-width: 600px) {
+    .chat-message .message-content {
+        max-width: 100%;
+    }
+
+    .chat-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .chat-footer button {
+        padding: 10px;
+    }
+}
+

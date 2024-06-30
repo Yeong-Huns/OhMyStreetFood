@@ -20,12 +20,14 @@ import java.time.LocalDateTime;
 @Setter
 public class ChatRoomVO {
     private long chatroomNo;
-    //private String roomAddress; userName + ownerName
-    //private String storeName; join
-    private String username;
-    private String ownerName;
-    private char ownerVisible;
-    private char customerVisible;
+    private String customer;
+    private long storeNo;
+    private boolean ownerVisible;
+    private boolean customerVisible;
     private LocalDateTime updatedAt;
+
+    public String getChannel(){
+        return customer+storeNo;
+    }
 
 }

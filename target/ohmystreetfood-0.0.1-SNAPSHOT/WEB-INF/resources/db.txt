@@ -1,0 +1,189 @@
+-- 멤버 테이블
+CREATE TABLE member (
+    username    VARCHAR2(255 CHAR) NOT NULL,
+    nickname    VARCHAR2(255),
+    password    VARCHAR2(255) NOT NULL DEFAULT 'x',
+    membertype  VARCHAR2(50) NOT NULL,
+    logintype   VARCHAR2(50) NOT NULL,
+    businessregistrationnumber VARCHAR2(10),
+    createdat   DATE NOT NULL,
+    modifiedat  DATE
+);
+
+ALTER TABLE member ADD CONSTRAINT member_pk PRIMARY KEY (username);
+ALTER TABLE member ADD CONSTRAINT member_nickname_uk UNIQUE (nickname);
+ALTER TABLE member ADD CONSTRAINT member_businessregistrationnumber_uk UNIQUE (businessregistrationnumber);
+
+
+-- 점포 테이블
+CREATE TABLE store (
+    storeno         NUMBER NOT NULL,
+    storename       VARCHAR2(50 CHAR) NOT NULL,
+    latitude        NUMBER(20, 15) NOT NULL,
+    longitude       NUMBER(20, 15) NOT NULL,
+    address         VARCHAR2(255 CHAR) NOT NULL,
+    picture         BLOB,
+    operatingdate   VARCHAR2(50 CHAR),
+    starttime       DATE,
+    endtime         DATE,
+    totalrating     NUMBER(5, 3) DEFAULT 0.0,
+    createdat       DATE NOT NULL,
+    modifiedat      DATE,
+    member_username VARCHAR2(255 CHAR)
+);
+
+CREATE UNIQUE INDEX store__idx ON store ( member_username ASC );
+
+ALTER TABLE store ADD CONSTRAINT store_pk PRIMARY KEY ( storeno );
+
+ALTER TABLE store
+    ADD CONSTRAINT store_member_fk FOREIGN KEY ( member_username )
+        REFERENCES member ( username ) ON DELETE SET NULL;
+
+CREATE SEQUENCE store_seq
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;
+    
+CREATE OR REPLACE TRIGGER store_bir 
+BEFORE INSERT ON store
+FOR EACH ROW
+WHEN (NEW.storeno IS NULL)
+BEGIN
+    SELECT store_seq.NEXTVAL
+    INTO   :NEW.storeno
+    FROM   dual;
+END;
+/
+
+-- 메뉴 테이블
+CREATE TABLE menu (
+    menuno        NUMBER NOT NULL,
+    menuname      VARCHAR2(50 CHAR) NOT NULL,
+    price         NUMBER(10) NOT NULL,
+    createdat     DATE NOT NULL,
+    modifiedat    DATE,
+    store_storeno NUMBER NOT NULL
+);
+
+ALTER TABLE menu ADD CONSTRAINT menu_pk PRIMARY KEY ( menuno );
+
+ALTER TABLE menu
+    ADD CONSTRAINT menu_store_fk FOREIGN KEY ( store_storeno )
+        REFERENCES store ( storeno ) ON DELETE CASCADE ENABLE;
+
+
+-- 리뷰 테이블
+CREATE TABLE review (
+    reviewno        NUMBER NOT NULL,
+    rating          NUMBER(1) NOT NULL,
+    content         VARCHAR2(1000 CHAR),
+    createdat       DATE NOT NULL,
+    modifiedat      DATE,
+    member_username VARCHAR2(255 CHAR),
+    store_storeno   NUMBER NOT NULL
+);
+
+ALTER TABLE review ADD CONSTRAINT review_pk PRIMARY KEY ( reviewno );
+
+ALTER TABLE review
+    ADD CONSTRAINT review_member_fk FOREIGN KEY ( member_username )
+        REFERENCES member ( username ) ON DELETE SET NULL ENABLE;
+
+ALTER TABLE review
+    ADD CONSTRAINT review_store_fk FOREIGN KEY ( store_storeno )
+        REFERENCES store ( storeno ) ON DELETE CASCADE ENABLE;
+
+
+-- 사진 테이블
+CREATE TABLE photo (
+    photono       NUMBER NOT NULL,
+    contenttype   VARCHAR2(50 CHAR) NOT NULL,
+    filesize      NUMBER(20) NOT NULL,
+    picture       BLOB NOT NULL,
+    createdat     DATE NOT NULL,
+    store_storeno NUMBER NOT NULL
+);
+
+ALTER TABLE photo ADD CONSTRAINT photo_pk PRIMARY KEY ( photono );
+
+ALTER TABLE photo
+    ADD CONSTRAINT photo_store_fk FOREIGN KEY ( store_storeno )
+        REFERENCES store ( storeno ) ON DELETE CASCADE ENABLE;
+
+
+-- 채팅 테이블
+drop table chatroom CASCADE CONSTRAINTS purge;
+
+CREATE TABLE ChatRoom (
+    chatRoomNo NUMBER GENERATED AS IDENTITY PRIMARY KEY,
+    customer VARCHAR2(255),
+    storeNo NUMBER,
+    ownerVisible CHAR(1) DEFAULT '0' NOT NULL,
+    customerVisible CHAR(1) DEFAULT '0' NOT NULL,
+    updatedAt DATE DEFAULT SYSDATE NOT NULL,
+    CONSTRAINT fk_customer FOREIGN KEY (customer) REFERENCES MEMBER(userName) ON DELETE CASCADE,
+    CONSTRAINT fk_storeNo FOREIGN KEY (storeNo) REFERENCES STORE(storeno) ON DELETE CASCADE
+);
+
+-- 메세지 테이블
+drop table message CASCADE CONSTRAINTS purge;
+CREATE TABLE Message (
+    messageNo NUMBER GENERATED AS IDENTITY PRIMARY KEY,
+    content VARCHAR2(1000 CHAR) NOT NULL,
+    senderId VARCHAR2(255),
+    chatRoomNo NUMBER,
+    isReceived CHAR(1) DEFAULT '0' NOT NULL,
+    createdAt DATE DEFAULT SYSDATE NOT NULL,
+    CONSTRAINT fk_sender FOREIGN KEY (senderId) REFERENCES MEMBER(userName) ON DELETE CASCADE,
+    CONSTRAINT fk_chatRoomNo FOREIGN KEY (chatRoomNo) REFERENCES CHATROOM(chatRoomNo) ON DELETE CASCADE
+);
+
+-- 신고 테이블 
+create table report(
+    reportno NUMBER PRIMARY KEY,	
+    storeno NUMBER NOT NULL,
+    username VARCHAR2(255) NOT NULL,
+    title VARCHAR2(100) NOT NULL,
+    content	VARCHAR2(500)NOT NULL,
+    createdat DATE NOT NULL
+);
+
+ALTER TABLE report
+    ADD CONSTRAINT report_store_fk FOREIGN KEY ( storeno )
+        REFERENCES store ( storeno ) ON DELETE CASCADE ENABLE;
+        
+ALTER TABLE report
+    ADD CONSTRAINT report_member_fk FOREIGN KEY ( username )
+        REFERENCES member ( username ) ON DELETE CASCADE ENABLE;
+
+CREATE SEQUENCE REPORT_SEQ
+START WITH 1 -- 시작 값
+INCREMENT BY 1 -- 증가 값
+MINVALUE 1 -- 최소 값
+CACHE 20
+NOCYCLE;
+/
+
+create or replace TRIGGER REPORT_TRG 
+BEFORE INSERT ON REPORT
+FOR EACH ROW 
+BEGIN
+  <<COLUMN_SEQUENCES>>
+  BEGIN
+    IF INSERTING AND :NEW.REPORTNO IS NULL THEN
+      SELECT REPORT_SEQ.NEXTVAL INTO :NEW.REPORTNO FROM SYS.DUAL;
+    END IF;
+  END COLUMN_SEQUENCES;
+END;
+/
+
+
+-- 검색 테이블
+CREATE TABLE search (
+    userIp VARCHAR2(255) NOT NULL,
+    keyword VARCHAR2(255) NOT NULL,
+    createdAt TIMESTAMP
+);
+

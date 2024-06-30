@@ -2,15 +2,13 @@ package org.omsf.chatRoom.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.model.MessageWithOwnerResponse;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.service.MessageService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,21 +25,32 @@ import java.util.List;
  */
 @Slf4j
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/chat")
 public class MessageController {
 
     private final MessageService messageService;
 
+
     @GetMapping("/room")
-    @ResponseBody
-    public ResponseEntity<List<MessageWithOwnerResponse>> findAllByCustomerAndStoreNo(SubscribeRequest request) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(messageService.findAllByCurrentUserAndStoreNo(request.getCustomerId(), request.getStoreNo()));
+    public ResponseEntity<List<MessageVO>> findAllMessageBySubscription(@RequestParam String customer, @RequestParam String storeNo) {
+        return ResponseEntity.ok(messageService.findAllMessageBySubscription(customer, storeNo));
     }
 
+    @PutMapping("/updateMessage")
+    public void updateMessageStatus(@RequestParam long messageNo){
+        messageService.updateMessageStatus(messageNo);
+    }
 
-    //       messageList.add(new GetChatRoomMessagesRequest("sonjoung@gmail.com", "네번째 메세지", 1, LocalDateTime.of(2024, 6, 22, 22, 45, 54)).toEntity());
+    @GetMapping("/chatRoomNo")
+    public List<MessageVO> findAllMessageByChatRoomNo(@RequestParam long chatRoomNo){
+        return messageService.findAllMessageByChatRoomNo(chatRoomNo);
+    }
+
+    @GetMapping
+    public String findRoomAddressByChatRoomNo(long chatRoomNo) {
+        return messageService.findRoomAddressByChatRoomNo(chatRoomNo);
+    }
+
 
 }

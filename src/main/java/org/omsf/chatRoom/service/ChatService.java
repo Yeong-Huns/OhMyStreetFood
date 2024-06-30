@@ -1,10 +1,15 @@
 package org.omsf.chatRoom.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.omsf.chatRoom.model.ChatRoomVO;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.model.chat.ChatRoom;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * packageName    : org.omsf.chatRoom.service
@@ -19,7 +24,19 @@ import java.util.List;
  */
 public interface ChatService {
 
-    List<ChatRoomVO> findAllRoom();
+    //1. 고유 Address
+    List<String> getUserAddress(String username);
+    //2. 구독목록 가져오기
+    List<String> getUserSubscriptions(String address);
+    //3. 챗룸번호로 구독주소 가져오기
+    String getSubscriptionByChatRoomNo(long chatRoomNo);
+
+
+    List<ChatRoomVO> findSubListByAddress(String address);
+    List<Integer> findStoreListByAddress(@Param("address") String address);
+    void saveChatRoom(String address, long storeNo);
+    void updateChatRoom(@RequestBody ChatRoomVO chatRoomVO);
+
     void subscribeToChatRoom(SubscribeRequest request);
     boolean isSubscribed(SubscribeRequest request);
     ChatRoom findById(String roomId);

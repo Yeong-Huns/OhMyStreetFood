@@ -3,10 +3,58 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.omsf.chatRoom.dao.MessageRepository">
 
-    <insert id="save">
+
+    <!-- findAllMessageBySubscription -->
+    <select id="findAllMessageBySubscription" resultType="org.omsf.chatRoom.model.MessageVO">
+        SELECT m.messageNo,
+               m.content,
+               m.senderId,
+               m.chatRoomNo,
+               m.isReceived,
+               m.createdAt
+        FROM Message m
+                 JOIN ChatRoom c ON m.chatRoomNo = c.chatRoomNo
+        WHERE c.customer = #{customer}
+          AND c.storeNo = #{storeNo}
+        ORDER BY m.createdAt
+    </select>
+
+    <!-- updateMessageStatus -->
+    <update id="updateMessageStatus" parameterType="long">
+        UPDATE Message
+        SET isReceived = '1'
+        WHERE messageNo = #{messageNo}
+    </update>
+
+    <!-- save -->
+    <insert id="save" parameterType="StompHandler.SendRequest">
         INSERT INTO Message (content, senderId, chatRoomNo)
-        VALUES (#{content}, #{senderId}, #{chatRoomNo})
+        VALUES (
+                   #{content},
+                   #{requestingUser},
+                   (SELECT chatRoomNo FROM ChatRoom WHERE customer = #{customer} AND storeNo = #{storeNo})
+               )
     </insert>
+
+    <!-- findAllMessageByChatRoomNo -->
+    <select id="findAllMessageByChatRoomNo" resultType="org.omsf.chatRoom.model.MessageVO">
+        SELECT
+            m.messageNo,
+            m.content,
+            m.senderId,
+            m.chatRoomNo,
+            m.isReceived,
+            m.createdAt
+        FROM
+            Message m
+        WHERE
+            m.chatRoomNo = #{chatRoomNo}
+        ORDER BY
+            m.createdAt
+    </select>
+
+
+
 
 
     <select id="findAllByChatRoomNo" resultType="org.omsf.chatRoom.model.MessageWithOwnerResponse">
@@ -20,12 +68,12 @@
             s.MEMBER_USERNAME AS owner
         FROM
             Message m
-                JOIN
-            ChatRoom cr ON m.chatRoomNo = cr.chatRoomNo
-                JOIN
-            Store s ON cr.storeNo = s.STORENO
+                JOIN ChatRoom cr ON m.chatRoomNo = cr.chatRoomNo
+                JOIN Store s ON cr.storeNo = s.storeNo
         WHERE
             m.chatRoomNo = #{chatRoomNo}
+        ORDER BY
+            m.createdAt ASC
     </select>
 
 </mapper>

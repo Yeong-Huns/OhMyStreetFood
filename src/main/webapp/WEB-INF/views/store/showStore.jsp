@@ -44,7 +44,7 @@
 		
 		<span style="display: flex; flex-direction: row; justify-content: space-between;">
                <span><i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong></span>
-      			<span><a href="#">사장님과 채팅하기</a></span>
+      			<span><a href="#" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo})','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
        	</span>
        	
 	    <div class="card" style="width: 100%; height: auto; border: none;">
