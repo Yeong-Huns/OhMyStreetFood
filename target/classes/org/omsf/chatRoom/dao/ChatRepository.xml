@@ -28,6 +28,19 @@
            OR (storeNo = TO_NUMBER(NULLIF(#{address}, 'invalid')) AND REGEXP_LIKE(#{address}, '^[0-9]+$'))
     </select>
 
+    <!-- getSubscriptionByChatRoomNo -->
+    <select id="getSubscriptionByChatRoomNo" resultType="java.lang.String">
+        SELECT
+            c.customer || c.storeNo AS subscription
+        FROM
+            ChatRoom c
+        WHERE
+            c.chatRoomNo = #{chatRoomNo}
+    </select>
+
+
+
+
     <!-- owner Store List -->
     <select id="findStoreListByAddress" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT storeno

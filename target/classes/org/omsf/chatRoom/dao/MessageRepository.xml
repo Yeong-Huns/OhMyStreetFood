@@ -19,10 +19,42 @@
         ORDER BY m.createdAt
     </select>
 
-    <insert id="save">
+    <!-- updateMessageStatus -->
+    <update id="updateMessageStatus" parameterType="long">
+        UPDATE Message
+        SET isReceived = '1'
+        WHERE messageNo = #{messageNo}
+    </update>
+
+    <!-- save -->
+    <insert id="save" parameterType="org.omsf.chatRoom.controller.StompHandler$SendRequest">
         INSERT INTO Message (content, senderId, chatRoomNo)
-        VALUES (#{content}, #{senderId}, #{chatRoomNo})
+        VALUES (
+                   #{content},
+                   #{requestingUser},
+                   (SELECT chatRoomNo FROM ChatRoom WHERE customer = #{customer} AND storeNo = #{storeNo})
+               )
     </insert>
+
+    <!-- findAllMessageByChatRoomNo -->
+    <select id="findAllMessageByChatRoomNo" resultType="org.omsf.chatRoom.model.MessageVO">
+        SELECT
+            m.messageNo,
+            m.content,
+            m.senderId,
+            m.chatRoomNo,
+            m.isReceived,
+            m.createdAt
+        FROM
+            Message m
+        WHERE
+            m.chatRoomNo = #{chatRoomNo}
+        ORDER BY
+            m.createdAt
+    </select>
+
+
+
 
 
     <select id="findAllByChatRoomNo" resultType="org.omsf.chatRoom.model.MessageWithOwnerResponse">
