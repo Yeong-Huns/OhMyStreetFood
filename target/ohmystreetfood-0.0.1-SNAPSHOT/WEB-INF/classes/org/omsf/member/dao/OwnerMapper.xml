@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.omsf.member.dao.OwnerRepository">
+	<insert id="insertOwner">
+		INSERT INTO member(
+		username, password, membertype, logintype, businessregistrationnumber, createdat, modifiedat)
+		VALUES (
+		#{username}, #{password}, #{memberType}, #{loginType}, #{businessRegistrationNumber}, SYSDATE, SYSDATE)
+	</insert>
+	
+	<resultMap id="ownerMap" type="org.omsf.member.model.Owner">
+		<result property="username" column="username" />
+		<result property="password" column="password" />
+		<result property="memberType" column="membertype" />
+		<result property="loginType" column="logintype" />
+		<result property="businessRegistrationNumber" column="businessregistrationnumber" />
+		<result property="createdAt" column="createdat" />
+		<result property="modifiedAt" column="modifiedat" />
+	</resultMap>
+	
+	<select id="findByUsername" resultMap="ownerMap">
+		SELECT username, password, membertype, logintype, businessregistrationnumber, createdat, modifiedat
+		FROM MEMBER
+		WHERE USERNAME = #{username}
+	</select>
+	
+	<update id="updateMember">
+	    update member
+	    <set>
+	        <trim suffixOverrides=",">
+	            <if test="password != null and password != ''">
+	                password = #{password,jdbcType=VARCHAR},
+	                modifiedat = SYSDATE
+	            </if>
+	        </trim>
+	    </set>
+	    where username = #{username,jdbcType=VARCHAR}
+	</update>
+	
+	<select id="checkBusinessRegistrationNumber" resultType="boolean">
+		select count(*)
+		from member
+		where businessregistrationnumber=#{businessRegistrationNumber}
+	</select>
+</mapper>

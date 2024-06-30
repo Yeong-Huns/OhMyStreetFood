@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security 
+        http://www.springframework.org/schema/security/spring-security.xsd">
+	
+	<global-method-security pre-post-annotations="enabled"/>
+	
+	<http auto-config="true">
+		<csrf disabled="true"/>
+    	<intercept-url pattern="/secure/**" access="authenticated" />
+	    <intercept-url pattern="/**" access="permitAll" />
+	    
+	    <form-login
+            login-page="/signin"
+            login-processing-url="/signin"
+            authentication-success-handler-ref="myAuthenticationSuccessHandler"
+            authentication-failure-url="/signin?error=true" />
+	        
+	    <logout
+	        logout-url="/logout"
+	        logout-success-url="/"
+	        delete-cookies="JSESSIONID" />
+	</http>
+    
+	<beans:bean id="customUserDetailsService" class="org.omsf.security.UserSecurityService"/>
+
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    
+    <beans:bean id="myAuthenticationSuccessHandler" class="org.omsf.security.MyAuthenticationSuccessHandler"/>
+    
+    <authentication-manager alias="authenticationManager">
+        <authentication-provider user-service-ref="customUserDetailsService">
+            <password-encoder ref="passwordEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+    
+</beans:beans>

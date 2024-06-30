@@ -1,3 +1,4 @@
+<!--chatHandler.jsp-->
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
@@ -7,7 +8,6 @@
 <html>
 <head>
     <meta charset="UTF-8">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chat/chatHandler.css">
@@ -18,20 +18,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/chat/chatHandler.js"></script>
     <!-- JavaScript로 값을 전달하기 위해 HTML 내에서 변수를 설정 -->
-    <c:set var="contextPath" value="${pageContext.request.contextPath}" />
-    <c:set var="username" value="${pageContext.request.userPrincipal.name}" />
+    <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+    <c:set var="username" value="${pageContext.request.userPrincipal.name}"/>
     <script>
         var contextPath = "${contextPath}";
         var username = null;
-
-        <sec:authorize access="isAuthenticated()">
-        username = "${username}";
-        </sec:authorize>
-
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("인식된 유저이름 : " + username)
-            initializeWebSocket(username);
+        document.addEventListener("DOMContentLoaded", function () {
+            <sec:authorize access="isAuthenticated()">
+            username = "${username}";
+            </sec:authorize>
+            // 인증된 사용자인 경우에만 실행
+            console.log(username)
+            connect(username);
         });
+
     </script>
 </head>
 <body>
@@ -41,7 +41,7 @@
 </div>
 
 <!-- 채팅방 목록 모달 -->
-<div class="modal fade" id="chatRoomListModal" tabindex="-1" aria-labelledby="chatRoomListModalLabel" aria-hidden="true">
+<div class="modal fade" id="chatRoomListModal" tabindex="-1" aria-labelledby="chatRoomListModalLabel" aria-hidden="true" data-store-no="">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content chatroom-container">
             <div class="modal-header chatroom-header" id="chatRoomListModalHeader">
@@ -72,7 +72,7 @@
             </div>
             <div class="modal-footer chat-footer">
                 <input type="text" id="message-input" class="form-control message-input" placeholder="메시지를 입력하세요...">
-                <button class="btn btn-primary send-button" onclick="sendMessage('${username}', )">전송</button>
+                <button class="btn btn-primary send-button" id="send-button">전송</button>
             </div>
         </div>
     </div>
@@ -80,9 +80,27 @@
 
 <!-- 알람 아이콘 초기화 -->
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('body').append('<i id="alarmIcon" class="fa fa-bell" style="font-size:24px; position: fixed; top: 10px; right: 10px; visibility: hidden;"></i>');
-        console.log("알람 초기화 실행 ..")
+        console.log("알람 초기화 실행 ..");
+        // 모달 초기화 시 백드롭 제거
+
+        var chatRoomModal = new bootstrap.Modal(document.getElementById('chatRoomModal'));
+        // 모달 열기
+        $('#openChatRoomListModalBtn').click(function () {
+            chatRoomListModal.show();
+        });
+
+        $('#openChatRoomModalBtn').click(function () {
+            chatRoomModal.show();
+        });
+        $('#openChatRoomButton').on('click', function () {
+            chatRoomModal.show();
+        });
+
+        $('.btn-close').on('click', function () {
+            chatRoomModal.hide();
+        });
     });
     $(function () {
         $('.modal-dialog').draggable({

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.omsf.report.dao.ReportRepository">
+	<insert id="insertReport">
+		INSERT INTO report(
+		reportno, storeno, username, title, content, createdat)
+		VALUES (
+		REPORT_SEQ.NEXTVAL, #{storeNo}, #{username}, #{title}, #{content}, SYSDATE)
+		
+		<selectKey keyProperty="reportNo" resultType="int" order="AFTER">
+       	SELECT REPORT_SEQ.CURRVAL FROM DUAL
+   		</selectKey>
+	</insert>
+	
+	<resultMap id="reportMap" type="org.omsf.report.model.Report">
+		<result property="reportNo" column="reportno" />
+		<result property="storeNo" column="storeno" />
+		<result property="username" column="username" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="createdAt" column="createdat" />
+	</resultMap>
+	
+	<select id="getReports" resultMap="reportMap">
+		SELECT reportno, storeno, username, title, content, createdat
+		FROM report 
+		ORDER BY storeno
+	</select>
+
+</mapper>
