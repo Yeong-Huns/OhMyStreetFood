@@ -27,7 +27,7 @@
     </update>
 
     <!-- save -->
-    <insert id="save" parameterType="StompHandler.SendRequest">
+    <insert id="save" parameterType="org.omsf.chatRoom.controller.StompHandler$SendRequest">
         INSERT INTO Message (content, senderId, chatRoomNo)
         VALUES (
                    #{content},
