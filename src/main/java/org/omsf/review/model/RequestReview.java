@@ -16,7 +16,7 @@ public class RequestReview {
 	@NotBlank(message = "반드시 입력해주세요.")
 	private String content;
 	
-	@NotBlank(message = "로그인 후 이용가능합니다.")
+
 	private String memberUsername;
 	private int storeStoreNo;
 }

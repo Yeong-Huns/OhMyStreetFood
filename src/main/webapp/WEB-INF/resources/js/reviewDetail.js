@@ -4,7 +4,8 @@
 
 document.querySelector('.close-button').onclick = function() {
     const storeNo = document.querySelector('#storeStoreNo').value;
-    location.href = '/review/list/' + storeNo;
+//    location.href = '/review/list/' + storeNo;
+    location.href = '/store/' + storeNo;
 };
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -358,7 +358,9 @@ public class StoreController {
 	public ResponseEntity<?> insertLike(Principal principal, @RequestBody Like like) {
 		like.setMemberUsername(principal.getName());
 		int count = likeService.isLike(like);
-		if (count >= 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미 찜 목록에 등록돼 있습니다.");
+		if (count >= 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.header("Content-Type", "text/plain; charset=UTF-8")
+				.body("이미 찜 목록에 등록돼 있습니다.");
 		likeService.insertLike(like);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -369,7 +371,9 @@ public class StoreController {
 	public ResponseEntity<?> deleteLike(Principal principal, @RequestBody Like like) {
 		like.setMemberUsername(principal.getName());
 		int count = likeService.isLike(like);
-		if (count < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("찜 목록에 등록돼 있지 않습니다.");
+		if (count < 1) return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.header("Content-Type", "text/plain; charset=UTF-8")
+				.body("찜 목록에 등록돼 있지 않습니다.");
 		likeService.deleteLike(like);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

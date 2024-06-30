@@ -62,7 +62,9 @@
 	            <div class="col-md-9 card-body" style="padding: 0 20px;">
 	                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
 		                    <span><h5 class="card-title">${store.storeName}</h5></span>
+		                    <sec:authorize access="isAuthenticated()">
 		                    <span><i id="like-btn" class="far fa-heart"></i></span>
+		                    </sec:authorize>
 	                    </span>
 	                    <p class="card-text">${store.introduce}</p>
 	                    <p class="card-text">
@@ -127,7 +129,7 @@
 
 		<jsp:include page="gallery.jsp" />
 		
-		<div>
+		<div id="reviewContainer">
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                  <span><h5><spring:message code="review.info" /></h5></span>
                  <button id="openModalBtn"><spring:message code="review.write" /></button>
@@ -153,7 +155,7 @@
 					    	<span>${review.memberUsername}</span>
 					    	<span>${review.createdAt}</span>
 					    </span>
-						<span>${review.content}</span>
+						<span><a href="<c:url value="/review/${review.reviewNo}" />">${review.content}</a></span>
 					</div>			    
 				</c:forEach>
 			</c:if>
@@ -174,6 +176,8 @@
 				</c:if>
 				<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
 			</div>
+			
+			<div id="spinner" class="spinner"></div>
 	    </div>
 	    
 	    <!-- 찜 목록 효과 -->
@@ -228,19 +232,129 @@
 
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/storeDetail.js"></script>
 
 	<!-- 리뷰 모달 -->
 	<script src="${pageContext.request.contextPath}/js/modal.js"></script>
 
 	<!-- like 요청 -->
-	<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
+<%-- 	<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script> --%>
 
 	<sec:authorize access="isAuthenticated()">
 		<!-- like 요청 -->
 		<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 	</sec:authorize>
 
+	<script>
+	// 중심좌표 마커 이미지 주소
+	var centerMarkerImg = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+	
+    console.log('위도(gps_lat) : ' + '${store.latitude}' + ', 경도(gps_lng) : ' + '${store.longitude}');
+	
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        mapOption = { 
+            center: new kakao.maps.LatLng('${store.longitude}', '${store.latitude}'), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    // 지도를 표시할 div와 지도 옵션으로 지도를 생성
+    var map = new kakao.maps.Map(mapContainer, mapOption); 
+
+    // 지도 중심좌표에 마커를 생성
+    var marker = new kakao.maps.Marker({ 
+        position: map.getCenter(),
+        image: new kakao.maps.MarkerImage(centerMarkerImg, new kakao.maps.Size(24, 35))
+    });
+
+    marker.setMap(map);
+
+
+	</script>
+	<script>
+	document.addEventListener('DOMContentLoaded', () => {
+	    let page = 2; // 페이지 번호
+	    const reviewContainer = document.getElementById('reviewContainer');
+
+	    // 더미 데이터를 추가하는 함수
+	    function addReviews(reviews) {
+	        reviews.forEach(review => {
+	            const reviewDiv = document.createElement('div');
+	            reviewDiv.className = "review";
+	            reviewDiv.style.width = '100%';
+	            reviewDiv.style.height = 'auto';
+	            reviewDiv.style.backgroundColor = '#f6f6f6';
+	            reviewDiv.style.borderRadius = '10px';
+	            reviewDiv.style.marginBottom = '20px';
+
+	         	// URL을 직접 생성
+	            const reviewUrl = `${pageContext.request.contextPath}/review/` + review.reviewNo;
+	            
+	            // 날짜 포맷
+	            const createdAt = new Date(review.createdAt).toLocaleDateString('ko-KR', {
+	                year: 'numeric',
+	                month: '2-digit',
+	                day: '2-digit'
+	            }).replace(/\./g, '-').replace(/ /g, '').replace('년', '').replace('월', '').replace('일', '').slice(0,-1);
+	            
+	            reviewDiv.innerHTML = `
+	                <span style="display: flex; flex-direction: row; justify-content: space-between;">
+	                    <span> ` + review.memberUsername + `</span>
+	                    <span> ` + createdAt + `</span>
+	                </span>
+	                <span>
+	                    <a href= ` + reviewUrl + `>` + review.content + `</a>
+	                </span>
+	            `;
+	            
+	            reviewContainer.appendChild(reviewDiv);
+	        });
+	    }
+
+		 // 실제 서버에 요청할 때 사용할 함수
+		 function fetchReviews(page) {
+		     return fetch(`${pageContext.request.contextPath}/review/api/${store.storeNo}?page=` + page)
+		         .then(response => response.json())
+		         .then(reviews => reviews)
+		         .catch(error => console.error('Error fetching reviews:', error));
+		 }
+
+	    // 스크롤 이벤트를 감지하는 함수
+	    function handleScroll() {
+	        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+	            window.removeEventListener('scroll', handleScroll);
+
+	            showSpinner(); // 스피너 표시
+
+	            console.log("스크롤 이벤트 발생");
+	            setTimeout(async () => { // 3초 지연
+	            fetchReviews(page).then(reviews => {
+	                addReviews(reviews);
+	                page++;
+	                hideSpinner(); // 스피너 숨김
+	                window.addEventListener('scroll', handleScroll);
+	            }).catch(error => {
+	                console.error('Error fetching reviews:', error);
+	                hideSpinner(); // 스피너 숨김
+	                window.addEventListener('scroll', handleScroll);
+	            })
+	            }, 2000);
+	        }
+	    }
+	    
+	 	// 스피너 표시 함수
+	    function showSpinner() {
+	    	document.getElementById('spinner').style.display = 'block';
+	    }
+
+	    // 스피너 숨김 함수
+	    function hideSpinner() {
+	    	document.getElementById('spinner').style.display = 'none';
+	    }
+
+	    // 스크롤 이벤트 리스너 추가
+	    window.addEventListener('scroll', handleScroll);
+
+	});
+	</script>
 </body>
 </html>

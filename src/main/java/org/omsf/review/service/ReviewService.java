@@ -32,4 +32,7 @@ public interface ReviewService {
 	// 가게별 리뷰 목록 가져오기 - 무한 스크롤
 	List<Review> getJSONReviewListByStoreId(@Param("storeNo") int storeNo, @Param("page") int page);
 	
+	// 가게번호와 유저명(principal)에 근거하여 진짜 그 리뷰 작성자인지 확인
+	int isWriter(@Param("storeNo") int storeNo, @Param("memberUsername") String memberUsername);
+	
 }
