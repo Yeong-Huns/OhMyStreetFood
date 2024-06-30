@@ -57,4 +57,9 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDao.getJSONReviewListByStoreId(storeNo, page);
 	}
 
+	@Override
+	public int isWriter(int storeNo, String memberUsername) {
+		return reviewDao.isWriter(storeNo, memberUsername);
+	}
+
 }
