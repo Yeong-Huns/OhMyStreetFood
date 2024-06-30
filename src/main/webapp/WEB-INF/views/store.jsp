@@ -19,27 +19,21 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+	<div class="main">
+        <div class="row">
 
-    <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
-    <span class="mt-4">
-    	<button class="btn btn-outline-primary" type="button" onclick="window.location.href='${pageContext.request.contextPath}/store/createstore'">점포등록</button>
-    </span>
-    <span class="dropdown mt-4">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">정렬기준</button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="?orderType=createdAt">최신순</a></li>
-            <li><a class="dropdown-item" href="?orderType=likes">인기순</a></li>
-            <li><a class="dropdown-item" id="distance" href="?orderType=distance">거리순</a></li>
-        </ul>
-    </span>
+	    <!-- Oderby -->
+	    <jsp:include page="orderby.jsp" />
+	
+	    <div class="col-md-12" id="storeList">
+	        <jsp:include page="search/searchItems.jsp">
+	            <jsp:param name="stores" value="${stores}" />
+	            <jsp:param name="pictures" value="${pictures}" />
+	        </jsp:include>
+	    </div>
+	
+		</div>
 	</div>
-
-    <div class="col-md-12" id="storeList">
-        <jsp:include page="search/searchItems.jsp">
-            <jsp:param name="stores" value="${stores}" />
-            <jsp:param name="pictures" value="${pictures}" />
-        </jsp:include>
-    </div>
 
     <!-- Menu -->
     <div class="row">
@@ -94,8 +88,8 @@
                     console.error('Error loading more stores:', error);
                     isLoading = false;
                 });
-	        }
-	    });
+        }
+    });
 	</script>
 
     <!-- 위도, 경도값 적용 JS -->

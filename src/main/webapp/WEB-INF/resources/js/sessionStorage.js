@@ -41,36 +41,59 @@ async function getLatitudeAndLongitude() {
 }
 
 async function updateLinkWithCoordinates() {
-	try {
-		const { latitude, longitude } = await getLatitudeAndLongitude();
+    try {
+        const { latitude, longitude } = await getLatitudeAndLongitude();
 
-		if (latitude && longitude) {
-			const queryStr = `?latitude=${latitude}&longitude=${longitude}`;
-			const storeLink = document.getElementById('storeLink'); // 링크를 추가할 요소의 ID
+        if (latitude && longitude) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const keyword = urlParams.has('keyword') ? urlParams.get('keyword') : '';
 
-			if (storeLink) {
-				storeLink.href = `${storeLink.getAttribute('href')}${queryStr}`;
-			} else {
-				console.error("링크 요소를 찾을 수 없습니다.");
-			}
+            const queryStr = `?latitude=${latitude}&longitude=${longitude}&keyword=${encodeURIComponent(keyword)}`;
 
-			await fetch('/store/list' + queryStr, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-			});
-			
-			await fetch('/store/lists' + queryStr, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-			});
-		}
-	} catch (error) {
-		console.error('오류 발생:', error.message);
-	}
+            const linksToUpdate = [
+                { id: 'modifiedAtLink', path: '/store/list' },
+                { id: 'createdAtLink', path: '/store/list' },
+                { id: 'likesLink', path: '/store/list' },
+                { id: 'distanceLink', path: '/store/list' }
+            ];
+
+            for (let link of linksToUpdate) {
+                const element = document.getElementById(link.id);
+                if (element) {
+                    element.href = `${link.path}${queryStr}`;
+
+                    if (link.id === 'modifiedAtLink' || link.id === 'createdAtLink' || link.id === 'likesLink' || link.id === 'distanceLink') {
+                        element.href += `&orderType=${link.id.replace('Link', '')}`;
+                    }
+                }
+            }
+            
+            const storeLinkElement = document.getElementById('storeLink');
+            if (storeLinkElement) {
+                storeLinkElement.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const clearedKeywordQueryStr = `?latitude=${latitude}&longitude=${longitude}&keyword=`;
+                    window.location.href = `${storeLinkElement.href.split('?')[0]}${clearedKeywordQueryStr}`;
+                });
+            }
+            
+            await fetch('/store/list' + queryStr, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            await fetch('/store/lists' + queryStr, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+        }
+    } catch (error) {
+        console.error('오류 발생:', error.message);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', updateLinkWithCoordinates);

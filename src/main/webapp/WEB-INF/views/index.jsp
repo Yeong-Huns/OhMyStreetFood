@@ -46,7 +46,9 @@
          <span class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
           <c:forEach items="${stores}" var="store">
 		    <div class="card" style="width:180px; cursor: pointer; margin: 5px; border: none;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
-		        <img class="card-img-top" src="${pageContext.request.contextPath}/img/00.jpg" alt="Card image">
+		        <c:if test="${store.storeNo eq picture.storeNo}">
+		        	<img class="card-img-top" src="${picture.picture}">
+		        </c:if>
 		        <div class="card-body">
 		            <p class="card-title">${store.storeName}</p>
 		            <c:set var="addressWords" value="${fn:split(store.address, ' ')}" />

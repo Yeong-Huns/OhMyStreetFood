@@ -17,11 +17,23 @@
 </head>
 <body>
 	<form class="input-group" id="searchForm" action="/store/list" method="get">
+		<input type="hidden" id="latitudeInput" name="latitude" value="${latitude}">
+	    <input type="hidden" id="longitudeInput" name="longitude" value="${longitude}">
 		<input type="text" class="form-control" id="searchInput" name="keyword" placeholder="Search"
 			aria-label="Search" aria-describedby="button-addon2">
 		<button class="btn btn-primary" type="submit" id="button-addon2">
 			<i class="fas fa-search" style="color: white;"></i>
 		</button>
 	</form>
+	
+	<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var latitude = sessionStorage.getItem('latitude');
+            var longitude = sessionStorage.getItem('longitude');
+
+            document.getElementById('latitudeInput').value = latitude;
+            document.getElementById('longitudeInput').value = longitude;
+        });
+    </script>
 </body>
 </html>
