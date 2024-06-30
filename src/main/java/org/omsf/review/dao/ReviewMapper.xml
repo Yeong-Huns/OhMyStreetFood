@@ -105,4 +105,12 @@
 		FIRST 10 ROWS ONLY
 	</select>
 	
+	<!-- 리뷰 작성자 검증 -->
+	<select id="isWriter" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM REVIEW
+		WHERE STORE_STORENO = #{storeNo} AND MEMBER_USERNAME = #{memberUsername}
+	</select>
+	
 </mapper>
