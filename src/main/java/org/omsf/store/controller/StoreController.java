@@ -224,7 +224,7 @@ public class StoreController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("orderType", orderType);
         
-        if (keyword == null || keyword.isEmpty()) {
+        if (keyword == null || keyword.isEmpty() || keyword == "") {
             return "store";
         } else {
             return "search/searchList"; 

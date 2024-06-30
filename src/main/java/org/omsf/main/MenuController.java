@@ -1,7 +1,9 @@
 package org.omsf.main;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,17 @@ public class MenuController {
 //    	model.addAttribute("stores", stores);
     	
     	List<Store> stores = storeService.getPopularStores();
-        model.addAttribute("stores", stores);
-        return "index";
+        
+    	List<Photo> pictures = new ArrayList<>();
+	    for (Store store : stores) {
+	    	if (store.getPicture() != null) {
+	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		pictures.add(photo);
+	    	}
+	    }
+	    
+    	model.addAttribute("stores", stores);
+    	model.addAttribute("pictures", pictures);
+    	return "index";
     }
 }

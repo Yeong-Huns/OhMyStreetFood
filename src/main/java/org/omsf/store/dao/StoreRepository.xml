@@ -225,7 +225,8 @@
 	
 	<select id="getPopularStores" resultType="org.omsf.store.model.Store">
 		SELECT * FROM STORE 
-		ORDER BY totalReview DESC, totalRating DESC, likes DESC FETCH FIRST 10 ROWS ONLY
+		ORDER BY totalReview DESC, totalRating DESC, likes DESC
+		FETCH FIRST 10 ROWS ONLY
 	</select>
 
 	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap">
@@ -233,19 +234,22 @@
 	</select>
 	
 	<select id="showStoreList" parameterType="map" resultType="org.omsf.store.model.StoreDistance">
-	    SELECT s.*, ROUND(SDO_GEOM.SDO_DISTANCE(
-	               SDO_GEOMETRY(2001, NULL, SDO_POINT_TYPE(#{longitude}, #{latitude}, NULL), NULL, NULL),
-	               SDO_GEOMETRY(2001, NULL, SDO_POINT_TYPE(s.longitude, s.latitude, NULL), NULL, NULL),
+	    SELECT s.*, TRUNC(SDO_GEOM.SDO_DISTANCE(
+	               SDO_CS.TRANSFORM(SDO_GEOMETRY(2001, 4326, SDO_POINT_TYPE(#{longitude}, #{latitude}, NULL), NULL, NULL), 32652),
+	               SDO_CS.TRANSFORM(SDO_GEOMETRY(2001, 4326, SDO_POINT_TYPE(s.longitude, s.latitude, NULL), NULL, NULL), 32652),
 	               1)) AS distance
 	    FROM store s
 	    WHERE storeName LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%'
 	    ORDER BY 
 	    <choose>
-	        <when test="orderType == 'createdAt'">
-	            createdAt DESC
+	    	<when test="orderType == 'createdAt'">
+	            createdAt ASC
+	        </when>
+	        <when test="orderType == 'modifiedAt'">
+	            modifiedAt DESC
 	        </when>
 	        <when test="orderType == 'likes'">
-	            likes DESC
+	            totalReview DESC, totalRating DESC, likes DESC
 	        </when>
 	        <when test="orderType == 'distance'">
 	            distance ASC

@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class StoreDistance extends Store {
 	
-	private Double distance;
+	private Integer distance;
 
 }

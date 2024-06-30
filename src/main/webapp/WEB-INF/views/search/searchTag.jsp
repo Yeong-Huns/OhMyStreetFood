@@ -15,26 +15,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <!-- CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var latitude = sessionStorage.getItem('latitude');
+            var longitude = sessionStorage.getItem('longitude');
+
+            if (!latitude || !longitude) {
+                console.error('latitude 또는 longitude 값이 sessionStorage에 없습니다.');
+                return;
+            }
+
+            var searchLinks = document.querySelectorAll('.search-link');
+            searchLinks.forEach(function(link) {
+                var keyword = link.getAttribute('data-keyword');
+                link.href = `/store/list?latitude=${latitude}&longitude=${longitude}&keyword=${keyword}&orderType=modifiedAt`;
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="main">
         <div class="row">
-			
-			<!-- Search -->
+            <!-- Search -->
             <jsp:include page="../search.jsp" />
 
-			<div class="col-md-12">
-				인기 검색어
-			      <p style="padding: 20px 0;">
-					<c:forEach items="${searchs}" var="search">               
-						<a href="${pageContext.request.contextPath}/store/list?keyword=${search.KEYWORD}" class="btn btn-outline-primary" style="margin: 5px 0; border-radius: 30px;">
-				            &nbsp;${search.KEYWORD}&nbsp;
-				        </a>
-					</c:forEach>
-				</p>
-			</div>
-			
-		</div>
+            <div class="col-md-12">
+                인기 검색어
+                <p style="padding: 20px 0;">
+                    <c:forEach items="${searchs}" var="search">
+                        <a class="btn btn-outline-primary search-link" style="margin: 5px 0; border-radius: 30px;"
+                            data-keyword="${search.KEYWORD}" href="#">
+                            &nbsp;${search.KEYWORD}&nbsp;
+                        </a>
+                    </c:forEach>
+                </p>
+            </div>
+        </div>
     </div>
     
     <!-- Menu -->
@@ -44,7 +61,25 @@
         </div>
     </div>
 
-	<!-- Bootstrap JS -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var latitude = sessionStorage.getItem('latitude');
+            var longitude = sessionStorage.getItem('longitude');
+
+            if (!latitude || !longitude) {
+                console.error('latitude 또는 longitude 값이 sessionStorage에 없습니다.');
+                return;
+            }
+
+            var searchLinks = document.querySelectorAll('.search-link');
+            searchLinks.forEach(function(link) {
+                var keyword = link.getAttribute('data-keyword');
+                link.href = '/store/list?latitude=' + latitude + '&longitude=' + longitude + '&keyword=' + keyword + '&orderType=modifiedAt';
+            });
+        });
+    </script>
 </body>
 </html>

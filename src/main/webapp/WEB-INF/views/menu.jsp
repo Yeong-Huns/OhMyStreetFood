@@ -53,6 +53,6 @@
 	
 	<!-- 위도, 경도값 적용 JS -->
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/sessionStorage.js"></script>
-	
+    
 </body>
 </html>
