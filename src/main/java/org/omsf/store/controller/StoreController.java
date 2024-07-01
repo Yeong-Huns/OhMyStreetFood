@@ -279,7 +279,7 @@ public class StoreController {
 	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position,
 									@RequestParam(value = "latitude", defaultValue = "1") String latitude,
 									@RequestParam(value = "longitude", defaultValue = "1") String longitude){
-		log.info("위도 : {}, 경도 : {}", latitude, longitude);
+		
 		log.info("api 요청 완료");
 		log.info("position : {}" , position);
 		return storeService.getStoresByPosition(position);
@@ -322,7 +322,10 @@ public class StoreController {
     		@PathVariable int photoNo, @RequestParam(value= "photo", required = true) ArrayList<MultipartFile> photo,
     		Principal principal) throws IOException {
         String username = principal.getName();
-        Photo storePhoto = storeService.getPhotoByPhotoNo(photoNo);
+        Photo storePhoto = null;
+        if (photoNo != 0) {	
+        	storePhoto = storeService.getPhotoByPhotoNo(photoNo);
+        }
         Store store = storeService.getStoreByNo(storeNo);
         String memberType = null;
         

@@ -19,6 +19,7 @@
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
+
 <!-- JQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -52,13 +53,6 @@
 </script>
 </head>
 <body>
-	<div class="main">
-		<div class="row">
-			<div>
-				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
-					<i class="fas fa-arrow-left"></i>
-				</a>
-			</div>
 			<div class="col-md-12 text-center" id="title">
 				<h3>마이페이지</h3>
 			</div>
@@ -131,8 +125,13 @@
 			</div>
 			
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		</div>
-	</div>
+
+	<!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
 	
 	<div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -161,6 +160,12 @@
 		<!-- like 요청 -->
 		<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 	</sec:authorize>
-    
+
+	<!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
 </body>
 </html>

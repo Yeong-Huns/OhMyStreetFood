@@ -20,9 +20,11 @@
 	<nav class="navbar navbar-expand-lg navbar-light fixed-bottom">
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav d-flex justify-content-between w-100">
-				<li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/">
+				<li class="nav-item active">
+					<a class="nav-link" href="${pageContext.request.contextPath}/">
 						<i class="fas fa-home"></i><br>홈
-				</a></li>
+					</a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="${pageContext.request.contextPath}/store/search">
 						<i class="fas fa-search"></i><br>검색
