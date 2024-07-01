@@ -3,6 +3,7 @@ package org.omsf.store.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -406,5 +407,27 @@ public class StoreController {
 			return new ResponseEntity<>(count, HttpStatus.OK);			
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
+	
+    @ResponseBody
+    @GetMapping("/popular")
+    public Map<String, Object> showPopular(Model model) {
+
+    	List<Store> stores = storeService.getPopularStores();
+        
+    	List<Photo> pictures = new ArrayList<>();
+	    for (Store store : stores) {
+	    	if (store.getPicture() != null) {
+	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		pictures.add(photo);
+	    	} else {
+	    		pictures.add(null);
+	    	}
+	    }
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("stores", stores);
+	    response.put("pictures", pictures);
+	    
+	    return response;
+    }
 }
 
