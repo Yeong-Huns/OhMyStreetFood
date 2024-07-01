@@ -28,7 +28,7 @@
 	<!-- Search -->
 	<div class="col-md-12">
       <jsp:include page="search.jsp" />
-   	</div>
+	</div>
 
 	<!-- KAKAO MAP API -->
 	<div class="col-md-12">

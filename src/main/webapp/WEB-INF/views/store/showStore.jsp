@@ -29,63 +29,72 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
 <!-- JavaScript -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/addStore.js"></script>
-
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
-
-
 </head>
-<body>		
-		<span style="display: flex; flex-direction: row; justify-content: space-between;">
-               <c:if test="${isOwner eq true }">
-               	<span>
-               		<i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
-               	</span>
-               	<sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
-               		<span><a href="${pageContext.request.contextPath}/chat" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
-               	</sec:authorize>
-               </c:if>
+<body>
+		<span style="display: flex; flex-direction: row; justify-content: space-between; padding: 0 20px;">
+              <c:choose>
+			    <c:when test="${isOwner eq true }">
+			        <span>
+			            <i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
+			        </span>
+			        <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
+			            <span><a href="${pageContext.request.contextPath}/chat" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
+			        </sec:authorize>
+			    </c:when>
+			    <c:otherwise>
+			        <span>
+			        	<i class="fas fa-bolt"></i><strong>&nbsp;제보된 상점</strong>
+			        </span>
+			    </c:otherwise>
+			</c:choose>
        	</span>
        	
-	    <div class="card" style="width: 100%; height: auto; display: flex; flex-direction: column; margin: 20px 0;">
-		    <div class="row g-0" style="display: flex; flex-direction: row; align-items: center;">
-		        <div class="col-md-3" style="padding: 0 40px;">
-		            <c:choose>
-		                <c:when test="${storePhoto.picture != null}">
-		                    <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 200px; height: auto; ">
-		                </c:when>
-		                <c:otherwise>
-		                    <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto; border: solid 1px #f6f6f6;">
-		                </c:otherwise>
-		            </c:choose>
-		        </div>
-		        <div class="col-md-9 card-body" style="padding: 0 100px;">
-		            <h5 class="card-title">${store.storeName}</h5>
-		            <sec:authorize access="hasRole('ROLE_USER')">
-		                <span><i class="like-btn far fa-heart" data-store-no="${store.storeNo}"></i></span>
-		                <!-- <i class="fas fa-heart"></i> -->
-		            </sec:authorize>
-		            <p class="card-text">${store.introduce}</p>
-		            <p class="card-text">
-		                리뷰 <span id="now-review">${store.totalReview}</span>
-		                평점 <span id="now-rating">${store.totalRating}</span>
-		                찜 <span id="now-like">${store.likes}</span>
-		            </p>
-		            <p><small class="text-muted">
-		                업데이트
-		                <c:choose>
-		                    <c:when test="${store.modifiedAt != null}">
-		                        ${store.modifiedAt}
-		                    </c:when>
-		                    <c:otherwise>
-		                        ${store.createdAt}
-		                    </c:otherwise>
-		                </c:choose>
-		            </small></p>
-		        </div>
-		    </div>
-		</div>
-
-	    
+       	<div class="col-md-12">
+		    <div class="card" style="width: 100%; height: auto;">
+		        <div class="row g-0">
+		            <div class="col-md-3" style="padding: 0 40px;">
+		           		 <c:choose>
+					        <c:when test="${storePhoto.picture != null}">
+					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 150px; height: auto;">
+					        </c:when>
+					        <c:otherwise>
+					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+					        </c:otherwise>
+					    </c:choose>
+		            </div>
+		            <div class="col-md-9 card-body" style="padding: 0 40px;">
+	                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
+		                    <span><h5 class="card-title">${store.storeName}</h5></span>
+		                    <sec:authorize access="hasRole('ROLE_USER')">
+		                    	<span><i class="like-btn far fa-heart" data-store-no="${store.storeNo }"></i></span>
+								<!-- <i class="fas fa-heart"></i> -->
+							</sec:authorize>
+	                    </span>
+	                    <p class="card-text">${store.introduce}</p>
+	                    <p class="card-text">
+		                		리뷰 <span id="now-review">${store.totalReview}</span>
+		                		평점 <span id="now-rating">${store.totalRating}</span>
+		                		찜 <span id="now-like">${store.likes}</span>
+		                </p>
+	            		<span>
+	            			<small class="text-muted">
+	            			업데이트
+	            		 	<c:choose>
+						        <c:when test="${store.modifiedAt != null}">
+						            ${store.modifiedAt}
+						        </c:when>
+						        <c:otherwise>
+						            ${store.createdAt}
+						        </c:otherwise>
+						    </c:choose>
+	            		 	</small>
+	                	</span>
+	               	</div>
+           		</div>
+        	</div>
+    	</div>
+  
 	    <div>
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                  <span><h5><strong>가게 정보</strong></h5></span>
@@ -124,9 +133,12 @@
 			    </span>
 			 </c:forEach>
 	    </div>
-
-		<jsp:include page="gallery.jsp" />
+	    
 		
+		<div class="col-md-12">
+			<jsp:include page="gallery.jsp" />
+		</div>
+			
 		<div id="reviewContainer">
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                   <span><h5><spring:message code="review.info" /></h5></span>
@@ -233,10 +245,18 @@
 			
 			<div id="spinner" class="spinner"></div>
 	    </div>
-	    
+	   
 	    <!-- 찜 목록 효과 -->
 	    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
 	    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
+	
+		<!-- Menu -->
+	    <div class="row">
+	        <div class="col-md-12">
+	            <jsp:include page="../menu.jsp" />
+	        </div>
+	    </div>
+	    
 	</div>
 	
 	<!-- 모달 화면 -->

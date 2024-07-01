@@ -26,10 +26,8 @@
 	<div class="col-md-12 text-center" id="title">
 		<h3>가게 정보 수정</h3>
 	</div>
-	<form method="post"
-		id="storeEditForm"
-		enctype="multipart/form-data">
-		
+  
+	<form method="post" id="storeEditForm" enctype="multipart/form-data">
 		<div>
 			<div class="col-md-12" id="map" style="width: 100%; height: 400px; border-radius: 20px"></div>
 			<div class="col-md-12" id="result"></div>
@@ -73,37 +71,36 @@
 	        </span>
 	    </div>
 
-		<div class="form-group">
+		<div class="form-group" style="margin-bottom: 15px;">
 			<label for="operatingHours">가게 운영시간</label> 
 			<span style="display: flex; align-items: center;">
 			<input type="time" class="form-control" id="startTime" name="startTime"
-					placeholder="시작 시간 선택" style="width: 380px; margin-right: 10px;">
+					placeholder="시작 시간 선택" style="width: 480px; margin-right: 10px;">
 				<span>&nbsp;부터&nbsp;</span>
 			<input type="time" class="form-control" id="endTime" name="endTime"
-					placeholder="종료 시간 선택" style="width: 380px; margin-right: 10px;">
+					placeholder="종료 시간 선택" style="width: 480px; margin-right: 10px;">
 				<span>&nbsp;까지&nbsp;</span>
 			</span>	
 		</div>
 		
         <div class="form-group">
-        	<span style="display: flex; align-items: center; justify-content: space-between;">
-	            <label for="gallery">가게 대표 사진</label>
-	            <button id="updateStorePhoto" class="btn btn-primary mt-2">수정</button>
-	        </span>
-            <input class="form-control" id="picture" name="picture" type="file" accept="image/*" style="display: none;">
-            <div>
+        	<span style="display: flex; flex-direction: row; justify-content: space-between;">
+            	<span>가게 대표 사진</span>
+            	<button id="updateStorePhoto" class="btn btn-primary mt-2">수정</button>
+            </span>
+            <span>
+            	<input class="form-control" id="picture" name="picture" type="file" accept="image/*" style="display: none;">
             	<img id="storePicture" src="${storePhoto.picture}" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
-            </div>
+            </span>
         </div>
 		
 		<div id="galleryList" class="mb-3">
-		    <span style="display: flex; align-items: center; justify-content: space-between;">
-	    		<label for="gallery">갤러리 사진들</label>
-		    	<input type="file" id="pictureInput" class="form-control mb-2" style="display: none;">
-				<button type="button" id="addPhotoBtn" class="btn btn-primary">+</button>				    
-		    </span>
+			<span style="display: flex; flex-direction: row; justify-content: space-between;">
+			    <span>갤러리 사진들</span>
+				<button type="button" id="addPhotoBtn" class="btn btn-primary">추가</button>
+			</span>
+		    <input type="file" id="pictureInput" class="form-control mb-2" style="display: none;">
 		    <ul id="sortable" class="list-group">
-		        
 		        <c:forEach var="gallery" items="${gallery}">
 		            <li class="list-group-item" data-id="${gallery.photoNo}">
 		                <img src="${gallery.picture}" class="img-thumbnail" style="max-width: 100px;">
@@ -121,10 +118,10 @@
 	    <div class="form-group">
 	      <label for="menu">메뉴 추가</label>
 	      <span style="display: flex; align-items: center;">
-	        <span style="width: 400px; margin-right: 10px;">
+	        <span style="width: 500px; margin-right: 10px;">
 	        	<input type="text" class="form-control" placeholder="메뉴" id="menuName">
 	        </span>
-	        <span style="width: 400px; margin-right: 10px;">
+	        <span style="width: 500px; margin-right: 10px;">
 		        <input type="number" class="form-control" placeholder="가격" id="menuPrice">
 		    </span>
 	        <button type="button" class="btn btn-primary" id="addMenuBtn" style="width: 50px;">+</button>
@@ -133,8 +130,8 @@
 		  <table class="table">
 		    <thead>
 		      <tr>
-		        <th style="width: 410px;">메뉴</th>
-		        <th style="width: 410px;">가격</th>
+		        <th style="width: 510px;">메뉴</th>
+		        <th style="width: 510px;">가격</th>
 		        <th style="width: 50px;"></th> <!-- 삭제 버튼 열 -->
 		      </tr>
 		    </thead>

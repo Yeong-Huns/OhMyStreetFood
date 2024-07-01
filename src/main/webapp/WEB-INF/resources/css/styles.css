@@ -21,10 +21,14 @@ body nav {
 	max-width: 1200px; 
 	background-color: white; 
 	margin: 0 auto; 
-	padding: 0 20px;
+	padding: 0 40px;
 	text-align: center; 
 	border-top: 1px solid #ccc;
 	position: fixed;
+}
+
+body nav > * {
+    margin: 0 100px;
 }
 
 body div {
@@ -43,3 +47,4 @@ h5 {
 	text-decoration-color: #007bff;
 	padding: 0;
 }
+

@@ -24,7 +24,7 @@
     <div class="col-md-12">
 	    <jsp:include page="../search.jsp" />
 	</div>
-	
+
     <!-- Oderby -->
     <jsp:include page="../orderby.jsp" />
 
