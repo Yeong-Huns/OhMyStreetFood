@@ -105,4 +105,19 @@
 		FIRST 10 ROWS ONLY
 	</select>
 	
+	<!-- yunbin -->
+	<select id="getReviewsByUsername" resultType="org.omsf.review.model.Review">
+		SELECT
+			REVIEWNO AS "reviewNo",
+			RATING AS "rating",
+			CONTENT AS "content",
+			CREATEDAT AS "createdAt",
+			MODIFIEDAT AS "modifiedAt",
+			MEMBER_USERNAME AS "memberUsername",
+			STORE_STORENO AS "storeStoreNo"
+		FROM REVIEW
+		WHERE MEMBER_USERNAME = #{username}
+		ORDER BY CREATEDAT DESC
+	</select>
+	
 </mapper>

@@ -5,9 +5,12 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.omsf.member.model.Member;
+import org.omsf.member.service.MemberService;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
@@ -50,6 +53,7 @@ public class StoreController {
 	private final StoreService storeService;
 	private final MenuService menuService;
 	private final ReviewService reviewService;
+	private final MemberService<Member> memberService;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private final LikeService likeService;
@@ -146,6 +150,19 @@ public class StoreController {
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menu);
 		model.addAttribute("reviews", review);
+		
+		// yunbin
+		if (store.getUsername() != null) {
+			Optional<Member> _member = memberService.findByUsername(store.getUsername());
+			
+			if(_member.isPresent()) {
+				Member member = _member.get();
+				if(member.getMemberType().equals("owner"))
+					model.addAttribute("isOwner", true);
+				else
+					model.addAttribute("isOwner", false);
+			}
+		}
 		
 		return "store/showStore";
 	}

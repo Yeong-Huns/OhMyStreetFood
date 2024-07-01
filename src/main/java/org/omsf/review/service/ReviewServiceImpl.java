@@ -57,4 +57,10 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDao.getJSONReviewListByStoreId(storeNo, page);
 	}
 
+	// yunbin
+	@Override
+	public List<Review> getReviewsByUsername(String username) {
+		return reviewDao.getReviewsByUsername(username);
+	}
+
 }

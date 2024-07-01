@@ -228,9 +228,9 @@
 
 	
 	<!-- yunbin -->
-	<select id="getStoreNameByStoreNo" resultType="String">
-		SELECT storename AS storeName FROM WHERE STORENO = #{storeNo}
-	</select>
+<!-- 	<select id="getStoreNameByStoreNo" resultType="String"> -->
+<!-- 		SELECT storename AS storeName FROM WHERE STORENO = #{storeNo} -->
+<!-- 	</select> -->
 	
 	<delete id="deleteStore">
 		DELETE FROM store WHERE storeno=#{storeNo} 
@@ -239,6 +239,12 @@
 	<delete id="deleteStoreByUsername">
 		delete from store where member_username=#{username}
 	</delete>
+	
+	<select id="getStoresByUsername" resultMap="storeResultMap">
+		select *
+		from store
+		where member_username=#{username}
+	</select>
 	
 	<!-- leejongseop -->
 	<select id="getStoresByPosition" resultMap="storeResultMap">

@@ -1,50 +1,50 @@
 document.addEventListener("DOMContentLoaded", function() {
-	
-	
-    const sendDataButton = document.getElementById("like-btn");
+
+    const sendDataButtons = document.querySelectorAll(".like-btn");
     const notificationInsert = document.getElementById("notification-insert");
     const notificationDelete = document.getElementById("notification-delete");
     const nowLikeElement = document.getElementById("now-like");
     const fireworksContainer = document.getElementById('fireworks-container');
-    
-	sendDataButton.addEventListener("click", handleClick);
+
+	const memberUsernameElement = document.getElementById("memberUsername");
+	const memberUsername = memberUsernameElement.value;
 	
-	function handleClick(event) {
-        const target = event.target;
-
-        if (target.className === "far fa-heart") {
-            insertLike();
-        } else if (target.className === "fas fa-heart") {
-            deleteLike();
-        } else {
-            console.error("알 수 없는 클래스입니다.");
-        }
-    }
+	sendDataButtons.forEach(function(button) {
+		const storeStoreNo = button.getAttribute("data-store-no");
+	
+	    if (!storeStoreNo || !memberUsername) {
+	        console.error("storeStoreNo 또는 memberUsername 요소를 찾을 수 없습니다.");
+	        return;
+	    }
     
-    const storeIdElement = document.getElementById("storeStoreNo");
-    const memberUsernameElement = document.getElementById("memberUsername");
-
+		const requestData = {
+        	storeStoreNo: storeStoreNo,
+        	memberUsername: memberUsername
+    	};
     
-    const storeStoreNo = storeIdElement.value;
-    const memberUsername = memberUsernameElement.value;
+    	isLike(button, requestData);
+    	
+        button.addEventListener("click", function(event) {
+			const buttonClassName = this.className;
+			
+            if (buttonClassName.includes("far fa-heart")) {
+                insertLike(this, requestData);
+            } else if (buttonClassName.includes("fas fa-heart")) {
+                deleteLike(this, requestData);
+            } else {
+                console.error("알 수 없는 클래스입니다.");
+            }
+            
+        });
+    });
     
-    // storeIdElement와 memberUsernameElement가 존재하는지 확인
-    if (!storeStoreNo || !memberUsername) {
-        console.error("storeStoreId 또는 memberUsername 요소를 찾을 수 없습니다.");
-        return;
-    }
-    
-    console.log(storeStoreNo);
-    console.log(memberUsername);
-
-    const requestData = {
-        storeStoreNo: storeStoreNo,
-        memberUsername: memberUsername
-    };
-    
-    isLike();
-    
+       
     function showNotificationInsert() {
+		// yunbin
+		if (!notificationInsert) {
+			return;
+		}
+		
         // 알림 문구를 보이도록 설정
         notificationInsert.classList.add("show");
 
@@ -63,6 +63,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
     function showNotificationDelete() {
+		// yunbin
+		if (!notificationDelete) {
+			return;
+		}
+		
         // 알림 문구를 보이도록 설정
         notificationDelete.classList.add("show");
 
@@ -80,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 4500);
     }
 
-    function insertLike() {
+    function insertLike(button, requestData) {
 
         fetch('/store/like/insert', { // URL을 실제 API 엔드포인트로 변경
             method: 'POST',
@@ -98,9 +103,10 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             console.log('Success:', data);
             // 추가적인 성공 처리 로직
-        	sendDataButton.className = "fas fa-heart";
-			sendDataButton.style.color = "red";
+			button.className = "like-btn fas fa-heart";
+			button.style.color = "red";
 			eventNowLike('insert');
+			
 			showNotificationInsert();
 			
         })
@@ -110,7 +116,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     
-    function deleteLike() {
+    function deleteLike(button, requestData) {
 
         fetch('/store/like/delete', { // URL을 실제 API 엔드포인트로 변경
             method: 'DELETE',
@@ -128,8 +134,9 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             console.log('Success:', data);
             // 추가적인 성공 처리 로직
-			sendDataButton.className = "far fa-heart";
-			sendDataButton.style.color = "";
+			button.className = "like-btn far fa-heart";
+			button.style.color = "";
+
 			eventNowLike('delete');
 			showNotificationDelete();
 			
@@ -140,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     
-    function isLike() {
+    function isLike(button, requestData) {
 		console.log('isLike 함수 실행');
 		console.log(requestData);
 		
@@ -167,8 +174,8 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log('Success:', data);
             // 추가적인 성공 처리 로직
             if(data > 0){
-				sendDataButton.className = "fas fa-heart";
-				sendDataButton.style.color = "red";
+				button.className = "like-btn fas fa-heart";
+				button.style.color = "red";
 			}
 			
         })

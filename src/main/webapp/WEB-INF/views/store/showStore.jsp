@@ -43,8 +43,15 @@
 			</div>
 			
 			<span style="display: flex; flex-direction: row; justify-content: space-between;">
-                <span><i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong></span>
-       			<span><a href="#">사장님과 채팅하기</a></span>
+                
+                <c:if test="${isOwner eq true }">
+                	<span>
+                		<i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
+                	</span>
+                	<sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
+                		<span><a href="${pageContext.request.contextPath}/chat">사장님과 채팅하기</a></span>
+                	</sec:authorize>
+                </c:if>
         	</span>
         	
 		    <div class="card" style="width: 100%; height: auto; border: none;">
@@ -63,7 +70,7 @@
 		                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
 			                    <span><h5 class="card-title">${store.storeName}</h5></span>
 			                    <sec:authorize access="hasRole('ROLE_USER')">
-			                    	<span><i id="like-btn" class="far fa-heart"></i></span>
+			                    	<span><i class="like-btn far fa-heart" data-store-no="${store.storeNo }"></i></span>
 									<!-- <i class="fas fa-heart"></i> -->
 								</sec:authorize>
 		                    </span>
@@ -129,7 +136,9 @@
 			<div>
 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                   <span><h5><spring:message code="review.info" /></h5></span>
-                  <button id="openModalBtn"><spring:message code="review.write" /></button>
+                  <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
+                  	<button id="openModalBtn"><spring:message code="review.write" /></button>
+                  </sec:authorize>
                  </span>
                  
 				<c:if test="${!empty reviews}">
@@ -165,14 +174,14 @@
 					</div>	
 				</c:if>
 
-				<div class="col-md-12 text-center">
-					<c:if test="${store.totalReview > 5}">
+<!-- 				<div class="col-md-12 text-center"> -->
+<%-- 					<c:if test="${store.totalReview > 5}"> --%>
 						<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}">
 							<spring:message code="review.more" />
 						</a>
-					</c:if>
+<%-- 					</c:if> --%>
+<!-- 				</div> -->
 					<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
-				</div>
 		    </div>
 		    
 		    <!-- 찜 목록 효과 -->

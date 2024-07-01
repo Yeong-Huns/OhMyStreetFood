@@ -33,8 +33,9 @@ public interface StoreService {
 	List<Store> searchByKeyword(String keyword, String ordertype, int offset, int limit);
 	
 	// yunbin
-	String getStoreNameByStoreNo(int storeNo);
+	//String getStoreNameByStoreNo(int storeNo);
 	void deleteStoreByUsername(String username);
+	List<Store> getStoresByUsername(String name);
 
 	// leejongseop
 	List<Store> getStoresByPosition(String position);
