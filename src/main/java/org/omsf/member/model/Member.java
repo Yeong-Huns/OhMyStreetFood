@@ -24,7 +24,7 @@ public class Member {
 	@Email(message = "유효한 이메일 주소를 입력하세요.")
 	private String username;
 	
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,16}$",
+	@Pattern(regexp = "^(?!.*\\|)(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,16}$",
             message = "비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다.")
 	@NotEmpty(message = "비밀번호 입력은 필수입니다.")
 	private String password;

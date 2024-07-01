@@ -3,6 +3,8 @@ package org.omsf.store.service;
 import java.sql.Timestamp;
 import java.util.List;
 
+import org.omsf.error.Exception.CustomBaseException;
+import org.omsf.error.Exception.ErrorCode;
 import org.omsf.store.dao.MenuRepository;
 import org.omsf.store.model.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Menu getMenuByMenuNo(int menuNo) {
-		Menu menu = menuRepository.getMenuByMenuNo(menuNo).get();
+		Menu menu = menuRepository.getMenuByMenuNo(menuNo).orElseThrow(() -> new CustomBaseException(ErrorCode.RESOURCE_NOT_FOUND));
 		return menu;
 	}
 	
@@ -65,6 +67,7 @@ public class MenuServiceImpl implements MenuService {
 	
 	@Override
 	public List<Menu> getMenusByStoreNo(int storeNo) {
-		return menuRepository.getMenusByStoreNo(storeNo);
+		List<Menu> menus = menuRepository.getMenusByStoreNo(storeNo);
+		return menus;
 	}
 }

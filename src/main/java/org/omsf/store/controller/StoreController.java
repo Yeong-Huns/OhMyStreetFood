@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -73,6 +74,7 @@ public class StoreController {
 			@RequestParam(value = "menus", required = false) String menusJson,
 	        Principal principal
 	) throws IOException {
+		
 		String username = principal.getName();
 		Store store = objectMapper.readValue(storeJson, Store.class);
 		List<Menu> menus = objectMapper.readValue(menusJson, new TypeReference<List<Menu>>() {});
@@ -90,7 +92,6 @@ public class StoreController {
         
         return ResponseEntity.ok("");
 	}
-	
 	
 	@GetMapping("/{storeNo}")
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
@@ -120,6 +121,21 @@ public class StoreController {
 		model.addAttribute("menus", menu);
 		model.addAttribute("reviews", review);
 		
+		// yunbin
+		if (store.getUsername() != null) {
+			Optional<Member> _member = memberService.findByUsername(store.getUsername());
+			
+			if(_member.isPresent()) {
+				Member member = _member.get();
+				if(member.getMemberType().equals("owner")) {
+					model.addAttribute("isOwner", true);
+					model.addAttribute("owner", member);
+				}
+				else
+					model.addAttribute("isOwner", false);
+			}
+		}
+		
 		return "store/showStore";
 	}
 
@@ -131,7 +147,7 @@ public class StoreController {
     	
     	if (store.getUsername() != null) {	
     		Member member = (Member) memberService.findByUsername(store.getUsername()).get();
-    		if (member.getMemberType().equals("owner")  && (store.getUsername() != username)) {
+    		if (member.getMemberType().equals("owner") && (!store.getUsername().equals(username))) {
     			return "redirect:/error";
     		}
     	}
@@ -148,6 +164,7 @@ public class StoreController {
         return "store/updateStore"; 
     }
 	
+    @PreAuthorize("isAuthenticated()")
     @ResponseBody
     @PostMapping("/{storeNo}")
     @Transactional
@@ -262,19 +279,20 @@ public class StoreController {
 	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position,
 									@RequestParam(value = "latitude", defaultValue = "1") String latitude,
 									@RequestParam(value = "longitude", defaultValue = "1") String longitude){
-		log.info("위도 : {}, 경도 : {}", latitude, longitude);
+		
 		log.info("api 요청 완료");
 		log.info("position : {}" , position);
 		return storeService.getStoresByPosition(position);
 	}	
 	
-	
+	@PreAuthorize("isAuthenticated()")
 	@ResponseBody
     @DeleteMapping("/{storeNo}/{photoNo}")
     public ResponseEntity<?> deleteStoreGallery(@PathVariable int storeNo,
     		@PathVariable int photoNo,
     		Principal principal) {
-        String username = principal.getName();
+        
+		String username = principal.getName();
         Photo photo = storeService.getPhotoByPhotoNo(photoNo);
         Store store = storeService.getStoreByNo(storeNo);
         String memberType = null;
@@ -296,10 +314,7 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("사진을 삭제하였습니다.");
     }
 	
-	
-	
-	
-	
+	@PreAuthorize("isAuthenticated()")
 	@PutMapping("/{storeNo}/{photoNo}")
 	@ResponseBody
 	@Transactional
@@ -307,7 +322,10 @@ public class StoreController {
     		@PathVariable int photoNo, @RequestParam(value= "photo", required = true) ArrayList<MultipartFile> photo,
     		Principal principal) throws IOException {
         String username = principal.getName();
-        Photo storePhoto = storeService.getPhotoByPhotoNo(photoNo);
+        Photo storePhoto = null;
+        if (photoNo != 0) {	
+        	storePhoto = storeService.getPhotoByPhotoNo(photoNo);
+        }
         Store store = storeService.getStoreByNo(storeNo);
         String memberType = null;
         
@@ -340,7 +358,8 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(newPhotoNo);
     }
 	
- @PostMapping("/{storeNo}/upload-photo")
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping("/{storeNo}/upload-photo")
     public ResponseEntity<Photo> uploadStorePicture(@PathVariable int storeNo, @RequestParam("photo") ArrayList<MultipartFile> photos,
     		Principal principal) throws IOException {
         	

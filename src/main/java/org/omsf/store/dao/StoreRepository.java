@@ -22,7 +22,7 @@ public interface StoreRepository {
 	void updateTotalReviewAndRating(Store store);
 	void updateLikes(Store store);
 	void createPhoto(Photo photo);
-	Photo getPhotoByPhotoNo(int photoNo);
+	Optional<Photo> getPhotoByPhotoNo(int photoNo);
 	List<Photo> getStorePhotos(int storeNo);
 	List<Photo> getStoreGallery(Store store);
 	void updatePhoto(Photo photo);
@@ -34,10 +34,10 @@ public interface StoreRepository {
 	List<Store> showStoreList(Map<String, Object> params);
 
 	// yunbin
-	String getStoreNameByStoreNo(int storeNo);
+	//String getStoreNameByStoreNo(int storeNo);
 	void deleteStoreByUsername(String username);
+	List<Store> getStoresByUsername(String username);
 	
 	// leejongseop
 	List<Store> getStoresByPosition(String position);
-	
 }

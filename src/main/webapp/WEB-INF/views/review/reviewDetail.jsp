@@ -21,15 +21,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
+<%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css"> --%>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reviewModal.css">
 <!-- 리뷰 수정 및 삭제 -->
 <script src="${pageContext.request.contextPath}/js/reviewEdit.js"></script>
 </head>
 <body>			
 	<div id="review-detail" class="review-detail">
-        <div class="modal-content">
+        <div class="review-modal-content">
 			<div class="review-container">
-				<span class="close-button">&times;</span>
+				<span class="review-close-button">&times;</span>
 				<h1><spring:message code="review" /></h1>
 				<form:form id="reviewForm" modelAttribute="review" method="post" action="${pageContext.request.contextPath}/review/command">
 					<p>
@@ -66,6 +67,7 @@
 				    </c:if>
 						<input type="hidden" name="command" id="command" value="" />
 						<input type="hidden" name="reviewNo" id="reviewNo" value="${reviewNo}" />
+						<input type="hidden" name="requestPage" id="requestPage" value="${requestPage}"/>
 						<sec:authorize access="authentication.name == '${memberUsername}'">
 							<button id="delete-submit" onclick="deleteCommand()"><spring:message code="delete.btn" /></button>
 							<button id="update-submit" onclick="updateCommand()"><spring:message code="update.btn" /></button>

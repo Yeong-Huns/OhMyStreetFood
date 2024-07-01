@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.omsf.error.Exception.BadRequestException;
 import org.omsf.error.Exception.CustomBaseException;
 import org.omsf.error.Exception.ErrorCode;
 import org.omsf.review.model.RequestReview;
@@ -13,6 +12,7 @@ import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
 import org.omsf.review.validator.UserValidator;
 import org.omsf.store.service.StoreService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -77,22 +77,28 @@ public class ReviewController {
 	
 	
 	// 리뷰 상세 페이지
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("{reviewNo}")
-	public String getReviewDetail(@PathVariable("reviewNo") int reviewNo,
+	public String getReviewDetail(@PathVariable("reviewNo") int reviewNo,@RequestParam(value="requestPage", required = false) String requestPage,
 									Model model) {
 		Review review = reviewServ.getReviewByReviewNo(reviewNo);
 		model.addAttribute("review", review);
 		model.addAttribute("reviewNo", reviewNo);
 		model.addAttribute("memberUsername", review.getMemberUsername());
+		
+		if(requestPage != null && !requestPage.isEmpty())
+			model.addAttribute("requestPage", requestPage);
 		return "review/reviewDetail";
 	}
 
 
 	// 리뷰 커맨드패턴 처리
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("command")
 	public String reviewCommand(Principal principal, @ModelAttribute("requestReview") RequestReview review,
-			@RequestParam("command") String command, @RequestParam("reviewNo") int reviewNo, Errors errors,
-			RedirectAttributes redirectAttributes) {
+			@RequestParam("command") String command, @RequestParam("reviewNo") int reviewNo
+			, @RequestParam(value="requestPage", required = false) String requestPage,
+			Errors errors, RedirectAttributes redirectAttributes) {
 		log.info("요청 커맨드 : {}", command);
 		
 		userValidator.validate(review, principal, errors);
@@ -111,15 +117,14 @@ public class ReviewController {
 			// delete 요청
 			if (!command.equals("delete")) {
 				// delete요청이 아닐 때
-				throw new CustomBaseException("잘못된 요청 방식입니다.", ErrorCode.INVALID_INPUT_VALUE);
+				throw new CustomBaseException(ErrorCode.NOT_ALLOWED_REQUEST);
 			}
 			reviewServ.deleteReview(reviewNo);
-			return String.format("redirect:/review/list/%d", review.getStoreStoreNo());
+			if(requestPage != null && !requestPage.isEmpty())
+				return "redirect:/mypage";
+			else
+				return String.format("redirect:/review/list/%d", review.getStoreStoreNo());
 		}
 	}
-
-
-	
-	
 
 }

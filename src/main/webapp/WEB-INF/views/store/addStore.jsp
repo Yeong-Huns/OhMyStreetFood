@@ -19,13 +19,6 @@
 	
 </head>
 <body>
-	<div class="main">
-		<div class="row">
-			<div>
-				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;">
-					<i class="fas fa-arrow-left"></i>
-				</a>
-			</div>
 			<div class="col-md-12 text-center" id="title">
 				<h3>가게 정보 등록</h3>
 			</div>
@@ -88,21 +81,22 @@
 					<label for="operatingHours">가게 운영시간</label> 
 					<span style="display: flex; align-items: center;">
 					<input type="time" class="form-control" id="startTime" name="startTime"
-							placeholder="시작 시간 선택" style="width: 280px; margin-right: 10px;">
+							placeholder="시작 시간 선택" style="width: 380px; margin-right: 10px;">
 						<span>&nbsp;부터&nbsp;</span>
 					<input type="time" class="form-control" id="endTime" name="endTime"
-							placeholder="종료 시간 선택" style="width: 280px; margin-right: 10px;">
+							placeholder="종료 시간 선택" style="width: 380px; margin-right: 10px;">
 						<span>&nbsp;까지&nbsp;</span>
 					</span>	
 				</div>
 				
 				<div class="form-group">
 				    <label for="picture">가게 대표 사진</label>
-				    <input class="form-control" id="picture" name="picture" type="file" accept="image/*">
 				
 				    <span id="preview">
-				        <img id="previewImg" src="" alt="이미지 미리보기" class="img-thumbnail" style="display: none; max-width: 100px;">
+				        <img id="previewImg" src="" alt="이미지 미리보기" class="img-thumbnail" style="display: none; max-width: 200px;">
 				    </span>
+				    <button type="button" class="btn btn-primary" id="photoBtn">파일 선택</button>
+				    <input class="form-control" id="picture" name="picture" type="file" accept="image/*" style="display: none;">
 				</div>
 
 				<div class="form-group">
@@ -113,10 +107,10 @@
 			    <div class="form-group">
 			      <label for="menu">메뉴 추가</label>
 			      <span style="display: flex; align-items: center;">
-			        <span style="width: 300px; margin-right: 10px;">
+			        <span style="width: 400px; margin-right: 10px;">
 			        	<input type="text" class="form-control" placeholder="메뉴" id="menuName">
 			        </span>
-			        <span style="width: 300px; margin-right: 10px;">
+			        <span style="width: 400px; margin-right: 10px;">
 				        <input type="number" class="form-control" placeholder="가격" id="menuPrice">
 				    </span>
 			        <button type="button" class="btn btn-primary" id="addMenuBtn" style="width: 50px;">+</button>
@@ -140,8 +134,13 @@
 					<button type="submit" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">등록하기</button>
 				</div>
 			</form>
-		</div>
-	</div>
+	
+	<!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
 	
 	<script type="module" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 	<!-- kakaoMap API key -->

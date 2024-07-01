@@ -146,7 +146,7 @@
 	</update>
 	<update id="updatePhoto">
 	    UPDATE PHOTO
-	    SET PHOTONO = #{photoNo},
+	    SET 
 	        contentType = #{contentType},
 	        fileSize = #{fileSize},
 	        picture = #{picture},
@@ -237,7 +237,8 @@
 	    SELECT s.*, TRUNC(SDO_GEOM.SDO_DISTANCE(
 	               SDO_CS.TRANSFORM(SDO_GEOMETRY(2001, 4326, SDO_POINT_TYPE(#{longitude}, #{latitude}, NULL), NULL, NULL), 32652),
 	               SDO_CS.TRANSFORM(SDO_GEOMETRY(2001, 4326, SDO_POINT_TYPE(s.longitude, s.latitude, NULL), NULL, NULL), 32652),
-	               1)) AS distance
+	               1
+	                ) / 1000, 2) AS distance
 	    FROM store s
 	    WHERE storeName LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%'
 	    ORDER BY 
@@ -262,9 +263,9 @@
 	</select>
 	
 	<!-- yunbin -->
-	<select id="getStoreNameByStoreNo" resultType="String">
-		SELECT storename AS storeName FROM WHERE STORENO = #{storeNo}
-	</select>
+<!-- 	<select id="getStoreNameByStoreNo" resultType="String"> -->
+<!-- 		SELECT storename AS storeName FROM WHERE STORENO = #{storeNo} -->
+<!-- 	</select> -->
 	
 	<delete id="deleteStore">
 		DELETE FROM store WHERE storeno=#{storeNo} 
@@ -273,6 +274,12 @@
 	<delete id="deleteStoreByUsername">
 		delete from store where member_username=#{username}
 	</delete>
+	
+	<select id="getStoresByUsername" resultMap="storeResultMap">
+		select *
+		from store
+		where member_username=#{username}
+	</select>
 	
 	<!-- leejongseop -->
 	<select id="getStoresByPosition" resultMap="storeResultMap">

@@ -1,6 +1,7 @@
 package org.omsf.member.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,11 @@ import org.omsf.member.service.EmailService;
 import org.omsf.member.service.GeneralMemberService;
 import org.omsf.member.service.MemberService;
 import org.omsf.member.service.OwnerService;
+import org.omsf.review.model.Review;
+import org.omsf.review.service.ReviewService;
+import org.omsf.store.model.Like;
+import org.omsf.store.model.Store;
+import org.omsf.store.service.LikeService;
 import org.omsf.store.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +59,8 @@ public class MemberController { // yunbin
 	private final MemberService<Member> memberService;
 	private final EmailService emailService;
 	private final StoreService storeService;
+	private final LikeService likeService;
+	private final ReviewService reviewService;
 
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
@@ -186,9 +194,43 @@ public class MemberController { // yunbin
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/mypage")
-	public String showMypage() {
+	public String showMypage(Model model, Principal principal) {
+		// 등록한 가게 리스트 전달
+		List<Store> registeredStores = storeService.getStoresByUsername(principal.getName());
+		model.addAttribute("registeredStores", registeredStores);
+		
+		// 찜한 가게 리스트 전달
+		List<Like> likes = likeService.getLikesByUsername(principal.getName());
+		List<Store> likeStores = new ArrayList<>();
+		
+		for(Like like : likes) {
+			likeStores.add(storeService.getStoreByNo(like.getStoreStoreNo()));
+		}
+		model.addAttribute("likeStores", likeStores);
+		
+		// 리뷰 리스트 전달
+		List<Review> reviews = reviewService.getReviewsByUsername(principal.getName());
+		List<Store> reviewStores = new ArrayList<>();
+		
+		model.addAttribute("reviews", reviews);
+		for(Review review : reviews) {
+			reviewStores.add(storeService.getStoreByNo(review.getStoreStoreNo()));
+		}
+		model.addAttribute("reviewStores", reviewStores);
+		
+		// 사용자 정보 전달
+		for (String authority : currentUserAuthority()) {
+			if (authority.equals("ROLE_USER")) {
+				Optional<GeneralMember> _member = generalMemberService.findByUsername(principal.getName());
+
+				if (_member.isPresent()) {
+					GeneralMember member = _member.get();
+					model.addAttribute("member", member);
+				}
+			}
+		}
+
 		return "member/mypage";
 	}
 
@@ -207,11 +249,6 @@ public class MemberController { // yunbin
 		return "redirect:/signin";
 	}
 
-	@GetMapping("/modifyMember")
-	public String showConfirmPasswordPage() {
-		return "member/confirmPassword";
-	}
-
 	@PostMapping("/confirmPassword")
 	@ResponseBody
 	public boolean confirmPassword(Principal principal, String password, Model model) {
@@ -224,7 +261,7 @@ public class MemberController { // yunbin
 		return false;
 	}
 
-	@GetMapping("/modifyMemberForm")
+	@GetMapping("/modifyMember")
 	public String showModifyMemberFormPage(Model model, Principal principal) {
 
 		for (String authority : currentUserAuthority()) {
@@ -318,10 +355,9 @@ public class MemberController { // yunbin
 	    }
 	}
 
+	// 현재 사용자 권한 가져옴
 	private List<String> currentUserAuthority() {
-		// 현재 인증 정보를 가져옴
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		// 사용자 권한(역할) 가져오기
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
 		List<String> authorityList = authorities.stream().map(GrantedAuthority::getAuthority)

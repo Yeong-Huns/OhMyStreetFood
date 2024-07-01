@@ -25,4 +25,9 @@ public class LogStoreServiceImpl implements LogStoreService {
 		logStoreRepository.updateStore(logId);
 	}
 
+	@Override
+	public List<Map<String, Object>> getLogListJSONByStoreNo(int storeNo, int page) {
+		return logStoreRepository.getLogListJSONByStoreNo(storeNo, page);
+	}
+
 }

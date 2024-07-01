@@ -24,79 +24,101 @@
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reviewModal.css">
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
 <!-- JavaScript -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/addStore.js"></script>
-
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
-
-
 </head>
 <body>
-	<div class="main">
-
-		<div id="back" style="padding: 20px 0;">
-			<a href="${pageContext.request.contextPath}/store/list" style="text-decoration: none; color: inherit;"> 
-				<i class="fas fa-arrow-left"></i>
-			</a>
-		</div>
-		
-		<span style="display: flex; flex-direction: row; justify-content: space-between;">
-               <span><i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong></span>
-      			<span><a href="#" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
+		<span style="display: flex; flex-direction: row; justify-content: space-between; padding: 0 20px;">
+              <c:choose>
+			    <c:when test="${isOwner eq true }">
+			        <span>
+			            <i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
+			        </span>
+			        <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
+			            <span><a href="${pageContext.request.contextPath}/chat" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
+			        </sec:authorize>
+			    </c:when>
+			    <c:otherwise>
+			        <span>
+			        	<i class="fas fa-bolt"></i><strong>&nbsp;제보된 상점</strong>
+			        </span>
+			    </c:otherwise>
+			</c:choose>
        	</span>
        	
-	    <div class="card" style="width: 100%; height: auto; border: none;">
-	        <div class="row g-0">
-	            <div class="col-md-3" style="padding: 0 20px;">
-	           		 <c:choose>
-				        <c:when test="${storePhoto.picture != null}">
-				            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
-				        </c:when>
+       	<div class="col-md-12">
+		    <div class="card" style="width: 100%; height: auto;">
+		        <div class="row g-0">
+		            <div class="col-md-3" style="padding: 0 40px;">
+		           		 <c:choose>
+					        <c:when test="${storePhoto.picture != null}">
+					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 150px; height: auto;">
+					        </c:when>
 				        <c:otherwise>
-				            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
-				        </c:otherwise>
-				    </c:choose>
-	            </div>
-	            <div class="col-md-9 card-body" style="padding: 0 20px;">
+					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+					        </c:otherwise>
+					    </c:choose>
+		            </div>
+		            <div class="col-md-9 card-body" style="padding: 0 20px;">
 	                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
 		                    <span><h5 class="card-title">${store.storeName}</h5></span>
-		                    <sec:authorize access="isAuthenticated()">
-		                    <span><i id="like-btn" class="far fa-heart"></i></span>
-		                    </sec:authorize>
+		                   
+		                    	<span>
+		                    		<sec:authorize access="hasRole('ROLE_USER')">
+		                    			<i class="like-btn far fa-heart" data-store-no="${store.storeNo }"></i>
+		                    			<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고</a>
+		                    		</sec:authorize>
+		                    		<sec:authorize access="isAnonymous()">	
+		                    			<a href="javascript:void(0);" onclick="showLoginAlert()">신고</a>
+		                    		</sec:authorize>
+		                    	</span>
 	                    </span>
 	                    <p class="card-text">${store.introduce}</p>
 	                    <p class="card-text">
-	                		리뷰 <span id="now-review">${store.totalReview}</span>
-	                		평점 <span id="now-rating">${store.totalRating}</span>
-	                		찜 <span id="now-like">${store.likes}</span>
-		            		<p>
-		            		<small class="text-muted">
-		            			업데이트
-		            		 	<c:choose>
-							        <c:when test="${store.modifiedAt != null}">
-							            ${store.modifiedAt}
-							        </c:when>
-							        <c:otherwise>
-							            ${store.createdAt}
-							        </c:otherwise>
-							    </c:choose>
-		            		 </small>
-		            		 </p>
+		                		리뷰 <span id="now-review">${store.totalReview}</span>
+		                		평점 <span id="now-rating">${store.totalRating}</span>
+		                		찜 <span id="now-like">${store.likes}</span>
 		                </p>
-	            </div>
-	        </div>
-	    </div>
+	            		<span>
+	            			<small class="text-muted">
+	            			업데이트
+	            		 	<c:choose>
+						        <c:when test="${store.modifiedAt != null}">
+						            ${store.modifiedAt}
+						        </c:when>
+						        <c:otherwise>
+						            ${store.createdAt}
+						        </c:otherwise>
+						    </c:choose>
+	            		 </small></span>
+	            		 
+	            	</div>
+	        	</div>
+	    	</div>
 	    
 	    <div>
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                  <span><h5>가게 정보</h5></span>
-                 <span><a href="${pageContext.request.contextPath}/store/${store.storeNo}/update">정보 수정</a></span>
+                 <sec:authorize access="isAuthenticated()">
+	                 <sec:authentication property="principal.username" var="currentUsername"/>
+	                 <c:if test="${isOwner eq false || owner.username eq currentUsername}">
+	                 	<span><a href="${pageContext.request.contextPath}/store/${store.storeNo}/update">정보 수정</a></span>
+	                 </c:if>
+                 </sec:authorize>
+                 <sec:authorize access="isAnonymous()">
+                 	<c:if test="${isOwner eq false }">
+                 		<span><a href="javascript:void(0);" onclick="showLoginAlert()">정보 수정</a></span>
+                 	</c:if>
+				</sec:authorize>
             </span>
             
+            
             <!-- KAKAO MAP API -->
-			<div class="col-md-12" id="map" style="width: 100%; height: 200px; border-radius: 20px"></div>
+			<div class="col-md-12" id="map" style="width: 100%; height: 200px; border-radius: 20px; background-color: "#f6f6f6;"></div>
 			<div class="col-md-12" id="result"></div>
 				
             <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
@@ -126,14 +148,22 @@
 			    </span>
 			 </c:forEach>
 	    </div>
-
-		<jsp:include page="gallery.jsp" />
+	    
 		
+		<div class="col-md-12">
+			<jsp:include page="gallery.jsp" />
+		</div>
+			
 		<div id="reviewContainer">
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                 <span><h5><spring:message code="review.info" /></h5></span>
-                 <button id="openModalBtn"><spring:message code="review.write" /></button>
-                </span>
+                  <span><h5><spring:message code="review.info" /></h5></span>
+                  <sec:authorize access="hasRole('ROLE_USER')">
+                  	<button id="openModalBtn" class="btn btn-primary"><spring:message code="review.write" /></button>
+                  </sec:authorize>
+                  <sec:authorize access="isAnonymous()">
+                  	<button onclick="showLoginAlert()" class="btn btn-primary"><spring:message code="review.write" /></button>
+                  </sec:authorize>
+                 </span>
                 
 			<c:if test="${!empty reviews}">
 				<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
@@ -152,10 +182,22 @@
 				<c:forEach items="${reviews}" var="review">
 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-					    	<span>${review.memberUsername}</span>
+				    		<c:choose>
+				    			<c:when test="${not empty review.memberUsername}">
+				    				<span><strong>${review.memberUsername}</strong></span>
+				    			</c:when>
+				    			<c:otherwise>
+				    				<span><strong>(탈퇴한 회원의 리뷰입니다)</strong></span>
+				    			</c:otherwise>
+				    		</c:choose>
 					    	<span>${review.createdAt}</span>
 					    </span>
-						<span><a href="<c:url value="/review/${review.reviewNo}" />">${review.content}</a></span>
+						<sec:authorize access="${not empty review.memberUsername and review.memberUsername eq principal.username}">
+			                <a href="<c:url value='/review/${review.reviewNo}'/>">${review.content}</a>
+			            </sec:authorize>
+			            <c:if test="${empty review.memberUsername or review.memberUsername ne principal.username }">
+			                ${review.content}
+			            </c:if>
 					</div>			    
 				</c:forEach>
 			</c:if>
@@ -167,29 +209,90 @@
 				    </span>
 				</div>	
 			</c:if>
+			<div>
+<!-- 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;"> -->
+<%--                   <span><h5><spring:message code="review.info" /></h5></span> --%>
+<%--                   <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')"> --%>
+<%--                   	<button id="openModalBtn"><spring:message code="review.write" /></button> --%>
+<%--                   </sec:authorize> --%>
+<!--                  </span> -->
+                 
+<%-- 				<c:if test="${!empty reviews}"> --%>
+<!-- 					<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
+<!-- 					    <span style="padding: 20px"> -->
+<%-- 					    	<c:forEach begin="1" end="${store.totalRating}"> --%>
+<!-- 					    		<i class="fas fa-star" style="color:#f5b301;"></i> -->
+<%-- 					    	</c:forEach> --%>
+<%-- 						    <c:if test="${5 - store.totalRating >= 1}"> --%>
+<%-- 						    	<c:forEach begin="1" end="${6 - store.totalRating >= 5 ? 5 : 6 - store.totalRating}"> --%>
+<!-- 					    			<i class="fas fa-star"></i> -->
+<%-- 					    		</c:forEach> --%>
+<%-- 						    </c:if> --%>
+<!-- 					    </span> -->
+<!-- 					</span> -->
+				
+<%-- 					<c:forEach items="${reviews}" var="review"> --%>
+<!-- 						<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
+<!-- 					    	<span style="display: flex; flex-direction: row; justify-content: space-between;"> -->
+<%-- 						    	<span>${review.memberUsername}</span> --%>
+<%-- 						    	<span>${review.createdAt}</span> --%>
+<!-- 						    </span> -->
+<%-- 							<span>${review.content}</span> --%>
+<!-- 						</div>			     -->
+<%-- 					</c:forEach> --%>
+<%-- 				</c:if> --%>
+				
+<%-- 				<c:if test="${empty reviews}"> --%>
 
-			<div class="col-md-12 text-center">
-				<c:if test="${store.totalReview > 5}">
-					<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}">
-						<spring:message code="review.more" />
-					</a>
-				</c:if>
-				<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
-			</div>
+<%-- 				<c:forEach items="${reviews}" var="review"> --%>
+
+<!-- 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
+<!-- 				    	<span style="display: flex; flex-direction: row; justify-content: space-between;"> -->
+<%-- 					    	<span>${review.memberUsername}</span> --%>
+<%-- 					    	<span>${review.createdAt}</span> --%>
+<!-- 					    </span> -->
+<%-- 						<span><a href="<c:url value="/review/${review.reviewNo}" />">${review.content}</a></span> --%>
+<!-- 					</div>			     -->
+<%-- 				</c:forEach> --%>
+<%-- 			</c:if> --%>
+			
+<%-- 			<c:if test="${empty reviews}"> --%>
+<!-- 				<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
+<!-- 			    	<span style="display: flex; flex-direction: row; justify-content: space-between;"> -->
+<%-- 				    	<span><spring:message code="review.nothing" /></span> --%>
+<!-- 				    </span> -->
+<!-- 				</div>	 -->
+<%-- 			</c:if> --%>
+
+<!-- 			<div class="col-md-12 text-center"> -->
+<%-- 				<c:if test="${store.totalReview > 5}"> --%>
+<%-- 					<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}"> --%>
+<%-- 						<spring:message code="review.more" /> --%>
+<!-- 					</a> -->
+<%-- 				</c:if> --%>
+<!-- 			</div> -->
 			
 			<div id="spinner" class="spinner"></div>
 	    </div>
-	    
+	   
 	    <!-- 찜 목록 효과 -->
 	    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
 	    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
+	
+		<!-- Menu -->
+	    <div class="row">
+	        <div class="col-md-12">
+	            <jsp:include page="../menu.jsp" />
+	        </div>
+	    </div>
+	    
 	</div>
 	
 	<!-- 모달 화면 -->
-	<div id="modal" class="modal" <c:if test="${modalOn}"> style="display: block;"</c:if>>
-        <div class="modal-content">
+	<div id="review-modal" class="review-modal" <c:if test="${modalOn}"> style="display: block;"</c:if>>
+        <div class="review-modal-content">
 			<div class="review-container">
-				<span class="close-button">&times;</span>
+				<span class="review-close-button">&times;</span>
 				<h1><spring:message code="review.write" /></h1>
 				<form:form id="reviewForm" method="post" modelAttribute="requestReview" action="${pageContext.request.contextPath}/review/insert">
 					<p>
@@ -229,13 +332,21 @@
 			</div>
         </div>
     </div>
-
+	
+	<!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
+    
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/storeDetail.js"></script>
 
 	<!-- 리뷰 모달 -->
 	<script src="${pageContext.request.contextPath}/js/modal.js"></script>
+	<script src="${pageContext.request.contextPath}/js/reviewModal.js"></script>
 
 	<!-- like 요청 -->
 <%-- 	<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script> --%>
@@ -253,7 +364,7 @@
 	
     var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
         mapOption = { 
-            center: new kakao.maps.LatLng('${store.longitude}', '${store.latitude}'), // 지도의 중심좌표
+            center: new kakao.maps.LatLng('${store.latitude}', '${store.longitude}'), // 지도의 중심좌표
             level: 3 // 지도의 확대 레벨
         };
 
@@ -355,6 +466,11 @@
 	    window.addEventListener('scroll', handleScroll);
 
 	});
+	</script>
+	<script>
+    function showLoginAlert() {
+	    alert('로그인이 필요합니다.');
+	}
 	</script>
 </body>
 </html>

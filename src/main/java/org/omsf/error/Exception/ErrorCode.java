@@ -1,7 +1,8 @@
 package org.omsf.error.Exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
+
+import lombok.Getter;
 
 /**
  * packageName    : org.omsf.error.code
@@ -26,6 +27,7 @@ public enum ErrorCode {
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, "E4", "등록되지 않은 유저입니다."),
     NOT_FOUND_STORE_OWNER(HttpStatus.NOT_FOUND, "E4", "점포 주인이 등록되지 않았습니다."),
     NOT_FOUND_STORE(HttpStatus.NOT_FOUND, "E4", "등록된 점포가 없습니다."),
+    NOT_FOUND_PHOTO(HttpStatus.NOT_FOUND, "E4", "사진을 찾을 수 없습니다."),
     NOT_FOUND_MESSAGE(HttpStatus.NOT_FOUND, "E4", "메세지 기록이 없습니다."),
     NOT_ALLOWED_REQUEST(HttpStatus.METHOD_NOT_ALLOWED, "E2", "로직상 있을 수 없는 요청입니다."),
     NOT_FOUND_STORENO(HttpStatus.NOT_FOUND, "E4", "해당 주소로 등록된 storeNo가 없습니다.")

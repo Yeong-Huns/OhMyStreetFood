@@ -2,15 +2,25 @@
  * 
  */
 
-document.querySelector('.close-button').onclick = function() {
-    const storeNo = document.querySelector('#storeStoreNo').value;
-//    location.href = '/review/list/' + storeNo;
-    location.href = '/store/' + storeNo;
-};
+//document.querySelector('.review-close-button').onclick = function() {
+//    const storeNo = document.querySelector('#storeStoreNo').value;
+//    location.href = '/store/' + storeNo;
+//};
 
 document.addEventListener('DOMContentLoaded', function() {
+    const closeButton = document.querySelector('.review-close-button');
     const ratingInputs = document.querySelectorAll('.rating input');
     const labels = document.querySelectorAll('.rating label');
+    const storeNo = document.querySelector('#storeStoreNo').value;
+
+    closeButton.onclick = function() {
+        const referrer = document.referrer;
+        if (referrer.includes('mypage')) {
+            location.href = '/mypage';
+        } else {
+             location.href = '/store/' + storeNo;
+        }
+    };
 	
     const checkedRadio = document.querySelector('.rating input:checked');
     if (checkedRadio) {

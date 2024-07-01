@@ -2,8 +2,10 @@ package org.omsf.store.model;
 
 import java.sql.Timestamp;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -11,6 +13,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Menu {
 	private int menuNo;
 	private String menuName;
@@ -20,16 +24,4 @@ public class Menu {
 	
 	private int storeNo;
 	
-	public Menu(int menuNo, String menuName, long price,
-			Timestamp createdAt, Timestamp modifiedAt, int storeNo) {
-		this.menuNo = menuNo;
-        this.menuName = menuName;
-        this.price = price;
-        this.createdAt = createdAt;
-        this.modifiedAt = modifiedAt;
-        this.storeNo = storeNo;
-    }
-	public Menu() {
-		
-	}
 }

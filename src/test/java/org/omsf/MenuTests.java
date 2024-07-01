@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.omsf.error.Exception.CustomBaseException;
 import org.omsf.store.dao.StoreRepository;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Store;
@@ -115,7 +115,7 @@ public class MenuTests {
 	@Test
 	public void deleteMenuTest() {
 		menuService.deleteMenu(menuNo);
-		assertThrows(NoSuchElementException.class, () -> {
+		assertThrows(CustomBaseException.class, () -> {
 			menuService.getMenuByMenuNo(menuNo);
 	    });
 	}
