@@ -105,7 +105,6 @@
 		FIRST 10 ROWS ONLY
 	</select>
 	
-
 	<!-- yunbin -->
 	<select id="getReviewsByUsername" resultType="org.omsf.review.model.Review">
 		SELECT
@@ -128,5 +127,4 @@
 		FROM REVIEW
 		WHERE STORE_STORENO = #{storeNo} AND MEMBER_USERNAME = #{memberUsername}
 	</select>
-	
 </mapper>

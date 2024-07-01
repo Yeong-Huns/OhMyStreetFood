@@ -322,7 +322,10 @@ public class StoreController {
     		@PathVariable int photoNo, @RequestParam(value= "photo", required = true) ArrayList<MultipartFile> photo,
     		Principal principal) throws IOException {
         String username = principal.getName();
-        Photo storePhoto = storeService.getPhotoByPhotoNo(photoNo);
+        Photo storePhoto = null;
+        if (photoNo != 0) {	
+        	storePhoto = storeService.getPhotoByPhotoNo(photoNo);
+        }
         Store store = storeService.getStoreByNo(storeNo);
         String memberType = null;
         
