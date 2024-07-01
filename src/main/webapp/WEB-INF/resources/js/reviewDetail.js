@@ -8,7 +8,7 @@
 //};
 
 document.addEventListener('DOMContentLoaded', function() {
-    const closeButton = document.querySelector('.close-button');
+    const closeButton = document.querySelector('.review-close-button');
     const ratingInputs = document.querySelectorAll('.rating input');
     const labels = document.querySelectorAll('.rating label');
     const storeNo = document.querySelector('#storeStoreNo').value;
