@@ -12,6 +12,10 @@
 	<http auto-config="true">
 		<csrf disabled="true"/>
     	<intercept-url pattern="/secure/**" access="authenticated" />
+    	<intercept-url pattern="/chat/**" access="authenticated" />
+    	<intercept-url pattern="/mypage" access="authenticated" />
+    	<intercept-url pattern="/store/report/**" access="authenticated" />
+    	<intercept-url pattern="/js/modal.js" access="authenticated" />
 	    <intercept-url pattern="/**" access="permitAll" />
 	    
 	    <form-login

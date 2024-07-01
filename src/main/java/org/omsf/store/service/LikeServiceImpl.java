@@ -1,5 +1,7 @@
 package org.omsf.store.service;
 
+import java.util.List;
+
 import org.omsf.store.dao.LikeRepository;
 import org.omsf.store.model.Like;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,12 @@ public class LikeServiceImpl implements LikeService {
 	@Override
 	public Integer isLike(Like like) {
 		return likeRepository.isLike(like);
+	}
+
+	// yunbin
+	@Override
+	public List<Like> getLikesByUsername(String username) {
+		return likeRepository.getLikesByUsername(username);
 	}
 
 }

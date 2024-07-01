@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -55,6 +56,7 @@ public class StoreController {
 	private final MenuService menuService;
 	private final MemberService<Member> memberService;
 	private final ReviewService reviewService;
+	private final MemberService<Member> memberService;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private final LikeService likeService;
@@ -119,6 +121,19 @@ public class StoreController {
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menu);
 		model.addAttribute("reviews", review);
+		
+		// yunbin
+		if (store.getUsername() != null) {
+			Optional<Member> _member = memberService.findByUsername(store.getUsername());
+			
+			if(_member.isPresent()) {
+				Member member = _member.get();
+				if(member.getMemberType().equals("owner"))
+					model.addAttribute("isOwner", true);
+				else
+					model.addAttribute("isOwner", false);
+			}
+		}
 		
 		return "store/showStore";
 	}

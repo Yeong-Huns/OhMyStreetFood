@@ -35,44 +35,53 @@
 </head>
 <body>
 	<div class="main">
-
-		<div id="back" style="padding: 20px 0;">
-			<a href="${pageContext.request.contextPath}/store/list" style="text-decoration: none; color: inherit;"> 
-				<i class="fas fa-arrow-left"></i>
-			</a>
-		</div>
-		
-		<span style="display: flex; flex-direction: row; justify-content: space-between;">
-               <span><i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong></span>
-      			<span><a href="#" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo})','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
-       	</span>
-       	
-	    <div class="card" style="width: 100%; height: auto; border: none;">
-	        <div class="row g-0">
-	            <div class="col-md-3" style="padding: 0 20px;">
-	           		 <c:choose>
-				        <c:when test="${storePhoto.picture != null}">
-				            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
-				        </c:when>
-				        <c:otherwise>
-				            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
-				        </c:otherwise>
-				    </c:choose>
-	            </div>
-	            <div class="col-md-9 card-body" style="padding: 0 20px;">
-	                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
-		                    <span><h5 class="card-title">${store.storeName}</h5></span>
-		                    <sec:authorize access="isAuthenticated()">
-		                    <span><i id="like-btn" class="far fa-heart"></i></span>
-		                    </sec:authorize>
-	                    </span>
-	                    <p class="card-text">${store.introduce}</p>
-	                    <p class="card-text">
-	                		리뷰 <span id="now-review">${store.totalReview}</span>
-	                		평점 <span id="now-rating">${store.totalRating}</span>
-	                		찜 <span id="now-like">${store.likes}</span>
-		            		<p>
-		            		<small class="text-muted">
+		<div class="row">
+			<div id="back">
+				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
+					<i class="fas fa-arrow-left"></i>
+				</a>
+			</div>
+			
+			<span style="display: flex; flex-direction: row; justify-content: space-between;">
+                
+                <c:if test="${isOwner eq true }">
+                	<span>
+                		<i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
+                	</span>
+                	<sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
+                		<span><a href="${pageContext.request.contextPath}/chat" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
+                	</sec:authorize>
+                </c:if>
+        	</span>
+        	
+		    <div class="card" style="width: 100%; height: auto; border: none;">
+		        <div class="row g-0">
+		            <div class="col-md-3" style="padding: 0 20px;">
+		           		 <c:choose>
+					        <c:when test="${storePhoto.picture != null}">
+					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+					        </c:when>
+					        <c:otherwise>
+					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+					        </c:otherwise>
+					    </c:choose>
+		            </div>
+		            <div class="col-md-9 card-body" style="padding: 0 20px;">
+		                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
+			                    <span><h5 class="card-title">${store.storeName}</h5></span>
+			                    <sec:authorize access="hasRole('ROLE_USER')">
+			                    	<span><i class="like-btn far fa-heart" data-store-no="${store.storeNo }"></i></span>
+									<!-- <i class="fas fa-heart"></i> -->
+								</sec:authorize>
+		                    </span>
+		                    <p class="card-text">${store.introduce}</p>
+		                    <p class="card-text">
+			                		리뷰 <span id="now-review">${store.totalReview}</span>
+			                		평점 <span id="now-rating">${store.totalRating}</span>
+			                		찜 <span id="now-like">${store.likes}</span>
+			                		<div id="fireworks-container"></div>
+			                </p>
+		            		<span><small class="text-muted">
 		            			업데이트
 		            		 	<c:choose>
 							        <c:when test="${store.modifiedAt != null}">
@@ -149,7 +158,44 @@
 				    </span>
 				</span>
 			
+/////////
+			<div>
+		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
+                  <span><h5><spring:message code="review.info" /></h5></span>
+                  <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
+                  	<button id="openModalBtn"><spring:message code="review.write" /></button>
+                  </sec:authorize>
+                 </span>
+                 
+				<c:if test="${!empty reviews}">
+					<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+					    <span style="padding: 20px">
+					    	<c:forEach begin="1" end="${store.totalRating}">
+					    		<i class="fas fa-star" style="color:#f5b301;"></i>
+					    	</c:forEach>
+						    <c:if test="${5 - store.totalRating >= 1}">
+						    	<c:forEach begin="1" end="${6 - store.totalRating >= 5 ? 5 : 6 - store.totalRating}">
+					    			<i class="fas fa-star"></i>
+					    		</c:forEach>
+						    </c:if>
+					    </span>
+					</span>
+				
+					<c:forEach items="${reviews}" var="review">
+						<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+					    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
+						    	<span>${review.memberUsername}</span>
+						    	<span>${review.createdAt}</span>
+						    </span>
+							<span>${review.content}</span>
+						</div>			    
+					</c:forEach>
+				</c:if>
+				
+				<c:if test="${empty reviews}">
+///////
 				<c:forEach items="${reviews}" var="review">
+//////
 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
 					    	<span>${review.memberUsername}</span>
