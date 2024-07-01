@@ -8,6 +8,8 @@ import org.omsf.report.model.Report;
 import org.omsf.report.service.LogStoreService;
 import org.omsf.report.service.ReportService;
 import org.omsf.store.service.StoreService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
@@ -89,6 +92,18 @@ public class ReportController {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+	
+	@ResponseBody
+	@GetMapping("/store/log/{storeId}/api")
+	public ResponseEntity<?> getLogNextPage(@PathVariable("storeId") int storeId, 
+			@RequestParam(value = "page", defaultValue = "2") int page){
+		log.info("ajax로 로그 정보 호출");
+		List<Map<String, Object>> list = logStoreService.getLogListJSONByStoreNo(storeId, page);
+		log.info("로그 api 결과 정보 : {}",list.toString());
+		if(list.size() < 1) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(list);
 	}
 	
 	

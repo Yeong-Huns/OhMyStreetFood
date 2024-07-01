@@ -8,4 +8,6 @@ public interface LogStoreService {
 
 	List<Map<String, Object>> getLogListByStoreNo(int storeNo);
 	void updateStore(int logId);
+	
+	List<Map<String, Object>> getLogListJSONByStoreNo(int storeNo, int page);
 }

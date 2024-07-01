@@ -2,15 +2,18 @@ package org.omsf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.omsf.error.Exception.CustomBaseException;
 import org.omsf.store.dao.StoreRepository;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
@@ -20,7 +23,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
 @WebAppConfiguration
@@ -33,8 +40,17 @@ public class StoreTests {
 	StoreService storeService;
 	@Autowired
 	StoreRepository storeRepository;
-	
+	@Autowired
+    private WebApplicationContext wac;
+	private MockMvc mockMvc;
 	private int storeNo; 
+	
+	@BeforeEach
+    public void mock() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac)
+        							.apply(springSecurity())
+        								.build();
+    }
 	
     @BeforeEach
     public void setup() {
@@ -88,7 +104,7 @@ public class StoreTests {
 	public void deleteTest() {
 		storeService.deleteStore(storeNo);
 		//Exception class
-		assertThrows(NoSuchElementException.class, () -> {
+		assertThrows(CustomBaseException.class, () -> {
 		        storeService.getStoreByNo(storeNo);
 		    });
 	}
@@ -107,4 +123,12 @@ public class StoreTests {
 		}
 	}
 	
+	@Test
+	public void storeListPageTest() throws Exception {
+		 MvcResult result = mockMvc.perform(get("/store/" + storeNo))
+				 .andExpect(status().isOk())
+				 .andReturn();
+		 String content = result.getResponse().getContentAsString();
+		 
+	}
 }

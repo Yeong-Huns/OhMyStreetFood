@@ -86,10 +86,10 @@ function saveLatitudeAndLongitude(latitude, longitude){
 	// 서버로부터 데이터를 받아와서 positions 배열을 업데이트
 	async function fetchPositionsByAddress(address) {
 		console.log(address);
-		showSpinner(); // 스피너 표시
-		setTimeout(async () => { // 3초 지연
+//		showSpinner(); // 스피너 표시
+//		setTimeout(async () => { // 3초 지연
 			try {
-				const response = await fetch('/store/api?' + address);
+				const response = await fetch('/store/api?position=' + address);
 				const data = await response.json();
 				positions = data; // 서버로부터 받은 데이터로 positions 업데이트
 				console.log(data);
@@ -97,9 +97,9 @@ function saveLatitudeAndLongitude(latitude, longitude){
 			} catch (error) {
 				console.error('Error fetching positions:', error);
 			} finally {
-				hideSpinner(); // 스피너 숨김
+//				hideSpinner(); // 스피너 숨김
 			}
-		}, 1500);
+//		}, 1500);
 	}
 
 	// 마커 렌더링
@@ -110,7 +110,7 @@ function saveLatitudeAndLongitude(latitude, longitude){
 			for (var i = 0; i < positions.length; i++) {
 				var marker = new kakao.maps.Marker({
 					map: map,
-					position: new kakao.maps.LatLng(positions[i].longitude, positions[i].latitude),
+					position: new kakao.maps.LatLng(positions[i].latitude, positions[i].longitude),
 					title: positions[i].storeName,
 					image: new kakao.maps.MarkerImage(imageSrc, new kakao.maps.Size(24, 35))
 				});
@@ -126,7 +126,7 @@ function saveLatitudeAndLongitude(latitude, longitude){
 		renderingMarker();
 	});
 
-	function searchDetailAddrFromCoords(coords, callback) {
+	async function searchDetailAddrFromCoords(coords, callback) {
 		var geocoder = new kakao.maps.services.Geocoder();
 		geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
 	}
@@ -136,16 +136,11 @@ function saveLatitudeAndLongitude(latitude, longitude){
 		if (status === kakao.maps.services.Status.OK) {
 
 			var detailAddr = result[0].address.address_name;
-//			console.log("위도 : " + map.getCenter().getLng().toString());
-//			console.log("경도 : " + map.getCenter().getLat().toString());
-//			address = {
-//				longitude: map.getCenter().getLng().toString(),
-//				latitude: map.getCenter().getLat().toString()
-//			};
-//			const queryStr = new URLSearchParams(address).toString();
-//			console.log(queryStr);
-//			fetchPositionsByAddress(queryStr); // 주소를 사용하여 서버에 요청
-			fetchPositionsByAddress(detailAddr);
+			showSpinner(); // 스피너 표시
+			setTimeout(async () => { // 1.5초 지연
+				await fetchPositionsByAddress(detailAddr);
+				hideSpinner(); // 스피너 숨김
+			},1500);
 		}
 	});
 	
@@ -162,5 +157,6 @@ function saveLatitudeAndLongitude(latitude, longitude){
             }   
         });
     });
+	
 
 })();

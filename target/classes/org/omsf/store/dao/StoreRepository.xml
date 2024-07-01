@@ -146,7 +146,7 @@
 	</update>
 	<update id="updatePhoto">
 	    UPDATE PHOTO
-	    SET PHOTONO = #{photoNo},
+	    SET 
 	        contentType = #{contentType},
 	        fileSize = #{fileSize},
 	        picture = #{picture},
