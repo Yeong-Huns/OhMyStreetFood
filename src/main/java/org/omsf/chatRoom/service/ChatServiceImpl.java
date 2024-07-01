@@ -55,11 +55,12 @@ public class ChatServiceImpl implements ChatService{
                 .orElseThrow(()->new CustomBaseException(ErrorCode.NOT_ALLOWED_REQUEST));
     }
 
-
-
-
-
-
+    //4. 구독주소로 chatRoomNo
+    @Override
+    public long getChatRoomNoBySubscription(String customer, long storeNo) {
+        return chatRepository.getChatRoomNoBySubscription(customer, storeNo)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_STORENO));
+    }
 
     @Override
     public List<ChatRoomVO> findSubListByAddress(String address) {

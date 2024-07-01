@@ -2,6 +2,7 @@ package org.omsf.chatRoom.service;
 
 import org.apache.ibatis.annotations.Param;
 import org.omsf.chatRoom.controller.StompHandler;
+import org.omsf.chatRoom.model.MessageResponse;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.model.MessageWithOwnerResponse;
 
@@ -25,9 +26,13 @@ public interface MessageService {
     //2. 수신처리
     void updateMessageStatus(long messageNo);
     //3. 메세지 저장
-    void handleSendMessage(StompHandler.SendRequest request);
-    //4. chatRoomNo로 모든 Message 조회
+    MessageResponse handleSendMessage(MessageVO messageVo);
+    //4. PK 로 메세지 찾기
+    MessageVO getMessageById(long messageNo);
+    //5. chatRoomNo로 모든 Message 조회
     List<MessageVO> findAllMessageByChatRoomNo(long chatRoomNo);
+    //6.
+
 
 
     List<MessageWithOwnerResponse> findAllByChatRoomNo(long chatRoomNo);

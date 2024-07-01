@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.omsf.chatRoom.controller.StompHandler;
 import org.omsf.chatRoom.dao.ChatRepository;
 import org.omsf.chatRoom.dao.MessageRepository;
+import org.omsf.chatRoom.model.MessageResponse;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.model.MessageWithOwnerResponse;
 import org.omsf.error.Exception.ErrorCode;
@@ -51,10 +52,18 @@ public class MessageServiceImpl implements MessageService {
 
     //3. 저장
     @Override
-    public void handleSendMessage(StompHandler.SendRequest request) {
-        messageRepository.save(request);
+    public MessageResponse handleSendMessage(MessageVO messageVo) {
+        messageRepository.saveMessage(messageVo);
+        String subscription = chatRepository.getSubscriptionByChatRoomNo(messageVo.getChatRoomNo())
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_ALLOWED_REQUEST));
+        return MessageResponse.of(messageVo, subscription); //정적 팩토리 메서드
     }
 
+    //4. PK로 찾기
+    @Override
+    public MessageVO getMessageById(long messageNo) {
+        return null;
+    }
     //4. chatRoomNo로 모든 Message 조회
     @Override
     public List<MessageVO> findAllMessageByChatRoomNo(long chatRoomNo) {

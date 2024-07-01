@@ -38,7 +38,8 @@ public interface ChatRepository {
     //3. chatRoomNo 로 Subscription 가져오기
     Optional<String> getSubscriptionByChatRoomNo(@Param("chatRoomNo") long chatRoomNo);
 
-    //4.
+    //4.Subscription 으로 chatRoomNo 가져오기
+    Optional<Long> getChatRoomNoBySubscription(@Param("customer") String customer, @Param("storeNo") long storeNo);
 
     List<ChatRoomVO> findSubListByAddress(@Param("address") String address);
     List<Integer> findStoreListByAddress(@Param("address") String address);
