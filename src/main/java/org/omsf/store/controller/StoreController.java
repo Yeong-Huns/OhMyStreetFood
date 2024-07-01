@@ -56,7 +56,6 @@ public class StoreController {
 	private final MenuService menuService;
 	private final MemberService<Member> memberService;
 	private final ReviewService reviewService;
-	private final MemberService<Member> memberService;
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private final LikeService likeService;

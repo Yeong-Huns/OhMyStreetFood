@@ -141,9 +141,11 @@
 		
 		<div id="reviewContainer">
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                 <span><h5><spring:message code="review.info" /></h5></span>
-                 <button id="openModalBtn"><spring:message code="review.write" /></button>
-                </span>
+                  <span><h5><spring:message code="review.info" /></h5></span>
+                  <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
+                  	<button id="openModalBtn"><spring:message code="review.write" /></button>
+                  </sec:authorize>
+                 </span>
                 
 			<c:if test="${!empty reviews}">
 				<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
@@ -159,44 +161,7 @@
 				    </span>
 				</span>
 			
-/////////
-			<div>
-		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                  <span><h5><spring:message code="review.info" /></h5></span>
-                  <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
-                  	<button id="openModalBtn"><spring:message code="review.write" /></button>
-                  </sec:authorize>
-                 </span>
-                 
-				<c:if test="${!empty reviews}">
-					<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-					    <span style="padding: 20px">
-					    	<c:forEach begin="1" end="${store.totalRating}">
-					    		<i class="fas fa-star" style="color:#f5b301;"></i>
-					    	</c:forEach>
-						    <c:if test="${5 - store.totalRating >= 1}">
-						    	<c:forEach begin="1" end="${6 - store.totalRating >= 5 ? 5 : 6 - store.totalRating}">
-					    			<i class="fas fa-star"></i>
-					    		</c:forEach>
-						    </c:if>
-					    </span>
-					</span>
-				
-					<c:forEach items="${reviews}" var="review">
-						<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-					    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-						    	<span>${review.memberUsername}</span>
-						    	<span>${review.createdAt}</span>
-						    </span>
-							<span>${review.content}</span>
-						</div>			    
-					</c:forEach>
-				</c:if>
-				
-				<c:if test="${empty reviews}">
-///////
 				<c:forEach items="${reviews}" var="review">
-//////
 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
 					    	<span>${review.memberUsername}</span>
@@ -214,6 +179,60 @@
 				    </span>
 				</div>	
 			</c:if>
+			<div>
+<!-- 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;"> -->
+<%--                   <span><h5><spring:message code="review.info" /></h5></span> --%>
+<%--                   <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')"> --%>
+<%--                   	<button id="openModalBtn"><spring:message code="review.write" /></button> --%>
+<%--                   </sec:authorize> --%>
+<!--                  </span> -->
+                 
+<%-- 				<c:if test="${!empty reviews}"> --%>
+<!-- 					<span style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
+<!-- 					    <span style="padding: 20px"> -->
+<%-- 					    	<c:forEach begin="1" end="${store.totalRating}"> --%>
+<!-- 					    		<i class="fas fa-star" style="color:#f5b301;"></i> -->
+<%-- 					    	</c:forEach> --%>
+<%-- 						    <c:if test="${5 - store.totalRating >= 1}"> --%>
+<%-- 						    	<c:forEach begin="1" end="${6 - store.totalRating >= 5 ? 5 : 6 - store.totalRating}"> --%>
+<!-- 					    			<i class="fas fa-star"></i> -->
+<%-- 					    		</c:forEach> --%>
+<%-- 						    </c:if> --%>
+<!-- 					    </span> -->
+<!-- 					</span> -->
+				
+<%-- 					<c:forEach items="${reviews}" var="review"> --%>
+<!-- 						<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
+<!-- 					    	<span style="display: flex; flex-direction: row; justify-content: space-between;"> -->
+<%-- 						    	<span>${review.memberUsername}</span> --%>
+<%-- 						    	<span>${review.createdAt}</span> --%>
+<!-- 						    </span> -->
+<%-- 							<span>${review.content}</span> --%>
+<!-- 						</div>			     -->
+<%-- 					</c:forEach> --%>
+<%-- 				</c:if> --%>
+				
+<%-- 				<c:if test="${empty reviews}"> --%>
+
+<%-- 				<c:forEach items="${reviews}" var="review"> --%>
+
+<!-- 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
+<!-- 				    	<span style="display: flex; flex-direction: row; justify-content: space-between;"> -->
+<%-- 					    	<span>${review.memberUsername}</span> --%>
+<%-- 					    	<span>${review.createdAt}</span> --%>
+<!-- 					    </span> -->
+<%-- 						<span><a href="<c:url value="/review/${review.reviewNo}" />">${review.content}</a></span> --%>
+<!-- 					</div>			     -->
+<%-- 				</c:forEach> --%>
+<%-- 			</c:if> --%>
+			
+<%-- 			<c:if test="${empty reviews}"> --%>
+<!-- 				<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
+<!-- 			    	<span style="display: flex; flex-direction: row; justify-content: space-between;"> -->
+<%-- 				    	<span><spring:message code="review.nothing" /></span> --%>
+<!-- 				    </span> -->
+<!-- 				</div>	 -->
+<%-- 			</c:if> --%>
 
 			<div class="col-md-12 text-center">
 <%-- 				<c:if test="${store.totalReview > 5}"> --%>

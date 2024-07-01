@@ -61,6 +61,7 @@ public class ReviewServiceImpl implements ReviewService {
 	@Override
 	public List<Review> getReviewsByUsername(String username) {
 		return reviewDao.getReviewsByUsername(username);
+	}
 
 	@Override
 	public int isWriter(int storeNo, String memberUsername) {
