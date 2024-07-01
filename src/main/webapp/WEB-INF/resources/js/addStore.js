@@ -4,6 +4,7 @@ import {addMenuInputForm, menuForm, storeForm} from './storeForm.js'
 // 메뉴 추가
 $(document).ready(function() {
 	addMenuInputForm();
+	imagePreview();
 	document.getElementById('storeForm').addEventListener('submit', function(event) {
 	    event.preventDefault();
 	    createStore();
@@ -41,4 +42,29 @@ function pictureForm(formData) {
     if (pictureInput.files.length > 0) {
         formData.append('photo', pictureInput.files[0]);
     }
+}
+
+function imagePreview() {
+	const photoBtn = document.getElementById("photoBtn");
+    const input = document.getElementById("picture");
+	
+	 photoBtn.addEventListener("click", function () {
+                input.click();
+     });
+	
+	input.addEventListener('change', function(event) {
+	    const file = event.target.files[0];
+	    const previewImg = document.getElementById('previewImg');
+	    if (file) {
+	        const reader = new FileReader();
+	        reader.onload = function(e) {
+	            previewImg.src = e.target.result;
+	            previewImg.style.display = 'block';
+	        }
+	        reader.readAsDataURL(file);
+	    } else {
+	        previewImg.src = '';
+	        previewImg.style.display = 'none';
+	    }
+	});
 }
