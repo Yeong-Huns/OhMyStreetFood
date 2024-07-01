@@ -218,6 +218,18 @@ public class MemberController { // yunbin
 			reviewStores.add(storeService.getStoreByNo(review.getStoreStoreNo()));
 		}
 		model.addAttribute("reviewStores", reviewStores);
+		
+		// 사용자 정보 전달
+		for (String authority : currentUserAuthority()) {
+			if (authority.equals("ROLE_USER")) {
+				Optional<GeneralMember> _member = generalMemberService.findByUsername(principal.getName());
+
+				if (_member.isPresent()) {
+					GeneralMember member = _member.get();
+					model.addAttribute("member", member);
+				}
+			}
+		}
 
 		return "member/mypage";
 	}
@@ -237,11 +249,6 @@ public class MemberController { // yunbin
 		return "redirect:/signin";
 	}
 
-	@GetMapping("/modifyMember")
-	public String showConfirmPasswordPage() {
-		return "member/confirmPassword";
-	}
-
 	@PostMapping("/confirmPassword")
 	@ResponseBody
 	public boolean confirmPassword(Principal principal, String password, Model model) {
@@ -254,7 +261,7 @@ public class MemberController { // yunbin
 		return false;
 	}
 
-	@GetMapping("/modifyMemberForm")
+	@GetMapping("/modifyMember")
 	public String showModifyMemberFormPage(Model model, Principal principal) {
 
 		for (String authority : currentUserAuthority()) {
@@ -348,11 +355,9 @@ public class MemberController { // yunbin
 	    }
 	}
 
-	
+	// 현재 사용자 권한 가져옴
 	private List<String> currentUserAuthority() {
-		// 현재 인증 정보를 가져옴
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		// 사용자 권한(역할) 가져오기
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
 		List<String> authorityList = authorities.stream().map(GrantedAuthority::getAuthority)

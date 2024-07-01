@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (referrer.includes('mypage')) {
             location.href = '/mypage';
         } else {
-            location.href = '/review/list/' + storeNo;
+             location.href = '/store/' + storeNo;
         }
     };
 	

@@ -33,20 +33,23 @@
 						<i class="fas fa-store"></i><br>점포
 					</a>
 				</li>
-				<sec:authorize access="isAnonymous()">
-					<li class="nav-item">
+				<li class="nav-item">
+					<sec:authorize access="isAnonymous()">
 						<a class="nav-link" href="${pageContext.request.contextPath}/signin">
 							<i class="fas fa-user"></i><br>로그인
 						</a>
-					</li>
-				</sec:authorize>
-				<sec:authorize access="isAuthenticated()">
-					<li class="nav-item">
+					</sec:authorize>
+					<sec:authorize access="hasRole('ROLE_OWNER') or hasRole('ROLE_USER')">
 						<a class="nav-link" href="${pageContext.request.contextPath}/mypage">
 							<i class="fas fa-user"></i><br>마이페이지
 						</a>
-					</li>
-				</sec:authorize>
+					</sec:authorize>
+					<sec:authorize access="hasRole('ROLE_ADMIN')">
+						<a class="nav-link" href="${pageContext.request.contextPath}/admin">
+							<i class="fas fa-user"></i><br>관리자 페이지
+						</a>
+					</sec:authorize>
+				</li>
 			</ul>
 		</div>
 	</nav>

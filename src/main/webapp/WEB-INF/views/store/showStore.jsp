@@ -68,41 +68,56 @@
 					    </c:choose>
 		            </div>
 		            <div class="col-md-9 card-body" style="padding: 0 20px;">
-		                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
-			                    <span><h5 class="card-title">${store.storeName}</h5></span>
-			                    <sec:authorize access="hasRole('ROLE_USER')">
-			                    	<span><i class="like-btn far fa-heart" data-store-no="${store.storeNo }"></i></span>
-									<!-- <i class="fas fa-heart"></i> -->
-								</sec:authorize>
-		                    </span>
-		                    <p class="card-text">${store.introduce}</p>
-		                    <p class="card-text">
-			                		리뷰 <span id="now-review">${store.totalReview}</span>
-			                		평점 <span id="now-rating">${store.totalRating}</span>
-			                		찜 <span id="now-like">${store.likes}</span>
-			                		<div id="fireworks-container"></div>
-			                </p>
-		            		<span><small class="text-muted">
-		            			업데이트
-		            		 	<c:choose>
-							        <c:when test="${store.modifiedAt != null}">
-							            ${store.modifiedAt}
-							        </c:when>
-							        <c:otherwise>
-							            ${store.createdAt}
-							        </c:otherwise>
-							    </c:choose>
-		            		 </small>
-		            		 </p>
+	                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
+		                    <span><h5 class="card-title">${store.storeName}</h5></span>
+		                   
+		                    	<span>
+		                    		<sec:authorize access="hasRole('ROLE_USER')">
+		                    			<i class="like-btn far fa-heart" data-store-no="${store.storeNo }"></i>
+		                    			<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고</a>
+		                    		</sec:authorize>
+		                    		<sec:authorize access="isAnonymous()">	
+		                    			<a href="javascript:void(0);" onclick="showLoginAlert()">신고</a>
+		                    		</sec:authorize>
+		                    	</span>
+	                    </span>
+	                    <p class="card-text">${store.introduce}</p>
+	                    <p class="card-text">
+		                		리뷰 <span id="now-review">${store.totalReview}</span>
+		                		평점 <span id="now-rating">${store.totalRating}</span>
+		                		찜 <span id="now-like">${store.likes}</span>
+		                		<div id="fireworks-container"></div>
 		                </p>
-	            </div>
-	        </div>
-	    </div>
+	            		<span><small class="text-muted">
+	            			업데이트
+	            		 	<c:choose>
+						        <c:when test="${store.modifiedAt != null}">
+						            ${store.modifiedAt}
+						        </c:when>
+						        <c:otherwise>
+						            ${store.createdAt}
+						        </c:otherwise>
+						    </c:choose>
+	            		 </small></span>
+	            		 
+	            	</div>
+	        	</div>
+	    	</div>
 	    
 	    <div>
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                  <span><h5>가게 정보</h5></span>
-                 <span><a href="${pageContext.request.contextPath}/store/${store.storeNo}/update">정보 수정</a></span>
+                 <sec:authorize access="isAuthenticated()">
+	                 <sec:authentication property="principal.username" var="currentUsername"/>
+	                 <c:if test="${isOwner eq false || owner.username eq currentUsername}">
+	                 	<span><a href="${pageContext.request.contextPath}/store/${store.storeNo}/update">정보 수정</a></span>
+	                 </c:if>
+                 </sec:authorize>
+                 <sec:authorize access="isAnonymous()">
+                 	<c:if test="${isOwner eq false }">
+                 		<span><a href="javascript:void(0);" onclick="showLoginAlert()">정보 수정</a></span>
+                 	</c:if>
+				</sec:authorize>
             </span>
             
             <!-- KAKAO MAP API -->
@@ -142,8 +157,11 @@
 		<div id="reviewContainer">
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                   <span><h5><spring:message code="review.info" /></h5></span>
-                  <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
-                  	<button id="openModalBtn"><spring:message code="review.write" /></button>
+                  <sec:authorize access="hasRole('ROLE_USER')">
+                  	<button id="openModalBtn" class="btn btn-primary"><spring:message code="review.write" /></button>
+                  </sec:authorize>
+                  <sec:authorize access="isAnonymous()">
+                  	<button onclick="showLoginAlert()" class="btn btn-primary"><spring:message code="review.write" /></button>
                   </sec:authorize>
                  </span>
                 
@@ -164,10 +182,22 @@
 				<c:forEach items="${reviews}" var="review">
 					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-					    	<span>${review.memberUsername}</span>
+				    		<c:choose>
+				    			<c:when test="${not empty review.memberUsername}">
+				    				<span><strong>${review.memberUsername}</strong></span>
+				    			</c:when>
+				    			<c:otherwise>
+				    				<span><strong>(탈퇴한 회원의 리뷰입니다)</strong></span>
+				    			</c:otherwise>
+				    		</c:choose>
 					    	<span>${review.createdAt}</span>
 					    </span>
-						<span><a href="<c:url value="/review/${review.reviewNo}" />">${review.content}</a></span>
+						<sec:authorize access="${not empty review.memberUsername and review.memberUsername eq principal.username}">
+			                <a href="<c:url value='/review/${review.reviewNo}'/>">${review.content}</a>
+			            </sec:authorize>
+			            <c:if test="${empty review.memberUsername or review.memberUsername ne principal.username }">
+			                ${review.content}
+			            </c:if>
 					</div>			    
 				</c:forEach>
 			</c:if>
@@ -234,14 +264,13 @@
 <!-- 				</div>	 -->
 <%-- 			</c:if> --%>
 
-			<div class="col-md-12 text-center">
+<!-- 			<div class="col-md-12 text-center"> -->
 <%-- 				<c:if test="${store.totalReview > 5}"> --%>
 <%-- 					<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}"> --%>
 <%-- 						<spring:message code="review.more" /> --%>
 <!-- 					</a> -->
 <%-- 				</c:if> --%>
-				<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
-			</div>
+<!-- 			</div> -->
 			
 			<div id="spinner" class="spinner"></div>
 	    </div>
@@ -422,6 +451,11 @@
 	    window.addEventListener('scroll', handleScroll);
 
 	});
+	</script>
+	<script>
+    function showLoginAlert() {
+	    alert('로그인이 필요합니다.');
+	}
 	</script>
 </body>
 </html>

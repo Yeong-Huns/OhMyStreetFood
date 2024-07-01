@@ -93,7 +93,6 @@ public class StoreController {
         return ResponseEntity.ok("");
 	}
 	
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/{storeNo}")
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
 		Store store = storeService.getStoreByNo(storeNo);
@@ -128,8 +127,10 @@ public class StoreController {
 			
 			if(_member.isPresent()) {
 				Member member = _member.get();
-				if(member.getMemberType().equals("owner"))
+				if(member.getMemberType().equals("owner")) {
 					model.addAttribute("isOwner", true);
+					model.addAttribute("owner", member);
+				}
 				else
 					model.addAttribute("isOwner", false);
 			}
@@ -146,7 +147,7 @@ public class StoreController {
     	
     	if (store.getUsername() != null) {	
     		Member member = (Member) memberService.findByUsername(store.getUsername()).get();
-    		if (member.getMemberType().equals("owner")  && (store.getUsername() != username)) {
+    		if (member.getMemberType().equals("owner") && (!store.getUsername().equals(username))) {
     			return "redirect:/error";
     		}
     	}
@@ -163,6 +164,7 @@ public class StoreController {
         return "store/updateStore"; 
     }
 	
+    @PreAuthorize("isAuthenticated()")
     @ResponseBody
     @PostMapping("/{storeNo}")
     @Transactional
@@ -283,6 +285,7 @@ public class StoreController {
 		return storeService.getStoresByPosition(position);
 	}	
 	
+	@PreAuthorize("isAuthenticated()")
 	@ResponseBody
     @DeleteMapping("/{storeNo}/{photoNo}")
     public ResponseEntity<?> deleteStoreGallery(@PathVariable int storeNo,
@@ -311,10 +314,7 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("사진을 삭제하였습니다.");
     }
 	
-	
-	
-	
-	
+	@PreAuthorize("isAuthenticated()")
 	@PutMapping("/{storeNo}/{photoNo}")
 	@ResponseBody
 	@Transactional
@@ -355,7 +355,8 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(newPhotoNo);
     }
 	
- @PostMapping("/{storeNo}/upload-photo")
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping("/{storeNo}/upload-photo")
     public ResponseEntity<Photo> uploadStorePicture(@PathVariable int storeNo, @RequestParam("photo") ArrayList<MultipartFile> photos,
     		Principal principal) throws IOException {
         	
@@ -380,6 +381,7 @@ public class StoreController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@DeleteMapping("like/delete")
 	public ResponseEntity<?> deleteLike(Principal principal, @RequestBody Like like) {

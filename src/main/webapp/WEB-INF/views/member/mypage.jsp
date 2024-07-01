@@ -19,7 +19,37 @@
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
+<script>
+    $(document).ready(function() {
+        $("#confirmPasswordBtn").click(function() {
+            var password = $("#password").val();
+
+            $.ajax({
+                type: "POST",
+                url: "./confirmPassword",
+                data: {
+                    password: password
+                },
+                success: function(result) {
+                    if (result === true) {
+                        window.location.href = "./modifyMember" ;
+                    } else {
+                        $("#confirmPasswordAlert").text("비밀번호가 일치하지 않습니다.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                	$("#confirmPasswordAlert").text("서버 오류입니다. 다시 시도해 주세요.");
+                }
+            });
+        });
+        $("#password").on("input", function() {
+            $("#confirmPasswordAlert").text("");
+        });
+    });
+</script>
 </head>
 <body>
 	<div class="main">
@@ -34,21 +64,16 @@
 			</div>
 			
 			<div align="center" style="margin-bottom: 20px;">
-				<img src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
-				<p style="margin-top: 20px;">
-
-					<sec:authorize access="isAuthenticated()">
-						<sec:authentication property="principal.username"/> <br>
-						<input type="hidden" id="memberUsername" value="${username }">
-						<sec:authorize access="hasRole('ROLE_OWNER')">OWNER</sec:authorize>
-						<sec:authorize access="hasRole('ROLE_USER')">USER</sec:authorize>
-					</sec:authorize>
-					<sec:authorize access="isAnonymous()">
-						Anonymous User
-					</sec:authorize>
-
-					<a href="#">사진 수정</a>
-				</p>
+				<sec:authentication property="principal.username" var="username"/> <br>
+				<input type="hidden" id="memberUsername" value="${username }">
+				<sec:authorize access="hasRole('ROLE_OWNER')">${username }</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_USER')">
+					${member.nickName } <br>
+					${username } 	
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					관리자 계정입니다.
+				</sec:authorize>
 			</div>
 			
 			<div style="width:100%;">
@@ -60,32 +85,34 @@
 				</c:forEach>
 			</div>
 			
-			<div style="width:100%;">
-				<i class="fas fa-heart"></i>&nbsp;<strong>내가 찜한 가게</strong>
-			</div>
-			<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-				<c:forEach items="${likeStores}" var="store" varStatus="status">
-					<span><i class="like-btn far fa-heart" data-store-no="${store.storeNo}"></i></span>
-					<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a> <br>
-				</c:forEach>
-			</div>
+			<sec:authorize access="hasRole('ROLE_USER')">
+				<div style="width:100%;">
+					<i class="fas fa-heart"></i>&nbsp;<strong>내가 찜한 가게</strong>
+				</div>
+				<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+					<c:forEach items="${likeStores}" var="store" varStatus="status">
+						<span><i class="like-btn far fa-heart" data-store-no="${store.storeNo}"></i></span>
+						<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a> <br>
+					</c:forEach>
+				</div>
+				
+				<div style="width:100%;">
+					<i class="fa fa-pen"></i>&nbsp;<strong>내가 쓴 리뷰</strong>
+				</div>
+				<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+					<c:forEach items="${reviews}" var="review" varStatus="status">
+						<c:set var="loop_flag" value="true" />
+					    <c:forEach items="${reviewStores}" var="store" varStatus="status">
+					    	<c:if test="${review.storeStoreNo eq store.storeNo and loop_flag}">
+					        	<a href="${pageContext.request.contextPath}/store/${store.storeNo}"> ${store.storeName}</a>
+					           	<c:set var="loop_flag" value="false" />
+					        </c:if>
+					    </c:forEach>
+					    <span><a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${review.content}</a></span> <br>
+					</c:forEach>
+				</div>
+			</sec:authorize>
 			
-			<div style="width:100%;">
-				<i class="fa fa-pen"></i>&nbsp;<strong>내가 쓴 리뷰</strong>
-			</div>
-			<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-				<c:forEach items="${reviews}" var="review" varStatus="status">
-					<c:set var="loop_flag" value="true" />
-				    <c:forEach items="${reviewStores}" var="store" varStatus="status">
-				    	<c:if test="${review.storeStoreNo eq store.storeNo and loop_flag}">
-				        	<a href="${pageContext.request.contextPath}/store/${store.storeNo}"> ${store.storeName}</a>
-				           	<c:set var="loop_flag" value="false" />
-				        </c:if>
-				    </c:forEach>
-				    <span><a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${review.content}</a></span> <br>
-				</c:forEach>
-			</div>
-
 			<div style="width:100%;">
 				<i class="fa fa-comments"></i>&nbsp;<strong>나의 채팅방</strong>
 			</div>
@@ -99,7 +126,7 @@
 			</div>
 			
 			<div class="col-md-12 text-center">
-				<a href="${pageContext.request.contextPath}/modifyMember">회원 정보 수정</a><br>
+				<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmPasswordModal">회원 정보 수정</a><br>
 				<a href="${pageContext.request.contextPath}/logout">로그아웃</a>
 			</div>
 			
@@ -107,10 +134,33 @@
 		</div>
 	</div>
 	
+	<div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmPasswordLabel">비밀번호 확인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                	<div class="mb-3">
+                    	<input type="password" class="form-control" id="password" name="password" required>
+                    	<label id="confirmPasswordAlert" class="text-danger"></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                	<button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
 	<sec:authorize access="isAuthenticated()">
 		<!-- like 요청 -->
 		<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 	</sec:authorize>
-	
+    
 </body>
 </html>
