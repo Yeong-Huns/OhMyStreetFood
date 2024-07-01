@@ -10,7 +10,7 @@
 		WHERE STORENO = #{storeNo}
 		ORDER BY LOGNO DESC
 		OFFSET 0 ROWS FETCH
-		FIRST 10 ROWS ONLY
+		FIRST 20 ROWS ONLY
 	</select>
 	
 	<update id="updateStore" statementType="CALLABLE" >
@@ -23,8 +23,8 @@
 		FROM LOG_STORE
 		WHERE STORENO = #{storeNo}
 		ORDER BY LOGNO DESC
-		OFFSET 10*(#{page}-1) ROWS FETCH
-		FIRST 10 ROWS ONLY
+		OFFSET 20*(#{page}-1) ROWS FETCH
+		FIRST 20 ROWS ONLY
 	</select>
 
 </mapper>

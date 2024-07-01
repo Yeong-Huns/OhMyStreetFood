@@ -35,6 +35,25 @@
             align-items: center;
             flex-direction: column;
         }
+        .spinner {
+		    display: none;
+		    width: 40px;
+		    height: 40px;
+		    border: 4px solid rgba(0, 0, 0, 0.1);
+		    border-top: 4px solid #3498db;
+		    border-radius: 50%;
+		    animation: spin 1s linear infinite;
+		    position: fixed;
+		    z-index: 1;
+		    bottom: 20px; /* Adjust this value to set how far from the bottom you want the spinner */
+		    left: 50%;
+		    transform: translateX(-50%);
+		}
+		
+		@keyframes spin {
+		    0% { transform: rotate(0deg); }
+		    100% { transform: rotate(360deg); }
+		}
 </style>
 </head>
 
@@ -116,13 +135,12 @@
         </div>
     </div>
     <script>
-		$(document).ready(function(){
-			$(".rollback").click(function(){
+		$(document).on("click", ".rollback", function(){
 				if(confirm("정말로 롤백하시겠습니까?") == true){
 					var logNo = Number($(this).data('log-no'));
 					var $button = $(this);  
 					$.ajax({
-				    	url : '/store/log/update',
+				    	url : '/admin/store/log/update',
 				        data : {
 				        	logNo : logNo,
 				        },
@@ -143,7 +161,6 @@
 				} else {
 					return false;
 				}
-			});
 		});
 	</script>
 	<script>
@@ -164,6 +181,7 @@
 	                day: '2-digit'
 	            }).replace(/\./g, '-').replace(/ /g, '').replace('년', '').replace('월', '').replace('일', '').slice(0,-1);
 	            console.log(log);
+	            console.log('수정일자 : '+ log.MODIFIEDAT);
 	            logTr.innerHTML = `
 	            	<td>` + log.LOGNO + `</td>
                     <td>` + log.STORENO + `</td>
@@ -171,16 +189,16 @@
                     <td>` + log.LATITUDE + `</td>
                     <td>` + log.LONGITUDE + `</td>
                     <td>` + log.ADDRESS + `</td>
-                    <td>` + log.INTRODUCE + `</td>
-                    <td>` + log.OPERATINGDATE + `</td>
+                    <td>` + nvl(log.INTRODUCE) + `</td>
+                    <td>` + nvl(log.OPERATINGDATE) + `</td>
                     <td>` + log.OPERATINGHOURS + `</td>
                     <td>` + log.TOTALREVIEW + `</td>
                     <td>` + log.TOTALRATING + `</td>
                     <td>` + log.LIKES + `</td>
-                    <td>` + log.CREATEDAT + `</td>
-                    <td>` + log.MODIFIEDAT + `</td>
+                    <td>` + dateFormat(log.CREATEDAT) + `</td>
+                    <td>` + dateFormat(log.MODIFIEDAT) + `</td>
                     <td>` + log.MODIFIER + `</td>
-                    <td><i class="fa fa-undo rollback" aria-hidden="true" data-log-no="${log.LOGNO}" style="cursor: pointer;"></i></td>
+                    <td><i class="fa fa-undo rollback" aria-hidden="true" data-log-no="` + log.LOGNO + `" style="cursor: pointer;"></i></td>
 					<td></td>`;
 	            
 	            logContainer.appendChild(logTr);
@@ -189,14 +207,19 @@
 
 		 // 실제 서버에 요청할 때 사용할 함수
 		 function fetchReviews(page) {
-		     return fetch(`${pageContext.request.contextPath}/store/log/${storeId}/api?page=` + page)
-		         .then(response => response.json())
+		     return fetch(`${pageContext.request.contextPath}/admin/store/log/${storeId}/api?page=` + page)
+		         .then(response => {
+		             if (response.ok) {
+		            	 return response.json();
+		             }
+		         })
 		         .then(logs => logs)
 		         .catch(error => console.error('Error fetching logs:', error));
 		 }
 
 	    // 스크롤 이벤트를 감지하는 함수
 	    function handleScroll() {
+	        
 	        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
 	            window.removeEventListener('scroll', handleScroll);
 
@@ -214,18 +237,38 @@
 	                hideSpinner(); // 스피너 숨김
 	                window.addEventListener('scroll', handleScroll);
 	            })
-	            }, 2000);
+	            }, 1000);
 	        }
 	    }
 	    
 	    function dateFormat(date){
-	    	const createdAt = new Date(log.createdAt).toLocaleDateString('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            }).replace(/\./g, '-').replace(/ /g, '').replace('년', '').replace('월', '').replace('일', '').slice(0,-1);
+	    	if(date === undefined) return '';
+	    	
+	    	// 문자열을 Date 객체로 변환
+	        const parsedDate = new Date(date);
+	    	
+	    	// 날짜 부분 포맷팅
+	    	const formattedDate = parsedDate.toLocaleDateString('ko-KR', {
+	    	    year: 'numeric',
+	    	    month: '2-digit',
+	    	    day: '2-digit'
+	    	}).replace(/\./g, '-').replace(/ /g, '').replace('년', '').replace('월', '').replace('일', '');
 
-	    	return 
+	    	// 시간 부분 포맷팅
+	    	const hours = String(parsedDate.getHours()).padStart(2, '0');
+	    	const minutes = String(parsedDate.getMinutes()).padStart(2, '0');
+	    	const seconds = String(parsedDate.getSeconds()).padStart(2, '0');
+	    	const milliseconds = String(parsedDate.getMilliseconds()).charAt(0);
+
+	    	// 최종 포맷팅
+	    	const formattedDateTime = formattedDate + ' ' + hours + ':' + minutes + ':' 
+	    				+ seconds + '.' + milliseconds;
+	    	return formattedDateTime;
+	    }
+	    
+	    function nvl(data){
+	    	if(data === undefined) return '';
+	    	return data;
 	    }
 	    
 	 	// 스피너 표시 함수
