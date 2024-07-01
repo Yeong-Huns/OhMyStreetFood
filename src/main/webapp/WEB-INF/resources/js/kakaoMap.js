@@ -89,7 +89,7 @@ function saveLatitudeAndLongitude(latitude, longitude){
 		showSpinner(); // 스피너 표시
 		setTimeout(async () => { // 3초 지연
 			try {
-				const response = await fetch('/store/api?' + address);
+				const response = await fetch('/store/api?position=' + address);
 				const data = await response.json();
 				positions = data; // 서버로부터 받은 데이터로 positions 업데이트
 				console.log(data);
@@ -110,7 +110,7 @@ function saveLatitudeAndLongitude(latitude, longitude){
 			for (var i = 0; i < positions.length; i++) {
 				var marker = new kakao.maps.Marker({
 					map: map,
-					position: new kakao.maps.LatLng(positions[i].longitude, positions[i].latitude),
+					position: new kakao.maps.LatLng(positions[i].latitude, positions[i].longitude),
 					title: positions[i].storeName,
 					image: new kakao.maps.MarkerImage(imageSrc, new kakao.maps.Size(24, 35))
 				});

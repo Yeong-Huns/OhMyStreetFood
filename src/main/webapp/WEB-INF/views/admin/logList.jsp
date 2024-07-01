@@ -11,6 +11,7 @@
 <title>OhMyStreetFood!</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css">
 <!-- Font Awesome CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <!-- Google Fonts -->
@@ -73,6 +74,7 @@
                                     <th>수정일자</th>
                                     <th>수정자</th>
                                     <th>롤백</th>
+                                    <th>now</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -94,6 +96,11 @@
                                         <td>${log.MODIFIEDAT}</td>
                                         <td>${log.MODIFIER}</td>
                                         <td><i class="fa fa-undo rollback" aria-hidden="true" data-log-no="${log.LOGNO}" style="cursor: pointer;"></i></td>
+                                        <td>
+                                        <c:if test="${status.index == 0}">
+                                        	<i class="bi bi-flag"></i>
+                                        </c:if>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -123,6 +130,7 @@
 				        success : function(result) {
 				        	if(result == true){	
 			            		alert("롤백이 완료되었습니다.");
+			            		location.reload();
 				        	}else{
 				        		alert("서버 오류입니다. 다시 시도해 주세요.");
 				        	}	            
