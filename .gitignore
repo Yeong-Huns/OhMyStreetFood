@@ -1,5 +1,10 @@
 # Compiled class file
 *.class
+.idea
+*.iml
+out
+gen
+*.class
 
 # Log file
 *.log
@@ -23,3 +28,10 @@
 hs_err_pid*
 replay_pid*
 key.properties
+target\
+classes\
+generated-sources\
+maven-status\
+ohmystreetfood-0.0.1-SNAPSHOT\
+/target/ohmystreetfood-0.0.1-SNAPSHOT
+

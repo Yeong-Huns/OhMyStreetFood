@@ -10,7 +10,7 @@
 		<div>
 		    <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
 		        <span><h5>사진 갤러리</h5></span>
-		        
+
 		    </span>
 		    
 		    <div class="gallery-wrapper">
@@ -27,7 +27,7 @@
 		                <button class="scroll-button right" onclick="scrollGallery('right')">&gt;</button>
 		            </c:when>
 		            <c:otherwise>
-		                <p>등록된 사진이 없습니다.</p>
+		                <p>등록된 사진이 없습니다</p>
 		            </c:otherwise>
 		        </c:choose>
 		    </div>

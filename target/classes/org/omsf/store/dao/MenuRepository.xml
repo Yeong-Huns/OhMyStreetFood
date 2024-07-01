@@ -53,7 +53,10 @@
     	DELETE MENU
     	WHERE MENUNO = #{menuNO}
     </update>
-    
+     <update id="deleteMenusByStoreNo">
+    	DELETE MENU
+    	WHERE STORE_STORENO = #{storeNo}
+    </update>
     <!-- jaeeun -->
     <insert id="insertMenu" parameterType="org.omsf.store.model.Menu">
 	    INSERT INTO MENU (MENUNAME, PRICE, CREATEDAT, MODIFIEDAT, STORE_STORENO)

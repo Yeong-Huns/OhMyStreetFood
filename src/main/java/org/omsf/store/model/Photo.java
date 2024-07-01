@@ -19,4 +19,5 @@ public class Photo {
 	private Timestamp createdAt;
 	
 	private int storeNo;
+	private String username;
 }

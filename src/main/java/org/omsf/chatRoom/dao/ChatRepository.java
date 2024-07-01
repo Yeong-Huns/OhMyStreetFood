@@ -1,9 +1,14 @@
 package org.omsf.chatRoom.dao;
 
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.mapping.StatementType;
+import org.omsf.chatRoom.model.ChatRoomVO;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -19,15 +24,37 @@ import java.util.Optional;
  */
 @Repository
 public interface ChatRepository {
+
+    // owner 확인
+
+
+    //1. 고유 Address 조회
+    Boolean isOwner(@Param("username") String username);
+    List<String> getOwnerAddress(@Param("username") String username);
+
+    //2. 구독목록 가져오기
+    List<ChatRoomVO> getUserSubscriptions(@Param("address") String address);
+
+    //3. chatRoomNo 로 Subscription 가져오기
+    Optional<String> getSubscriptionByChatRoomNo(@Param("chatRoomNo") long chatRoomNo);
+
+    //4.
+
+    List<ChatRoomVO> findSubListByAddress(@Param("address") String address);
+    List<Integer> findStoreListByAddress(@Param("address") String address);
+    void saveChatRoom(@Param("address") String address, @Param("storeNo")long storeNo);
+    void updateChatRoom(ChatRoomVO chatRoomVO);
+
+
     int isSubscribed(@Param("customerId") String customerId, @Param("storeNo") long storeNo);
 
-    void subscribeToChatRoom(@Param("customer") String customerId, @Param("storeNo")long storeNo);
+    void subscribeToChatRoom(@Param("customerId") String customerId, @Param("storeNo")long storeNo);
 
     @Select("SELECT customer || storeNo AS RoomAddress FROM CHATROOM WHERE chatRoomNo = #{chatRoomNo}")
     String findRoomAddressByChatRoomNo(@Param("chatRoomNo") long chatRoomNo);
 
-    @Select("SELECT chatRoomNo FROM ChatRoom WHERE customer = #{currentUser} AND storeNo = #{storeNo}")
-    Long findChatRoomNoByCurrentUserAndStoreNo(@Param("customer") String currentUser, @Param("storeNo") Long storeNo);
+    @Select("SELECT chatRoomNo FROM ChatRoom WHERE customer = #{customerId} AND storeNo = #{storeNo}")
+    Long findChatRoomNoByCurrentUserAndStoreNo(@Param("customerId") String customerId, @Param("storeNo") Long storeNo);
 
     Optional<String> findOwnerByRoomAddress(@Param("storeNo") long storeNo);
 

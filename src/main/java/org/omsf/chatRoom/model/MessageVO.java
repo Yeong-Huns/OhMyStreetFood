@@ -24,20 +24,8 @@ public class MessageVO {
     private long messageNo;
     private String content;
     private String senderId;
-    private String ownerId;
     private long chatRoomNo;
     private boolean isReceived;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt;
-
-
-    @Builder
-    public MessageVO(String content, String senderId, long chatRoomNo) {
-        this.content = content;
-        this.senderId = senderId;
-        this.chatRoomNo = chatRoomNo;
-    }
-
-
 }

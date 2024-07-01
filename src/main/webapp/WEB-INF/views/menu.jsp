@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light fixed-bottom" style="max-width: 800px; background-color: white; margin: 0 auto; padding: 0 20px; text-align: center; border-top: 1px solid #ccc;">
+	<nav class="navbar navbar-expand-lg navbar-light fixed-bottom">
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav d-flex justify-content-between w-100">
 				<li class="nav-item active"><a class="nav-link" href="${pageContext.request.contextPath}/">
@@ -29,7 +29,7 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="${pageContext.request.contextPath}/store/list">
+					<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/store/list">
 						<i class="fas fa-store"></i><br>점포
 					</a>
 				</li>
@@ -50,5 +50,9 @@
 			</ul>
 		</div>
 	</nav>
+	
+	<!-- 위도, 경도값 적용 JS -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/sessionStorage.js"></script>
+    
 </body>
 </html>

@@ -38,4 +38,7 @@ public interface ReviewRepository {
 	// yunbin
 	List<Review> getReviewsByUsername(String username);
 	
+	// 가게번호와 유저명(principal)에 근거하여 진짜 그 리뷰 작성자인지 확인
+	int isWriter(@Param("storeNo") int storeNo, @Param("memberUsername") String memberUsername);
+	
 }

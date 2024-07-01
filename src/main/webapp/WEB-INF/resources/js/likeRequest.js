@@ -96,11 +96,14 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+   				return response.text().then(text => {
+					   throw new Error(text);
+				   })
             }
             return response;
         })
         .then(data => {
+			
             console.log('Success:', data);
             // 추가적인 성공 처리 로직
 			button.className = "like-btn fas fa-heart";
@@ -111,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			
         })
         .catch(error => {
-            console.error('Error:', error);
+			alert(error);
             // 추가적인 에러 처리 로직
         });
     }
@@ -127,7 +130,9 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+   				return response.text().then(text => {
+					   throw new Error(text);
+				   })
             }
             return response;
         })
@@ -142,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			
         })
         .catch(error => {
-            console.error('Error:', error);
+            alert(error);
             // 추가적인 에러 처리 로직
         });
     }

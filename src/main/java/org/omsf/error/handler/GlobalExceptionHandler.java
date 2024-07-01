@@ -11,6 +11,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * packageName    : org.omsf.error.handler
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * 2024-06-18        Yeong-Huns       최초 생성
  */
 @Slf4j
-@ControllerAdvice
+@ControllerAdvice(annotations = RestController.class)
 public class  GlobalExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -63,6 +64,7 @@ public class  GlobalExceptionHandler {
         return createErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR);
     }
     //최종 에러처리
+
     private ResponseEntity<ErrorResponse> createErrorResponse(ErrorCode errorCode){
         return new ResponseEntity<>(
                 ErrorResponse.of(errorCode),

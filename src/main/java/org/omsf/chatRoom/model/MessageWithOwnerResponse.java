@@ -1,6 +1,10 @@
 package org.omsf.chatRoom.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 
@@ -15,21 +19,17 @@ import java.time.LocalDateTime;
  * -----------------------------------------------------------
  * 2024-06-27        Yeong-Huns       최초 생성
  */
+@Slf4j
+@ToString
 @Getter
+@Setter
 public class MessageWithOwnerResponse {
-    private final String content;
-    private final String senderId;
-    private final Long chatRoomNo;
-    private final boolean isReceived;
-    private final LocalDateTime createdAt;
-    private final String owner; // 추가된 필드
-
-    public MessageWithOwnerResponse(String content, String senderId, Long chatRoomNo, boolean isReceived, LocalDateTime createdAt, String owner) {
-        this.content = content;
-        this.senderId = senderId;
-        this.chatRoomNo = chatRoomNo;
-        this.isReceived = isReceived;
-        this.createdAt = createdAt;
-        this.owner = owner;
-    }
+    private long messageNo;
+    private String content;
+    private String senderId;
+    private Long chatRoomNo;
+    private boolean isReceived;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime createdAt;
+    private String owner; // 추가된 필드
 }

@@ -17,19 +17,21 @@ public interface StoreRepository {
 	List<Store> getStoreByposition(double latitude, double longitude);
 	void createStore(Store store);
 	void updateStore(Store store);
+	void updatePicture(Store store);
 	void deleteStore(int storeNo);
-	
 	void updateTotalReviewAndRating(Store store);
 	void updateLikes(Store store);
 	void createPhoto(Photo photo);
 	Photo getPhotoByPhotoNo(int photoNo);
-	List<Photo> getStorePhotos(Store store);
+	List<Photo> getStorePhotos(int storeNo);
+	List<Photo> getStoreGallery(Store store);
+	void updatePhoto(Photo photo);
 	void deletePhoto(int photoNo);
 	
 	// jaeeun
 	List<Store> getPopularStores();
 	Optional<Store> getStoreByNo(int storeNo);
-	List<Store> searchByKeyword(Map<String, Object> params);
+	List<Store> showStoreList(Map<String, Object> params);
 
 	// yunbin
 	//String getStoreNameByStoreNo(int storeNo);
@@ -38,5 +40,4 @@ public interface StoreRepository {
 	
 	// leejongseop
 	List<Store> getStoresByPosition(String position);
-
 }

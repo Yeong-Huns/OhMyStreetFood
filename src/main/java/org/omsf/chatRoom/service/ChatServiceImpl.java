@@ -1,17 +1,20 @@
 package org.omsf.chatRoom.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.omsf.chatRoom.dao.ChatRepository;
 import org.omsf.chatRoom.model.ChatRoomVO;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.model.chat.ChatRoom;
 import org.omsf.error.Exception.CustomBaseException;
 import org.omsf.error.Exception.ErrorCode;
+import org.omsf.error.Exception.NotFoundException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * packageName    : org.omsf.chatRoom.service
@@ -24,16 +27,62 @@ import java.util.List;
  * -----------------------------------------------------------
  * 2024-06-20        Yeong-Huns       최초 생성
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ChatServiceImpl implements ChatService{
     private final ChatRepository chatRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
+    //1. 고유 Address 조회
     @Override
-    public List<ChatRoomVO> findAllRoom() {
-        return Collections.emptyList();
+    public List<String> getUserAddress(String username) {
+        if(isOwner(username)) return chatRepository.getOwnerAddress(username);
+        return Collections.singletonList(username);
     }
+
+    //2. 구독 목록 가져오기
+    public List<String> getUserSubscriptions(String address) {
+        return chatRepository.getUserSubscriptions(address).stream()
+                .map(ChatRoomVO::getChannel)
+                .collect(Collectors.toList());
+    }
+
+    //3. 챗룸번호로 구독주소 가져오기
+    @Override
+    public String getSubscriptionByChatRoomNo(long chatRoomNo) {
+        return chatRepository.getSubscriptionByChatRoomNo(chatRoomNo)
+                .orElseThrow(()->new CustomBaseException(ErrorCode.NOT_ALLOWED_REQUEST));
+    }
+
+
+
+
+
+
+
+    @Override
+    public List<ChatRoomVO> findSubListByAddress(String address) {
+        return chatRepository.findSubListByAddress(address);
+    }
+
+    @Override
+    public List<Integer> findStoreListByAddress(String address) {
+        return chatRepository.findStoreListByAddress(address);
+    }
+
+    @Override
+    public void saveChatRoom(String address, long storeNo) {
+        chatRepository.saveChatRoom(address, storeNo);
+    }
+
+    @Override
+    public void updateChatRoom(ChatRoomVO chatRoomVO) {
+        chatRepository.updateChatRoom(chatRoomVO);
+    }
+
+
+
 
     @Override
     public ChatRoom findById(String roomId) {
@@ -47,14 +96,13 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public void subscribeToChatRoom(SubscribeRequest request) {
-        if(!isSubscribed(request)){
-            String owner = chatRepository.findOwnerByRoomAddress(request.getStoreNo())
-                    .orElseThrow(()-> new CustomBaseException(ErrorCode.NOT_FOUND_STORE_OWNER));
-            chatRepository.subscribeToChatRoom(request.getCustomerId(), request.getStoreNo());
-
-            messagingTemplate.convertAndSend("/topic/chat/" + request.getCustomerId(), request.getCombinedId());
-            messagingTemplate.convertAndSend("/topic/chat/" + owner, request.getCombinedId());
-        }
+        if(!isSubscribed(request)) chatRepository.subscribeToChatRoom(request.getCustomerId(), request.getStoreNo());
+        String owner = chatRepository.findOwnerByRoomAddress(request.getStoreNo())
+                .orElseThrow(()-> new CustomBaseException(ErrorCode.NOT_FOUND_STORE_OWNER));
+        messagingTemplate.convertAndSend("/topic/chat/" + request.getCustomerId(), request.getCombinedId());
+        messagingTemplate.convertAndSend("/topic/chat/" + owner, request.getCombinedId());
+        log.info("발신주소 send : /topic/chat/"+request.getCustomerId()+" : combinedId? = " + request.getCustomerId());
+        log.info("수신주소 send : /topic/chat/"+owner+" : combinedId? = " + request.getCustomerId());
     }
 
     @Override
@@ -62,5 +110,11 @@ public class ChatServiceImpl implements ChatService{
         return chatRepository.isSubscribed(request.getCustomerId(), request.getStoreNo()) > 0;
     }
 
+
+    private boolean isOwner(String username){
+        Boolean result = chatRepository.isOwner(username);
+        if(result == null) throw new NotFoundException(ErrorCode.NOT_FOUND_USER);
+        return result;
+    }
 
 }

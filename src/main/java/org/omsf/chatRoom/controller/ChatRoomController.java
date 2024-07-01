@@ -6,14 +6,16 @@ import org.omsf.chatRoom.model.ChatRoomVO;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.service.ChatService;
 import org.omsf.error.Exception.BadRequestException;
+import org.omsf.error.Exception.ErrorCode;
+import org.omsf.error.Exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * packageName    : org.omsf.chatRoom.controller
@@ -29,18 +31,51 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/chat")
-@Controller
+@RestController
 public class ChatRoomController {
 
     private final ChatService chatService;
-    private List<MessageVO> messageList = new ArrayList<>();
 
-
-    @GetMapping("/rooms")
-    @ResponseBody
-    public List<ChatRoomVO> getChatRooms(@RequestParam String userId) {
-        return chatService.findAllRoom();
+    //1. 고유 Address 조회
+    @GetMapping("/getAddress")
+    public ResponseEntity<List<String>> getAddress(@RequestParam String username) {
+        List<String> Address = chatService.getUserAddress(username);
+        if(Address.isEmpty()) throw new NotFoundException(ErrorCode.NOT_FOUND_STORE);
+        return ResponseEntity.ok(chatService.getUserAddress(username));
     }
+
+    //2. 구독목록 가져오기
+    @GetMapping("/subscriptions")
+    public ResponseEntity<List<String>> getUserSubscriptions(@RequestParam String address) {
+        return ResponseEntity.ok(chatService.getUserSubscriptions(address));
+    }
+    //3. 챗룸넘버로 구독주소 가져오기
+    @GetMapping("/subscription")
+    public ResponseEntity<String> getSubscriptionByChatRoomNo(long chatRoomNo){
+        return ResponseEntity.ok(chatService.getSubscriptionByChatRoomNo(chatRoomNo));
+    }
+
+    @GetMapping("/chatList")
+    public ResponseEntity<List<ChatRoomVO>> findSubListByAddress(@RequestParam String address){
+        return ResponseEntity.ok(chatService.findSubListByAddress(address));
+    }
+
+    // 여러개의 storeNo
+    @GetMapping("/storeList")
+    public ResponseEntity<List<Integer>> findStoreList(@RequestParam String address){
+        return ResponseEntity.ok(chatService.findStoreListByAddress(address));
+    }
+
+    @PostMapping("/saveChatRoom")
+    public void saveChatRoom(@RequestBody ChatRoomVO chatRoomVO){
+        chatService.saveChatRoom(chatRoomVO.getCustomer(), chatRoomVO.getStoreNo());
+    }
+
+    @PostMapping("/updateChatRoom")
+    public void updateChatRoom(@RequestBody ChatRoomVO chatRoomVO){
+        chatService.updateChatRoom(chatRoomVO);
+    }
+
 
     // 테스트 폼
     @GetMapping("/test")
@@ -55,21 +90,6 @@ public class ChatRoomController {
 //        return chatService.findById(roomId);
 //    }
 //
-
-    @PostMapping("/saveMessage")
-    @ResponseBody
-    public ResponseEntity<?> saveMessage(@RequestBody MessageVO message) {
-        try {
-            message.setCreatedAt(LocalDateTime.now());
-            messageList.add(message); // 실제 DB 대신 리스트에 저장하여 테스트
-            return ResponseEntity.ok(message);
-        } catch (Exception e) {
-            log.error("메시지 저장 중 오류 발생: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new BadRequestException());
-        }
-    }
-
 
 
 }

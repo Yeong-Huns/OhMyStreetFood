@@ -13,7 +13,7 @@
 </head>
 
 <body>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chatRoomModal" onclick="startChat(senderId, 0)">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chatRoomModal" onclick="startChat(senderId, 281)">
     채팅 시작
 </button>
 

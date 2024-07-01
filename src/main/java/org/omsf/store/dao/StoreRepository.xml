@@ -28,6 +28,7 @@
         <result property="picture" column="PICTURE"/>
         <result property="createdAt" column="CREATEDAT"/>
         <result property="storeNo" column="STORE_STORENO" jdbcType="NUMERIC"/> 
+        <result property="username" column="USERNAME"/> 
     </resultMap>
 
 <!--   <select id="getStoreByposition" resultType="org.omsf.store.model.Store"> -->
@@ -105,7 +106,8 @@
         FILESIZE,
         PICTURE,
         CREATEDAT,
-        STORE_STORENO
+        STORE_STORENO,
+        USERNAME
     )
     VALUES
     (	
@@ -114,7 +116,8 @@
         #{fileSize},
         #{picture},
         sysdate,
-        #{storeNo}
+        #{storeNo},
+        #{username}
     )
    		 <selectKey keyProperty="photoNo" resultType="int" order="AFTER">
        		SELECT PHOTO_SEQ.CURRVAL FROM DUAL
@@ -127,15 +130,31 @@
 	<select id="getStorePhotos">
 		SELECT * FROM PHOTO 
 		WHERE STORE_STORENO = #{storeNo}
+		ORDER BY PHOTONO
+	</select>
+	<select id="getStoreGallery">
+		SELECT * FROM PHOTO 
+		WHERE STORE_STORENO = #{storeNo}
 		<if test="picture != null">
         	AND PHOTONO != #{picture}
     	</if>
+    	ORDER BY PHOTONO
 	</select>
 	
 	<update id="deletePhoto" parameterType="int">
-		DELETE PHOTO WHERE PHOTO = #{photoNo}
+		DELETE PHOTO WHERE PHOTONO = #{photoNo}
 	</update>
-	
+	<update id="updatePhoto">
+	    UPDATE PHOTO
+	    SET PHOTONO = #{photoNo},
+	        contentType = #{contentType},
+	        fileSize = #{fileSize},
+	        picture = #{picture},
+	        createdAt = sysdate,
+	        USERNAME = #{username}
+	    WHERE photoNo = #{photoNo}
+	</update>
+
 	<update id="updateStore">
 	    UPDATE STORE
 	    SET
@@ -147,6 +166,14 @@
 	        OPERATINGDATE = #{operatingDate},
 	        OPERATINGHOURS = #{operatingHours},
 	        MODIFIEDAT = sysdate,
+	        PICTURE = #{picture, jdbcType=NUMERIC}
+	    WHERE
+	        STORENO = #{storeNo}
+	</update>
+	
+	<update id="updatePicture">
+	    UPDATE STORE
+	    SET
 	        PICTURE = #{picture, jdbcType=NUMERIC}
 	    WHERE
 	        STORENO = #{storeNo}
@@ -197,35 +224,42 @@
 	<!-- jaeeun -->
 	
 	<select id="getPopularStores" resultType="org.omsf.store.model.Store">
-		SELECT * FROM STORE ORDER BY likes DESC FETCH FIRST 8 ROWS ONLY
+		SELECT * FROM STORE 
+		ORDER BY totalReview DESC, totalRating DESC, likes DESC
+		FETCH FIRST 10 ROWS ONLY
 	</select>
 
 	<select id="getStoreByNo" parameterType="int" resultMap="storeResultMap">
 		SELECT * FROM STORE WHERE STORENO = #{storeNo}
 	</select>
 	
-	<select id="searchByKeyword" parameterType="map" resultType="org.omsf.store.model.Store">
-	    SELECT * 
-	    FROM store 
+	<select id="showStoreList" parameterType="map" resultType="org.omsf.store.model.StoreDistance">
+	    SELECT s.*, TRUNC(SDO_GEOM.SDO_DISTANCE(
+	               SDO_CS.TRANSFORM(SDO_GEOMETRY(2001, 4326, SDO_POINT_TYPE(#{longitude}, #{latitude}, NULL), NULL, NULL), 32652),
+	               SDO_CS.TRANSFORM(SDO_GEOMETRY(2001, 4326, SDO_POINT_TYPE(s.longitude, s.latitude, NULL), NULL, NULL), 32652),
+	               1)) AS distance
+	    FROM store s
 	    WHERE storeName LIKE '%' || #{keyword, jdbcType=VARCHAR} || '%'
 	    ORDER BY 
 	    <choose>
-	        <when test="orderType == 'createdAt'">
-	            createdAt DESC
+	    	<when test="orderType == 'createdAt'">
+	            createdAt ASC
+	        </when>
+	        <when test="orderType == 'modifiedAt'">
+	            modifiedAt DESC
 	        </when>
 	        <when test="orderType == 'likes'">
-	            likes DESC
+	            totalReview DESC, totalRating DESC, likes DESC
 	        </when>
-<!-- 	        <when test="orderType == 'distance'"> -->
-<!-- 	            distance DESC -->
-<!-- 	        </when> -->
+	        <when test="orderType == 'distance'">
+	            distance ASC
+	        </when>
 	        <otherwise>
 	            storeNo DESC
 	        </otherwise>
 	    </choose>
 	    OFFSET #{offset} ROWS FETCH NEXT #{limit} ROWS ONLY
 	</select>
-
 	
 	<!-- yunbin -->
 <!-- 	<select id="getStoreNameByStoreNo" resultType="String"> -->

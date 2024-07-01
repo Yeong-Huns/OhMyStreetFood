@@ -15,22 +15,28 @@ public interface StoreService {
 //	List<Store> getStoreByposition(String position);
 	List<Map<String, Object>> getStoreList(StorePagination page);
 	
-
 	int createStore(Store store);
 	void updateStore(Store store);
+	void updatePicture(Store store);
 	void deleteStore(int storeNo);
+	void updatePhotoOrder(List<Integer> photoOrder, int storeNo, String username);
 	
 	Store updateTotalReview(Store store);
 	Store updateTotalRating(Store store);
 	Store updateLikes(Store store);
 	
-	int UploadImage(ArrayList<MultipartFile> files, int storeNo) throws IOException;
+	int UploadImage(ArrayList<MultipartFile> files, int storeNo, String username) throws IOException;
 	void deleteImage(int PhotoNo);
-	
+  
+	Photo getPhotoByPhotoNo(Integer photoNo);
+	List<Photo> getStorePhotos(int storeNo);
+	List<Photo> getStoreGallery(int storeNo);
+	List<Photo> getUpdateStoreGallery(int storeNo, String username);
+  
 	// jaeeun
 	List<Store> getPopularStores();
 	Store getStoreByNo(int storeNo);
-	List<Store> searchByKeyword(String keyword, String ordertype, int offset, int limit);
+	List<Store> showStoreList(String keyword, String orderType, Double latitude, Double longitude, int offset, int limit);
 	
 	// yunbin
 	//String getStoreNameByStoreNo(int storeNo);
@@ -39,7 +45,7 @@ public interface StoreService {
 
 	// leejongseop
 	List<Store> getStoresByPosition(String position);
-	
-	Photo getPhotoByPhotoNo(int photoNo);
-	List<Photo> getStorePhotos(int storeNo);
+
+
+
 }

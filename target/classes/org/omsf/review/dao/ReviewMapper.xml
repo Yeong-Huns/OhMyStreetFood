@@ -105,6 +105,7 @@
 		FIRST 10 ROWS ONLY
 	</select>
 	
+
 	<!-- yunbin -->
 	<select id="getReviewsByUsername" resultType="org.omsf.review.model.Review">
 		SELECT
@@ -118,6 +119,14 @@
 		FROM REVIEW
 		WHERE MEMBER_USERNAME = #{username}
 		ORDER BY CREATEDAT DESC
+	</select>
+  
+	<!-- 리뷰 작성자 검증 -->
+	<select id="isWriter" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM REVIEW
+		WHERE STORE_STORENO = #{storeNo} AND MEMBER_USERNAME = #{memberUsername}
 	</select>
 	
 </mapper>

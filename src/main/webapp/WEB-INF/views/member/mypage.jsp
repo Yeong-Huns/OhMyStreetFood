@@ -36,10 +36,16 @@
 			<div align="center" style="margin-bottom: 20px;">
 				<img src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
 				<p style="margin-top: 20px;">
-					<sec:authentication property="principal.Username" var="username"/> <br>
-					<input type="hidden" id="memberUsername" value="${username }">
-					<sec:authorize access="hasRole('ROLE_OWNER')">OWENR</sec:authorize>
-					<sec:authorize access="hasRole('ROLE_USER')">USER</sec:authorize>
+
+					<sec:authorize access="isAuthenticated()">
+						<sec:authentication property="principal.username"/> <br>
+						<sec:authorize access="hasRole('ROLE_OWNER')">OWNER</sec:authorize>
+						<sec:authorize access="hasRole('ROLE_USER')">USER</sec:authorize>
+					</sec:authorize>
+					<sec:authorize access="isAnonymous()">
+						Anonymous User
+					</sec:authorize>
+
 					<a href="#">사진 수정</a>
 				</p>
 			</div>

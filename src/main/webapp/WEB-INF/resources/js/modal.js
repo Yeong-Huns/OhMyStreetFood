@@ -1,19 +1,15 @@
-/**
- * 
- */
-
- document.getElementById('openModalBtn').onclick = function() {
-    document.getElementById('modal').style.display = 'block';
+document.getElementById('openModalBtn').onclick = function() {
+    document.getElementById('customModal').style.display = 'block';
 };
 
-document.querySelector('.close-button').onclick = function() {
-    document.getElementById('modal').style.display = 'none';
+document.querySelector('.custom-close-button').onclick = function() {
+    document.getElementById('customModal').style.display = 'none';
 };
 
 // 모달 이외의 부분을 클릭하면 모달창 없어짐
 window.onclick = function(event) {
-    if (event.target == document.getElementById('modal')) {
-        document.getElementById('modal').style.display = 'none';
+    if (event.target == document.getElementById('customModal')) {
+        document.getElementById('customModal').style.display = 'none';
     }
 
     if (event.target == document.getElementById('review-modal')) {
@@ -24,26 +20,25 @@ window.onclick = function(event) {
 document.addEventListener('DOMContentLoaded', function() {
     const ratingInputs = document.querySelectorAll('.rating input');
     const labels = document.querySelectorAll('.rating label');
-	console.log("화면 로드");
-	
+    console.log("화면 로드");
+
     const checkedRadio = document.querySelector('.rating input:checked');
     if (checkedRadio) {
         const index = parseInt(checkedRadio.value) - 1; // value는 1부터 시작
         colorStars(index);
-   	}
-    
+    }
+
     // 평점 색상 변경 함수
     function colorStars(index) {
         labels.forEach((innerLabel, innerIndex) => {
             if (innerIndex <= index) {
-				console.log("innerIndex 값 : " + innerIndex);
+                console.log("innerIndex 값 : " + innerIndex);
                 innerLabel.style.color = '#f5b301';
             } else {
                 innerLabel.style.color = '#ccc';
             }
         });
     }
-
 
     labels.forEach((label, index) => {
         label.addEventListener('mouseover', () => {

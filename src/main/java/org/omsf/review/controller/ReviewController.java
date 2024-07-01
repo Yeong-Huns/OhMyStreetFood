@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.omsf.error.Exception.BadRequestException;
+import org.omsf.error.Exception.CustomBaseException;
+import org.omsf.error.Exception.ErrorCode;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
@@ -42,12 +45,12 @@ public class ReviewController {
 	
 	// 리뷰 등록
 	@PostMapping("insert")
-	public String reviewInsert(@Valid @ModelAttribute("requestReview") RequestReview review,
+	public String reviewInsert(Principal principal, @Valid @ModelAttribute("requestReview") RequestReview review,
 										Errors errors,
 										Model model,
 										RedirectAttributes redirectAttributes) {
 		log.info("RequestReview content : {}", review.toString());
-		
+		userValidator.validate(principal, errors);
 		if(errors.hasErrors()) {
 			redirectAttributes.addFlashAttribute("modalOn", true);
 			redirectAttributes.addFlashAttribute("requestReview", review);
@@ -116,7 +119,7 @@ public class ReviewController {
 			// delete 요청
 			if (!command.equals("delete")) {
 				// delete요청이 아닐 때
-				return String.format("redirect:/review/%d", reviewNo);
+				throw new CustomBaseException("잘못된 요청 방식입니다.", ErrorCode.INVALID_INPUT_VALUE);
 			}
 			reviewServ.deleteReview(reviewNo);
 			if(requestPage != null && !requestPage.isEmpty())

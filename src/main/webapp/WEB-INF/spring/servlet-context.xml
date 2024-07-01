@@ -29,7 +29,7 @@
 			<beans:value>50000000</beans:value>
 		</beans:property>
 	</beans:bean>
-
+	
 	<!-- use-default-filters
 	<context:component-scan base-package="org.omsf" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />

@@ -6,10 +6,10 @@
 }
 
 /* 모달 오버레이 */
-.modal {
+#customModal {
     display: none; /* 기본적으로 모달을 숨깁니다 */
     position: fixed;
-    z-index: 1;
+    z-index: 1050;
     left: 0;
     top: 0;
     width: 100%;
@@ -18,14 +18,11 @@
     background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
 }
 
-/* 모달 컨텐트 박스 */
-.modal-content {
-    /*position: relative;*/
-	position: fixed; /* 화면에 고정 */
+.custom-modal-content {
+    position: fixed; /* 화면에 고정 */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* margin: 15% auto; */
     padding: 20px;
     width: 80%;
     max-width: 600px;
@@ -36,7 +33,7 @@
 }
 
 /* 모달 닫기 버튼 */
-.close-button {
+.custom-close-button {
     position: absolute;
     top: 10px;
     right: 20px;
@@ -46,8 +43,8 @@
     cursor: pointer;
 }
 
-.close-button:hover,
-.close-button:focus {
+.custom-close-button:hover,
+.custom-close-button:focus {
     color: black;
 }
 
@@ -58,10 +55,9 @@
 }
 
 /* 모달이 열리면 display 속성을 변경합니다 */
-.modal:target {
+.custom-modal:target {
     display: block;
 }
-
 /*
 .review-container {
     background: #fff;
