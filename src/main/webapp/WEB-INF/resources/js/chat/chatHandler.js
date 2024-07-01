@@ -164,6 +164,21 @@ function initialize(address, username) {
         });
 }
 
+function connectToChannelWithOutLoginCheck(subscription, address) {
+    const match = subscription.match(/(.*?)(\d+)$/);
+    if (match) {
+        const customer = match[1];
+        const storeNo = match[2];
+        const target = (customer === address) ? storeNo : customer;
+        stompClient.send("/app/chat/subRequest", {}, JSON.stringify({
+            customerId: address,
+            storeNo: target,
+        }));
+    }
+}
+
+
+
 function connectToChannel(subscription, address) {
     const match = subscription.match(/(.*?)(\d+)$/);
     if (match) {
@@ -186,23 +201,63 @@ function startChat(customer, storeNo, address) {
             'Content-Type': 'application/json'
         }
     }).then(response => {
-        if (response.status === 404) {
+        if (response.code === "E4") {
             console.log("채팅 기록이 없습니다 (이미지와 함께 채팅방에 업데이트[예정])")
-            //return;
+            displayNoChatMessage();
+            return;
         }
         return response.json();
     })
         .then(data => {
             console.log("메세지목록 : ", data);
-            connectToChannel((customer + storeNo), address);
+            connectToChannelWithOutLoginCheck((customer + storeNo), address);
             showChatRoom(data, (customer + storeNo), address); // 모달&메세지표시
         })
         .catch(error => {
             console.error(error);
+            showLoginModal();
         });
 }
+
+function displayNoChatMessage() {
+    const chatMessagesDiv = document.getElementById('chat-messages');
+    chatMessagesDiv.innerHTML = '<div class="no-chat-message">첫 이용 고객입니다</div>';
+}
+
+function showLoginModal() {
+    const modalHtml = `
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">로그인 필요</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        채팅을 하려면 로그인이 필요합니다. 로그인해 주세요.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="redirectToLogin()">로그인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    loginModal.show();
+}
+
+function redirectToLogin(){
+    window.location.href = '/signin';
+}
+
 //messages, subscription, target 281
 function showChatRoom(messages, subscription, address) {
+    if (!Array.isArray(messages)) {
+        messages = [];
+    }
     const match = subscription.match(/(.*?)(\d+)$/);
     const customer = match[1];
     const storeNo = match[2];
@@ -221,6 +276,7 @@ function showChatRoom(messages, subscription, address) {
     var chatRoomModal = new bootstrap.Modal(chatRoomModalElement);
     chatRoomModal.show();
     document.getElementById('send-button').setAttribute('onclick', `sendMessage('${subscription}', '${target}')`);
+    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 }
 
 function showMessage(message, sender) {
@@ -255,6 +311,7 @@ function showMessage(message, sender) {
 
     document.getElementById('chat-messages').appendChild(messageElement);
     document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+
 }
 
 
@@ -446,4 +503,18 @@ $(document).ready(function () {
     $('.btn-close').on('click', function () {
         chatRoomModal.hide();
     });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    var chatRoomModalElement = document.getElementById('chatRoomModal');
+    var chatRoomModal = new bootstrap.Modal(chatRoomModalElement);
+
+    var closeButton = chatRoomModalElement.querySelector('.btn-close');
+    closeButton.addEventListener('click', function () {
+        chatRoomModal.hide();
+    });
+});
+
+document.getElementById('loginModal').addEventListener('hidden.bs.modal', function (event) {
+    event.target.remove();
 });

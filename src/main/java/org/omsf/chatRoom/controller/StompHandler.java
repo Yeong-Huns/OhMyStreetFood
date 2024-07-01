@@ -45,6 +45,8 @@ public class StompHandler {
         chatService.subscribeToChatRoom(request);
     }
 
+
+
     // 메세지 전송 요청
     @MessageMapping("/chat/sendRequest")
     public void handleSendMessage(MessageVO request) throws JsonProcessingException {
