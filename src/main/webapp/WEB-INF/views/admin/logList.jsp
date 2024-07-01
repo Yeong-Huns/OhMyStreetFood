@@ -77,7 +77,7 @@
                                     <th>now</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="log-data" class="log-data">
                                 <c:forEach items="${list}" var="log" varStatus="status">
                                     <tr class="log-row">
                                         <td>${log.LOGNO}</td>
@@ -105,6 +105,7 @@
                                 </c:forEach>
                             </tbody>
                         </table>
+                        <div id="spinner" class="spinner"></div>
                     </div>
                 </div>
             </div>
@@ -144,6 +145,103 @@
 				}
 			});
 		});
+	</script>
+	<script>
+	document.addEventListener('DOMContentLoaded', () => {
+	    let page = 2; // 페이지 번호
+	    const logContainer = document.getElementById('log-data');
+
+	    // 더미 데이터를 추가하는 함수
+	    function addLogs(logs) {
+	    	logs.forEach(log => {
+	            const logTr = document.createElement('tr');
+	            logTr.className = "log-row";
+	            
+	            // 날짜 포맷
+	            const createdAt = new Date(log.createdAt).toLocaleDateString('ko-KR', {
+	                year: 'numeric',
+	                month: '2-digit',
+	                day: '2-digit'
+	            }).replace(/\./g, '-').replace(/ /g, '').replace('년', '').replace('월', '').replace('일', '').slice(0,-1);
+	            console.log(log);
+	            logTr.innerHTML = `
+	            	<td>` + log.LOGNO + `</td>
+                    <td>` + log.STORENO + `</td>
+                    <td>` + log.STORENAME + `</td>
+                    <td>` + log.LATITUDE + `</td>
+                    <td>` + log.LONGITUDE + `</td>
+                    <td>` + log.ADDRESS + `</td>
+                    <td>` + log.INTRODUCE + `</td>
+                    <td>` + log.OPERATINGDATE + `</td>
+                    <td>` + log.OPERATINGHOURS + `</td>
+                    <td>` + log.TOTALREVIEW + `</td>
+                    <td>` + log.TOTALRATING + `</td>
+                    <td>` + log.LIKES + `</td>
+                    <td>` + log.CREATEDAT + `</td>
+                    <td>` + log.MODIFIEDAT + `</td>
+                    <td>` + log.MODIFIER + `</td>
+                    <td><i class="fa fa-undo rollback" aria-hidden="true" data-log-no="${log.LOGNO}" style="cursor: pointer;"></i></td>
+					<td></td>`;
+	            
+	            logContainer.appendChild(logTr);
+	        });
+	    }
+
+		 // 실제 서버에 요청할 때 사용할 함수
+		 function fetchReviews(page) {
+		     return fetch(`${pageContext.request.contextPath}/store/log/${storeId}/api?page=` + page)
+		         .then(response => response.json())
+		         .then(logs => logs)
+		         .catch(error => console.error('Error fetching logs:', error));
+		 }
+
+	    // 스크롤 이벤트를 감지하는 함수
+	    function handleScroll() {
+	        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight) {
+	            window.removeEventListener('scroll', handleScroll);
+
+	            showSpinner(); // 스피너 표시
+
+	            console.log("스크롤 이벤트 발생");
+	            setTimeout(async () => { // 3초 지연
+	            fetchReviews(page).then(logs => {
+	            	addLogs(logs);
+	                page++;
+	                hideSpinner(); // 스피너 숨김
+	                window.addEventListener('scroll', handleScroll);
+	            }).catch(error => {
+	                console.error('Error fetching logs:', error);
+	                hideSpinner(); // 스피너 숨김
+	                window.addEventListener('scroll', handleScroll);
+	            })
+	            }, 2000);
+	        }
+	    }
+	    
+	    function dateFormat(date){
+	    	const createdAt = new Date(log.createdAt).toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            }).replace(/\./g, '-').replace(/ /g, '').replace('년', '').replace('월', '').replace('일', '').slice(0,-1);
+
+	    	return 
+	    }
+	    
+	 	// 스피너 표시 함수
+	    function showSpinner() {
+	    	document.getElementById('spinner').style.display = 'block';
+	    }
+
+	    // 스피너 숨김 함수
+	    function hideSpinner() {
+	    	document.getElementById('spinner').style.display = 'none';
+	    }
+
+	    // 스크롤 이벤트 리스너 추가
+	    window.addEventListener('scroll', handleScroll);
+
+	});
 	</script>
 	
 </body>
