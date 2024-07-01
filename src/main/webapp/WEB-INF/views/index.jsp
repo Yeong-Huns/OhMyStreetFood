@@ -21,12 +21,14 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spinner.css">
 </head>
 <body>
-	<div class="col-md-12 text-center" style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 10px; text-decoration: underline; text-decoration-color: #007bff;" id="logo">
+	<div class="col-md-12 text-center" id="logo">
 		<h3>Oh My Street Food!</h3>
 	</div>
 
 	<!-- Search -->
+	<div class="col-md-12">
       <jsp:include page="search.jsp" />
+	</div>
 
 	<!-- KAKAO MAP API -->
 	<div class="col-md-12">
@@ -47,8 +49,15 @@
           <c:forEach items="${stores}" var="store">
 		    <div class="card" style="width:180px; cursor: pointer; margin: 5px; border: none;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
 		        <c:if test="${store.storeNo eq picture.storeNo}">
-		        	<img class="card-img-top" src="${picture.picture}">
-		        </c:if>
+				    <c:choose>
+				        <c:when test="${picture.picture != null}">
+				            <img class="card-img-top" src="${picture.picture}">
+				        </c:when>
+				        <c:otherwise>
+				            <img class="card-img-top" src="${pageContext.request.contextPath}/resources/img/00.jpg">
+				        </c:otherwise>
+				    </c:choose>
+				</c:if>
 		        <div class="card-body">
 		            <p class="card-title">${store.storeName}</p>
 		            <c:set var="addressWords" value="${fn:split(store.address, ' ')}" />

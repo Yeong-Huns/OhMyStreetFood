@@ -8,12 +8,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	const memberUsernameElement = document.getElementById("memberUsername");
 	const memberUsername = memberUsernameElement.value;
+	console.log(memberUsername);
 	
 	sendDataButtons.forEach(function(button) {
 		const storeStoreNo = button.getAttribute("data-store-no");
 	
-	    if (!storeStoreNo || !memberUsername) {
-	        console.error("storeStoreNo 또는 memberUsername 요소를 찾을 수 없습니다.");
+	    if (!storeStoreNo) {
+	        console.error("storeStoreNo 요소를 찾을 수 없습니다.");
+	        return;
+	    }
+	    
+	    if (!memberUsername) {
+	        console.error("memberUsername 요소를 찾을 수 없습니다.");
 	        return;
 	    }
     

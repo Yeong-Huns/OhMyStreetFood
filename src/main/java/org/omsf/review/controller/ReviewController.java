@@ -2,13 +2,9 @@ package org.omsf.review.controller;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
-import org.omsf.error.Exception.BadRequestException;
 import org.omsf.error.Exception.CustomBaseException;
 import org.omsf.error.Exception.ErrorCode;
 import org.omsf.review.model.RequestReview;
@@ -16,6 +12,7 @@ import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
 import org.omsf.review.validator.UserValidator;
 import org.omsf.store.service.StoreService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -81,6 +77,7 @@ public class ReviewController {
 	
 	
 	// 리뷰 상세 페이지
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("{reviewNo}")
 	public String getReviewDetail(@PathVariable("reviewNo") int reviewNo,@RequestParam(value="requestPage", required = false) String requestPage,
 									Model model) {
@@ -96,6 +93,7 @@ public class ReviewController {
 
 
 	// 리뷰 커맨드패턴 처리
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("command")
 	public String reviewCommand(Principal principal, @ModelAttribute("requestReview") RequestReview review,
 			@RequestParam("command") String command, @RequestParam("reviewNo") int reviewNo
