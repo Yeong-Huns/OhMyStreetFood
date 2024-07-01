@@ -2,9 +2,9 @@
  * 
  */
 
-//document.querySelector('.close-button').onclick = function() {
+//document.querySelector('.review-close-button').onclick = function() {
 //    const storeNo = document.querySelector('#storeStoreNo').value;
-//    location.href = '/review/list/' + storeNo;
+//    location.href = '/store/' + storeNo;
 //};
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (referrer.includes('mypage')) {
             location.href = '/mypage';
         } else {
-            location.href = '/review/list/' + storeNo;
+            location.href = '/store/' + storeNo;
         }
     };
 	

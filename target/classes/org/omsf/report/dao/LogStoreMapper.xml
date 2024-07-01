@@ -8,7 +8,7 @@
 			*
 		FROM LOG_STORE
 		WHERE STORENO = #{storeNo}
-		ORDER BY LOGNO ASC
+		ORDER BY LOGNO DESC
 	</select>
 	
 	<update id="updateStore" statementType="CALLABLE" >
