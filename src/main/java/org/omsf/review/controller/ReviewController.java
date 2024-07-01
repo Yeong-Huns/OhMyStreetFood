@@ -119,7 +119,7 @@ public class ReviewController {
 			// delete 요청
 			if (!command.equals("delete")) {
 				// delete요청이 아닐 때
-				throw new CustomBaseException("잘못된 요청 방식입니다.", ErrorCode.INVALID_INPUT_VALUE);
+				throw new CustomBaseException(ErrorCode.NOT_ALLOWED_REQUEST);
 			}
 			reviewServ.deleteReview(reviewNo);
 			if(requestPage != null && !requestPage.isEmpty())

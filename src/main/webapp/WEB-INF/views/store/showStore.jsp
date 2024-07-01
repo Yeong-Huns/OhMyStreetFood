@@ -24,6 +24,7 @@
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reviewModal.css">
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
 <!-- JavaScript -->
@@ -215,11 +216,11 @@
 			</c:if>
 
 			<div class="col-md-12 text-center">
-				<c:if test="${store.totalReview > 5}">
-					<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}">
-						<spring:message code="review.more" />
-					</a>
-				</c:if>
+<%-- 				<c:if test="${store.totalReview > 5}"> --%>
+<%-- 					<a href="${pageContext.request.contextPath}/review/list/${store.storeNo}"> --%>
+<%-- 						<spring:message code="review.more" /> --%>
+<!-- 					</a> -->
+<%-- 				</c:if> --%>
 				<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고하기</a>
 			</div>
 			
@@ -232,10 +233,10 @@
 	</div>
 	
 	<!-- 모달 화면 -->
-	<div id="modal" class="modal" <c:if test="${modalOn}"> style="display: block;"</c:if>>
-        <div class="modal-content">
+	<div id="review-modal" class="review-modal" <c:if test="${modalOn}"> style="display: block;"</c:if>>
+        <div class="review-modal-content">
 			<div class="review-container">
-				<span class="close-button">&times;</span>
+				<span class="review-close-button">&times;</span>
 				<h1><spring:message code="review.write" /></h1>
 				<form:form id="reviewForm" method="post" modelAttribute="requestReview" action="${pageContext.request.contextPath}/review/insert">
 					<p>
@@ -282,6 +283,7 @@
 
 	<!-- 리뷰 모달 -->
 	<script src="${pageContext.request.contextPath}/js/modal.js"></script>
+	<script src="${pageContext.request.contextPath}/js/reviewModal.js"></script>
 
 	<!-- like 요청 -->
 <%-- 	<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script> --%>
