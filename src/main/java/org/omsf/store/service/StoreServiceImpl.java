@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.omsf.error.Exception.CustomBaseException;
+import org.omsf.error.Exception.ErrorCode;
 import org.omsf.member.model.Member;
 import org.omsf.member.service.MemberService;
 import org.omsf.store.dao.StoreRepository;
@@ -157,7 +158,7 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Override
 	public Store getStoreByNo(int storeNo) {
-		Store store = storeRepository.getStoreByNo(storeNo).orElseThrow(() -> new NoSuchElementException("해당하는 상점을 찾을 수 없습니다"));
+		Store store = storeRepository.getStoreByNo(storeNo).orElseThrow(() -> new CustomBaseException(ErrorCode.NOT_FOUND_STORE));
 		return store;
 	}
 	
@@ -220,8 +221,7 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public Photo getPhotoByPhotoNo(Integer photoNo) {
 		if (photoNo == null) {return null;}
- 		Photo photo = storeRepository.getPhotoByPhotoNo(photoNo);
-		
+ 		Photo photo = storeRepository.getPhotoByPhotoNo(photoNo).orElseThrow(() -> new CustomBaseException(ErrorCode.NOT_FOUND_PHOTO));		
 		return photo;
 	}
 	

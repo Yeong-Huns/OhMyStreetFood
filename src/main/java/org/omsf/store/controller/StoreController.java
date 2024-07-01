@@ -75,6 +75,7 @@ public class StoreController {
 			@RequestParam(value = "menus", required = false) String menusJson,
 	        Principal principal
 	) throws IOException {
+		
 		String username = principal.getName();
 		Store store = objectMapper.readValue(storeJson, Store.class);
 		List<Menu> menus = objectMapper.readValue(menusJson, new TypeReference<List<Menu>>() {});
@@ -93,7 +94,7 @@ public class StoreController {
         return ResponseEntity.ok("");
 	}
 	
-	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/{storeNo}")
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
 		Store store = storeService.getStoreByNo(storeNo);
@@ -283,13 +284,13 @@ public class StoreController {
 		return storeService.getStoresByPosition(position);
 	}	
 	
-	
 	@ResponseBody
     @DeleteMapping("/{storeNo}/{photoNo}")
     public ResponseEntity<?> deleteStoreGallery(@PathVariable int storeNo,
     		@PathVariable int photoNo,
     		Principal principal) {
-        String username = principal.getName();
+        
+		String username = principal.getName();
         Photo photo = storeService.getPhotoByPhotoNo(photoNo);
         Store store = storeService.getStoreByNo(storeNo);
         String memberType = null;
@@ -380,7 +381,6 @@ public class StoreController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@DeleteMapping("like/delete")
 	public ResponseEntity<?> deleteLike(Principal principal, @RequestBody Like like) {
