@@ -66,6 +66,7 @@
 				    </c:if>
 						<input type="hidden" name="command" id="command" value="" />
 						<input type="hidden" name="reviewNo" id="reviewNo" value="${reviewNo}" />
+						<input type="hidden" name="requestPage" id="requestPage" value="${requestPage}"/>
 						<sec:authorize access="authentication.name == '${memberUsername}'">
 							<button id="delete-submit" onclick="deleteCommand()"><spring:message code="delete.btn" /></button>
 							<button id="update-submit" onclick="updateCommand()"><spring:message code="update.btn" /></button>

@@ -29,4 +29,11 @@
 		AND STORE_STORENO = #{storeStoreNo}
 	</delete>
 	
+	<!-- yunbin -->
+	<select id="getLikesByUsername" resultType="org.omsf.store.model.Like">
+		select member_username as memberUsername, store_storeno as storeStoreNo
+		from "LIKE"
+		where member_username = #{username}
+	</select>
+	
 </mapper>

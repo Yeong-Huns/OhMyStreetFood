@@ -2,7 +2,10 @@ package org.omsf.review.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.omsf.error.Exception.BadRequestException;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -78,12 +82,15 @@ public class ReviewController {
 	
 	// 리뷰 상세 페이지
 	@GetMapping("{reviewNo}")
-	public String getReviewDetail(@PathVariable("reviewNo") int reviewNo,
+	public String getReviewDetail(@PathVariable("reviewNo") int reviewNo,@RequestParam(value="requestPage", required = false) String requestPage,
 									Model model) {
 		Review review = reviewServ.getReviewByReviewNo(reviewNo);
 		model.addAttribute("review", review);
 		model.addAttribute("reviewNo", reviewNo);
 		model.addAttribute("memberUsername", review.getMemberUsername());
+		
+		if(requestPage != null && !requestPage.isEmpty())
+			model.addAttribute("requestPage", requestPage);
 		return "review/reviewDetail";
 	}
 
@@ -91,8 +98,9 @@ public class ReviewController {
 	// 리뷰 커맨드패턴 처리
 	@PostMapping("command")
 	public String reviewCommand(Principal principal, @ModelAttribute("requestReview") RequestReview review,
-			@RequestParam("command") String command, @RequestParam("reviewNo") int reviewNo, Errors errors,
-			RedirectAttributes redirectAttributes) {
+			@RequestParam("command") String command, @RequestParam("reviewNo") int reviewNo
+			, @RequestParam(value="requestPage", required = false) String requestPage,
+			Errors errors, RedirectAttributes redirectAttributes) {
 		log.info("요청 커맨드 : {}", command);
 		
 		userValidator.validate(review, principal, errors);
@@ -114,12 +122,11 @@ public class ReviewController {
 				throw new CustomBaseException(ErrorCode.NOT_ALLOWED_REQUEST);
 			}
 			reviewServ.deleteReview(reviewNo);
-			return String.format("redirect:/review/list/%d", review.getStoreStoreNo());
+			if(requestPage != null && !requestPage.isEmpty())
+				return "redirect:/mypage";
+			else
+				return String.format("redirect:/review/list/%d", review.getStoreStoreNo());
 		}
 	}
-
-
-	
-	
 
 }
