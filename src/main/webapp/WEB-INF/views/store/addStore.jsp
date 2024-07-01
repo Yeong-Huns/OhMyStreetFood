@@ -98,11 +98,12 @@
 				
 				<div class="form-group">
 				    <label for="picture">가게 대표 사진</label>
-				    <input class="form-control" id="picture" name="picture" type="file" accept="image/*">
 				
 				    <span id="preview">
-				        <img id="previewImg" src="" alt="이미지 미리보기" class="img-thumbnail" style="display: none; max-width: 100px;">
+				        <img id="previewImg" src="" alt="이미지 미리보기" class="img-thumbnail" style="display: none; max-width: 200px;">
 				    </span>
+				    <button type="button" class="btn btn-primary" id="photoBtn">파일 선택</button>
+				    <input class="form-control" id="picture" name="picture" type="file" accept="image/*" style="display: none;">
 				</div>
 
 				<div class="form-group">
