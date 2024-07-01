@@ -14,8 +14,11 @@
     	<intercept-url pattern="/secure/**" access="authenticated" />
     	<intercept-url pattern="/chat/**" access="authenticated" />
     	<intercept-url pattern="/mypage" access="authenticated" />
-    	<intercept-url pattern="/store/report/**" access="authenticated" />
-    	<intercept-url pattern="/js/modal.js" access="authenticated" />
+    	<intercept-url pattern="/store/report/**" access="authenticated" /> 
+    	<intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
+    	<intercept-url pattern="/store/createstore" access="authenticated" />
+    	<intercept-url pattern="/store/**/update" access="authenticated" />
+    	<intercept-url pattern="/review/insert" access="hasRole('ROLE_USER')"/>
 	    <intercept-url pattern="/**" access="permitAll" />
 	    
 	    <form-login
@@ -28,6 +31,7 @@
 	        logout-url="/logout"
 	        logout-success-url="/"
 	        delete-cookies="JSESSIONID" />
+	        
 	</http>
     
 	<beans:bean id="customUserDetailsService" class="org.omsf.security.UserSecurityService"/>
