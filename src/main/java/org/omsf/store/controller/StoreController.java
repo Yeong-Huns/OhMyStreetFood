@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.omsf.member.model.Member;
 import org.omsf.member.service.MemberService;
@@ -23,6 +25,7 @@ import org.omsf.store.service.LikeService;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.SearchService;
 import org.omsf.store.service.StoreService;
+import org.omsf.store.service.ViewCountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -61,7 +64,8 @@ public class StoreController {
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private final LikeService likeService;
 	private final SearchService searchService;
-
+	private final ViewCountService viewCountService;
+	
 	@GetMapping("/createstore")
 	public String showAddStoreGeneralPage() {
 	    return "store/addStore";
@@ -96,11 +100,12 @@ public class StoreController {
 	
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/{storeNo}")
-	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
+	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model, HttpServletRequest request, HttpServletResponse response) {
 		Store store = storeService.getStoreByNo(storeNo);
 		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
 		Photo storePhoto = null;
-    
+		Cookie cookie = viewCountService.addViewCount(request, storeNo);
+		response.addCookie(cookie);
 		storePhoto = storeService.getPhotoByPhotoNo(store.getPicture());
 		List<Photo> gallery = storeService.getStoreGallery(storeNo);
 
