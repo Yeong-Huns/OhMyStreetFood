@@ -39,6 +39,7 @@
 
 					<sec:authorize access="isAuthenticated()">
 						<sec:authentication property="principal.username"/> <br>
+						<input type="hidden" id="memberUsername" value="${username }">
 						<sec:authorize access="hasRole('ROLE_OWNER')">OWNER</sec:authorize>
 						<sec:authorize access="hasRole('ROLE_USER')">USER</sec:authorize>
 					</sec:authorize>
