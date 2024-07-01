@@ -74,7 +74,7 @@ public class ReportController {
 	}
 	
 	// leejongseop
-	@GetMapping("/store/log/{storeId}")
+	@GetMapping("/admin/store/log/{storeId}")
 	public String showLogList(@PathVariable("storeId") int storeId, Model model) {
 		List<Map<String, Object>> list = logStoreService.getLogListByStoreNo(storeId);
 		log.info("로그 정보 : {}", list);
@@ -83,7 +83,7 @@ public class ReportController {
 	}
 	
 	@ResponseBody
-	@PostMapping("/store/log/update")
+	@PostMapping("/admin/store/log/update")
 	public boolean updateStore(int logNo) {
 		log.info("로그 id : {}", logNo);
 		try {
@@ -95,7 +95,7 @@ public class ReportController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/store/log/{storeId}/api")
+	@GetMapping("/admin/store/log/{storeId}/api")
 	public ResponseEntity<?> getLogNextPage(@PathVariable("storeId") int storeId, 
 			@RequestParam(value = "page", defaultValue = "2") int page){
 		log.info("ajax로 로그 정보 호출");
