@@ -19,11 +19,12 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+
 	<!-- Search -->
-	<div class="col-md-12">
-      <jsp:include page="../search.jsp" />
-   	</div>
-            
+    <div class="col-md-12">
+	    <jsp:include page="../search.jsp" />
+	</div>
+
     <!-- Oderby -->
     <jsp:include page="../orderby.jsp" />
 

@@ -19,10 +19,8 @@
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
-
 </head>
 <body>
-
 			<div class="col-md-12 text-center" id="title">
 				<h3>마이페이지</h3>
 			</div>
@@ -105,5 +103,11 @@
 		<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 	</sec:authorize>
 	
+	<!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
 </body>
 </html>

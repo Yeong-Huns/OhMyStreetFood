@@ -282,7 +282,7 @@
 		</div>
 	</div>
 	
-	<!-- Menu -->
+    <!-- Menu -->
     <div class="row">
         <div class="col-md-12">
             <jsp:include page="../menu.jsp" />

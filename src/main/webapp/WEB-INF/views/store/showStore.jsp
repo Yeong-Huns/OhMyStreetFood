@@ -94,15 +94,16 @@
            		</div>
         	</div>
     	</div>
-	    
+  
 	    <div>
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
-                 <span><h5>가게 정보</h5></span>
+                 <span><h5><strong>가게 정보</strong></h5></span>
                  <span><a href="${pageContext.request.contextPath}/store/${store.storeNo}/update">정보 수정</a></span>
             </span>
             
+            
             <!-- KAKAO MAP API -->
-			<div class="col-md-12" id="map" style="width: 100%; height: 200px; border-radius: 20px"></div>
+			<div class="col-md-12" id="map" style="width: 100%; height: 200px; border-radius: 20px; background-color: "#f6f6f6;"></div>
 			<div class="col-md-12" id="result"></div>
 				
             <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
@@ -302,7 +303,14 @@
 			</div>
         </div>
     </div>
-
+	
+	<!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
+    
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/storeDetail.js"></script>

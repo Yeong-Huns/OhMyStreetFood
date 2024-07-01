@@ -10,7 +10,6 @@
     <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
         <span><h5>사진 갤러리</h5></span>
     </span>
-    
     <span class="gallery-wrapper">
         <c:choose>
             <c:when test="${not empty gallery}">

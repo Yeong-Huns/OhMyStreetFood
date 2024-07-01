@@ -19,15 +19,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	    <!-- Oderby -->
-	    <jsp:include page="orderby.jsp" />
-	
-	    <div class="col-md-12" id="storeList">
-	        <jsp:include page="search/searchItems.jsp">
-	            <jsp:param name="stores" value="${stores}" />
-	            <jsp:param name="pictures" value="${pictures}" />
-	        </jsp:include>
-	    </div>
+    <!-- Oderby -->
+    <jsp:include page="orderby.jsp" />
+
+    <div class="col-md-12" id="storeList">
+        <jsp:include page="search/searchItems.jsp">
+            <jsp:param name="stores" value="${stores}" />
+            <jsp:param name="pictures" value="${pictures}" />
+        </jsp:include>
+    </div>
 
     <!-- Menu -->
     <div class="row">

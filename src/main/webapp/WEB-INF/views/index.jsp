@@ -29,7 +29,7 @@
 	<div class="col-md-12">
       <jsp:include page="search.jsp" />
 	</div>
-	
+
 	<!-- KAKAO MAP API -->
 	<div class="col-md-12">
 		<div id="map" style="width: 100%; height: 400px; border-radius: 20px"></div>
@@ -49,8 +49,15 @@
           <c:forEach items="${stores}" var="store">
 		    <div class="card" style="width:180px; cursor: pointer; margin: 5px; border: none;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
 		        <c:if test="${store.storeNo eq picture.storeNo}">
-		        	<img class="card-img-top" src="${picture.picture}">
-		        </c:if>
+				    <c:choose>
+				        <c:when test="${picture.picture != null}">
+				            <img class="card-img-top" src="${picture.picture}">
+				        </c:when>
+				        <c:otherwise>
+				            <img class="card-img-top" src="${pageContext.request.contextPath}/resources/img/00.jpg">
+				        </c:otherwise>
+				    </c:choose>
+				</c:if>
 		        <div class="card-body">
 		            <p class="card-title">${store.storeName}</p>
 		            <c:set var="addressWords" value="${fn:split(store.address, ' ')}" />
