@@ -19,9 +19,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	<div class="main">
-        <div class="row">
-
 	    <!-- Oderby -->
 	    <jsp:include page="orderby.jsp" />
 	
@@ -31,9 +28,6 @@
 	            <jsp:param name="pictures" value="${pictures}" />
 	        </jsp:include>
 	    </div>
-	
-		</div>
-	</div>
 
     <!-- Menu -->
     <div class="row">

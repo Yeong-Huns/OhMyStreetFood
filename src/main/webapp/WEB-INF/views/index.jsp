@@ -21,13 +21,15 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spinner.css">
 </head>
 <body>
-	<div class="col-md-12 text-center" style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 10px; text-decoration: underline; text-decoration-color: #007bff;" id="logo">
+	<div class="col-md-12 text-center" id="logo">
 		<h3>Oh My Street Food!</h3>
 	</div>
 
 	<!-- Search -->
+	<div class="col-md-12">
       <jsp:include page="search.jsp" />
-
+	</div>
+	
 	<!-- KAKAO MAP API -->
 	<div class="col-md-12">
 		<div id="map" style="width: 100%; height: 400px; border-radius: 20px"></div>

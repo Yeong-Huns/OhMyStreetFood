@@ -22,33 +22,21 @@
 
 </head>
 <body>
-	<div class="main">
-		<div class="row">
-			<div>
-				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
-					<i class="fas fa-arrow-left"></i>
-				</a>
-			</div>
+
 			<div class="col-md-12 text-center" id="title">
 				<h3>마이페이지</h3>
 			</div>
 			
 			<div align="center" style="margin-bottom: 20px;">
-				<img src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
-				<p style="margin-top: 20px;">
-
-					<sec:authorize access="isAuthenticated()">
-						<sec:authentication property="principal.username"/> <br>
-						<input type="hidden" id="memberUsername" value="${username }">
-						<sec:authorize access="hasRole('ROLE_OWNER')">OWNER</sec:authorize>
-						<sec:authorize access="hasRole('ROLE_USER')">USER</sec:authorize>
-					</sec:authorize>
-					<sec:authorize access="isAnonymous()">
-						Anonymous User
-					</sec:authorize>
-
-					<a href="#">사진 수정</a>
-				</p>
+				<sec:authorize access="isAuthenticated()">
+					<sec:authentication property="principal.username"/> <br>
+					<input type="hidden" id="memberUsername" value="${username }">
+					<sec:authorize access="hasRole('ROLE_OWNER')">OWNER</sec:authorize>
+					<sec:authorize access="hasRole('ROLE_USER')">USER</sec:authorize>
+				</sec:authorize>
+				<sec:authorize access="isAnonymous()">
+					Anonymous User
+				</sec:authorize>
 			</div>
 			
 			<div style="width:100%;">
@@ -104,8 +92,13 @@
 			</div>
 			
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		</div>
-	</div>
+
+	<!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
 	
 	<sec:authorize access="isAuthenticated()">
 		<!-- like 요청 -->
