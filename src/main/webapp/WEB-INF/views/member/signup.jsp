@@ -220,11 +220,6 @@
 <body>
 	<div class="main">
 		<div class="row">
-			<div>
-				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
-				<i class="fas fa-arrow-left"></i>
-				</a>
-			</div>
 			<div class="col-md-12 text-center" id="title">
 				<c:choose>
 				    <c:when test="${member.memberType eq 'owner'}">
@@ -286,7 +281,14 @@
 			</form:form>
 		</div>
 	</div>
-
+	
+    <!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
+    
 	<!-- Bootstrap JS -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
