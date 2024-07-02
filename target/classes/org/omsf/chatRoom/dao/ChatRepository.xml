@@ -46,15 +46,12 @@
           AND storeNo = #{storeNo}
     </select>
 
-    <!-- -->
-
-    <!-- getChatRoomsWithLastMessage -->
-    <select id="getChatRoomsWithLastMessage" parameterType="string" resultType="org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest">
+    <!-- 새로운 SQL 매핑-->
+    <select id="getChatRoomsWithLastMessage" resultType="org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest">
         WITH UserType AS (
             SELECT
-                CASE
-                    WHEN LOWER(memberType) = 'owner' THEN 'owner'
-                    ELSE 'user'
+                CASE WHEN LOWER(memberType) = 'owner' THEN 'owner'
+                     ELSE 'user'
                     END AS type,
                 m.username
             FROM member m
@@ -108,6 +105,8 @@
         ) m ON cr.chatroomNo = m.chatRoomNo
         WHERE m.rn = 1
     </select>
+
+
 
 
 

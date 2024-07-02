@@ -9,7 +9,6 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
 <title>OhMyStreetFood!</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -39,10 +38,10 @@
 			            <i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
 			        </span>
 			        <sec:authorize access="hasRole('ROLE_USER')">
-			            <span><a href="${pageContext.request.contextPath}/chat" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
+			            <span><a href="javascript:void(0)" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
 			        </sec:authorize>
 			        <sec:authorize access="isAnonymous()">
-			            <span><a href="javascript:void(0)" onclick="showLoginAlert()">사장님과 채팅하기</a></span>
+			            <span><a href="javascript:void(0)" onclick="showLoginModal()">사장님과 채팅하기</a></span>
 			        </sec:authorize>
 			    </c:when>
 			    <c:otherwise>
