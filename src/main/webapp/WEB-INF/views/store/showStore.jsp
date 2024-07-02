@@ -181,7 +181,7 @@
 				    		<i class="fas fa-star" style="color:#f5b301;"></i>
 				    	</c:forEach>
 					    <c:if test="${5 - store.totalRating > 0}">
-					    	<c:forEach begin="1" end="${store.totalRating % 1 == 0 ? 5 - store.totalRaiting : 6 - store.totalRating}">
+					    	<c:forEach begin="1" end="${store.totalRating % 1 == 0 ? 5 - store.totalRating : 6 - store.totalRating}">
 				    			<i class="fas fa-star"></i>
 				    		</c:forEach>
 					    </c:if>
