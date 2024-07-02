@@ -80,7 +80,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 3;  /* 최대 3줄까지만 표시 */
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
 .chatroom-time {
@@ -113,8 +113,8 @@
     margin-bottom: 10px;
 }
 .chat-message .message-content {
-    max-width: 70%;
-    padding: 10px;
+    max-width: 90%;
+    padding: 8px;
     border-radius: 10px;
     position: relative;
 }
@@ -186,12 +186,12 @@
 }
 
 .btn-back::before {
-    content: '\2190'; /* Unicode for left arrow */
+    content: '\2190';
     font-size: 24px;
 }
 
 .chat-avatar {
-    margin-right: 10px; /* 기존 이미지의 위치를 약간 오른쪽으로 이동 */
+    margin-right: 10px;
 }
 
 .chat-avatar img {
@@ -296,4 +296,13 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.no-chat-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 24px;
+    color: #888;
 }

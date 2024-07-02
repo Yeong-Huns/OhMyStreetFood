@@ -55,11 +55,12 @@ public class ChatServiceImpl implements ChatService{
                 .orElseThrow(()->new CustomBaseException(ErrorCode.NOT_ALLOWED_REQUEST));
     }
 
-
-
-
-
-
+    //4. 구독주소로 chatRoomNo
+    @Override
+    public long getChatRoomNoBySubscription(String customer, long storeNo) {
+        return chatRepository.getChatRoomNoBySubscription(customer, storeNo)
+                .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_STORENO));
+    }
 
     @Override
     public List<ChatRoomVO> findSubListByAddress(String address) {
@@ -100,7 +101,7 @@ public class ChatServiceImpl implements ChatService{
         String owner = chatRepository.findOwnerByRoomAddress(request.getStoreNo())
                 .orElseThrow(()-> new CustomBaseException(ErrorCode.NOT_FOUND_STORE_OWNER));
         messagingTemplate.convertAndSend("/topic/chat/" + request.getCustomerId(), request.getCombinedId());
-        messagingTemplate.convertAndSend("/topic/chat/" + owner, request.getCombinedId());
+        messagingTemplate.convertAndSend("/topic/chat/" + request.getStoreNo(), request.getCombinedId());
         log.info("발신주소 send : /topic/chat/"+request.getCustomerId()+" : combinedId? = " + request.getCustomerId());
         log.info("수신주소 send : /topic/chat/"+owner+" : combinedId? = " + request.getCustomerId());
     }

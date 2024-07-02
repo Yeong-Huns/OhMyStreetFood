@@ -38,7 +38,13 @@
             c.chatRoomNo = #{chatRoomNo}
     </select>
 
-
+    <!-- getChatRoomNoBySubscription -->
+    <select id="getChatRoomNoBySubscription" parameterType="map" resultType="java.lang.Long">
+        SELECT chatRoomNo
+        FROM ChatRoom
+        WHERE customer = #{customer}
+          AND storeNo = #{storeNo}
+    </select>
 
 
     <!-- owner Store List -->
@@ -52,6 +58,8 @@
             FETCH FIRST 1 ROWS ONLY
         )
     </select>
+
+
     <!-- create ChatRoom -->
     <insert id="saveChatRoom">
         INSERT INTO CHATROOM (CUSTOMER, STORENO)

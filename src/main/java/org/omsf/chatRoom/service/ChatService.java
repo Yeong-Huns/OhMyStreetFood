@@ -30,7 +30,8 @@ public interface ChatService {
     List<String> getUserSubscriptions(String address);
     //3. 챗룸번호로 구독주소 가져오기
     String getSubscriptionByChatRoomNo(long chatRoomNo);
-
+    //4. 구독주소로 챗룸번호
+    long getChatRoomNoBySubscription(String customer, long storeNo);
 
     List<ChatRoomVO> findSubListByAddress(String address);
     List<Integer> findStoreListByAddress(@Param("address") String address);

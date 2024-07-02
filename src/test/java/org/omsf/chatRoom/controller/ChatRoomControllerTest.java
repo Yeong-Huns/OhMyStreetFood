@@ -90,7 +90,7 @@ class ChatRoomControllerTest {
     }
 
 
-    @DisplayName("존재하지 않는 회원 조회(ErrorCode.NOT_FOUND_USER")
+    @DisplayName("존재하지 않는 회원 조회(ErrorCode.NOT_FOUND_USER)")
     @Test
     void getAddressNotFound() throws Exception {
         MvcResult result = mockMvc.perform(get("/chat/getAddress")

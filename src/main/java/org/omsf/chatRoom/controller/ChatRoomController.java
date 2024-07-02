@@ -51,8 +51,13 @@ public class ChatRoomController {
     }
     //3. 챗룸넘버로 구독주소 가져오기
     @GetMapping("/subscription")
-    public ResponseEntity<String> getSubscriptionByChatRoomNo(long chatRoomNo){
+    public ResponseEntity<String> getSubscriptionByChatRoomNo(@RequestParam long chatRoomNo){
         return ResponseEntity.ok(chatService.getSubscriptionByChatRoomNo(chatRoomNo));
+    }
+    //4. 구독주소로 챗룸넘버
+    @GetMapping("/chatRoomNoBySubscription")
+    public ResponseEntity<Long> getChatRoomNoBySubscription(String customer, long storeNo){
+        return ResponseEntity.ok(chatService.getChatRoomNoBySubscription(customer, storeNo));
     }
 
     @GetMapping("/chatList")
