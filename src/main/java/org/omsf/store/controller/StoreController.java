@@ -42,6 +42,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -276,13 +278,13 @@ public class StoreController {
 	
 	@ResponseBody
 	@GetMapping("api")
-	public List<Store> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position,
-									@RequestParam(value = "latitude", defaultValue = "1") String latitude,
-									@RequestParam(value = "longitude", defaultValue = "1") String longitude){
-		
-		log.info("api 요청 완료");
-		log.info("position : {}" , position);
-		return storeService.getStoresByPosition(position);
+	public ResponseEntity<?> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position) throws JsonProcessingException{
+		Gson gson = new Gson();
+		List<Map<String, Object>> storeList = storeService.getStoresByPosition(position);
+		if(storeList.size() <= 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.OK)
+				.header("Content-Type", "text/plain; charset=UTF-8")
+				.body(gson.toJson(storeList));
 	}	
 	
 	@PreAuthorize("isAuthenticated()")
@@ -408,5 +410,6 @@ public class StoreController {
 			return new ResponseEntity<>(count, HttpStatus.OK);			
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
+	
 }
 

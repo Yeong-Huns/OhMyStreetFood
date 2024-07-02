@@ -19,6 +19,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spinner.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/customOverlay.css">
+    
 </head>
 <body>
 	<div class="col-md-12 text-center" id="logo">

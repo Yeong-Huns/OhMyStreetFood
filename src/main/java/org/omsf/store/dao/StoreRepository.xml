@@ -282,12 +282,29 @@
 	</select>
 	
 	<!-- leejongseop -->
-	<select id="getStoresByPosition" resultMap="storeResultMap">
+	<select id="getStoresByPosition" resultType="hashmap">
 		<bind name="pattern" value="'%' + position + '%'" />
-		SELECT 
-			* 
-		FROM STORE 
-		WHERE ADDRESS LIKE #{pattern}
+		SELECT
+	  		S.STORENO AS "storeNo",
+	  		S.STORENAME AS "storeName",
+	  		S.LATITUDE AS "latitude",
+	  		S.LONGITUDE AS "longitude",
+	  		S.ADDRESS AS "address",
+	  		S.INTRODUCE AS "introduce",
+	  		S.OPERATINGDATE AS "operatingDate",
+	  		S.OPERATINGHOURS AS "operatingHours",
+	  		S.TOTALREVIEW AS "totalReview",
+	  		S.TOTALRATING AS "totalRating",
+	  		S.LIKES AS "likes",
+	  		S.CREATEDAT AS "createdAt",
+	  		S.MODIFIEDAT AS "modifiedAt",
+	  		S.MEMBER_USERNAME AS "username",
+	  		S.PICTURE AS "picture",
+	  		P.PICTURE AS "pictureUrl"
+	  	FROM STORE S
+	  	LEFT JOIN PHOTO P
+	  	ON S.PICTURE = P.PHOTONO
+	  	WHERE S.ADDRESS LIKE #{pattern}
 	</select>
 	
 </mapper>

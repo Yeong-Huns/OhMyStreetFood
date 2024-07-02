@@ -55,6 +55,10 @@ function saveLatitudeAndLongitude(latitude, longitude){
 	console.log("현재 경도 값 : " + longitude);
 }
 
+function undefinedTodefault(imgURL){
+	return imgURL === undefined ? '/img/00.jpg' : imgURL;
+}
+
 (async () => {
 	const location = await displayLocation();
 	var gps_lat = location.gps_lat;
@@ -91,8 +95,9 @@ function saveLatitudeAndLongitude(latitude, longitude){
 			try {
 				const response = await fetch('/store/api?position=' + address);
 				const data = await response.json();
+//				const data = JSON.stringify(response.json());
 				positions = data; // 서버로부터 받은 데이터로 positions 업데이트
-				console.log(data);
+				console.log("data 값 : " + data);
 				renderingMarker();
 			} catch (error) {
 				console.error('Error fetching positions:', error);
@@ -106,25 +111,103 @@ function saveLatitudeAndLongitude(latitude, longitude){
 	function renderingMarker() {
 		// 기존 마커 제거
 		var markers = [];
+		
 		if (positions) {
-			for (var i = 0; i < positions.length; i++) {
+			positions.forEach(function (pos) {
 				var marker = new kakao.maps.Marker({
 					map: map,
-					position: new kakao.maps.LatLng(positions[i].latitude, positions[i].longitude),
-					title: positions[i].storeName,
+					position: new kakao.maps.LatLng(pos.latitude, pos.longitude),
+					title: pos.storeName,
 					image: new kakao.maps.MarkerImage(imageSrc, new kakao.maps.Size(24, 35))
 				});
 				markers.push(marker);
+				
+				// content HTMLElement 생성
+				var content = document.createElement('div');
+				content.className = 'wrap';
+				
+				var info = document.createElement('div');
+				info.className = 'info';
+				content.appendChild(info);
+				
+				var title = document.createElement('div');
+				title.className = 'title';
+				title.appendChild(document.createTextNode(pos.storeName));
+				
+				var close = document.createElement('div');
+				close.className = 'close';
+				close.setAttribute('onclick', 'closeOverlay()');
+				close.setAttribute('title', '닫기');
+				title.appendChild(close);
+				info.appendChild(title);
+				
+				var body = document.createElement('div');
+				body.className = 'body';
+				info.appendChild(body);
+				
+				var img = document.createElement('div');
+				img.className = 'img';
+				var imgTag = document.createElement('img');
+				imgTag.setAttribute('src', undefinedTodefault(pos.pictureUrl));
+				imgTag.setAttribute('width', '73');
+				imgTag.setAttribute('height', '70');
+				img.appendChild(imgTag);
+				body.appendChild(img);
+				
+				var desc = document.createElement('div');
+				desc.className = 'desc';
+				body.appendChild(desc);
+				
+				var ellipsis1 = document.createElement('div');
+				ellipsis1.className = 'ellipsis';
+				ellipsis1.appendChild(document.createTextNode(pos.address));
+				desc.appendChild(ellipsis1);
+				
+				var ellipsis2 = document.createElement('div');
+				ellipsis2.className = 'jibun ellipsis';
+				ellipsis2.appendChild(document.createTextNode('평점 ' + pos.totalRating + "   찜  " + pos.likes));
+				desc.appendChild(ellipsis2);
+				
+				var link = document.createElement('div');
+				var anchor = document.createElement('a');
+				anchor.setAttribute('href', '/store/' + pos.storeNo);
+				anchor.setAttribute('target', '_blank');
+				anchor.className = 'link';
+				anchor.appendChild(document.createTextNode('상세보기'));
+				link.appendChild(anchor);
+				desc.appendChild(link);
+
+			    // 닫기 이벤트 추가
+			    close.onclick = function() {
+			        overlay.setMap(null);
+			    };
+			
+//			    content.appendChild(closeBtn);
+			    
+			    // customoverlay 생성, 이때 map을 선언하지 않으면 지도위에 올라가지 않습니다.
+			    var overlay = new daum.maps.CustomOverlay({
+			        position: new kakao.maps.LatLng(pos.latitude, pos.longitude),
+			        content: content
+			    });
+			
+			    // 마커를 클릭했을 때 커스텀 오버레이를 표시합니다
+			    kakao.maps.event.addListener(marker, 'click', function() {
+			        overlay.setMap(map);
+			    });
 			}
+			
+
+			)	
 		}
 	}
 
 	renderingMarker();
+	
 
 	// 마우스 드래그로 지도 이동이 완료되었을 때 마커 렌더링 갱신
-	kakao.maps.event.addListener(map, 'idle', function() {
-		renderingMarker();
-	});
+//	kakao.maps.event.addListener(map, 'idle', function() {
+//		renderingMarker();
+//	});
 
 	async function searchDetailAddrFromCoords(coords, callback) {
 		var geocoder = new kakao.maps.services.Geocoder();
