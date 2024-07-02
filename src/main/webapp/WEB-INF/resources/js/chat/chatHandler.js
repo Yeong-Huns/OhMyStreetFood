@@ -202,7 +202,7 @@ function startChat(customer, storeNo, address) {
         }
     }).then(response => {
         if (response.code === "E4") {
-            console.log("채팅 기록이 없습니다 (이미지와 함께 채팅방에 업데이트[예정])")
+            console.log("채팅기록 없음")
             displayNoChatMessage();
             return;
         }
@@ -280,6 +280,7 @@ function showChatRoom(messages, subscription, address) {
 }
 
 function showMessage(message, sender) {
+    if(message.length===0)
     let messageNo = message.messageNo;
     let messageElement = document.createElement('div');
     let date = new Date(message.createdAt);
@@ -308,6 +309,7 @@ function showMessage(message, sender) {
             </div>
         </div>
     `;
+
 
     document.getElementById('chat-messages').appendChild(messageElement);
     document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
