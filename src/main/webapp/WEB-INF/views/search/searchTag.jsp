@@ -35,9 +35,12 @@
     </script>
 </head>
 <body>
-    <!-- Search -->
-    <div class="col-md-12">
-	    <jsp:include page="../search.jsp" />
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	</div>
+	
+	<div class="col-md-12">
+		<jsp:include page="../search.jsp" />
 	</div>
 	
     <div class="col-md-12">

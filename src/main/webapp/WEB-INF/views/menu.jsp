@@ -21,34 +21,41 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav d-flex justify-content-between w-100">
 				<li class="nav-item active">
-					<a class="nav-link" href="${pageContext.request.contextPath}/">
-						<i class="fas fa-home"></i><br>홈
+					<a class="nav-link" href="/">
+						<i class="fas fa-home"></i>
+						&nbsp;홈
 					</a>
 				</li>
+				
 				<li class="nav-item">
 					<a class="nav-link" href="${pageContext.request.contextPath}/store/search">
-						<i class="fas fa-search"></i><br>검색
+						<i class="fas fa-search"></i>
+						&nbsp;검색
 					</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/store/list">
-						<i class="fas fa-store"></i><br>점포
+						<i class="fas fa-store"></i>
+						&nbsp;점포
 					</a>
 				</li>
 				<li class="nav-item">
 					<sec:authorize access="isAnonymous()">
 						<a class="nav-link" href="${pageContext.request.contextPath}/signin">
-							<i class="fas fa-user"></i><br>로그인
+							<i class="fas fa-user"></i>
+							&nbsp;로그인
 						</a>
 					</sec:authorize>
 					<sec:authorize access="hasRole('ROLE_OWNER') or hasRole('ROLE_USER')">
 						<a class="nav-link" href="${pageContext.request.contextPath}/mypage">
-							<i class="fas fa-user"></i><br>마이페이지
+							<i class="fas fa-user"></i>
+							&nbsp;마이페이지
 						</a>
 					</sec:authorize>
 					<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a class="nav-link" href="${pageContext.request.contextPath}/admin">
-							<i class="fas fa-user"></i><br>관리자 페이지
+							<i class="fas fa-user"></i>
+							&nbsp;관리자 페이지
 						</a>
 					</sec:authorize>
 				</li>

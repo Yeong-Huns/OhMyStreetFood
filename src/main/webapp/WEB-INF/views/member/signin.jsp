@@ -21,36 +21,44 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	</div>
+	
 	<div class="main">
-		<div class="row">
-			<div class="col-md-12 text-center" id="title">
-				<h3>로그인</h3>
-			</div>
-			<form action="${pageContext.request.contextPath}/signin" method="post">
-				<div class="form-group">
-					<label for="username">이메일 주소</label> 
-					<input type="email" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="Email">
+    	<div class="row justify-content-center">
+        	<div class="col-md-10">
+				<div class="col-md-12 text-center" id="title">
+					<h2>로그인</h2>
 				</div>
-				<div class="form-group">
-					<label for="password">비밀번호</label> 
-					<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+				<form action="${pageContext.request.contextPath}/signin" method="post">
+					<div class="form-group">
+						<label for="username">이메일 주소</label> 
+						<input type="email" class="form-control" id="username" name="username" aria-describedby="emailHelp" placeholder="Email">
+					</div>
+					<div class="form-group">
+						<label for="password">비밀번호</label> 
+						<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+					</div>
+	
+					<c:if test="${param.error}">
+						<div class="col-md-12" style="padding: 0 20px;">
+							<div class="alert alert-danger">
+		                		사용자ID 또는 비밀번호를 확인해 주세요.
+		            		</div>
+						</div>
+					</c:if>
+					<div class="col-md-12">
+						<button type="submit" class="btn btn-primary"
+							style="height: 50px; width: 100%; margin-bottom: 20px;">로그인하기</button>
+						<button type="button" onclick="window.location.href='${pageContext.request.contextPath}/signup/general';" class="btn btn-outline-primary"
+							style="height: 50px; width: 100%; margin-bottom: 20px;">회원가입하기</button>
+					</div>
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				</form>
+				<div class="col-md-12 text-center">
+					<a href="${pageContext.request.contextPath}/findPassword">비밀번호 찾기</a>				
 				</div>
-
-				<c:if test="${param.error}">
-					<div class="alert alert-danger">
-                		사용자ID 또는 비밀번호를 확인해 주세요.
-            		</div>
-				</c:if>
-				<div class="col-md-12">
-					<button type="submit" class="btn btn-primary"
-						style="height: 50px; width: 100%; margin-bottom: 20px;">로그인하기</button>
-					<button type="button" onclick="window.location.href='${pageContext.request.contextPath}/signup/general';" class="btn btn-outline-primary"
-						style="height: 50px; width: 100%; margin-bottom: 20px;">회원가입하기</button>
-				</div>
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-			</form>
-			<div class="col-md-12 text-center">
-				<a href="${pageContext.request.contextPath}/findPassword">비밀번호 찾기</a>				
 			</div>
 		</div>
 	</div>
