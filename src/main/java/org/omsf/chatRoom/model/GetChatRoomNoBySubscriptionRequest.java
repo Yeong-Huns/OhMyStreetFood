@@ -27,5 +27,4 @@ public class GetChatRoomNoBySubscriptionRequest {
     private LocalDateTime updatedAt;
     private String target;
     private String lastMessage;
-    private String img;
 }
