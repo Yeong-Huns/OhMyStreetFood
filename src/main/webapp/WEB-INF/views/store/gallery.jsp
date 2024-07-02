@@ -24,7 +24,9 @@
                 <button class="scroll-button right" onclick="scrollGallery('right')">&gt;</button>
             </c:when>
             <c:otherwise>
-                <p>등록된 사진이 없습니다</p>
+            	<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+                	등록된 사진이 없습니다
+                </div>
             </c:otherwise>
         </c:choose>
 </body>

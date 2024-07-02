@@ -99,6 +99,7 @@ function saveLatitudeAndLongitude(latitude, longitude){
 			} finally {
 //				hideSpinner(); // 스피너 숨김
 			}
+
 //		}, 1500);
 	}
 

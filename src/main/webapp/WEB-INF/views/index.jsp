@@ -17,13 +17,31 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spinner.css">
 </head>
+    <style>
+        .owl-carousel .item {
+            padding: 0px;
+            margin: 5px;
+            text-align: center;
+        }
+        .owl-carousel .item img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+         #storeCarousel .owl-stage {
+        display: flex;
+        flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
+    }
+    </style>
 <body>
-	<div class="col-md-12 text-center" id="logo">
-		<h3>Oh My Street Food!</h3>
-	</div>
+	<center>
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 400px">
+	</center>
 
 	<!-- Search -->
 	<div class="col-md-12">
@@ -43,37 +61,14 @@
 		</div>
 	</sec:authorize>
 
-	<div class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
-         <h5>인기 점포</h5>
-         <span class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
-          <c:forEach items="${stores}" var="store">
-		    <div class="card" style="width:180px; cursor: pointer; margin: 5px; border: none;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
-		        <c:if test="${store.storeNo eq picture.storeNo}">
-				    <c:choose>
-				        <c:when test="${picture.picture != null}">
-				            <img class="card-img-top" src="${picture.picture}">
-				        </c:when>
-				        <c:otherwise>
-				            <img class="card-img-top" src="${pageContext.request.contextPath}/resources/img/00.jpg">
-				        </c:otherwise>
-				    </c:choose>
-				</c:if>
-		        <div class="card-body">
-		            <p class="card-title">${store.storeName}</p>
-		            <c:set var="addressWords" value="${fn:split(store.address, ' ')}" />
-		            <p class="card-title">${addressWords[0]} ${addressWords[1]}</p>
-		            <p class="card-text">
-		                <small class="text-muted">
-		                    리뷰 ${store.totalReview}<br>
-		                    평점 ${store.totalRating}<br>
-		                    찜 ${store.likes}<br>
-		                </small>
-		            </p>
-		        </div>
-		    </div>
-		</c:forEach>
-         </span>
-     </div>
+
+  <div class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
+   <h5>인기 점포</h5>
+  <!-- Store Carousel -->
+	  <div id="storeCarousel" class="owl-carousel owl-theme">
+	  </div>
+  
+  </div>
     
     <!-- Menu -->
     <div class="row">
@@ -94,6 +89,8 @@
 	<!-- KakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMap.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/js/mainPage.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
 </body>
 </html>
