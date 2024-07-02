@@ -33,13 +33,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ViewCountServiceImpl implements ViewCountService{
 	
-	private static final Logger logger = LoggerFactory.getLogger(ViewCountService.class);
+	private static final Logger log = LoggerFactory.getLogger(ViewCountService.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
     private final RedisTemplate<String, String> redisTemplate;
 	private final StoreService storeService;
     private final MenuService menuService;
-	private String currentTopStores;
-    
+	
+    private static String currentTopStores;
+	private static final double[] WEIGHT_VALUES = {1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4};
     private static final String DAILY_VIEW_COUNT_KEY = "store:daily:view:count:";
     private static final String POPULAR_STORES_KEY = "popular:stores";
     private static final String STORE_RANKINGS_KEY = "store:rankings";
@@ -52,30 +53,41 @@ public class ViewCountServiceImpl implements ViewCountService{
         redisTemplate.opsForValue().increment(dailyKey);
         redisTemplate.expire(dailyKey, 7, TimeUnit.DAYS);
         
-        redisTemplate.opsForZSet().incrementScore("store:rankings", storeNo.toString(), 1);
-    }
-    
-    @Override
-    public void decreaseViewCount(Integer storeNo, int count) {
-        redisTemplate.opsForZSet().incrementScore("store:rankings", storeNo.toString(), -count);
+        redisTemplate.opsForZSet().incrementScore("store:rankings", storeNo.toString(), WEIGHT_VALUES[0]);
     }
 
     @Scheduled(cron = "0 0 0 * * ?") 
     @Override
-    public void decreaseOldViewCounts() {
-        String oldDailyKey = DAILY_VIEW_COUNT_KEY + LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_DATE) + ":*";
-        Set<String> keys = redisTemplate.keys(oldDailyKey);
-        for (String key : keys) {
-        	//store:daily:view:count:2024-07-01:282
-            String[] parts = key.split(":");
-            Integer storeNo = Integer.parseInt(parts[parts.length - 1]);
-            String countStr = redisTemplate.opsForValue().get(key);
-            if (countStr != null) {
-                int count = Integer.parseInt(countStr);
-                decreaseViewCount(storeNo, count);
-            }
-            redisTemplate.delete(key);
+    public void calculateAllStoreScore() {
+        Set<String> storeNos = redisTemplate.opsForZSet().range(DAILY_VIEW_COUNT_KEY, 0, -1);
+        //모든가게 가중치 점수 갱신
+        for (String storeNoSt : storeNos) {
+        	Integer storeNo = Integer.parseInt(storeNoSt);
+        	double totalScore = 0;
+        	
+        	for (int i=0; i<7; i++) {
+        		LocalDate date = LocalDate.now().minusDays(i);
+        		//store:daily:view:count:2024-07-02:353
+        		String DailyKey = DAILY_VIEW_COUNT_KEY + date.format(DateTimeFormatter.ISO_DATE) + ":" + storeNo;
+        		String countSt = redisTemplate.opsForValue().get(DailyKey);
+        		
+        		if (countSt != null) {
+        			int count = Integer.parseInt(countSt);
+        			totalScore += count * WEIGHT_VALUES[i];
+        		}
+        	}
+        	
+        	redisTemplate.opsForZSet().add(STORE_RANKINGS_KEY, storeNoSt, totalScore);
         }
+        
+        //7일 지난 조회수 삭제
+        String oldDailyKey = DAILY_VIEW_COUNT_KEY + LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_DATE) + ":*";
+        Set<String> oldKeys = redisTemplate.keys(oldDailyKey);
+        if (oldKeys != null && !oldKeys.isEmpty()) {
+        	redisTemplate.delete(oldKeys);
+        }
+        
+        updateTop10Stores();
     }
     
     @Transactional
@@ -117,7 +129,7 @@ public class ViewCountServiceImpl implements ViewCountService{
     public void updateTop10Stores() {
         Set<ZSetOperations.TypedTuple<String>> topStores = 
             redisTemplate.opsForZSet().reverseRangeWithScores(STORE_RANKINGS_KEY, 0, 9);
-        logger.info("상위 10개 점포 업데이트");
+        log.info("상위 10개 점포 업데이트");
         if (topStores == null || topStores.isEmpty()) {
             return;
         }
@@ -136,7 +148,7 @@ public class ViewCountServiceImpl implements ViewCountService{
             	StoreInfo storeInfo = setStoreInfo(store, storePhoto, gallery, menus);
             	
             	if (menus == null || menus.isEmpty()) {
-                    logger.warn("Store {} has no menus", storeNo);
+                    log.warn("Store {} has no menus", storeNo);
                 }
             	
             	top10Stores.add(storeInfo);
@@ -152,7 +164,7 @@ public class ViewCountServiceImpl implements ViewCountService{
             redisTemplate.opsForValue().set(POPULAR_STORES_KEY, jsonTopStores);
             
         } catch (JsonProcessingException e) {
-            logger.error("상위 10개 점포 업데이트 중 에러발생!");
+            log.error("상위 10개 점포 업데이트 중 에러발생!");
             e.printStackTrace();
         }
     }
@@ -164,7 +176,7 @@ public class ViewCountServiceImpl implements ViewCountService{
             updateTop10Stores();
             currentTopStores = newTopStores;
         } else {
-            logger.info("변경된 순위 없음.");
+            log.info("변경된 순위 없음.");
         }
     }
     
@@ -182,7 +194,7 @@ public class ViewCountServiceImpl implements ViewCountService{
                 String updatedJsonTopStores = objectMapper.writeValueAsString(topStores);
                 redisTemplate.opsForValue().set(POPULAR_STORES_KEY, updatedJsonTopStores);
             } catch (JsonProcessingException e) {
-                logger.error("가게 삭제중 에러발생", e);
+                log.error("가게 삭제중 에러발생", e);
             }
         }
         
@@ -237,7 +249,7 @@ public class ViewCountServiceImpl implements ViewCountService{
                             .findFirst()
                             .orElse(null);
         } catch (JsonProcessingException e) {
-            logger.error("Error parsing JSON from Redis for top stores", e);
+            log.error("인기 점포 정보를 얻는중 에러가 발생했습니다.", e);
             return null;
         }
     }
