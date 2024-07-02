@@ -203,7 +203,7 @@ function startChat(customer, storeNo, address) {
     }).then(response => {
         if (response.code === "E4") {
             console.log("채팅기록 없음")
-            displayNoChatMessage();
+            showChatRoom([], (customer + storeNo), address);
             return;
         }
         return response.json();
@@ -219,10 +219,6 @@ function startChat(customer, storeNo, address) {
         });
 }
 
-function displayNoChatMessage() {
-    const chatMessagesDiv = document.getElementById('chat-messages');
-    chatMessagesDiv.innerHTML = '<div class="no-chat-message">첫 이용 고객입니다</div>';
-}
 
 function showLoginModal() {
     const modalHtml = `
@@ -255,8 +251,15 @@ function redirectToLogin(){
 
 //messages, subscription, target 281
 function showChatRoom(messages, subscription, address) {
-    if (!Array.isArray(messages)) {
-        messages = [];
+    if (!Array.isArray(messages) || messages.length === 0) {
+        messages = [{
+            messageNo: 0,
+            content: '첫 방문 고객! 환영합니다',
+            senderId: null,
+            createdAt: null,
+            isReceived: true,
+            chatRoomNo: null
+        }];
     }
     const match = subscription.match(/(.*?)(\d+)$/);
     const customer = match[1];
@@ -280,7 +283,23 @@ function showChatRoom(messages, subscription, address) {
 }
 
 function showMessage(message, sender) {
-    if(message.length===0)
+    if (message.messageNo === 0) {
+        let messageElement = document.createElement('div');
+        messageElement.className = 'chat-message received';
+        messageElement.innerHTML = `
+            <div class="chat-avatar">
+                <img src="../../img/00_1.jpg" alt="Avatar">
+            </div>
+            <div class="message-content">
+                <div>${message.content}</div>
+                <div class="chat-time"></div>
+            </div>
+        `;
+        document.getElementById('chat-messages').appendChild(messageElement);
+        document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+        return;
+    }
+
     let messageNo = message.messageNo;
     let messageElement = document.createElement('div');
     let date = new Date(message.createdAt);
@@ -291,7 +310,7 @@ function showMessage(message, sender) {
     let chatRoomNo = message.chatRoomNo;
     let isReceived = message.isReceived;
     let isCurrentUser = message.senderId === sender;
-    console.log("message.senderId"+ message.senderId)
+    console.log("message.senderId" + message.senderId);
     console.log("sender!!!! : " + sender);
     console.log("isCurrentUser? ? : " + isCurrentUser);
     if (!isCurrentUser && !isReceived) updateMessageStatus(messageNo);
@@ -310,12 +329,9 @@ function showMessage(message, sender) {
         </div>
     `;
 
-
     document.getElementById('chat-messages').appendChild(messageElement);
     document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
-
 }
-
 
 function sendMessage(subscription, address) {
     var messageInput = document.getElementById("message-input");
