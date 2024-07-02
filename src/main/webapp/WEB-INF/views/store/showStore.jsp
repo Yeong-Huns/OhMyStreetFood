@@ -19,15 +19,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-<!-- Jquery -->
+<!-- JavaScript -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reviewModal.css">
-
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
-<!-- JavaScript -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
 </head>
 <body>
@@ -61,10 +59,10 @@
 		            <div class="col-md-3" style="padding: 0 40px;">
 		           		 <c:choose>
 					        <c:when test="${storePhoto.picture != null}">
-					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 150px; height: auto;">
+					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: 120px;">
 					        </c:when>
 				        <c:otherwise>
-					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: 120px;">
 					        </c:otherwise>
 					    </c:choose>
 		            </div>
@@ -197,7 +195,7 @@
 				    				<span><strong>${review.memberUsername}</strong></span>
 				    			</c:when>
 				    			<c:otherwise>
-				    				<span><strong>탈퇴한 회원의 리뷰입니다</strong></span>
+				    				<span><strong>탈퇴한 회원</strong></span>
 				    			</c:otherwise>
 				    		</c:choose>
 					    	<span>${review.createdAt}</span>
