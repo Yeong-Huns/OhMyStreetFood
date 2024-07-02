@@ -21,9 +21,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spinner.css">
 </head>
 <body>
-	<div class="col-md-12 text-center" id="logo">
-		<h3>Oh My Street Food!</h3>
-	</div>
+	<center>
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 400px">
+	</center>
 
 	<!-- Search -->
 	<div class="col-md-12">

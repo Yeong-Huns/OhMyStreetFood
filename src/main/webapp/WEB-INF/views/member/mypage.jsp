@@ -53,8 +53,15 @@
 </script>
 </head>
 <body>
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	</div>
+
+	<div class="main">		
+    	<div class="row justify-content-center">
+        	<div class="col-md-10">
 			<div class="col-md-12 text-center" id="title">
-				<h3>마이페이지</h3>
+				<h2>마이페이지</h2>
 			</div>
 			
 			<div align="center" style="margin-bottom: 20px;">
@@ -66,7 +73,7 @@
 					${username } 	
 				</sec:authorize>
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
-					관리자 계정입니다.
+					관리자 계정입니다
 				</sec:authorize>
 			</div>
 			
@@ -75,7 +82,10 @@
 			</div>
 			<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				<c:forEach items="${registeredStores}" var="store" varStatus="status">
-					<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a> <br>
+					<p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+						<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>						
+					</p>
+					<hr/>
 				</c:forEach>
 			</div>
 			
@@ -85,8 +95,11 @@
 				</div>
 				<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 					<c:forEach items="${likeStores}" var="store" varStatus="status">
-						<span><i class="like-btn far fa-heart" data-store-no="${store.storeNo}"></i></span>
-						<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a> <br>
+						<p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+							<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
+							<i class="like-btn far fa-heart" data-store-no="${store.storeNo}"></i>
+						</p>
+						<hr/>
 					</c:forEach>
 				</div>
 				
@@ -98,11 +111,16 @@
 						<c:set var="loop_flag" value="true" />
 					    <c:forEach items="${reviewStores}" var="store" varStatus="status">
 					    	<c:if test="${review.storeStoreNo eq store.storeNo and loop_flag}">
-					        	<a href="${pageContext.request.contextPath}/store/${store.storeNo}"> ${store.storeName}</a>
+					    		<p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+					        		<a href="${pageContext.request.contextPath}/store/${store.storeNo}">${store.storeName}</a>
 					           	<c:set var="loop_flag" value="false" />
 					        </c:if>
 					    </c:forEach>
-					    <span><a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${review.content}</a></span> <br>
+					    <span>
+					    		<a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${review.content}</a>
+					    	</p>
+						</span>
+						<hr/>
 					</c:forEach>
 				</div>
 			</sec:authorize>
@@ -125,33 +143,29 @@
 			</div>
 			
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-	<!-- Menu -->
-    <div class="row">
-        <div class="col-md-12">
-            <jsp:include page="../menu.jsp" />
-        </div>
-    </div>
 	
-	<div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmPasswordLabel">비밀번호 확인</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                	<div class="mb-3">
-                    	<input type="password" class="form-control" id="password" name="password" required>
-                    	<label id="confirmPasswordAlert" class="text-danger"></label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                	<button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
-                </div>
-            </div>
-        </div>
-    </div>
+			<div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
+		        <div class="modal-dialog modal-dialog-centered">
+		            <div class="modal-content">
+		                <div class="modal-header">
+		                    <h5 class="modal-title" id="confirmPasswordLabel">비밀번호 확인</h5>
+		                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+		                </div>
+		                <div class="modal-body">
+		                	<div class="mb-3">
+		                    	<input type="password" class="form-control" id="password" name="password" required>
+		                    	<label id="confirmPasswordAlert" class="text-danger"></label>
+		                    </div>
+		                </div>
+		                <div class="modal-footer">
+		                	<button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+	</div>
+	</div>
     
     <!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
