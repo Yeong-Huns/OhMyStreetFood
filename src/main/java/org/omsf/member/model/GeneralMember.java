@@ -21,9 +21,9 @@ public class GeneralMember extends Member {
 	private String nickName;
 	
     @Builder
-    public GeneralMember(String username, String nickName, String password, String memberType,
-                         String loginType, Date createdAt, Date modifiedAt) {
-        super(username, password, memberType, loginType, createdAt, modifiedAt);
+    public GeneralMember(String username, String nickName, String password, 
+    		String memberType, Date createdAt, Date modifiedAt) {
+        super(username, password, memberType, createdAt, modifiedAt);
         this.nickName=nickName;
     }
 

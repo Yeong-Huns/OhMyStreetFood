@@ -1,7 +1,9 @@
 package org.omsf.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
@@ -34,11 +36,15 @@ public class MenuController {
 	    	if (store.getPicture() != null) {
 	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
 	    		pictures.add(photo);
+	    	} else {
+	    		pictures.add(null);
 	    	}
 	    }
-	    
-    	model.addAttribute("stores", stores);
-    	model.addAttribute("pictures", pictures);
+	    Map<String, Object> dataMap = new HashMap<>();
+	    dataMap.put("stores", stores);
+	    dataMap.put("pictures", pictures);
+	    model.addAllAttributes(dataMap);
     	return "index";
     }
+    
 }

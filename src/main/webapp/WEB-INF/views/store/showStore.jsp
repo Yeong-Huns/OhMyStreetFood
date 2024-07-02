@@ -19,27 +19,30 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-<!-- Jquery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- JavaScript -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reviewModal.css">
-
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/like.css">
-<!-- JavaScript -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
 </head>
 <body>
-		<span style="display: flex; flex-direction: row; justify-content: space-between; padding: 0 20px;">
+    <div class="col-md-12">
+		  <img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	  </div>
+		<span style="display: flex; flex-direction: row; justify-content: space-between; padding: 0 40px;">
               <c:choose>
 			    <c:when test="${isOwner eq true }">
 			        <span>
 			            <i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
 			        </span>
-			        <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
+			        <sec:authorize access="hasRole('ROLE_USER')">
 			            <span><a href="${pageContext.request.contextPath}/chat" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
+			        </sec:authorize>
+			        <sec:authorize access="isAnonymous()">
+			            <span><a href="javascript:void(0)" onclick="showLoginAlert()">사장님과 채팅하기</a></span>
 			        </sec:authorize>
 			    </c:when>
 			    <c:otherwise>
@@ -48,70 +51,77 @@
 			        </span>
 			    </c:otherwise>
 			</c:choose>
-       	</span>
+		</span>
        	
+       	<div>
        	<div class="col-md-12">
 		    <div class="card" style="width: 100%; height: auto;">
 		        <div class="row g-0">
 		            <div class="col-md-3" style="padding: 0 40px;">
 		           		 <c:choose>
 					        <c:when test="${storePhoto.picture != null}">
-					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 150px; height: auto;">
+					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: 120px;">
 					        </c:when>
-					        <c:otherwise>
-					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
+				        <c:otherwise>
+					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: 120px;">
 					        </c:otherwise>
 					    </c:choose>
 		            </div>
 		            <div class="col-md-9 card-body" style="padding: 0 20px;">
 	                    <span style="display: flex; flex-direction: row; justify-content: space-between;">
 		                    <span><h5 class="card-title">${store.storeName}</h5></span>
-		                   
 		                    	<span>
 		                    		<sec:authorize access="hasRole('ROLE_USER')">
 		                    			<i class="like-btn far fa-heart" data-store-no="${store.storeNo }"></i>
-		                    			<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">신고</a>
-		                    		</sec:authorize>
-		                    		<sec:authorize access="isAnonymous()">	
-		                    			<a href="javascript:void(0);" onclick="showLoginAlert()">신고</a>
 		                    		</sec:authorize>
 		                    	</span>
-	                    </span>
+	                    	</span>
 	                    <p class="card-text">${store.introduce}</p>
 	                    <p class="card-text">
 		                		리뷰 <span id="now-review">${store.totalReview}</span>
 		                		평점 <span id="now-rating">${store.totalRating}</span>
 		                		찜 <span id="now-like">${store.likes}</span>
 		                </p>
-	            		<span>
+	            		<p class="card-text">
 	            			<small class="text-muted">
-	            			업데이트
-	            		 	<c:choose>
-						        <c:when test="${store.modifiedAt != null}">
-						            ${store.modifiedAt}
-						        </c:when>
-						        <c:otherwise>
-						            ${store.createdAt}
-						        </c:otherwise>
-						    </c:choose>
-	            		 </small></span>
-	            		 
+	            				업데이트
+		            		 	<c:choose>
+							        <c:when test="${store.modifiedAt != null}">
+							            ${store.modifiedAt}
+							        </c:when>
+							        <c:otherwise>
+							            ${store.createdAt}
+							        </c:otherwise>
+							    </c:choose>
+	            		 	</small>
+	            		 </p>
+            		 	<p class="card-text">
+	            			<small class="text-muted">
+	                    		<sec:authorize access="hasRole('ROLE_USER')">
+	                    			<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">잘못된 정보 신고하기</a>
+	                    		</sec:authorize>
+	                    		<sec:authorize access="isAnonymous()">	
+	                    			<a href="javascript:void(0);" onclick="showLoginAlert()">잘못된 정보 신고하기</a>
+	                    		</sec:authorize>
+	                    	</small>
+                    	</p>
 	            	</div>
 	        	</div>
 	    	</div>
-	    
+	    </div>
+	    	
 	    <div>
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                  <span><h5>가게 정보</h5></span>
                  <sec:authorize access="isAuthenticated()">
 	                 <sec:authentication property="principal.username" var="currentUsername"/>
 	                 <c:if test="${isOwner eq false || owner.username eq currentUsername}">
-	                 	<span><a href="${pageContext.request.contextPath}/store/${store.storeNo}/update">정보 수정</a></span>
+	                 	<span><a href="${pageContext.request.contextPath}/store/${store.storeNo}/update" class="btn btn-primary">정보 수정</a></span>
 	                 </c:if>
                  </sec:authorize>
                  <sec:authorize access="isAnonymous()">
                  	<c:if test="${isOwner eq false }">
-                 		<span><a href="javascript:void(0);" onclick="showLoginAlert()">정보 수정</a></span>
+                 		<span><a href="javascript:void(0);" onclick="showLoginAlert()" class="btn btn-primary">정보 수정</a></span>
                  	</c:if>
 				</sec:authorize>
             </span>
@@ -148,7 +158,6 @@
 			    </span>
 			 </c:forEach>
 	    </div>
-	    
 		
 		<div class="col-md-12">
 			<jsp:include page="gallery.jsp" />
@@ -187,7 +196,7 @@
 				    				<span><strong>${review.memberUsername}</strong></span>
 				    			</c:when>
 				    			<c:otherwise>
-				    				<span><strong>(탈퇴한 회원의 리뷰입니다)</strong></span>
+				    				<span><strong>탈퇴한 회원</strong></span>
 				    			</c:otherwise>
 				    		</c:choose>
 					    	<span>${review.createdAt}</span>
@@ -278,17 +287,10 @@
 	    <!-- 찜 목록 효과 -->
 	    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
 	    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
-	
-		<!-- Menu -->
-	    <div class="row">
-	        <div class="col-md-12">
-	            <jsp:include page="../menu.jsp" />
-	        </div>
-	    </div>
 	    
 	</div>
 	
-	<!-- 모달 화면 -->
+	<!-- 리뷰 모달 화면 -->
 	<div id="review-modal" class="review-modal" <c:if test="${modalOn}"> style="display: block;"</c:if>>
         <div class="review-modal-content">
 			<div class="review-container">
@@ -333,13 +335,47 @@
         </div>
     </div>
 	
-	<!-- Menu -->
+	<!-- 신고 모달 화면 -->
+	<div class="modal fade" id="reportStoreModal" tabindex="-1" aria-labelledby="reportStoreLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportStoreLabel">가게 신고</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                	<form id="reportStoreForm" action="${pageContext.request.contextPath}/store/report/${storeNo}" method="post">
+					    <div class="form-group">
+					        <label for="title" class="form-label">신고 제목</label>
+					        <input type="text" id="title" name="title" placeholder="title" class="form-control"/>
+					        <span id="error-title" class="text-danger"></span>
+					    </div>
+					    <div class="form-group">
+					        <label for="content" class="form-label">신고 내용</label>
+					        <textarea id="content" name="content" placeholder="content" class="form-control"></textarea>
+					        <span id="error-content" class="text-danger"></span>
+					    </div>
+					    <input type="hidden" name="storeNo" value="${storeNo}"/>
+					</form>
+                </div>
+                <div class="modal-footer">
+                	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                	<button type="submit" class="btn btn-primary" id="reportStoreModalBtn" form="reportStoreForm">신고</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu -->
     <div class="row">
         <div class="col-md-12">
             <jsp:include page="../menu.jsp" />
         </div>
     </div>
     
+    <!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/js/storeDetail.js"></script>
@@ -355,7 +391,7 @@
 		<!-- like 요청 -->
 		<script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
 	</sec:authorize>
-
+	
 	<script>
 	// 중심좌표 마커 이미지 주소
 	var centerMarkerImg = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
@@ -464,13 +500,48 @@
 
 	    // 스크롤 이벤트 리스너 추가
 	    window.addEventListener('scroll', handleScroll);
-
 	});
 	</script>
 	<script>
     function showLoginAlert() {
 	    alert('로그인이 필요합니다.');
 	}
+	</script>
+	<script>
+		$(document).ready(function() {
+		    $('#reportStoreModalBtn').click(function(event) {
+		        event.preventDefault(); // 기본 폼 제출을 방지
+	
+		        var form = $('#reportStoreForm')[0];
+		        var formData = new FormData(form);
+	
+		        $.ajax({
+		            url: $('#reportStoreForm').attr('action'), // 폼의 action 속성 값 사용
+		            type: 'POST',
+		            data: formData,
+		            processData: false,
+		            contentType: false,
+		            success: function(data) {
+		                if (data.errors) {
+		                    // 유효성 검사 오류가 있는 경우
+		                    $('#error-title').text(data.errors.title || "");
+		                    $('#error-content').text(data.errors.content || "");
+		                } else {
+		                    // 성공적으로 신고가 접수된 경우 모달 닫기
+		                    var myModal = bootstrap.Modal.getInstance(document.getElementById('reportStoreModal'));
+		                    myModal.hide();
+		                    // 성공 시 리디렉션을 원하는 경로로 수행
+		                    window.location.href = `${pageContext.request.contextPath}/store/${data.storeNo}`;
+		                }
+		            },
+		            error: function(xhr) {
+		                var response = JSON.parse(xhr.responseText);
+		                $('#error-title').text(response.errors.title || "");
+		                $('#error-content').text(response.errors.content || "");
+		            }
+		        });
+		    });
+		});
 	</script>
 </body>
 </html>

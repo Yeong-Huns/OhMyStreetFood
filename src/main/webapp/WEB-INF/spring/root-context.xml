@@ -4,10 +4,15 @@
 	   xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
 	   xmlns:tx="http://www.springframework.org/schema/tx"
 	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xmlns:context="http://www.springframework.org/schema/context"
 	   xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+	
 	<!-- DataSource 설정 -->
 	<bean id="dataSource"
 		  class="org.apache.commons.dbcp2.BasicDataSource">
@@ -66,7 +71,13 @@
 			</props>
 		</property>
 	</bean>
-
+	
+	<!-- 스케쥴러 파일이 존재하는 패키지 -->
+	<context:component-scan base-package="com.kokoa.acait.scheduler"/>
+	<!-- 크론탭 설정에 -->
+	<task:scheduler id="jobScheduler" pool-size="10"/>
+	<task:annotation-driven scheduler="jobScheduler"/>
+	
 	<tx:annotation-driven />
 
 	<aop:aspectj-autoproxy />

@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -53,8 +52,15 @@
 </script>
 </head>
 <body>
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	</div>
+
+	<div class="main">		
+    	<div class="row justify-content-center">
+        	<div class="col-md-10">
 			<div class="col-md-12 text-center" id="title">
-				<h3>마이페이지</h3>
+				<h2>마이페이지</h2>
 			</div>
 			
 			<div align="center" style="margin-bottom: 20px;">
@@ -66,7 +72,7 @@
 					${username } 	
 				</sec:authorize>
 				<sec:authorize access="hasRole('ROLE_ADMIN')">
-					관리자 계정입니다.
+					관리자 계정입니다
 				</sec:authorize>
 			</div>
 			
@@ -75,7 +81,10 @@
 			</div>
 			<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 				<c:forEach items="${registeredStores}" var="store" varStatus="status">
-					<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a> <br>
+					<p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+						<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>						
+					</p>
+					<hr/>
 				</c:forEach>
 			</div>
 			
@@ -85,8 +94,11 @@
 				</div>
 				<div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
 					<c:forEach items="${likeStores}" var="store" varStatus="status">
-						<span><i class="like-btn far fa-heart" data-store-no="${store.storeNo}"></i></span>
-						<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a> <br>
+						<p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+							<a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
+							<i class="like-btn far fa-heart" data-store-no="${store.storeNo}"></i>
+						</p>
+						<hr/>
 					</c:forEach>
 				</div>
 				
@@ -98,11 +110,16 @@
 						<c:set var="loop_flag" value="true" />
 					    <c:forEach items="${reviewStores}" var="store" varStatus="status">
 					    	<c:if test="${review.storeStoreNo eq store.storeNo and loop_flag}">
-					        	<a href="${pageContext.request.contextPath}/store/${store.storeNo}"> ${store.storeName}</a>
+					    		<p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+					        		<a href="${pageContext.request.contextPath}/store/${store.storeNo}">${store.storeName}</a>
 					           	<c:set var="loop_flag" value="false" />
 					        </c:if>
 					    </c:forEach>
-					    <span><a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${review.content}</a></span> <br>
+					    <span>
+					    		<a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${review.content}</a>
+					    	</p>
+						</span>
+						<hr/>
 					</c:forEach>
 				</div>
 			</sec:authorize>
@@ -125,12 +142,7 @@
 			</div>
 			
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-	<!-- Menu -->
-    <div class="row">
-        <div class="col-md-12">
-            <jsp:include page="../menu.jsp" />
-        </div>
+		 </div>
     </div>
 	
 	<div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
@@ -147,6 +159,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 	<button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
                 </div>
             </div>

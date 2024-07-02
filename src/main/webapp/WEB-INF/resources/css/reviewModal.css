@@ -120,7 +120,7 @@ textarea {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
@@ -130,7 +130,7 @@ textarea {
 }
 
 #review-btn {
-    background-color: #218838;
+    background-color: #007bff;
 }
 
 #error {
@@ -196,7 +196,7 @@ textarea {
 #update-btn {
     width: 100%;
     padding: 10px;
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
@@ -210,7 +210,7 @@ textarea {
 	
 	width: 100%;
     padding: 10px;
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
@@ -222,7 +222,7 @@ textarea {
 #delete-submit {
     width: 100%;
     padding: 10px;
-    background-color: #28a745;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;

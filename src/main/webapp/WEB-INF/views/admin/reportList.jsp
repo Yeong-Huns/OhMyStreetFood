@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%-- <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %> --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -21,21 +20,16 @@
 <body>
 	<div class="main">
 		<div class="row">
-			<div>
-				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
-					<i class="fas fa-arrow-left"></i>
-				</a>
-			</div>
 			<div class="col-md-12 text-center" id="title">
 				<h3>관리자 페이지</h3>
 			</div>
 			
-			<c:forEach items="${reports}" var="report" varStatus="status">
+			<c:forEach items="${groupedReports}" var="entry">
 			    <div class="report-container mb-4">
 			        <div class="card">
 			            <div class="card-header d-flex justify-content-between align-items-center">
-			                <h5 class="d-inline">점포번호: <a href="${pageContext.request.contextPath}/admin/store/log/${report.storeNo}">${report.storeNo}</a></h5>
-			                <button type="button" class="btn btn-danger btn-sm float-right deleteStore" data-store-no="${report.storeNo}">X</button>
+			                <h5 class="d-inline">점포번호: <a href="${pageContext.request.contextPath}/admin/store/log/${entry.key}">${entry.key}</a></h5>
+			                <button type="button" class="btn btn-danger btn-sm float-right deleteStore" data-store-no="${entry.key}">X</button>
 			            </div>
 			            <div class="card-body">
 			                <table class="table table-bordered">
@@ -48,12 +42,14 @@
 			                        </tr>
 			                    </thead>
 			                    <tbody>
-			                        <tr>
-			                            <td>${report.title}</td>
-			                            <td>${report.content}</td>
-			                            <td>${report.username}</td>
-			                            <td>${report.createdAt}</td>
-			                        </tr>
+			                        <c:forEach items="${entry.value}" var="report">
+			                            <tr>
+			                                <td>${report.title}</td>
+			                                <td>${report.content}</td>
+			                                <td>${report.username}</td>
+			                                <td>${report.createdAt}</td>
+			                            </tr>
+			                        </c:forEach>
 			                    </tbody>
 			                </table>
 			            </div>
@@ -68,6 +64,12 @@
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</div>
 	</div>
+	<!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
 	<script>
 		$(document).ready(function(){
 			$(".deleteStore").click(function(){

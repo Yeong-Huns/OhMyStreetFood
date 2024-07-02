@@ -4,9 +4,9 @@
 <mapper namespace="org.omsf.member.dao.GeneralMemberRepository">
 	<insert id="insertGeneralMember">
 		INSERT INTO member (
-		username, nickname, password, membertype, logintype, createdat, modifiedat)
+		username, nickname, password, membertype, createdat, modifiedat)
 		VALUES (
-		#{username}, #{nickName}, #{password}, #{memberType}, #{loginType}, SYSDATE, SYSDATE)
+		#{username}, #{nickName}, #{password}, #{memberType}, SYSDATE, SYSDATE)
 	</insert>
 	
 	<select id="checkMemberNickName" resultType="boolean">
@@ -20,13 +20,12 @@
 		<result property="nickName" column="nickname" />
 		<result property="password" column="password" />
 		<result property="memberType" column="membertype" />
-		<result property="loginType" column="logintype" />
 		<result property="createdAt" column="createdat" />
 		<result property="modifiedAt" column="modifiedat" />
 	</resultMap>
 	
 	<select id="findByUsername" resultMap="generalMemberMap">
-		SELECT username, nickname, password, membertype, logintype, createdat, modifiedat
+		SELECT username, nickname, password, membertype, createdat, modifiedat
 		FROM MEMBER
 		WHERE USERNAME = #{username}
 	</select>

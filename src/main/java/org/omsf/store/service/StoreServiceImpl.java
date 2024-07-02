@@ -59,11 +59,11 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public void deleteStore(int storeNo) {
-		List<Photo> photos = storeRepository.getStorePhotos(storeNo);
-
-		for (Photo photo : photos) {
-			storeService.deleteImage(photo.getPhotoNo());
-		}
+//		List<Photo> photos = storeRepository.getStorePhotos(storeNo);
+//
+//		for (Photo photo : photos) {
+//			storeService.deleteImage(photo.getPhotoNo());
+//		}
 		storeRepository.deleteStore(storeNo);
 		
 	}

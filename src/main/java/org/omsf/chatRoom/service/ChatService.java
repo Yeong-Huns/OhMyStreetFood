@@ -2,6 +2,7 @@ package org.omsf.chatRoom.service;
 
 import org.apache.ibatis.annotations.Param;
 import org.omsf.chatRoom.model.ChatRoomVO;
+import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.model.chat.ChatRoom;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,10 @@ public interface ChatService {
     List<String> getUserSubscriptions(String address);
     //3. 챗룸번호로 구독주소 가져오기
     String getSubscriptionByChatRoomNo(long chatRoomNo);
+    //4. 구독주소로 챗룸번호
+    long getChatRoomNoBySubscription(String customer, long storeNo);
+    //5. get 5 chatroom
+    List<GetChatRoomNoBySubscriptionRequest> getChatRoomsWithLastMessage(String username);
 
 
     List<ChatRoomVO> findSubListByAddress(String address);

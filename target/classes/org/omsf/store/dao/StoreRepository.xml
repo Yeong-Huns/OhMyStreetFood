@@ -159,9 +159,9 @@
 	    UPDATE STORE
 	    SET
 	        STORENAME = #{storeName},
-	        LATITUDE = #{latitude},
-	        LONGITUDE = #{longitude},
-	        ADDRESS = #{address},
+<!-- 	        LATITUDE = #{latitude}, -->
+<!-- 	        LONGITUDE = #{longitude}, -->
+<!-- 	        ADDRESS = #{address}, -->
 	        INTRODUCE = #{introduce},
 	        OPERATINGDATE = #{operatingDate},
 	        OPERATINGHOURS = #{operatingHours},

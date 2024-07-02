@@ -104,6 +104,7 @@ function undefinedTodefault(imgURL){
 			} finally {
 //				hideSpinner(); // 스피너 숨김
 			}
+
 //		}, 1500);
 	}
 
