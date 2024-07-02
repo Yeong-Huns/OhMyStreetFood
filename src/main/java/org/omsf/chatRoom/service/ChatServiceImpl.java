@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.omsf.chatRoom.dao.ChatRepository;
 import org.omsf.chatRoom.model.ChatRoomVO;
+import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.model.chat.ChatRoom;
 import org.omsf.error.Exception.CustomBaseException;
@@ -60,6 +61,12 @@ public class ChatServiceImpl implements ChatService{
     public long getChatRoomNoBySubscription(String customer, long storeNo) {
         return chatRepository.getChatRoomNoBySubscription(customer, storeNo)
                 .orElseThrow(()->new NotFoundException(ErrorCode.NOT_FOUND_STORENO));
+    }
+
+    //5. 5개 가져오기
+    @Override
+    public List<GetChatRoomNoBySubscriptionRequest> getChatRoomsWithLastMessage(String username){
+        return chatRepository.getChatRoomsWithLastMessage(username);
     }
 
     @Override

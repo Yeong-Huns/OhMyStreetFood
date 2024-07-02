@@ -306,3 +306,33 @@
     font-size: 24px;
     color: #888;
 }
+
+
+#custom-chat-room-container {
+    padding: 20px;
+}
+.custom-chat-room {
+    background-color: #f6f6f6;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+}
+.custom-chat-room img {
+    border-radius: 50%;
+    margin-right: 15px;
+    width: 50px;
+    height: 50px;
+}
+.custom-chat-room div {
+    flex-grow: 1;
+}
+.custom-chat-room p {
+    margin: 0;
+}
+.custom-chat-room p strong {
+    display: block;
+    font-weight: bold;
+    font-size: 1.2em;
+}
