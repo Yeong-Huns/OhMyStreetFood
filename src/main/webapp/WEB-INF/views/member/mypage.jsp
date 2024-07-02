@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ include file="../chat/chatHandler.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -221,6 +222,7 @@
                         <input type="hidden" value="` + chatRoom.chatroomNo + `">
                     </div>
                 `;
+                    chatRoomElement.onclick = function() { openChatRoomMyPage(chatRoom.senderId, chatRoom.chatroomNo); }; // 클릭 이벤트 추가
                     chatRoomContainer.appendChild(chatRoomElement);
                 });
             })
