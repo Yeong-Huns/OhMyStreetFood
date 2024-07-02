@@ -22,9 +22,9 @@ public class Owner extends Member{
 	private String businessRegistrationNumber;
 	
 	@Builder
-	public Owner(String username, String password, String memberType, String loginType, Date createdAt,
+	public Owner(String username, String password, String memberType, Date createdAt,
 			Date modifiedAt, String businessRegistrationNumber) {
-		super(username, password, memberType, loginType, createdAt, modifiedAt);
+		super(username, password, memberType, createdAt, modifiedAt);
 		this.businessRegistrationNumber=businessRegistrationNumber;
 	}
 	

@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -143,29 +142,29 @@
 			</div>
 			
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		 </div>
+    </div>
 	
-			<div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
-		        <div class="modal-dialog modal-dialog-centered">
-		            <div class="modal-content">
-		                <div class="modal-header">
-		                    <h5 class="modal-title" id="confirmPasswordLabel">비밀번호 확인</h5>
-		                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-		                </div>
-		                <div class="modal-body">
-		                	<div class="mb-3">
-		                    	<input type="password" class="form-control" id="password" name="password" required>
-		                    	<label id="confirmPasswordAlert" class="text-danger"></label>
-		                    </div>
-		                </div>
-		                <div class="modal-footer">
-		                	<button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-		</div>
-	</div>
-	</div>
+	<div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmPasswordLabel">비밀번호 확인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                	<div class="mb-3">
+                    	<input type="password" class="form-control" id="password" name="password" required>
+                    	<label id="confirmPasswordAlert" class="text-danger"></label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                	<button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

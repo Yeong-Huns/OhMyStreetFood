@@ -4,7 +4,6 @@ CREATE TABLE member (
     nickname    VARCHAR2(255),
     password    VARCHAR2(255) NOT NULL DEFAULT 'x',
     membertype  VARCHAR2(50) NOT NULL,
-    logintype   VARCHAR2(50) NOT NULL,
     businessregistrationnumber VARCHAR2(10),
     createdat   DATE NOT NULL,
     modifiedat  DATE

@@ -53,7 +53,7 @@
 						</a>
 					</sec:authorize>
 					<sec:authorize access="hasRole('ROLE_ADMIN')">
-						<a class="nav-link" href="${pageContext.request.contextPath}/admin">
+						<a class="nav-link" href="${pageContext.request.contextPath}/admin/reports">
 							<i class="fas fa-user"></i>
 							&nbsp;관리자 페이지
 						</a>

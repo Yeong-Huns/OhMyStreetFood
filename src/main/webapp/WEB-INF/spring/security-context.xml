@@ -15,7 +15,7 @@
     	<intercept-url pattern="/chat/**" access="authenticated" />
     	<intercept-url pattern="/mypage" access="authenticated" />
     	<intercept-url pattern="/store/report/**" access="authenticated" /> 
-    	<intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')"/>
+    	<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
     	<intercept-url pattern="/store/createstore" access="authenticated" />
     	<intercept-url pattern="/store/**/update" access="authenticated" />
     	<intercept-url pattern="/review/insert" access="hasRole('ROLE_USER')"/>
