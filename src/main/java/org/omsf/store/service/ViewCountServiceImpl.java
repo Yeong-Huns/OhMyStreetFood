@@ -38,7 +38,8 @@ public class ViewCountServiceImpl implements ViewCountService{
     private final RedisTemplate<String, String> redisTemplate;
 	private final StoreService storeService;
     private final MenuService menuService;
-	
+	private String currentTopStores;
+    
     private static final String DAILY_VIEW_COUNT_KEY = "store:daily:view:count:";
     private static final String POPULAR_STORES_KEY = "popular:stores";
     private static final String STORE_RANKINGS_KEY = "store:rankings";
@@ -112,12 +113,11 @@ public class ViewCountServiceImpl implements ViewCountService{
     }
 	
     @Override
-    @Scheduled(fixedRate = 60000)
     @Transactional(readOnly = true)
     public void updateTop10Stores() {
         Set<ZSetOperations.TypedTuple<String>> topStores = 
             redisTemplate.opsForZSet().reverseRangeWithScores(STORE_RANKINGS_KEY, 0, 9);
-        logger.info("상위 10개 점포 가져오기");
+        logger.info("상위 10개 점포 업데이트");
         if (topStores == null || topStores.isEmpty()) {
             return;
         }
@@ -149,14 +149,22 @@ public class ViewCountServiceImpl implements ViewCountService{
 
         try {
             String jsonTopStores = objectMapper.writeValueAsString(top10Stores);
-            String currentTopStores = redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
-
             redisTemplate.opsForValue().set(POPULAR_STORES_KEY, jsonTopStores);
-//            if (!jsonTopStores.equals(currentTopStores)) {
-//            }
+            
         } catch (JsonProcessingException e) {
-            // 예외 처리
+            logger.error("상위 10개 점포 업데이트 중 에러발생!");
             e.printStackTrace();
+        }
+    }
+    
+    @Scheduled(fixedRate = 60000) 
+    public void checkPopularChanged() {
+        String newTopStores = redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
+        if (newTopStores !=null && currentTopStores == null || !newTopStores.equals(currentTopStores)) {
+            updateTop10Stores();
+            currentTopStores = newTopStores;
+        } else {
+            logger.info("변경된 순위 없음.");
         }
     }
     
