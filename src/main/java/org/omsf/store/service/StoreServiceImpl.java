@@ -211,7 +211,7 @@ public class StoreServiceImpl implements StoreService {
 	
 	// leejongseop
 	@Override
-	public List<Store> getStoresByPosition(String position) {
+	public List<Map<String, Object>> getStoresByPosition(String position) {
 		String[] locationArray = position.split(" ");
 		// 서울일때는 "구", 지방일때는 "시" 기준
 		String pos = locationArray[1];

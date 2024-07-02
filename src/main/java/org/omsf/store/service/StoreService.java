@@ -44,8 +44,7 @@ public interface StoreService {
 	List<Store> getStoresByUsername(String name);
 
 	// leejongseop
-	List<Store> getStoresByPosition(String position);
-
+	List<Map<String, Object>> getStoresByPosition(String position);
 
 
 }
