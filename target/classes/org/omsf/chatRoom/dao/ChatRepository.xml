@@ -46,7 +46,7 @@
           AND storeNo = #{storeNo}
     </select>
 
-    <!-- 새로운 SQL 매핑-->
+    <!-- getChatRoomsWithLastMessage -->
     <select id="getChatRoomsWithLastMessage" resultType="org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest">
         WITH UserType AS (
             SELECT
@@ -94,12 +94,14 @@
             cr.updatedAt,
             cr.target,
             cr.img,
-            m.content AS lastMessage
+            m.content AS lastMessage,
+            m.senderId AS senderId
         FROM ChatRooms cr
                  LEFT JOIN (
             SELECT
                 chatRoomNo,
                 content,
+                senderId,
                 ROW_NUMBER() OVER (PARTITION BY chatRoomNo ORDER BY createdAt DESC) AS rn
             FROM Message
         ) m ON cr.chatroomNo = m.chatRoomNo

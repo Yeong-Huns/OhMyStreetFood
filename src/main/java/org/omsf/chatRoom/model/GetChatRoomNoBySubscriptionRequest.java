@@ -28,4 +28,5 @@ public class GetChatRoomNoBySubscriptionRequest {
     private String target;
     private String lastMessage;
     private String img;
+    private String senderId;
 }
