@@ -57,8 +57,34 @@
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				</form>
 				<div class="col-md-12 text-center">
-					<a href="${pageContext.request.contextPath}/findPassword">비밀번호 찾기</a>				
+					<a href="#" id="findPassword" data-bs-toggle="modal" data-bs-target="#passwordRecoveryModal">비밀번호 찾기</a>
 				</div>
+				
+				<!-- Modal -->
+				<div class="modal fade" id="passwordRecoveryModal" tabindex="-1" aria-labelledby="passwordRecoveryModalLabel" aria-hidden="true">
+				    <div class="modal-dialog">
+				        <div class="modal-content">
+				            <div class="modal-header">
+				                <h5 class="modal-title" id="passwordRecoveryModalLabel">비밀번호 찾기</h5>
+				                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				            </div>
+				            <div class="modal-body">
+				                <form action="${pageContext.request.contextPath}/findPassword" method="post" id="sendEmailModal">
+				                    <div class="mb-3">
+				                        <label for="usernameModal" class="form-label">아이디(이메일)를 입력해주세요</label>
+				                        <input type="email" class="form-control" id="usernameModal" name="username" placeholder="Email">
+				                    </div>
+				                    
+				                </form>
+				            </div>
+				            <div class="modal-footer">
+				                <button type="button" class="btn btn-primary" id="confirmExistedIdModal">비밀번호 발송</button>
+				                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+				            </div>
+				        </div>
+				    </div>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -69,9 +95,11 @@
             <jsp:include page="../menu.jsp" />
         </div>
     </div>
-
+    
 	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	
+	
 	<script>
         window.onload = function() {
             var success = '${success}';
@@ -79,6 +107,50 @@
                 alert('회원가입이 완료되었습니다.');
             }
         }
+	</script>
+	<script>
+	
+	$(document).ready(function(){
+		//var csrfToken = $('meta[name="_csrf"]').attr('content');
+        //var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+        
+        $("#findPassword").click(function(){
+	    	$('#passwordRecoveryModal').modal('show');
+		});
+
+		$("#confirmExistedId").click(function(){
+			var id = $("#username").val();
+			
+			if(id == '' || id.length == 0) {
+				alert("이메일을 입력해주세요.");
+				return;
+			}
+			
+			$.ajax({
+        		url : './findPassword/confirmId',
+        		data : {
+        			username : id,
+        			memberType : 'general'
+        		},
+        		type : 'POST',
+        		dataType : 'json',
+        		//beforeSend: function(xhr) {
+                    //xhr.setRequestHeader(csrfHeader, csrfToken);
+                //},
+        		success : function(result) {
+        			if (result == true) {
+        				alert("존재하지 않는 아이디입니다.");
+        			} else{
+        				alert('임시비밀번호를 전송 했습니다.');
+        				sendEmail.submit();
+        			}
+        		},
+        		error: function(xhr, status, error) {
+                    console.error("AJAX Error: " + status + error);
+                }
+        	});
+		})
+	})
 	</script>
 </body>
 </html>
