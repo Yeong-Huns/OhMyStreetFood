@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.omsf.member.model.Member;
 import org.omsf.member.service.MemberService;
+import org.omsf.report.model.Report;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -94,7 +96,7 @@ public class StoreController {
 	}
 	
 	@GetMapping("/{storeNo}")
-	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model) {
+	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model, @ModelAttribute Report report) {
 		Store store = storeService.getStoreByNo(storeNo);
 		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
 		Photo storePhoto = null;

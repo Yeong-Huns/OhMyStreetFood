@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
@@ -53,6 +52,8 @@
 </script>
 </head>
 <body>
+	<div class="main">
+		<div class="row">
 			<div class="col-md-12 text-center" id="title">
 				<h3>마이페이지</h3>
 			</div>
@@ -125,12 +126,7 @@
 			</div>
 			
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-	<!-- Menu -->
-    <div class="row">
-        <div class="col-md-12">
-            <jsp:include page="../menu.jsp" />
-        </div>
+		 </div>
     </div>
 	
 	<div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
@@ -147,6 +143,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
                 	<button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
                 </div>
             </div>

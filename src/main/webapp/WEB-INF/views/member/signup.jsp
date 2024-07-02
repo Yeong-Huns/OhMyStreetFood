@@ -263,7 +263,6 @@
 				</div>
 				<div class="col-md-12">
 					<form:hidden path="memberType" value="${member.memberType}" />
-					<form:hidden path="loginType" value="email" />
 					<input type="submit" value="회원가입" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">
 				</div>
 			</form:form>

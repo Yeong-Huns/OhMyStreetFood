@@ -25,7 +25,7 @@
 	<select id="getReports" resultMap="reportMap">
 		SELECT reportno, storeno, username, title, content, createdat
 		FROM report 
-		ORDER BY storeno
+		ORDER BY storeno, createdat desc
 	</select>
 
 </mapper>

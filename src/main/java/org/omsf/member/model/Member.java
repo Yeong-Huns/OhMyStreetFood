@@ -33,7 +33,6 @@ public class Member {
 	private String passwordConfirm;
 	
 	private String memberType; 
-	private String loginType;
 	private Date createdAt;
 	private Date modifiedAt;
 	
@@ -41,11 +40,10 @@ public class Member {
 		this.memberType=memberType;
 	}
 	
-	public Member(String username, String password, String memberType, String loginType, Date createdAt, Date modifiedAt) {
+	public Member(String username, String password, String memberType, Date createdAt, Date modifiedAt) {
 		this.username = username;
 		this.password = password;
 		this.memberType = memberType;
-		this.loginType = loginType;
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
 	}
