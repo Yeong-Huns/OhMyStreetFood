@@ -200,12 +200,14 @@
 				    		</c:choose>
 					    	<span>${review.createdAt}</span>
 					    </span>
-						<sec:authorize access="${not empty review.memberUsername and review.memberUsername eq principal.username}">
+						<sec:authorize access="authentication.name == '${review.memberUsername}'">
 			                <a href="<c:url value='/review/${review.reviewNo}'/>">${review.content}</a>
 			            </sec:authorize>
+			            <sec:authorize access="authentication.name != '${review.memberUsername}'">
 			            <c:if test="${empty review.memberUsername or review.memberUsername ne principal.username }">
 			                ${review.content}
 			            </c:if>
+			            </sec:authorize>
 					</div>			    
 				</c:forEach>
 			</c:if>
