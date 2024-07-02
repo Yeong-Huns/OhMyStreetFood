@@ -20,7 +20,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 <!-- Jquery -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!-- CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/review.css">
@@ -39,7 +38,7 @@
 			            <i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
 			        </span>
 			        <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')">
-			            <span><a href="${pageContext.request.contextPath}/chat" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
+			            <span><a href="#" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
 			        </sec:authorize>
 			    </c:when>
 			    <c:otherwise>
@@ -58,7 +57,7 @@
 					        <c:when test="${storePhoto.picture != null}">
 					            <img id="storePhoto" src="${storePhoto.picture}" class="card-img-top rounded-circle" alt="사진" style="max-width: 150px; height: auto;">
 					        </c:when>
-					        <c:otherwise>
+				        <c:otherwise>
 					            <img id="storePhoto" src="${pageContext.request.contextPath}/img/00.jpg" class="card-img-top rounded-circle" alt="사진" style="max-width: 120px; height: auto;">
 					        </c:otherwise>
 					    </c:choose>
