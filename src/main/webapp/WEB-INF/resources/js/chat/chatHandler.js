@@ -201,7 +201,7 @@ function startChat(customer, storeNo, address) {
             'Content-Type': 'application/json'
         }
     }).then(response => {
-        if (response.code === "E4") {
+        if (response.code === "no_record") {
             console.log("채팅기록 없음")
             showChatRoom([], (customer + storeNo), address);
             return;
