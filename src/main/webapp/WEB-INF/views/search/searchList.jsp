@@ -19,7 +19,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	</div>
+	
 	<!-- Search -->
     <div class="col-md-12">
 	    <jsp:include page="../search.jsp" />
