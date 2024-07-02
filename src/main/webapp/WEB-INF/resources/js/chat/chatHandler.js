@@ -449,6 +449,7 @@ function openChatRoomModal(message, username) {
 }
 
 function openChatRoomMyPage(sender, chatRoomNo) {
+
     fetch('/chat/subscription?chatRoomNo=' + chatRoomNo)
         .then(Response=> {
             if(!Response.ok) throw new Error("구독목록 조회에 실패!") //response
@@ -458,6 +459,7 @@ function openChatRoomMyPage(sender, chatRoomNo) {
         const customer = match[1];
         const storeNo = match[2];
         const target = (customer === sender) ? storeNo : customer;
+        connectToChannelWithOutLoginCheck((customer + storeNo), target);
         connectModalToChatRoom(chatRoomNo, data, target);
     }).catch(error=>{
         console.error("/chat/subscsription 호출 에러" + error)
