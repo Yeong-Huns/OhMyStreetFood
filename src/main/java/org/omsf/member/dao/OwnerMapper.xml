@@ -4,16 +4,15 @@
 <mapper namespace="org.omsf.member.dao.OwnerRepository">
 	<insert id="insertOwner">
 		INSERT INTO member(
-		username, password, membertype, logintype, businessregistrationnumber, createdat, modifiedat)
+		username, password, membertype, businessregistrationnumber, createdat, modifiedat)
 		VALUES (
-		#{username}, #{password}, #{memberType}, #{loginType}, #{businessRegistrationNumber}, SYSDATE, SYSDATE)
+		#{username}, #{password}, #{memberType}, #{businessRegistrationNumber}, SYSDATE, SYSDATE)
 	</insert>
 	
 	<resultMap id="ownerMap" type="org.omsf.member.model.Owner">
 		<result property="username" column="username" />
 		<result property="password" column="password" />
 		<result property="memberType" column="membertype" />
-		<result property="loginType" column="logintype" />
 		<result property="businessRegistrationNumber" column="businessregistrationnumber" />
 		<result property="createdAt" column="createdat" />
 		<result property="modifiedAt" column="modifiedat" />

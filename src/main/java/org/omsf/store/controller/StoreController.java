@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.omsf.member.model.Member;
 import org.omsf.member.service.MemberService;
+import org.omsf.report.model.Report;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
@@ -35,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -101,7 +103,7 @@ public class StoreController {
 	}
 	
 	@GetMapping("/{storeNo}")
-	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model, HttpServletRequest request, HttpServletResponse response) {
+	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model, HttpServletRequest request, HttpServletResponse response, @ModelAttribute Report report) {
 		Cookie cookie = viewCountService.addViewCount(request, storeNo);
 		response.addCookie(cookie);
 		StoreInfo storeInfo = viewCountService.getPopularStoreInfo(storeNo);

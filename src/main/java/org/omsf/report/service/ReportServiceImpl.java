@@ -1,6 +1,8 @@
 package org.omsf.report.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.omsf.report.dao.ReportRepository;
 import org.omsf.report.model.Report;
@@ -17,9 +19,15 @@ public class ReportServiceImpl implements ReportService{
 	public void insertReport(Report report) {
 		reportRepository.insertReport(report);
 	}
+	
 	@Override
-	public List<Report> getReports() {
-		return reportRepository.getReports();
+	public Map<Integer, List<Report>> getReportsGroupedByStoreNo() {
+		List<Report> reports = reportRepository.getReports();
+		
+		Map<Integer, List<Report>> groupedReports = reports.stream()
+			    .collect(Collectors.groupingBy(Report::getStoreNo));
+		
+		return groupedReports;
 	}
 
 }

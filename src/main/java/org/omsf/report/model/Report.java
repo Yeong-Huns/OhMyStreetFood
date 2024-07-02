@@ -2,7 +2,7 @@ package org.omsf.report.model;
 
 import java.sql.Date;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,9 +17,9 @@ public class Report {
 	private Integer reportNo;
 	private int storeNo;
 	private String username;
-	@NotNull(message="제목은 필수입니다.")
+	@NotEmpty(message="제목은 필수입니다.")
 	private String title;
-	@NotNull(message="내용은 필수입니다.")
+	@NotEmpty(message="내용은 필수입니다.")
 	private String content;
 	private Date createdAt;
 }

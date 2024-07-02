@@ -1,8 +1,11 @@
 package org.omsf.report.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.omsf.report.model.Report;
 import org.omsf.report.service.LogStoreService;
@@ -14,10 +17,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -36,27 +41,32 @@ public class ReportController {
 	// leejongseop
 	private final LogStoreService logStoreService;
 	
-
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/store/report/{storeNo}")
-	public String showStoreReportPage(@PathVariable Integer storeNo, Model model) {
-		model.addAttribute("storeNo", storeNo);
-		return "store/report";
-	}
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/store/report/{storeNo}")
-	public String processStoreReport(Report report, Principal principal) {
-		report.setUsername(principal.getName());
-		reportService.insertReport(report);
-		return "store";
+	public ResponseEntity<?> processStoreReport(@Valid @ModelAttribute Report report, BindingResult result, Principal principal) {
+	    if (result.hasErrors()) {
+	        // 유효성 검사 오류가 있는 경우 JSON으로 오류 메시지 반환
+	        Map<String, String> errors = new HashMap<>();
+	        for (FieldError error : result.getFieldErrors()) {
+	            errors.put(error.getField(), error.getDefaultMessage());
+	        }
+	        Map<String, Object> response = new HashMap<>();
+	        response.put("errors", errors);
+	        return ResponseEntity.badRequest().body(response);
+	    }
+	    report.setUsername(principal.getName());
+	    reportService.insertReport(report);
+	    
+	    // 성공적으로 신고가 접수된 경우 JSON으로 성공 메시지와 신고한 가게 번호 반환
+	    Map<String, Object> response = new HashMap<>();
+	    response.put("storeNo", report.getStoreNo());
+	    return ResponseEntity.ok(response);
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/admin")
+	@GetMapping("/admin/reports")
 	public String showReportList(Model model) {
-		List<Report> reports = reportService.getReports();
-		model.addAttribute("reports", reports);
+		Map<Integer, List<Report>> groupedReports = reportService.getReportsGroupedByStoreNo();
+		model.addAttribute("groupedReports", groupedReports);
 		
 		return "admin/reportList";
 	}
