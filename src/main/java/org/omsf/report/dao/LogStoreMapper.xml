@@ -9,10 +9,22 @@
 		FROM LOG_STORE
 		WHERE STORENO = #{storeNo}
 		ORDER BY LOGNO DESC
+		OFFSET 0 ROWS FETCH
+		FIRST 20 ROWS ONLY
 	</select>
 	
 	<update id="updateStore" statementType="CALLABLE" >
 		CALL store_update_by_log_store(#{logId, mode=IN})
 	</update>
+	
+	<select id="getLogListJSONByStoreNo" resultType="hashmap">
+		SELECT
+			*
+		FROM LOG_STORE
+		WHERE STORENO = #{storeNo}
+		ORDER BY LOGNO DESC
+		OFFSET 20*(#{page}-1) ROWS FETCH
+		FIRST 20 ROWS ONLY
+	</select>
 
 </mapper>

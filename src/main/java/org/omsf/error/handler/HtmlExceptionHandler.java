@@ -6,12 +6,19 @@ import org.omsf.error.Exception.ErrorCode;
 import org.omsf.error.Exception.ResourceNotFoundException;
 import org.omsf.error.response.ErrorResponse;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * packageName    : org.omsf.error.handler
@@ -27,7 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
 @ControllerAdvice(annotations = Controller.class)
-public class HtmlExceptionHandler {
+public class HtmlExceptionHandler{
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ModelAndView handle(HttpRequestMethodNotSupportedException e){
         log.error("Response: {}", ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED , " 🥲[상세 로그] : "+e.getMessage()));
@@ -63,6 +70,13 @@ public class HtmlExceptionHandler {
         log.error("Response: {}", ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR , " 🥲[상세 메세지] : "+e.getMessage()));
         return createErrorModelAndView(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ModelAndView handle(AccessDeniedException e) {
+        log.error("Response: {}", ErrorResponse.of(ErrorCode.METHOD_NOT_ALLOWED, " 🥲[상세 메세지] : " + e.getMessage()));
+        return createErrorModelAndView(ErrorCode.METHOD_NOT_ALLOWED, e.getMessage());
+    }
+
 
     private ModelAndView createErrorModelAndView(ErrorCode errorCode, String detailMessage) {
         ModelAndView mav = new ModelAndView("error/errorPage"); // 에러 페이지로 이동

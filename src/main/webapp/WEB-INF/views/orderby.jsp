@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -27,8 +28,18 @@
 	        </ul>
 	    </span>
 	    <span class="mt-4">
-	    	<button class="btn btn-outline-primary" type="button" onclick="window.location.href='${pageContext.request.contextPath}/store/createstore'">점포등록</button>
+	    	<sec:authorize access="isAuthenticated()">
+	    		<button class="btn btn-outline-primary" type="button" onclick="window.location.href='${pageContext.request.contextPath}/store/createstore'">점포등록</button>
+	    	</sec:authorize>
+	    	<sec:authorize access="isAnonymous()">
+	    		<button class="btn btn-outline-primary" type="button" onclick="showLoginAlert()">점포등록</button>
+	    	</sec:authorize>
 	    </span>
 	</div>
+	<script>
+    function showLoginAlert() {
+	    alert('로그인이 필요합니다.');
+	}
+	</script>
 </body>
 </html>

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.mapping.StatementType;
 import org.omsf.chatRoom.model.ChatRoomVO;
+import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -38,7 +39,10 @@ public interface ChatRepository {
     //3. chatRoomNo 로 Subscription 가져오기
     Optional<String> getSubscriptionByChatRoomNo(@Param("chatRoomNo") long chatRoomNo);
 
-    //4.
+    //4.Subscription 으로 chatRoomNo 가져오기
+    Optional<Long> getChatRoomNoBySubscription(@Param("customer") String customer, @Param("storeNo") long storeNo);
+    //5. username chatroom get 5 order by updatedAt 😋
+    List<GetChatRoomNoBySubscriptionRequest> getChatRoomsWithLastMessage(@Param("username") String username);
 
     List<ChatRoomVO> findSubListByAddress(@Param("address") String address);
     List<Integer> findStoreListByAddress(@Param("address") String address);

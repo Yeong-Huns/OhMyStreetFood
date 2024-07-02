@@ -35,23 +35,24 @@
     </script>
 </head>
 <body>
-    <div class="main">
-        <div class="row">
-            <!-- Search -->
-            <jsp:include page="../search.jsp" />
-
-            <div class="col-md-12">
-                인기 검색어
-                <p style="padding: 20px 0;">
-                    <c:forEach items="${searchs}" var="search">
-                        <a class="btn btn-outline-primary search-link" style="margin: 5px 0; border-radius: 30px;"
-                            data-keyword="${search.KEYWORD}" href="#">
-                            &nbsp;${search.KEYWORD}&nbsp;
-                        </a>
-                    </c:forEach>
-                </p>
-            </div>
-        </div>
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	</div>
+	
+	<div class="col-md-12">
+		<jsp:include page="../search.jsp" />
+	</div>
+	
+    <div class="col-md-12">
+        <h5><strong>인기 검색어</strong></h5>
+        <p style="padding: 20px 0;">
+            <c:forEach items="${searchs}" var="search">
+                <a class="btn btn-outline-primary search-link" style="margin: 5px 0; border-radius: 30px;"
+                    data-keyword="${search.KEYWORD}" href="#">
+                    &nbsp;${search.KEYWORD}&nbsp;
+                </a>
+            </c:forEach>
+        </p>
     </div>
     
     <!-- Menu -->

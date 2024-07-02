@@ -19,21 +19,19 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	<div class="main">
-        <div class="row">
-
-	    <!-- Oderby -->
-	    <jsp:include page="orderby.jsp" />
-	
-	    <div class="col-md-12" id="storeList">
-	        <jsp:include page="search/searchItems.jsp">
-	            <jsp:param name="stores" value="${stores}" />
-	            <jsp:param name="pictures" value="${pictures}" />
-	        </jsp:include>
-	    </div>
-	
-		</div>
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
 	</div>
+		
+    <!-- Oderby -->
+    <jsp:include page="orderby.jsp" />
+
+    <div class="col-md-12" id="storeList">
+        <jsp:include page="search/searchItems.jsp">
+            <jsp:param name="stores" value="${stores}" />
+            <jsp:param name="pictures" value="${pictures}" />
+        </jsp:include>
+    </div>
 
     <!-- Menu -->
     <div class="row">

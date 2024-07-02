@@ -39,12 +39,14 @@
     }
     </style>
 <body>
-	<div class="col-md-12 text-center" style="font-family: 'Chakra Petch', sans-serif; font-weight: 700; letter-spacing: 10px; text-decoration: underline; text-decoration-color: #007bff;" id="logo">
-		<h3>Oh My Street Food!</h3>
-	</div>
+	<center>
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 400px">
+	</center>
 
 	<!-- Search -->
+	<div class="col-md-12">
       <jsp:include page="search.jsp" />
+	</div>
 
 	<!-- KAKAO MAP API -->
 	<div class="col-md-12">
@@ -59,11 +61,14 @@
 		</div>
 	</sec:authorize>
 
+
+  <div class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
+   <h5>인기 점포</h5>
   <!-- Store Carousel -->
-  	<div style="font-size: 24px; font-weight: bold;">인기 점포</div>
 	  <div id="storeCarousel" class="owl-carousel owl-theme">
 	  </div>
-
+  
+  </div>
     
     <!-- Menu -->
     <div class="row">
