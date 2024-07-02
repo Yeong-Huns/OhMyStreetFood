@@ -90,16 +90,26 @@
 </head>
 <body>
 	<div class="main">
-		<div class="row">
-			<div>
-				<a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;"> 
-					<i class="fas fa-arrow-left"></i>
-				</a>
-			</div>
+		<div class="col-md-12">
+			<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+		</div>
+		
+    	<div class="row justify-content-center">
+        	<div class="col-md-10">
 			<div class="col-md-12 text-center" id="title">
 				<h3>회원 정보 수정</h3>
 			</div>
 			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/modifyMember/${member.memberType}" method="post">
+				<sec:authorize access="hasRole('ROLE_USER')">
+					<div class="form-group">
+						<label for="nickName">닉네임 변경</label>
+						<span style="display: flex; align-items: center;"> 
+						<form:input path="nickName" class="form-control" id="nickName" value="${member.nickName}"/>
+						<input type="button" id="nickNameDuplicateConfirm" class="btn btn-primary" value="중복 확인">
+						</span>
+						<label id="nickNameAlertLabel"></label>
+					</div>
+				</sec:authorize>
 				<div class="form-group">
 					<label for="password">비밀번호 변경</label>
 					<span style="display: flex; align-items: center;"> 
@@ -112,16 +122,6 @@
 					<form:password path="passwordConfirm" class="form-control" placeholder="Password Confirm"/>
 					<form:errors path="passwordConfirm" cssClass="text-danger"/>
 				</div>
-				<sec:authorize access="hasRole('ROLE_USER')">
-					<div class="form-group">
-						<label for="nickName">닉네임 변경</label>
-						<span style="display: flex; align-items: center;"> 
-						<form:input path="nickName" class="form-control" id="nickName" value="${member.nickName}"/>
-						<input type="button" id="nickNameDuplicateConfirm" class="btn btn-primary" value="중복 확인">
-						</span>
-						<label id="nickNameAlertLabel"></label>
-					</div>
-				</sec:authorize>
 				<div class="col-md-12">
 					<form:hidden path="memberType" value="${member.memberType}" />
 					<form:hidden path="username" value="${member.username }" />
@@ -132,9 +132,16 @@
 				<a href="#" id="withdrawal">회원 탈퇴</a>
 			</div>
 		</div>
+	</div>
 	</div>		
 
-	
+	<!-- Menu -->
+    <div class="row">
+        <div class="col-md-12">
+            <jsp:include page="../menu.jsp" />
+        </div>
+    </div>
+    
 	<!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
