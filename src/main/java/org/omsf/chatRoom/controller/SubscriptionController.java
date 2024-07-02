@@ -28,21 +28,28 @@ public class SubscriptionController {
     private final SimpMessagingTemplate messagingTemplate;
 
     @MessageMapping("/chat/subscribe")
-    public void subscribeToNewChannel(SubscriptionRequest request){
-        if(webSocketEventListener.isActive(request.getTarget())){
+    public void subscribeToNewChannel(SubscriptionRequest request) {
+        if (webSocketEventListener.isActive(request.getTarget())) {
             messagingTemplate.convertAndSend("/topic/chat/" + request.getTarget(), request.getChannel());
             messagingTemplate.convertAndSend("/topic/chat/" + request.getRequestingUser(), request.getChannel());
         }
     }
 
+    @MessageMapping("/chat/subscribeWithOut")
+    public void subscribeToNewChannelWithOutLoginCheck(SubscriptionRequest request) {
+        messagingTemplate.convertAndSend("/topic/chat/" + request.getTarget(), request.getChannel());
+        messagingTemplate.convertAndSend("/topic/chat/" + request.getRequestingUser(), request.getChannel());
+    }
+
+
     @GetMapping("/chat/isActive")
-    public boolean isActive(@RequestParam String target){
+    public boolean isActive(@RequestParam String target) {
         return webSocketEventListener.isActive(target);
     }
 
     @Setter
     @Getter
-    public static class SubscriptionRequest{
+    public static class SubscriptionRequest {
         private String requestingUser;
         private String target;
         private String channel;

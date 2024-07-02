@@ -206,49 +206,60 @@
 </script>
 </head>
 <body>
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	</div>
+	
 	<div class="main">
-		<div class="row">
-			<div class="col-md-12 text-center" id="title">
-				<c:choose>
-				    <c:when test="${member.memberType eq 'owner'}">
-				        <h3>사장님 회원가입</h3>
-				    </c:when>
-				    <c:otherwise>
-				        <h3>회원가입</h3>
-				    </c:otherwise>
-				</c:choose>
-			</div>
-
-			<form:form modelAttribute="member" id="signupForm" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
-				<div class="form-group">
-					<label for="username">아이디(이메일 주소)</label> 
-					<span style="display: flex; align-items: center;"> 
-					<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id" /> 
-					<input type="button" id="idDuplicateConfirm" class="btn btn-primary" value="중복 확인" />
-					</span> 
-					<label id="idAlertLabel""></label>
-					<form:errors path="username" cssClass="text-danger" />
+		<div class="row justify-content-center">
+        	<div class="col-md-10" style="padding: 0px;">
+				<div class="col-md-12 text-center" id="title">
+					<c:choose>
+					    <c:when test="${member.memberType eq 'owner'}">
+					        <h2>사장님 회원가입</h2>
+					    </c:when>
+					    <c:otherwise>
+					        <h2>회원가입</h2>
+					    </c:otherwise>
+					</c:choose>
 				</div>
-				<c:if test="${member.memberType != 'owner'}">
-					<div class="form-group" id="nickNameGroup">
-						<label for="nickName">닉네임</label> 
+	
+				<form:form modelAttribute="member" id="signupForm" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
+					<div class="form-group">
+						<label for="username">아이디(이메일 주소)</label> 
 						<span style="display: flex; align-items: center;"> 
-						<form:input type="text" path="nickName" class="form-control" placeholder="NickName" /> 
-						<input type="button" id="nickNameDuplicateConfirm" class="btn btn-primary" value="중복 확인" />
+						<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id" /> 
+						<input type="button" id="idDuplicateConfirm" class="btn btn-primary" value="중복 확인" />
 						</span> 
-						<label id="nickNameAlertLabel"></label>
-						<form:errors path="nickName" cssClass="text-danger" />
+						<label id="idAlertLabel""></label>
+						<form:errors path="username" cssClass="text-danger" />
 					</div>
-				</c:if>
-				<c:if test="${member.memberType == 'owner'}">
-					<div class="form-group" id="businessRegistrationNumberGroup">
-						<label for="businessRegistrationNumber">사업자 등록 번호</label> 
-						<span style="display: flex; align-items: center;"> 
-						<form:input type="text" path="businessRegistrationNumber" class="form-control" placeholder="businessRegistrationNumber" /> 
-						<input type="button" id="businessRegistrationNumberConfirm" class="btn btn-primary" value="중복 확인" />
-						</span> 
-						<label id="businessRegistrationNumberAlertLabel"></label>
-						<form:errors path="businessRegistrationNumber" cssClass="text-danger" />
+					<c:if test="${member.memberType != 'owner'}">
+						<div class="form-group" id="nickNameGroup">
+							<label for="nickName">닉네임</label> 
+							<span style="display: flex; align-items: center;"> 
+							<form:input type="text" path="nickName" class="form-control" placeholder="NickName" /> 
+							<input type="button" id="nickNameDuplicateConfirm" class="btn btn-primary" value="중복 확인" />
+							</span> 
+							<label id="nickNameAlertLabel"></label>
+							<form:errors path="nickName" cssClass="text-danger" />
+						</div>
+					</c:if>
+					<c:if test="${member.memberType == 'owner'}">
+						<div class="form-group" id="businessRegistrationNumberGroup">
+							<label for="businessRegistrationNumber">사업자 등록 번호</label> 
+							<span style="display: flex; align-items: center;"> 
+							<form:input type="text" path="businessRegistrationNumber" class="form-control" placeholder="businessRegistrationNumber" /> 
+							<input type="button" id="businessRegistrationNumberConfirm" class="btn btn-primary" value="중복 확인" />
+							</span> 
+							<label id="businessRegistrationNumberAlertLabel"></label>
+							<form:errors path="businessRegistrationNumber" cssClass="text-danger" />
+						</div>
+					</c:if>
+					<div class="form-group">
+						<label for="password">비밀번호</label>
+						<form:password path="password" class="form-control" placeholder="비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다." />
+						<form:errors path="password" cssClass="text-danger" />
 					</div>
 				</c:if>
 				<div class="form-group">
@@ -277,7 +288,6 @@
     </div>
 
 	<!-- Bootstrap JS -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

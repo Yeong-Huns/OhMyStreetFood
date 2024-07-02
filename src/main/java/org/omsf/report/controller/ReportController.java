@@ -11,6 +11,7 @@ import org.omsf.report.model.Report;
 import org.omsf.report.service.LogStoreService;
 import org.omsf.report.service.ReportService;
 import org.omsf.store.service.StoreService;
+import org.omsf.store.service.ViewCountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,7 +36,7 @@ public class ReportController {
 	// yunbin
 	private final ReportService reportService;
 	private final StoreService storeService;
-	
+	private final ViewCountService viewCountService;
 
 	// leejongseop
 	private final LogStoreService logStoreService;
@@ -76,6 +77,7 @@ public class ReportController {
 	public boolean deleteStore(int storeNo) {
 		try {
 			storeService.deleteStore(storeNo);
+			viewCountService.removeStoreRankings(storeNo);
 			return true;
 		} catch (Exception e){
 			e.printStackTrace();

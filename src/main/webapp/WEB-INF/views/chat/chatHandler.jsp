@@ -11,12 +11,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chat/chatHandler.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.0.2/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/chat/chatHandler.js"></script>
+
     <!-- JavaScript로 값을 전달하기 위해 HTML 내에서 변수를 설정 -->
     <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
     <c:set var="username" value="${pageContext.request.userPrincipal.name}"/>
@@ -105,6 +109,17 @@
     $(function () {
         $('.modal-dialog').draggable({
             handle: ".modal-header"
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var chatRoomModalElement = document.getElementById('chatRoomModal');
+        var chatRoomModal = new bootstrap.Modal(chatRoomModalElement);
+
+        var closeButton = chatRoomModalElement.querySelector('.btn-close');
+        closeButton.addEventListener('click', function () {
+            chatRoomModal.hide();
         });
     });
 </script>

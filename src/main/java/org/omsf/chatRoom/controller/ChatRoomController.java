@@ -3,6 +3,7 @@ package org.omsf.chatRoom.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.omsf.chatRoom.model.ChatRoomVO;
+import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.service.ChatService;
 import org.omsf.error.Exception.BadRequestException;
@@ -51,9 +52,20 @@ public class ChatRoomController {
     }
     //3. 챗룸넘버로 구독주소 가져오기
     @GetMapping("/subscription")
-    public ResponseEntity<String> getSubscriptionByChatRoomNo(long chatRoomNo){
+    public ResponseEntity<String> getSubscriptionByChatRoomNo(@RequestParam long chatRoomNo){
         return ResponseEntity.ok(chatService.getSubscriptionByChatRoomNo(chatRoomNo));
     }
+    //4. 구독주소로 챗룸넘버
+    @GetMapping("/chatRoomNoBySubscription")
+    public ResponseEntity<Long> getChatRoomNoBySubscription(String customer, long storeNo){
+        return ResponseEntity.ok(chatService.getChatRoomNoBySubscription(customer, storeNo));
+    }
+    //5. 채팅방 5개 조회
+    @GetMapping("/getChatRoomsWithMessage")
+    public ResponseEntity<List<GetChatRoomNoBySubscriptionRequest>> getChatRoomsWithLastMessage(String username){
+        return ResponseEntity.ok(chatService.getChatRoomsWithLastMessage(username));
+    }
+
 
     @GetMapping("/chatList")
     public ResponseEntity<List<ChatRoomVO>> findSubListByAddress(@RequestParam String address){
