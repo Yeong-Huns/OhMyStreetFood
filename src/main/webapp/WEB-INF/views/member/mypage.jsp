@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -11,13 +10,17 @@
     <style>.custom-chat-room {
         display: flex;
         align-items: center;
-        margin-bottom: 10px; /* 간격 줄임 */
-        padding-bottom: 10px; /* 선과 간격 조정 */
-        border-bottom: 1px solid #ccc; /* 회색 선 추가 */
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
     }
 
     .custom-chat-room img {
         margin-right: 10px;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
     }
 
     .custom-chat-room div {
@@ -187,20 +190,18 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const username = document.getElementById('memberUsername').value; // Ensure the username is obtained correctly
-
-        fetch(`/chat/getChatRoomsWithMessage?username=${username}`) // Fetch chat rooms with last message
+        fetch(`/chat/getChatRoomsWithMessage?username=${username}`)
             .then(response => response.json())
             .then(data => {
                 const chatRoomContainer = document.getElementById('custom-chat-room-container');
-                chatRoomContainer.innerHTML = ''; // Clear existing content
+                chatRoomContainer.innerHTML = '';
 
                 data.forEach(chatRoom => {
                     console.log(chatRoom); // Log chatRoom to see its structure
                     const chatRoomElement = document.createElement('div');
                     chatRoomElement.className = 'custom-chat-room';
                     chatRoomElement.innerHTML = `
-                    <img src="img/00_1.jpg" alt="Avatar" width="50" height="50">
+                    <img src="`+chatRoom.img+`" alt="Avatar" width="50" height="50">
                     <div>
                         <p><strong>`+chatRoom.target+`와의 대화</strong></p>
                         <p>`+chatRoom.lastMessage+`</p>

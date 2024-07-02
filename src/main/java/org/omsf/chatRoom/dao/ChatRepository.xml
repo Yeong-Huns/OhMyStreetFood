@@ -52,8 +52,9 @@
     <select id="getChatRoomsWithLastMessage" parameterType="string" resultType="org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest">
         WITH UserType AS (
             SELECT
-                CASE WHEN LOWER(memberType) = 'owner' THEN 'owner'
-                     ELSE 'user'
+                CASE
+                    WHEN LOWER(memberType) = 'owner' THEN 'owner'
+                    ELSE 'user'
                     END AS type,
                 m.username
             FROM member m
@@ -65,28 +66,48 @@
                  WHERE member_username = (SELECT username FROM UserType WHERE type = 'owner')
              ),
              ChatRooms AS (
-                 SELECT cr.chatroomNo, cr.customer, cr.storeNo, cr.ownerVisible, cr.customerVisible, cr.updatedAt,
-                        CASE
-                            WHEN ut.type = 'owner' THEN (SELECT nickname FROM member WHERE username = cr.customer)
-                            ELSE s.storeName
-                            END AS target
+                 SELECT
+                     cr.chatroomNo,
+                     cr.customer,
+                     cr.storeNo,
+                     cr.ownerVisible,
+                     cr.customerVisible,
+                     cr.updatedAt,
+                     CASE
+                         WHEN ut.type = 'owner' THEN (SELECT nickname FROM member WHERE username = cr.customer)
+                         ELSE s.storeName
+                         END AS target,
+                     CASE
+                         WHEN ut.type = 'owner' THEN 'img/00.jpg'
+                         WHEN s.picture IS NULL THEN 'img/00.jpg'
+                         ELSE p.picture
+                         END AS img
                  FROM chatroom cr
                           JOIN UserType ut ON cr.customer = ut.username
                      OR (ut.type = 'owner' AND cr.storeNo IN (SELECT storeNo FROM OwnerStores))
                           LEFT JOIN store s ON cr.storeNo = s.storeNo
+                          LEFT JOIN photo p ON s.picture = p.photoNo
                  ORDER BY cr.updatedAt DESC
                      FETCH FIRST 5 ROWS ONLY
              )
-        SELECT cr.chatroomNo, cr.ownerVisible, cr.customerVisible, cr.updatedAt, cr.target, m.content AS lastMessage
+        SELECT
+            cr.chatroomNo,
+            cr.ownerVisible,
+            cr.customerVisible,
+            cr.updatedAt,
+            cr.target,
+            cr.img,
+            m.content AS lastMessage
         FROM ChatRooms cr
                  LEFT JOIN (
-            SELECT chatRoomNo, content, ROW_NUMBER() OVER (PARTITION BY chatRoomNo ORDER BY createdAt DESC) AS rn
+            SELECT
+                chatRoomNo,
+                content,
+                ROW_NUMBER() OVER (PARTITION BY chatRoomNo ORDER BY createdAt DESC) AS rn
             FROM Message
         ) m ON cr.chatroomNo = m.chatRoomNo
         WHERE m.rn = 1
     </select>
-
-
 
 
 
