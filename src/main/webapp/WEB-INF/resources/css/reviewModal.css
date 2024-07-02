@@ -9,7 +9,8 @@
 .review-modal {
     display: none; /* 기본적으로 모달을 숨깁니다 */
     position: fixed;
-    z-index: 1;
+/*     z-index: 1; */
+	z-index: 999999;
     left: 0;
     top: 0;
     width: 100%;
