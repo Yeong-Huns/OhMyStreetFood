@@ -8,13 +8,13 @@ import org.omsf.report.model.Report;
 import org.omsf.report.service.LogStoreService;
 import org.omsf.report.service.ReportService;
 import org.omsf.store.service.StoreService;
+import org.omsf.store.service.ViewCountService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class ReportController {
 	// yunbin
 	private final ReportService reportService;
 	private final StoreService storeService;
-	
+	private final ViewCountService viewCountService;
 
 	// leejongseop
 	private final LogStoreService logStoreService;
@@ -63,6 +63,7 @@ public class ReportController {
 	public boolean deleteStore(int storeNo) {
 		try {
 			storeService.deleteStore(storeNo);
+			viewCountService.removeStoreRankings(storeNo);
 			return true;
 		} catch (Exception e){
 			e.printStackTrace();

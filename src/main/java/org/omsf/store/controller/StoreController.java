@@ -21,6 +21,7 @@ import org.omsf.store.model.Like;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
+import org.omsf.store.model.StoreInfo;
 import org.omsf.store.service.LikeService;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.SearchService;
@@ -65,6 +66,7 @@ public class StoreController {
 	private final LikeService likeService;
 	private final SearchService searchService;
 	private final ViewCountService viewCountService;
+
 	
 	@GetMapping("/createstore")
 	public String showAddStoreGeneralPage() {
@@ -101,13 +103,29 @@ public class StoreController {
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("/{storeNo}")
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model, HttpServletRequest request, HttpServletResponse response) {
-		Store store = storeService.getStoreByNo(storeNo);
-		List<Menu> menu = menuService.getMenusByStoreNo(storeNo);
-		Photo storePhoto = null;
 		Cookie cookie = viewCountService.addViewCount(request, storeNo);
 		response.addCookie(cookie);
-		storePhoto = storeService.getPhotoByPhotoNo(store.getPicture());
-		List<Photo> gallery = storeService.getStoreGallery(storeNo);
+		StoreInfo storeInfo = viewCountService.getPopularStoreInfo(storeNo);
+	    
+		Store store;
+	    List<Menu> menu;
+	    Photo storePhoto;
+	    List<Photo> gallery;
+
+	    if (storeInfo != null) {
+	    	//
+	    	log.debug(storeNo + "번 가게 캐시에서 가져옴");
+	        store = storeInfo.getStore();
+	        menu = storeInfo.getMenus();
+	        storePhoto = storeInfo.getPhoto();
+	        gallery = storeInfo.getGallery();
+	    } else {
+
+	        store = storeService.getStoreByNo(storeNo);
+	        menu = menuService.getMenusByStoreNo(storeNo);
+	        storePhoto = (store.getPicture() != null) ? storeService.getPhotoByPhotoNo(store.getPicture()) : null;
+	        gallery = storeService.getStoreGallery(storeNo);
+	    }
 
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menu);
@@ -124,8 +142,6 @@ public class StoreController {
 		
 		List<Review> review = reviewService.getReviewListOnStore(storeNo);
 		
-		model.addAttribute("store", store);
-		model.addAttribute("menus", menu);
 		model.addAttribute("reviews", review);
 		
 		// yunbin
@@ -194,6 +210,8 @@ public class StoreController {
     	menuService.updateMenus(storeNo, menus);
 		//사진 업데이트
 		storeService.updatePhotoOrder(photoOrder, storeNo, username);
+		//캐시 업데이트
+		viewCountService.updateTop10Stores();
 		
 	    return "store/{storeNo}";
 	}
@@ -364,7 +382,7 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(newPhotoNo);
     }
 	
- @PostMapping("/{storeNo}/upload-photo")
+	@PostMapping("/{storeNo}/upload-photo")
     public ResponseEntity<Photo> uploadStorePicture(@PathVariable int storeNo, @RequestParam("photo") ArrayList<MultipartFile> photos,
     		Principal principal) throws IOException {
         	
@@ -417,22 +435,32 @@ public class StoreController {
     @GetMapping("/popular")
     public Map<String, Object> showPopular(Model model) {
 
-    	List<Store> stores = storeService.getPopularStores();
-        
-    	List<Photo> pictures = new ArrayList<>();
-	    for (Store store : stores) {
-	    	if (store.getPicture() != null) {
-	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
-	    		pictures.add(photo);
-	    	} else {
-	    		pictures.add(null);
-	    	}
-	    }
-	    Map<String, Object> response = new HashMap<>();
-	    response.put("stores", stores);
-	    response.put("pictures", pictures);
-	    
-	    return response;
+    	List<StoreInfo> storeInfos = viewCountService.getTop10PopularStores();
+
+    	if (storeInfos.isEmpty()) {
+    		
+    		List<Store> stores = storeService.getPopularStores();
+    		
+    		List<Photo> pictures = new ArrayList<>();
+    		for (Store store : stores) {
+    			if (store.getPicture() != null) {
+    				Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+    				pictures.add(photo);
+    			} else {
+    				pictures.add(null);
+    			}
+    		}
+    		Map<String, Object> response = new HashMap<>();
+    		response.put("stores", stores);
+    		response.put("pictures", pictures);
+    		
+	    	return response;
+    	} else {
+    		Map<String, Object> response = new HashMap<>();
+    		response.put("storeInfos", storeInfos);
+    		
+    		return response;
+    	}
     }
 }
 
