@@ -188,28 +188,28 @@
 				    </span>
 				</span>
 			
-				<c:forEach items="${reviews}" var="review">
-					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-				    		<c:choose>
-				    			<c:when test="${not empty review.memberUsername}">
-				    				<span><strong>${review.memberUsername}</strong></span>
-				    			</c:when>
-				    			<c:otherwise>
-				    				<span><strong>탈퇴한 회원</strong></span>
-				    			</c:otherwise>
-				    		</c:choose>
-					    	<span>${review.createdAt}</span>
-					    </span>
-						<sec:authorize access="authentication.name == '${review.memberUsername}'">
-			                <a href="<c:url value='/review/${review.reviewNo}'/>">${review.content}</a>
-			            </sec:authorize>
-			            <sec:authorize access="authentication.name != '${review.memberUsername}'">
-			            <c:if test="${empty review.memberUsername or review.memberUsername ne principal.username }">
-			                ${review.content}
-			            </c:if>
-			            </sec:authorize>
-					</div>			    
+				<c:forEach items="${reviews.keySet()}" var="review">
+				    <div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+				        <span style="display: flex; flex-direction: row; justify-content: space-between;">
+				            <c:choose>
+				                <c:when test="${not empty review.memberUsername}">
+				                    <span><strong>${reviews.get(review)}</strong></span>
+				                </c:when>
+				                <c:otherwise>
+				                    <span><strong>탈퇴한 회원</strong></span>
+				                </c:otherwise>
+				            </c:choose>
+				            <span>${review.createdAt}</span>
+				        </span>
+				        <sec:authorize access="authentication.name == '${review.memberUsername}'">
+				            <a href="<c:url value='/review/${review.reviewNo}'/>">${review.content}</a>
+				        </sec:authorize>
+				        <sec:authorize access="authentication.name != '${review.memberUsername}'">
+				            <c:if test="${empty review.memberUsername or review.memberUsername ne principal.username }">
+				                ${review.content}
+				            </c:if>
+				        </sec:authorize>
+				    </div>               
 				</c:forEach>
 			</c:if>
 			
@@ -524,9 +524,6 @@
 		            processData: true,
 		            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 		            success: function(data) {
-		            	console.log(data); // 서버 응답 로그 출력
-		                //console.log("Context Path: " +${pageContext.request.contextPath});
-		            	
 		                if (data.errors) {
 		                    // 유효성 검사 오류가 있는 경우
 		                    $('#error-title').text(data.errors.title || "");

@@ -41,7 +41,6 @@ public class ReportController {
 	// leejongseop
 	private final LogStoreService logStoreService;
 	
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/store/report/{storeNo}")
 	public ResponseEntity<?> processStoreReport(@Valid @ModelAttribute Report report, BindingResult result, Principal principal) {
 	    if (result.hasErrors()) {
@@ -63,7 +62,6 @@ public class ReportController {
 	    return ResponseEntity.ok(response);
 	}
 	
-	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/admin/reports")
 	public String showReportList(Model model) {
 		Map<Integer, List<Report>> groupedReports = reportService.getReportsGroupedByStoreNo();
@@ -72,7 +70,6 @@ public class ReportController {
 		return "admin/reportList";
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/admin/deleteStore")
 	@ResponseBody
 	public boolean deleteStore(int storeNo) {
@@ -86,7 +83,6 @@ public class ReportController {
 		}
 	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/admin/deleteReport")
 	@ResponseBody
 	public boolean deleteReport(int reportNo) {

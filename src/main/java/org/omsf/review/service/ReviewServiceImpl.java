@@ -1,7 +1,13 @@
 package org.omsf.review.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
+import org.omsf.member.dao.GeneralMemberRepository;
+import org.omsf.member.model.GeneralMember;
+import org.omsf.member.model.Member;
 import org.omsf.review.dao.ReviewRepository;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
@@ -16,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReviewServiceImpl implements ReviewService {
 
 	private final ReviewRepository reviewDao;
+	private final GeneralMemberRepository generalMemberRepository;
 	
 	@Override
 	public void createReview(RequestReview review) {
@@ -48,8 +55,20 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<Review> getReviewListOnStore(int storeNo) {
-		return reviewDao.getReviewListOnStore(storeNo);
+	public Map<Review, String> getReviewListOnStore(int storeNo) {
+		List<Review> reviews = reviewDao.getReviewListOnStore(storeNo);
+		Map<Review, String> reviewsWithNickName = new HashMap<>();
+		for(Review review:reviews) {
+			
+			Optional<GeneralMember> _generalMember = generalMemberRepository.findByUsername(review.getMemberUsername());
+			if(_generalMember.isPresent()) {
+				GeneralMember generalMember = _generalMember.get();
+				reviewsWithNickName.put(review, generalMember.getNickName());
+			} else {
+				reviewsWithNickName.put(review, null);
+			}	
+		}
+		return reviewsWithNickName;
 	}
 
 	@Override
