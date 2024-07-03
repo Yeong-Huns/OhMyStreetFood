@@ -10,8 +10,11 @@
     </insert>
 
     <select id="getAllKeywords" resultType="map">
-        SELECT keyword, COUNT(keyword) as searchCount FROM search GROUP BY keyword ORDER BY searchCount DESC FETCH FIRST 30 ROWS ONLY
-
+        SELECT keyword, COUNT(keyword) as searchCount 
+        FROM search 
+        GROUP BY keyword 
+        ORDER BY searchCount DESC 
+        FETCH FIRST 30 ROWS ONLY
     </select>
 
 </mapper>

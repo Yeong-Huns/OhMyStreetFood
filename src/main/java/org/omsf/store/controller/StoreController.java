@@ -50,7 +50,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -247,10 +246,11 @@ public class StoreController {
 	    for (Store store : initialStores) {
 	    	if (store.getPicture() != null) {
 	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		photo.setStoreNo(store.getStoreNo());
 	    		pictures.add(photo);
 	    	}
 	    }
-        
+	    
         String userIp = "";
         if (request != null) {
             userIp = request.getHeader("X-FORWARDED-FOR");
@@ -266,6 +266,9 @@ public class StoreController {
         
         model.addAttribute("stores", initialStores);
         model.addAttribute("pictures", pictures);
+        
+        System.out.println(pictures);
+        
         model.addAttribute("keyword", keyword);
         model.addAttribute("orderType", orderType);
         
@@ -292,6 +295,7 @@ public class StoreController {
 	    for (Store store : stores) {
 	    	if (store.getPicture() != null) {
 	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		photo.setStoreNo(store.getStoreNo());
 	    		pictures.add(photo);
 	    	}
 	    }
