@@ -73,7 +73,7 @@
         WHERE
             m.chatRoomNo = #{chatRoomNo}
         ORDER BY
-            m.createdAt ASC
+            m.createdAt
     </select>
 
 </mapper>

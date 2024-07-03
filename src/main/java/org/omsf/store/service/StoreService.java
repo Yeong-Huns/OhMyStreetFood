@@ -21,10 +21,6 @@ public interface StoreService {
 	void deleteStore(int storeNo);
 	void updatePhotoOrder(List<Integer> photoOrder, int storeNo, String username);
 	
-	Store updateTotalReview(Store store);
-	Store updateTotalRating(Store store);
-	Store updateLikes(Store store);
-	
 	int UploadImage(ArrayList<MultipartFile> files, int storeNo, String username) throws IOException;
 	void deleteImage(int PhotoNo);
   
@@ -44,8 +40,7 @@ public interface StoreService {
 	List<Store> getStoresByUsername(String name);
 
 	// leejongseop
-	List<Store> getStoresByPosition(String position);
-
+	List<Map<String, Object>> getStoresByPosition(String position);
 
 
 }

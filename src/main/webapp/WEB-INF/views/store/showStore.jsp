@@ -9,7 +9,6 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
 <title>OhMyStreetFood!</title>
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -38,11 +37,12 @@
 			        <span>
 			            <i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
 			        </span>
-			        <sec:authorize access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')">
-			            <span><a href="${pageContext.request.contextPath}/chat" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
+
+			        <sec:authorize access="hasRole('ROLE_USER')">
+			            <span><a href="javascript:void(0)" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
 			        </sec:authorize>
 			        <sec:authorize access="isAnonymous()">
-			            <span><a href="javascript:void(0)" onclick="showLoginAlert()">사장님과 채팅하기</a></span>
+			            <span><a href="javascript:void(0)" onclick="showLoginModal()">사장님과 채팅하기</a></span>
 			        </sec:authorize>
 			    </c:when>
 			    <c:otherwise>
@@ -180,8 +180,8 @@
 				    	<c:forEach begin="1" end="${store.totalRating}">
 				    		<i class="fas fa-star" style="color:#f5b301;"></i>
 				    	</c:forEach>
-					    <c:if test="${5 - store.totalRating >= 1}">
-					    	<c:forEach begin="1" end="${6 - store.totalRating >= 5 ? 5 : 6 - store.totalRating}">
+					    <c:if test="${5 - store.totalRating > 0}">
+					    	<c:forEach begin="1" end="${store.totalRating % 1 == 0 ? 5 - store.totalRating : 6 - store.totalRating}">
 				    			<i class="fas fa-star"></i>
 				    		</c:forEach>
 					    </c:if>
@@ -201,12 +201,14 @@
 				    		</c:choose>
 					    	<span>${review.createdAt}</span>
 					    </span>
-						<sec:authorize access="${not empty review.memberUsername and review.memberUsername eq principal.username}">
+						<sec:authorize access="authentication.name == '${review.memberUsername}'">
 			                <a href="<c:url value='/review/${review.reviewNo}'/>">${review.content}</a>
 			            </sec:authorize>
+			            <sec:authorize access="authentication.name != '${review.memberUsername}'">
 			            <c:if test="${empty review.memberUsername or review.memberUsername ne principal.username }">
 			                ${review.content}
 			            </c:if>
+			            </sec:authorize>
 					</div>			    
 				</c:forEach>
 			</c:if>

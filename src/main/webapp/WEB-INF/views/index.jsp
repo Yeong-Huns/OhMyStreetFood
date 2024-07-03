@@ -21,8 +21,17 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spinner.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/customOverlay.css">
+    
 </head>
     <style>
+    	.owl-stage-outer {
+    		padding: 0px;
+    		margin: 0px;
+    	}
+    	.owl-stage {
+    		padding: 0px;
+    	}
         .owl-carousel .item {
             padding: 0px;
             margin: 5px;
@@ -33,10 +42,14 @@
             width: 100%;
             height: auto;
         }
-         #storeCarousel .owl-stage {
-        display: flex;
-        flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
-    }
+        .owl-carousel owl-theme owl-loaded owl-drag {
+        	padding: 0px;
+    		margin: 0px;
+        }
+        #storeCarousel .owl-stage {
+        	display: flex;
+        	flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
+    	}
     </style>
 <body>
 	<center>

@@ -201,7 +201,7 @@ function startChat(customer, storeNo, address) {
             'Content-Type': 'application/json'
         }
     }).then(response => {
-        if (response.code === "E4") {
+        if (response.code === "no_record") {
             console.log("채팅기록 없음")
             showChatRoom([], (customer + storeNo), address);
             return;
@@ -446,13 +446,29 @@ function openChatRoomModal(message, username) {
         }).then(data=>{
 
     })
-    //messageNo NUMBER GENERATED AS IDENTITY PRIMARY KEY,
-    //     content VARCHAR2(1000 CHAR) NOT NULL,
-    //     senderId VARCHAR2(255),
-    //     chatRoomNo NUMBER,
-    //     isReceived CHAR(1) DEFAULT '0' NOT NULL,
-    //     createdAt DATE DEFAULT SYSDATE NOT NULL,
-    //startChat(customer, storeNo);
+}
+
+function openChatRoomMyPage(sender, chatRoomNo) {
+    fetch('/chat/subscription?chatRoomNo=' + chatRoomNo)
+        .then(Response=> {
+            if(!Response.ok) throw new Error("구독목록 조회에 실패!") //response
+            return Response.text()
+        }).then(data=>{
+        let match = data.match(/(.*?)(\d+)$/);
+        const customer = match[1];
+        const storeNo = match[2];
+        const target = (customer === sender) ? storeNo : customer;
+        connectModalToChatRoom(chatRoomNo, data, target);
+    }).catch(error=>{
+        console.error("/chat/subscsription 호출 에러" + error)
+    })
+
+    fetch('/chat/chatRoomNo?chatRoomNo='+ chatRoomNo)
+        .then(response=>{
+            if(!response.ok) throw new Error("메세지 조회 실패!")
+        }).then(data=>{
+
+    })
 }
 
 function connectModalToChatRoom(chatRoomNo, subscription, address){

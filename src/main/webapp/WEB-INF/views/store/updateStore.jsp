@@ -23,6 +23,10 @@
 	
 </head>
 <body>
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	</div>
+	
 	<div class="col-md-12 text-center" id="title">
 		<h3>가게 정보 수정</h3>
 	</div>
@@ -90,7 +94,14 @@
             </span>
             <span>
             	<input class="form-control" id="picture" name="picture" type="file" accept="image/*" style="display: none;">
-            	<img id="storePicture" src="${storePhoto.picture}" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				<c:choose>
+				    <c:when test="${not empty storePhoto.picture}">
+				        <img id="storePicture" src="${storePhoto.picture}" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				    </c:when>
+				    <c:otherwise>
+				        <img id="storePicture" src="${pageContext.request.contextPath}/img/00.jpg" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				    </c:otherwise>
+				</c:choose>
             </span>
         </div>
 		
@@ -163,7 +174,32 @@
 	<script type="module" src="${pageContext.request.contextPath}/js/updateStore.js"></script>
 	<!-- kakaoMap API key -->
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d42b402c7a6ae8d76807bdcfbc3a1b41&libraries=services,clusterer,drawing"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/js/kakaoMapInput.js"></script>
+	
+	<script>
+		// 중심좌표 마커 이미지 주소
+		var centerMarkerImg = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+		
+	    console.log('위도(gps_lat) : ' + '${store.latitude}' + ', 경도(gps_lng) : ' + '${store.longitude}');
+		
+	    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	        mapOption = { 
+	            center: new kakao.maps.LatLng('${store.latitude}', '${store.longitude}'), // 지도의 중심좌표
+	            level: 3 // 지도의 확대 레벨
+	        };
+	
+	    // 지도를 표시할 div와 지도 옵션으로 지도를 생성
+	    var map = new kakao.maps.Map(mapContainer, mapOption); 
+	
+	    // 지도 중심좌표에 마커를 생성
+	    var marker = new kakao.maps.Marker({ 
+	        position: map.getCenter(),
+	        image: new kakao.maps.MarkerImage(centerMarkerImg, new kakao.maps.Size(24, 35))
+	    });
+	
+	    marker.setMap(map);
+
+
+	</script>
 	<script>
 	    $(document).ready(function() {
 	        

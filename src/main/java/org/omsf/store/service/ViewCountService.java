@@ -9,8 +9,7 @@ import org.omsf.store.model.StoreInfo;
 
 public interface ViewCountService {
 	 public void incrementViewCount(Integer storeNo);
-	 public void decreaseViewCount(Integer storeNo, int count);
-	 public void decreaseOldViewCounts();
+	 public void calculateAllStoreScore();
 	 Cookie addViewCount(HttpServletRequest request, int storeNo);
 	 public void updateTop10Stores();
 	 public void removeStoreRankings(int storeNo);
