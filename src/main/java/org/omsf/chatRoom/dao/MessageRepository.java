@@ -35,7 +35,7 @@ public interface MessageRepository {
     void updateMessageStatus(@Param("messageNo") long messageNo);
 
     //3. 메세지 저장 + PK 반환
-    @Insert("INSERT INTO Message (content, senderId, chatRoomNo, isReceived, createdAt) VALUES (#{content}, #{senderId}, #{chatRoomNo}, '0', SYSDATE)")
+    @Insert("INSERT INTO Message (content, senderId, chatRoomNo, isReceived, createdAt) VALUES (#{content}, #{senderId}, #{chatRoomNo}, '0', #{createdAt})")
     @Options(useGeneratedKeys = true, keyProperty = "messageNo", keyColumn = "messageNo")
     void saveMessage(MessageVO messageVo);
     //4, pk로 조회

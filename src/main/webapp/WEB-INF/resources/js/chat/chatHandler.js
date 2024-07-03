@@ -243,7 +243,7 @@ function showLoginModal() {
         </div>
     `;
 
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    document.body.insertAdjacentHTML('afterbegin', modalHtml);
     var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
     loginModal.show();
 }
@@ -261,7 +261,7 @@ function showChatRoom(messages, subscription, address) { // pictureUrl 파라미
             senderId: null,
             createdAt: null,
             isReceived: true,
-            chatRoomNo: null``
+            chatRoomNo: null
         }];
     }
     const match = subscription.match(/(.*?)(\d+)$/);
@@ -289,7 +289,18 @@ function showMessage(message, sender) {
     if (message.messageNo === 0) {
         let messageElement = document.createElement('div');
         messageElement.className = 'chat-message received';
-        messageElement.innerHTML = `
+        messageElement.insertAdjacentHTML('berforeend', `
+               <div class="chat-avatar">
+               <img src="${message.picture}" alt="Avatar">
+               </div>
+               <div class="message-content">
+               <div>${message.content}</div>
+               <div class="chat-time"></div>
+               </div>`)
+
+
+
+        /*messageElement.innerHTML = `
             <div class="chat-avatar">
                 <img src="${message.picture}" alt="Avatar">
             </div>
@@ -297,7 +308,7 @@ function showMessage(message, sender) {
                 <div>${message.content}</div>
                 <div class="chat-time"></div>
             </div>
-        `;
+        `;*/
         document.getElementById('chat-messages').appendChild(messageElement);
         document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
         return;
@@ -549,6 +560,11 @@ document.addEventListener('DOMContentLoaded', function () {
     closeButton.addEventListener('click', function () {
         chatRoomModal.hide();
     });
+
+    const scrollContainer = document.getElementById('chat-messages');
+    // 스크롤 위치를 200px로 설정
+    scrollContainer.scrollTop = 20000;
+
 });
 
 document.getElementById('loginModal').addEventListener('hidden.bs.modal', function (event) {

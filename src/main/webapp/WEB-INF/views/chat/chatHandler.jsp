@@ -111,7 +111,12 @@
         });
         $('#chatRoomModal').on('shown.bs.modal', function() {
             var chatMessages = document.getElementById('chat-messages');
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+
+            chatMessages.scrollTo({
+                top: chatMessages.scrollHeight,
+                behavior: 'smooth'
+            });
         });
     });
 
