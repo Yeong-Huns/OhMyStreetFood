@@ -261,7 +261,7 @@
 						<form:password path="password" class="form-control" placeholder="비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다." />
 						<form:errors path="password" cssClass="text-danger" />
 					</div>
-				</c:if>
+<%-- 				</c:if> --%>
 				<div class="form-group">
 					<label for="password">비밀번호</label>
 					<form:password path="password" class="form-control" placeholder="비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다." />

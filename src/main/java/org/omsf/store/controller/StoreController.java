@@ -12,7 +12,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.omsf.member.model.GeneralMember;
 import org.omsf.member.model.Member;
+import org.omsf.member.service.GeneralMemberService;
 import org.omsf.member.service.MemberService;
 import org.omsf.report.model.Report;
 import org.omsf.review.model.RequestReview;
@@ -70,6 +72,7 @@ public class StoreController {
 	private final LikeService likeService;
 	private final SearchService searchService;
 	private final ViewCountService viewCountService;
+	private final GeneralMemberService generalMemberService;
 
 	
 	@GetMapping("/createstore")
@@ -470,6 +473,23 @@ public class StoreController {
     		return response;
     	}
     }
+    
+    // leejongseop - 마이페이지에서 본인이 사장 인증을 한 가게를 삭제할 수 있는 메소드
+	@PreAuthorize("hasRole('ROLE_OWNER')")
+	@DeleteMapping("delete/{storeNo}")
+	@ResponseBody
+	public ResponseEntity<?> deleteStore(Principal principal, @PathVariable("storeNo") int storeNo) {
+		String username = storeService.getStoreByNo(storeNo).getUsername();
+		Optional<GeneralMember> _member = generalMemberService.findByUsername(principal.getName());
+		if(!_member.isPresent()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		GeneralMember member = _member.get();
+		if(member.getMemberType().equals("owner") && username != null && username.equals(principal.getName())) {
+			// 해당 가게의 진짜 사장
+			storeService.deleteStore(storeNo);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
 
 }
 

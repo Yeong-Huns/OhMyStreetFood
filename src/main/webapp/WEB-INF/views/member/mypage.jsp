@@ -76,7 +76,44 @@
             $("#password").on("input", function () {
                 $("#confirmPasswordAlert").text("");
             });
+            
+            $("#delete-btn").click(function(){
+            	if(confirm("정말로 삭제하시겠습니까?") == true){
+            		var storeNo = Number($(this).data('store-no'));
+            		console.log("삭제할 가게번호 : " + storeNo);
+            		
+            		$.ajax({
+            			url : '/store/delete/' + storeNo,
+            			type : 'DELETE',
+            			success : function(data, textStatus, xhr){
+            				if (textStatus === "success") {
+                                console.log("삭제 성공");
+                                alert("가게가 성공적으로 삭제되었습니다.");
+                                location.reload();
+                            } else {
+                                console.log("삭제 실패");
+                                alert("삭제에 실패했습니다. 다시 시도해주세요.");
+                            }
+            				
+            			},
+            			error : function(xhr, status, error){
+            				if (xhr.status === 400) {
+                                console.error("Bad Request: " + xhr.responseText);
+                                alert("삭제할 권한이 없습니다.");
+                            } else {
+                                console.error("AJAX Error: " + status + " " + error);
+                                alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                            }
+            				
+            			}
+            		});
+            	} else{
+            		return false;
+            	} 
+            	
+            });
         });
+        
     </script>
 </head>
 <body>
@@ -111,6 +148,9 @@
                 <c:forEach items="${registeredStores}" var="store" varStatus="status">
                     <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
                         <a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
+                        <sec:authorize access="authentication.name == '${store.username}' && hasRole('ROLE_OWNER')">
+                    	<button type="button" class="btn btn-danger" id="delete-btn" data-store-no="${store.storeNo}">삭제</button>
+                    	</sec:authorize>
                     </p>
                     <hr/>
                 </c:forEach>
