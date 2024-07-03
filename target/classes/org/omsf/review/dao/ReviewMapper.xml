@@ -89,20 +89,23 @@
 	</select>
 	
 		<!-- 가게별 리뷰 목록 가져오기 -->
-	<select id="getJSONReviewListByStoreId" resultType="org.omsf.review.model.Review">
+	<select id="getJSONReviewListByStoreId" resultType="hashmap">
 		SELECT
-			REVIEWNO AS "reviewNo",
-			RATING AS "rating",
-			CONTENT AS "content",
-			CREATEDAT AS "createdAt",
-			MODIFIEDAT AS "modifiedAt",
-			MEMBER_USERNAME AS "memberUsername",
-			STORE_STORENO AS "storeStoreNo"
-		FROM REVIEW
-		WHERE STORE_STORENO = #{storeNo}
-		ORDER BY CREATEDAT DESC
-		OFFSET 10*(#{page}-1) ROWS FETCH
-		FIRST 10 ROWS ONLY
+			R.REVIEWNO AS "reviewNo",
+			R.RATING AS "rating",
+			R.CONTENT AS "content",
+			R.CREATEDAT AS "createdAt",
+			R.MODIFIEDAT AS "modifiedAt",
+			R.MEMBER_USERNAME AS "memberUsername",
+			NVL(M.NICKNAME, '탈퇴한 회원') AS "nickName",
+			R.STORE_STORENO AS "storeStoreNo"
+		FROM REVIEW R
+		INNER JOIN MEMBER M 
+		ON R.MEMBER_USERNAME = M.USERNAME
+		WHERE R.STORE_STORENO = #{storeNo}
+		ORDER BY R.CREATEDAT DESC
+		OFFSET 5*(#{page}-1) ROWS FETCH
+		FIRST 5 ROWS ONLY
 	</select>
 	
 	<!-- yunbin -->

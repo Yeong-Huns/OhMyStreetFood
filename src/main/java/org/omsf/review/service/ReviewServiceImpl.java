@@ -1,6 +1,7 @@
 package org.omsf.review.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.omsf.review.dao.ReviewRepository;
 import org.omsf.review.model.RequestReview;
@@ -53,7 +54,7 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public List<Review> getJSONReviewListByStoreId(int storeNo, int page) {
+	public List<Map<String, Object>> getJSONReviewListByStoreId(int storeNo, int page) {
 		return reviewDao.getJSONReviewListByStoreId(storeNo, page);
 	}
 
