@@ -84,9 +84,7 @@ public class ReviewController {
 				.body(gson.toJson(reviews));
 	}
 	
-	
 	// 리뷰 상세 페이지
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@GetMapping("{reviewNo}")
 	public String getReviewDetail(@PathVariable("reviewNo") int reviewNo,@RequestParam(value="requestPage", required = false) String requestPage,
 									Model model) {
@@ -102,7 +100,6 @@ public class ReviewController {
 
 
 	// 리뷰 커맨드패턴 처리
-	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("command")
 	public String reviewCommand(Principal principal, @ModelAttribute("requestReview") RequestReview review,
 			@RequestParam("command") String command, @RequestParam("reviewNo") int reviewNo

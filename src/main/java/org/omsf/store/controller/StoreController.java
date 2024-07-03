@@ -146,9 +146,8 @@ public class StoreController {
             model.addAttribute("requestReview", review);
         }
 		
-		List<Review> review = reviewService.getReviewListOnStore(storeNo);
-		
-		model.addAttribute("reviews", review);
+		Map<Review, String> reviews = reviewService.getReviewListOnStore(storeNo);
+		model.addAttribute("reviews", reviews);
 		
 		// yunbin
 		if (store.getUsername() != null) {
@@ -199,7 +198,6 @@ public class StoreController {
         return "store/updateStore"; 
     }
 	
-    @PreAuthorize("isAuthenticated()")
     @ResponseBody
     @PostMapping("/{storeNo}")
     @Transactional
@@ -327,7 +325,6 @@ public class StoreController {
 				.body(gson.toJson(storeList));
 	}	
 	
-	@PreAuthorize("isAuthenticated()")
 	@ResponseBody
     @DeleteMapping("/{storeNo}/{photoNo}")
     public ResponseEntity<?> deleteStoreGallery(@PathVariable int storeNo,
@@ -356,7 +353,6 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("사진을 삭제하였습니다.");
     }
 	
-	@PreAuthorize("isAuthenticated()")
 	@PutMapping("/{storeNo}/{photoNo}")
 	@ResponseBody
 	@Transactional
@@ -400,8 +396,6 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(newPhotoNo);
     }
 	
-
-	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/{storeNo}/upload-photo")
     public ResponseEntity<Photo> uploadStorePicture(@PathVariable int storeNo, @RequestParam("photo") ArrayList<MultipartFile> photos,
     		Principal principal) throws IOException {

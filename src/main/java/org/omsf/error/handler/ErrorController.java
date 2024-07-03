@@ -20,4 +20,9 @@ public class ErrorController {
     public String showErrorTestPage() {
         return "error/errorTestPage";
     }
+    
+    @GetMapping("/error/403")
+    public String show403ErrorPage() {
+        return "error/errorPage";
+    }
 }
