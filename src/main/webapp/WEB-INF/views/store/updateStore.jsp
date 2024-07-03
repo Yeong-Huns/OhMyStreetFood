@@ -90,7 +90,14 @@
             </span>
             <span>
             	<input class="form-control" id="picture" name="picture" type="file" accept="image/*" style="display: none;">
-            	<img id="storePicture" src="${storePhoto.picture}" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				<c:choose>
+				    <c:when test="${not empty storePhoto.picture}">
+				        <img id="storePicture" src="${storePhoto.picture}" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				    </c:when>
+				    <c:otherwise>
+				        <img id="storePicture" src="${pageContext.request.contextPath}/img/00.jpg" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				    </c:otherwise>
+				</c:choose>
             </span>
         </div>
 		

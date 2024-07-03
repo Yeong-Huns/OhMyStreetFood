@@ -144,7 +144,11 @@ public class ViewCountServiceImpl implements ViewCountService{
                 storeNo = (Integer) value;
             } else if (value instanceof String) {
                 storeNo = Integer.parseInt((String) value);
-            } 
+            } else {
+            	log.warn("상위점포 없음", storeNo);
+            	return;
+            }
+            
             
             Store store = storeService.getStoreByNo(storeNo);
             if (store != null) {
@@ -155,10 +159,6 @@ public class ViewCountServiceImpl implements ViewCountService{
             	List<Menu> menus = menuService.getMenusByStoreNo(storeNo);
             	List<Photo> gallery = storeService.getStoreGallery(storeNo);
             	StoreInfo storeInfo = setStoreInfo(store, storePhoto, gallery, menus);
-            	
-            	if (menus == null || menus.isEmpty()) {
-                    log.warn("Store {} has no menus", storeNo);
-                }
             	
             	top10Stores.add(storeInfo);
             }
