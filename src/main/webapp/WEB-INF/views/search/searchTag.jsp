@@ -35,8 +35,9 @@
     </script>
 </head>
 <body>
-	<div class="col-md-12">
-		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	<!-- Logo -->
+	<div style="text-align: center; margin-top: 55px;">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
 	</div>
 	
 	<div class="col-md-12">

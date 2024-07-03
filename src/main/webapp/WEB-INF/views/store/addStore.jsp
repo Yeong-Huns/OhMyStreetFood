@@ -19,9 +19,10 @@
 	
 </head>
 <body>
-		<div class="col-md-12">
-			<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
-		</div>
+    <!-- Logo -->
+	<div style="text-align: center;">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
+	</div>
 		
 		<div class="col-md-12 text-center" id="title">
 			<h3>가게 정보 등록</h3>

@@ -17,7 +17,7 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 </head>
 <body>
-	<div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+	<span style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0 20px;">
 	    <span class="dropdown mt-4">
 	        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">정렬기준</button>
 	        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -35,7 +35,7 @@
 	    		<button class="btn btn-outline-primary" type="button" onclick="showLoginAlert()">점포등록</button>
 	    	</sec:authorize>
 	    </span>
-	</div>
+	</span>
 	<script>
     function showLoginAlert() {
 	    alert('로그인이 필요합니다.');
