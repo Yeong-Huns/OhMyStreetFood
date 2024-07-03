@@ -28,4 +28,8 @@
 		ORDER BY storeno, createdat desc
 	</select>
 
+	<delete id="deleteReport">
+		delete report
+		where reportno=#{reportNo}
+	</delete>
 </mapper>

@@ -20,10 +20,10 @@
 <body>
 	<div class="main">
 		<div class="row">
-			<div class="col-md-12 text-center" id="title">
-				<h3>관리자 페이지</h3>
+			<div class="col-md-12 d-flex justify-content-between align-items-center" id="title">
+				<h3 class="text-center flex-grow-1">관리자 페이지</h3>
+				<a href="${pageContext.request.contextPath}/logout" class="text-end">로그아웃</a>
 			</div>
-			
 			<c:forEach items="${groupedReports}" var="entry">
 			    <div class="report-container mb-4">
 			        <div class="card">
@@ -39,6 +39,7 @@
 			                            <th>내용</th>
 			                            <th>작성자</th>
 			                            <th>등록일자</th>
+			                            <th>삭제</th>
 			                        </tr>
 			                    </thead>
 			                    <tbody>
@@ -48,6 +49,7 @@
 			                                <td>${report.content}</td>
 			                                <td>${report.username}</td>
 			                                <td>${report.createdAt}</td>
+			                                <td><button type="button" class="btn btn-danger btn-sm float-right deleteReport" data-report-no="${report.reportNo}">X</button>
 			                            </tr>
 			                        </c:forEach>
 			                    </tbody>
@@ -56,10 +58,6 @@
 			        </div>
 			    </div>
 			</c:forEach>
-	
-			<div class="col-md-12 text-center">
-				<a href="${pageContext.request.contextPath}/logout">로그아웃</a>
-			</div>
 			
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		</div>
@@ -92,6 +90,34 @@
 				            }
 				        },
 				        error: function(xhr, status, error) {
+				            console.error("AJAX Error: " + status + error);
+				        }
+					});
+				} else {
+					return false;
+				}
+			});
+			$(".deleteReport").click(function(){
+				if(confirm("정말로 삭제하시겠습니까?") == true){
+					var reportNo = Number($(this).data('report-no'));
+					var $button = $(this);  
+					$.ajax({
+				    	url : './deleteReport',
+				        data : {
+				        	reportNo : reportNo,
+				        },
+				        type : 'POST',
+				        dataType : 'json',
+				        success : function(result) {
+				        	if(result == true){
+				            	alert("삭제가 완료되었습니다.");
+				            	$button.closest('tr').remove();
+				            } else {
+				            	alert("서버 오류입니다. 다시 시도해 주세요.");
+				            }
+				        },
+				        error: function(xhr, status, error) {
+				        	alert("서버 오류입니다. 다시 시도해 주세요.");
 				            console.error("AJAX Error: " + status + error);
 				        }
 					});
