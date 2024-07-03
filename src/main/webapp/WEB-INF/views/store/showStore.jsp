@@ -74,7 +74,7 @@
 		                    <span><h5 class="card-title">${store.storeName}</h5></span>
 		                    	<span>
 		                    		<sec:authorize access="hasRole('ROLE_USER')">
-		                    			<i class="like-btn far fa-heart" data-store-no="${store.storeNo }"></i>
+		                    			<i class="like-btn far fa-heart" data-store-no="${store.storeNo }" style="cursor:pointer;"></i>
 		                    		</sec:authorize>
 	  	                    		<sec:authorize access="isAnonymous()">	
 	  		                  			<a href="javascript:void(0);" onclick="showLoginAlert()">
