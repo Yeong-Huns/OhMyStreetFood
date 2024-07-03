@@ -28,9 +28,11 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
 </head>
 <body>
-    <div class="col-md-12">
-		  <img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
-	  </div>
+    <!-- Logo -->
+	<div style="text-align: center;">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
+	</div>
+	
 		<span style="display: flex; flex-direction: row; justify-content: space-between; padding: 0 40px;">
               <c:choose>
 			    <c:when test="${isOwner eq true }">
@@ -74,6 +76,11 @@
 		                    		<sec:authorize access="hasRole('ROLE_USER')">
 		                    			<i class="like-btn far fa-heart" data-store-no="${store.storeNo }"></i>
 		                    		</sec:authorize>
+	  	                    		<sec:authorize access="isAnonymous()">	
+	  		                  			<a href="javascript:void(0);" onclick="showLoginAlert()">
+											<i class="fas fa-skull-crossbones"></i>
+										</a>
+	        	            		</sec:authorize>
 		                    	</span>
 	                    	</span>
 	                    <p class="card-text">${store.introduce}</p>
@@ -95,16 +102,6 @@
 							    </c:choose>
 	            		 	</small>
 	            		 </p>
-            		 	<p class="card-text">
-	            			<small class="text-muted">
-	                    		<sec:authorize access="hasRole('ROLE_USER')">
-	                    			<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#reportStoreModal">잘못된 정보 신고하기</a>
-	                    		</sec:authorize>
-	                    		<sec:authorize access="isAnonymous()">	
-	                    			<a href="javascript:void(0);" onclick="showLoginAlert()">잘못된 정보 신고하기</a>
-	                    		</sec:authorize>
-	                    	</small>
-                    	</p>
 	            	</div>
 	        	</div>
 	    	</div>

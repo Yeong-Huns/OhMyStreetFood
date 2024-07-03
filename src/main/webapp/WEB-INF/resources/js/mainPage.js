@@ -11,8 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 card.classList.add('item');
                 
                 card.innerHTML = `
-                    <div class="card" style="width: 200px;">
-                    
+                    <div class="card" style="width: 280px;">
                         <a href="/store/${store.storeNo}" style="text-decoration: none; color: inherit;">
                             <div class="card-img-wrapper" style="height: 0; padding-top: 100%; position: relative; overflow: hidden;">
                                 <img src="${store.picture && photo.picture ? photo.picture : '/img/00.jpg'}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
@@ -21,9 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <h5 class="card-title">${store.storeName}</h5>
                                 <p class="card-text">${store.address.split(' ').slice(0, 2).join(' ')}</p>
                                 <p class="card-text text-muted">
-                                    리뷰 ${store.totalReview}<br>
-                                    평점 ${store.totalRating}<br>
-                                    찜 ${store.likes}
+                                    리뷰 ${store.totalReview}, 평점 ${store.totalRating}, 찜 ${store.likes}
                                 </p>
                             </div>
                         </a>
@@ -41,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 autoplayTimeout: 2500,
                 responsive: {
                     600: {
-                        items: 5
+                        items: 3.5
                     }
                 }
             });

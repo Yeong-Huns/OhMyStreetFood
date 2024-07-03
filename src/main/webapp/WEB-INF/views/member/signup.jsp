@@ -206,23 +206,24 @@
 </script>
 </head>
 <body>
-	<div class="col-md-12">
-		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	<!-- Logo -->
+	<div style="text-align: center; margin-top: 55px;">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
 	</div>
 	
 	<div class="main">
 		<div class="row justify-content-center">
         	<div class="col-md-10" style="padding: 0px;">
-				<div class="col-md-12 text-center" id="title">
-					<c:choose>
-					    <c:when test="${member.memberType eq 'owner'}">
-					        <h2>사장님 회원가입</h2>
-					    </c:when>
-					    <c:otherwise>
-					        <h2>회원가입</h2>
-					    </c:otherwise>
-					</c:choose>
-				</div>
+<!-- 				<div class="col-md-12 text-center" id="title"> -->
+<%-- 					<c:choose> --%>
+<%-- 					    <c:when test="${member.memberType eq 'owner'}"> --%>
+<!-- 					        <h2>사장님 회원가입</h2> -->
+<%-- 					    </c:when> --%>
+<%-- 					    <c:otherwise> --%>
+<!-- 					        <h2>회원가입</h2> -->
+<%-- 					    </c:otherwise> --%>
+<%-- 					</c:choose> --%>
+<!-- 				</div> -->
 	
 				<form:form modelAttribute="member" id="signupForm" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
 					<div class="form-group">
