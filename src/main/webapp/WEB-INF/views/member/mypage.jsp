@@ -9,7 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        .custom-chat-room {
+        /*.custom-chat-room {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
@@ -32,7 +32,46 @@
 
         .custom-chat-room p {
             margin: 0;
+        }*/
+        .section-box {
+            width: 100%;
+            height: auto;
+            background-color: #f6f6f6;
+            border-radius: 10px; /* 전체 컨테이너의 테두리를 둥글게 */
+            margin-bottom: 20px;
+            padding: 20px;
         }
+
+        .custom-chat-room {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc; /* 구분선을 직선으로 유지 */
+            border-radius: 0; /* 구분선에 대해 둥근 모서리 효과 없음 */
+        }
+
+        .custom-chat-room img {
+            margin-right: 10px;
+            border-radius: 50%; /* 이미지는 둥글게 유지 */
+            width: 50px;
+            height: 50px;
+        }
+
+        .custom-chat-room div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .custom-chat-room:last-child {
+            border-bottom: none;
+        }
+
+        .custom-chat-room p {
+            margin: 0;
+        }
+
     </style>
     <title>OhMyStreetFood!</title>
     <!-- Bootstrap CSS -->
@@ -155,7 +194,8 @@
             <div style="width:100%;">
                 <i class="fa fa-comments"></i>&nbsp;<strong>나의 채팅방</strong>
             </div>
-            <div id="custom-chat-room-container" style="width:100%; height:auto;">
+            <div class="section-box" id="custom-chat-room-container">
+
             </div>
         </div>
 
@@ -222,7 +262,15 @@
                         <input type="hidden" value="` + chatRoom.chatroomNo + `">
                     </div>
                 `;
-                    chatRoomElement.onclick = function() { openChatRoomMyPage(chatRoom.senderId, chatRoom.chatroomNo); }; // 클릭 이벤트 추가
+                    chatRoomElement.onclick = function () {
+                        const principal = '${pageContext.request.userPrincipal.name}';
+                        if (principal) {
+                            console.log("조회 : " +  chatRoom.chatroomNo)
+                            openChatRoomMyPage(chatRoom, principal);
+                        } else {
+                            console.error("로그인 정보가 없습니다.");
+                        }
+                    };
                     chatRoomContainer.appendChild(chatRoomElement);
                 });
             })
@@ -230,4 +278,6 @@
     });
 </script>
 </body>
+<!-- jQuery UI JS -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </html>
