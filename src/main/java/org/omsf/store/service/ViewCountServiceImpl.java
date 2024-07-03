@@ -35,11 +35,12 @@ public class ViewCountServiceImpl implements ViewCountService{
 	
 	private static final Logger log = LoggerFactory.getLogger(ViewCountService.class);
 	private ObjectMapper objectMapper = new ObjectMapper();
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 	private final StoreService storeService;
     private final MenuService menuService;
 	
     private static String currentTopStores;
+    private static boolean isChanged = false;
 	private static final double[] WEIGHT_VALUES = {1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4};
     private static final String DAILY_VIEW_COUNT_KEY = "store:daily:view:count:";
     private static final String POPULAR_STORES_KEY = "popular:stores";
@@ -53,26 +54,27 @@ public class ViewCountServiceImpl implements ViewCountService{
         redisTemplate.opsForValue().increment(dailyKey);
         redisTemplate.expire(dailyKey, 7, TimeUnit.DAYS);
         
-        redisTemplate.opsForZSet().incrementScore("store:rankings", storeNo.toString(), WEIGHT_VALUES[0]);
+        redisTemplate.opsForZSet().incrementScore(STORE_RANKINGS_KEY, storeNo.toString(), WEIGHT_VALUES[0]);
     }
 
     @Scheduled(cron = "0 0 0 * * ?") 
     @Override
     public void calculateAllStoreScore() {
-        Set<String> storeNos = redisTemplate.opsForZSet().range(DAILY_VIEW_COUNT_KEY, 0, -1);
-        //모든가게 가중치 점수 갱신
-        for (String storeNoSt : storeNos) {
-        	Integer storeNo = Integer.parseInt(storeNoSt);
-        	double totalScore = 0;
+    	Set<String> keys = redisTemplate.keys(DAILY_VIEW_COUNT_KEY + "*");
+    	 //모든가게 가중치 점수 갱신
+    	for (String key : keys) {
+    	    String[] parts = key.split(":");
+    	    String storeNoSt = parts[parts.length - 1];
+    	    double totalScore = 0;
         	
         	for (int i=0; i<7; i++) {
         		LocalDate date = LocalDate.now().minusDays(i);
         		//store:daily:view:count:2024-07-02:353
-        		String DailyKey = DAILY_VIEW_COUNT_KEY + date.format(DateTimeFormatter.ISO_DATE) + ":" + storeNo;
-        		String countSt = redisTemplate.opsForValue().get(DailyKey);
-        		
+        		String DailyKey = DAILY_VIEW_COUNT_KEY + date.format(DateTimeFormatter.ISO_DATE) + ":" + storeNoSt;
+        		Integer countSt = (Integer) redisTemplate.opsForValue().get(DailyKey);
+        		System.out.println(DailyKey + "찾는중:" +countSt);
         		if (countSt != null) {
-        			int count = Integer.parseInt(countSt);
+        			double count = Double.valueOf(countSt);
         			totalScore += count * WEIGHT_VALUES[i];
         		}
         	}
@@ -127,16 +129,27 @@ public class ViewCountServiceImpl implements ViewCountService{
     @Override
     @Transactional(readOnly = true)
     public void updateTop10Stores() {
-        Set<ZSetOperations.TypedTuple<String>> topStores = 
-            redisTemplate.opsForZSet().reverseRangeWithScores(STORE_RANKINGS_KEY, 0, 9);
+    	Set<ZSetOperations.TypedTuple<Object>> topStores =
+    	    redisTemplate.opsForZSet().reverseRangeWithScores(STORE_RANKINGS_KEY, 0, 9);
         log.info("상위 10개 점포 업데이트");
         if (topStores == null || topStores.isEmpty()) {
             return;
         }
 
         List<StoreInfo> top10Stores = new ArrayList<>();
-        for (ZSetOperations.TypedTuple<String> tuple : topStores) {
-            int storeNo = Integer.parseInt(tuple.getValue());
+        for (ZSetOperations.TypedTuple<Object> tuple : topStores) {
+        	Object value = tuple.getValue();
+            int storeNo = 0;
+            if (value instanceof Integer) {
+                storeNo = (Integer) value;
+            } else if (value instanceof String) {
+                storeNo = Integer.parseInt((String) value);
+            } else {
+            	log.warn("상위점포 없음", storeNo);
+            	return;
+            }
+            
+            
             Store store = storeService.getStoreByNo(storeNo);
             if (store != null) {
             	Photo storePhoto = Photo.builder().build();
@@ -146,10 +159,6 @@ public class ViewCountServiceImpl implements ViewCountService{
             	List<Menu> menus = menuService.getMenusByStoreNo(storeNo);
             	List<Photo> gallery = storeService.getStoreGallery(storeNo);
             	StoreInfo storeInfo = setStoreInfo(store, storePhoto, gallery, menus);
-            	
-            	if (menus == null || menus.isEmpty()) {
-                    log.warn("Store {} has no menus", storeNo);
-                }
             	
             	top10Stores.add(storeInfo);
             }
@@ -171,9 +180,10 @@ public class ViewCountServiceImpl implements ViewCountService{
     
     @Scheduled(fixedRate = 60000) 
     public void checkPopularChanged() {
-        String newTopStores = redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
-        if (newTopStores !=null && currentTopStores == null || !newTopStores.equals(currentTopStores)) {
+        String newTopStores = (String) redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
+        if (newTopStores !=null && currentTopStores == null || !newTopStores.equals(currentTopStores) || isChanged) {
             updateTop10Stores();
+            isChanged = false;
             currentTopStores = newTopStores;
         } else {
             log.info("변경된 순위 없음.");
@@ -185,7 +195,7 @@ public class ViewCountServiceImpl implements ViewCountService{
     public void removeStoreRankings(int storeNo) {
         redisTemplate.opsForZSet().remove(STORE_RANKINGS_KEY, String.valueOf(storeNo));
 
-        String jsonTopStores = redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
+        String jsonTopStores = (String) redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
         if (jsonTopStores != null) {
             try {
                 List<StoreInfo> topStores = objectMapper.readValue(jsonTopStores, new TypeReference<List<StoreInfo>>() {});
@@ -205,11 +215,11 @@ public class ViewCountServiceImpl implements ViewCountService{
             redisTemplate.delete(keys);
         }
 
-        updateTop10Stores();
+        ViewCountServiceImpl.markAsChanged();
     }
     
     public List<StoreInfo> getTop10PopularStores() {
-        String jsonTopStores = redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
+        String jsonTopStores = (String) redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
         if (jsonTopStores == null) {
             return Collections.emptyList();
         }
@@ -237,7 +247,7 @@ public class ViewCountServiceImpl implements ViewCountService{
 
     @Override
     public StoreInfo getPopularStoreInfo(int storeNo) {
-        String jsonTopStores = redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
+        String jsonTopStores = (String) redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
         if (jsonTopStores == null) {
             return null;
         }
@@ -252,5 +262,9 @@ public class ViewCountServiceImpl implements ViewCountService{
             log.error("인기 점포 정보를 얻는중 에러가 발생했습니다.", e);
             return null;
         }
+    }
+    
+    public static void markAsChanged() {
+        isChanged = true;
     }
 }

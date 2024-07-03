@@ -39,11 +39,6 @@ public class StoreServiceImpl implements StoreService {
 	private AmazonS3 s3Client;
 	@Value("${aws.bucketname}")
 	private String bucketName;
-	
-//	@Override
-//	public List<Store> getStoreByposition(String position) {
-//		return storeRepository.getStoreByposition(position);
-//	}
 
 	@Override
 	public int createStore(Store store) {
@@ -59,34 +54,7 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public void deleteStore(int storeNo) {
-//		List<Photo> photos = storeRepository.getStorePhotos(storeNo);
-//
-//		for (Photo photo : photos) {
-//			storeService.deleteImage(photo.getPhotoNo());
-//		}
 		storeRepository.deleteStore(storeNo);
-		
-	}
-
-	@Override
-	public Store updateTotalReview(Store store) {
-		int reviewCount = store.getTotalReview() + 1;
-		store.setTotalReview(reviewCount++);
-		return store;
-	}
-
-	@Override
-	public Store updateTotalRating(Store store) {
-		double totalRating = store.getTotalRating() + 1;
-		// 업데이트 할 때 리뷰랑 평군점수 업데이트. 삭제할때는?
-		return store;
-	}
-
-	@Override
-	public Store updateLikes(Store store) {
-		int reviewCount = store.getTotalReview() + 1;
-		store.setTotalReview(reviewCount++);
-		return store;
 	}
 
 	@Override
