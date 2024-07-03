@@ -38,7 +38,7 @@
 			        <span>
 			            <i class="fas fa-flag"></i><strong>&nbsp;사장님 인증 상점</strong>
 			        </span>
-			        <sec:authorize access="hasRole('ROLE_USER')">
+			        <sec:authorize access="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')">
 			            <span><a href="${pageContext.request.contextPath}/chat" onclick="startChat('${pageContext.request.userPrincipal.name}','${store.storeNo}','${pageContext.request.userPrincipal.name}')">사장님과 채팅하기</a></span>
 			        </sec:authorize>
 			        <sec:authorize access="isAnonymous()">
@@ -98,7 +98,7 @@
             		 	<p class="card-text">
 	            			<small class="text-muted">
 	                    		<sec:authorize access="hasRole('ROLE_USER')">
-	                    			<a href="${pageContext.request.contextPath}/store/report/${store.storeNo}">잘못된 정보 신고하기</a>
+	                    			<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#reportStoreModal">잘못된 정보 신고하기</a>
 	                    		</sec:authorize>
 	                    		<sec:authorize access="isAnonymous()">	
 	                    			<a href="javascript:void(0);" onclick="showLoginAlert()">잘못된 정보 신고하기</a>
@@ -344,7 +344,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                	<form id="reportStoreForm" action="${pageContext.request.contextPath}/store/report/${storeNo}" method="post">
+                	<form id="reportStoreForm">
 					    <div class="form-group">
 					        <label for="title" class="form-label">신고 제목</label>
 					        <input type="text" id="title" name="title" placeholder="title" class="form-control"/>
@@ -512,16 +512,19 @@
 		    $('#reportStoreModalBtn').click(function(event) {
 		        event.preventDefault(); // 기본 폼 제출을 방지
 	
-		        var form = $('#reportStoreForm')[0];
-		        var formData = new FormData(form);
+		        var form = $('#reportStoreForm').serialize();
+		        //var formData = new FormData(form);
 	
 		        $.ajax({
-		            url: $('#reportStoreForm').attr('action'), // 폼의 action 속성 값 사용
+		            url: '/store/report/${storeNo}', 
 		            type: 'POST',
-		            data: formData,
-		            processData: false,
-		            contentType: false,
+		            data: form,
+		            processData: true,
+		            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 		            success: function(data) {
+		            	console.log(data); // 서버 응답 로그 출력
+		                //console.log("Context Path: " +${pageContext.request.contextPath});
+		            	
 		                if (data.errors) {
 		                    // 유효성 검사 오류가 있는 경우
 		                    $('#error-title').text(data.errors.title || "");
@@ -531,17 +534,32 @@
 		                    var myModal = bootstrap.Modal.getInstance(document.getElementById('reportStoreModal'));
 		                    myModal.hide();
 		                    // 성공 시 리디렉션을 원하는 경로로 수행
-		                    window.location.href = `${pageContext.request.contextPath}/store/${data.storeNo}`;
+		                    window.location.href = "/store/" + data.storeNo;
 		                }
 		            },
 		            error: function(xhr) {
-		                var response = JSON.parse(xhr.responseText);
-		                $('#error-title').text(response.errors.title || "");
-		                $('#error-content').text(response.errors.content || "");
+		            	try {
+		                    var response = JSON.parse(xhr.responseText);
+		                    $('#error-title').text(response.errors.title || "");
+		                    $('#error-content').text(response.errors.content || "");
+		                } catch (e) {
+		                    console.error("Error parsing JSON response: ", e);
+		                    $('#error-title').text("An error occurred");
+		                    $('#error-content').text("Please try again later.");
+		                }
 		            }
 		        });
 		    });
 		});
+		
+		$('#title').on('input', function() {
+	        $('#error-title').text("");
+	    });
+		
+		$('#content').on('input', function() {
+	        $('#error-content').text("");
+	    });
+		
 	</script>
 </body>
 </html>
