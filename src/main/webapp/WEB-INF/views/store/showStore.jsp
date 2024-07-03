@@ -217,7 +217,7 @@
 				    </span>
 				</div>	
 			</c:if>
-			<div>
+<!-- 			<div> -->
 <!-- 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;"> -->
 <%--                   <span><h5><spring:message code="review.info" /></h5></span> --%>
 <%--                   <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')"> --%>
@@ -280,9 +280,9 @@
 <%-- 				</c:if> --%>
 <!-- 			</div> -->
 			
-			<div id="spinner" class="spinner"></div>
-	    </div>
+<!-- 	    </div> -->
 	   
+			<div id="spinner" class="spinner"></div>
 	    <!-- 찜 목록 효과 -->
 	    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
 	    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
@@ -444,13 +444,25 @@
 	            
 	            reviewDiv.innerHTML = `
 	                <span style="display: flex; flex-direction: row; justify-content: space-between;">
-	                    <span> ` + review.memberUsername + `</span>
+	                    <span><strong> ` + review.nickName + `</strong></span>
 	                    <span> ` + createdAt + `</span>
 	                </span>
 	                <span>
-	                    <a href= ` + reviewUrl + `>` + review.content + `</a>
+	                	` + review.content + `
 	                </span>
 	            `;
+	            
+	            if(review.memberUsername === '${pageContext.request.userPrincipal.name}'){
+	            	reviewDiv.innerHTML = `
+		                <span style="display: flex; flex-direction: row; justify-content: space-between;">
+		                    <span><strong> ` + review.nickName + `</strong></span>
+		                    <span> ` + createdAt + `</span>
+		                </span>
+		                <span>
+		                    <a href= ` + reviewUrl + `>` + review.content + `</a>
+		                </span>
+		            `;
+                }
 	            
 	            reviewContainer.appendChild(reviewDiv);
 	        });
