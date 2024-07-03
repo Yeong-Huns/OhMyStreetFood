@@ -63,6 +63,7 @@ public class ReportController {
 	    return ResponseEntity.ok(response);
 	}
 	
+	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/admin/reports")
 	public String showReportList(Model model) {
 		Map<Integer, List<Report>> groupedReports = reportService.getReportsGroupedByStoreNo();
@@ -72,12 +73,25 @@ public class ReportController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PostMapping("/deleteStore")
+	@PostMapping("/admin/deleteStore")
 	@ResponseBody
 	public boolean deleteStore(int storeNo) {
 		try {
 			storeService.deleteStore(storeNo);
 			viewCountService.removeStoreRankings(storeNo);
+			return true;
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PostMapping("/admin/deleteReport")
+	@ResponseBody
+	public boolean deleteReport(int reportNo) {
+		try {
+			reportService.deleteReport(reportNo);
 			return true;
 		} catch (Exception e){
 			e.printStackTrace();

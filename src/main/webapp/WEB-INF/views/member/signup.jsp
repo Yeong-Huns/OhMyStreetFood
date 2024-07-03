@@ -206,23 +206,24 @@
 </script>
 </head>
 <body>
-	<div class="col-md-12">
-		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	<!-- Logo -->
+	<div style="text-align: center; margin-top: 55px;">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
 	</div>
 	
 	<div class="main">
 		<div class="row justify-content-center">
         	<div class="col-md-10" style="padding: 0px;">
-				<div class="col-md-12 text-center" id="title">
-					<c:choose>
-					    <c:when test="${member.memberType eq 'owner'}">
-					        <h2>사장님 회원가입</h2>
-					    </c:when>
-					    <c:otherwise>
-					        <h2>회원가입</h2>
-					    </c:otherwise>
-					</c:choose>
-				</div>
+<!-- 				<div class="col-md-12 text-center" id="title"> -->
+<%-- 					<c:choose> --%>
+<%-- 					    <c:when test="${member.memberType eq 'owner'}"> --%>
+<!-- 					        <h2>사장님 회원가입</h2> -->
+<%-- 					    </c:when> --%>
+<%-- 					    <c:otherwise> --%>
+<!-- 					        <h2>회원가입</h2> -->
+<%-- 					    </c:otherwise> --%>
+<%-- 					</c:choose> --%>
+<!-- 				</div> -->
 	
 				<form:form modelAttribute="member" id="signupForm" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
 					<div class="form-group">
@@ -261,21 +262,16 @@
 						<form:password path="password" class="form-control" placeholder="비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다." />
 						<form:errors path="password" cssClass="text-danger" />
 					</div>
-				</c:if>
-				<div class="form-group">
-					<label for="password">비밀번호</label>
-					<form:password path="password" class="form-control" placeholder="비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다." />
-					<form:errors path="password" cssClass="text-danger" />
-				</div>
-				<div class="form-group">
-					<label for="passwordConfirm">비밀번호 확인</label>
-					<form:password path="passwordConfirm" class="form-control" placeholder="Password Confirm" />
-					<form:errors path="passwordConfirm" cssClass="text-danger" />
-				</div>
-				<div class="col-md-12">
-					<form:hidden path="memberType" value="${member.memberType}" />
-					<input type="submit" value="회원가입" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">
-				</div>
+					<div class="form-group">
+						<label for="passwordConfirm">비밀번호 확인</label>
+						<form:password path="passwordConfirm" class="form-control" placeholder="Password Confirm" />
+						<form:errors path="passwordConfirm" cssClass="text-danger" />
+					</div>
+					<div class="col-md-12">
+						<form:hidden path="memberType" value="${member.memberType}" />
+						<input type="submit" value="회원가입" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">
+					</div>
+
 			</form:form>
 		</div>
 	</div>

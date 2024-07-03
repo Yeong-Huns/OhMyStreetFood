@@ -30,29 +30,6 @@
         <result property="storeNo" column="STORE_STORENO" jdbcType="NUMERIC"/> 
         <result property="username" column="USERNAME"/> 
     </resultMap>
-
-<!--   <select id="getStoreByposition" resultType="org.omsf.store.model.Store"> -->
-<!--   	<bind name="pattern" value="'%' + position + '%'" /> -->
-<!--   	SELECT * FROM STORE WHERE ADDRESS LIKE #{pattern} -->
-<!--   	SELECT -->
-<!--   		STORENO AS "storeNo", -->
-<!--   		STORENAME AS "storeName", -->
-<!--   		LATITUDE AS "latitude", -->
-<!--   		LONGITUDE AS "longitude", -->
-<!--   		ADDRESS AS "address", -->
-<!--   		INTRODUCE AS "introduce", -->
-<!--   		OPERATINGDATE AS "operatingDate", -->
-<!--   		OPERATINGHOURS AS "operatingHours", -->
-<!--   		TOTALREVIEW AS "totalReview", -->
-<!--   		TOTALRATING AS "totalRating", -->
-<!--   		LIKES AS "likes", -->
-<!--   		CREATEDAT AS "createdAt", -->
-<!--   		MODIFIEDAT AS "modifiedAt", -->
-<!--   		MEMBER_USERNAME AS "username", -->
-<!--   		PICTURE AS "picture" -->
-<!--   	FROM STORE -->
-<!--   	WHERE ADDRESS LIKE #{pattern} -->
-<!--   </select> -->
   
   <insert id="createStore" parameterType="org.omsf.store.model.Store">
         INSERT INTO store
@@ -178,26 +155,7 @@
 	    WHERE
 	        STORENO = #{storeNo}
 	</update>
-<!-- 	<update id="deleteStore" parameterType="int"> -->
-<!-- 	      DELETE FROM store -->
-<!--     		WHERE storeNo = #{storeNo} -->
-<!-- 	</update> -->
 	
-	<update id="updateTotalReviewAndRating">
-	    UPDATE STORE
-	     SET
-	        TOTALREVIEW = #{totalReview},
-	        TOTALRATING = #{totalRating}
-	     WHERE
-	        STORENO = #{storeNo}
-	</update>
-	<update id="updateLikes">
-	    UPDATE STORE
-	     SET
-	        LIKES = #{likes},
-	     WHERE
-	        STORENO = #{storeNo}
-	</update>
 	
 	<select id="getStoreByposition" parameterType="String" resultMap="storeResultMap">
 		SELECT *
@@ -268,7 +226,7 @@
 <!-- 	</select> -->
 	
 	<delete id="deleteStore">
-		DELETE FROM store WHERE storeno=#{storeNo} 
+		DELETE FROM store WHERE STORENO=#{storeNo} 
 	</delete>
 	
 	<delete id="deleteStoreByUsername">

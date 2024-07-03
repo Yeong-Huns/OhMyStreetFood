@@ -23,8 +23,9 @@
 	
 </head>
 <body>
-	<div class="col-md-12 text-center" id="title">
-		<h3>가게 정보 수정</h3>
+	<!-- Logo -->
+	<div style="text-align: center; margin-top: 55px;">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
 	</div>
   
 	<form method="post" id="storeEditForm" enctype="multipart/form-data">
@@ -90,7 +91,14 @@
             </span>
             <span>
             	<input class="form-control" id="picture" name="picture" type="file" accept="image/*" style="display: none;">
-            	<img id="storePicture" src="${storePhoto.picture}" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				<c:choose>
+				    <c:when test="${not empty storePhoto.picture}">
+				        <img id="storePicture" src="${storePhoto.picture}" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				    </c:when>
+				    <c:otherwise>
+				        <img id="storePicture" src="${pageContext.request.contextPath}/img/00.jpg" alt="대표사진" class="img-thumbnail" style="width: auto; height: 200px; border-radius: 20px" data-id="${storePhoto.photoNo}">
+				    </c:otherwise>
+				</c:choose>
             </span>
         </div>
 		

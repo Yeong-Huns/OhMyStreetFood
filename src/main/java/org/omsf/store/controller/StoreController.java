@@ -12,7 +12,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.omsf.member.model.GeneralMember;
 import org.omsf.member.model.Member;
+import org.omsf.member.service.GeneralMemberService;
 import org.omsf.member.service.MemberService;
 import org.omsf.report.model.Report;
 import org.omsf.review.model.RequestReview;
@@ -30,6 +32,7 @@ import org.omsf.store.service.StoreService;
 import org.omsf.store.service.ViewCountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +53,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,6 +72,7 @@ public class StoreController {
 	private final LikeService likeService;
 	private final SearchService searchService;
 	private final ViewCountService viewCountService;
+	private final GeneralMemberService generalMemberService;
 
 	
 	@GetMapping("/createstore")
@@ -168,14 +171,20 @@ public class StoreController {
     @GetMapping("/{storeNo}/update")
     public String showStoreEditForm(@PathVariable("storeNo") int storeNo, Model model,
     		Principal principal) {
+    	
     	String username = principal.getName();
     	Store store = storeService.getStoreByNo(storeNo);
     	
     	if (store.getUsername() != null) {	
-    		Member member = (Member) memberService.findByUsername(store.getUsername()).get();
-    		if (member.getMemberType().equals("owner") && (!store.getUsername().equals(username))) {
-    			return "redirect:/error";
+    		Member storeMember = (Member) memberService.findByUsername(store.getUsername()).get();
+    		Member userMember = (Member) memberService.findByUsername(username).get();
+    		if (storeMember.getMemberType().equals("owner") && (!store.getUsername().equals(username))) {
+    			throw new AccessDeniedException("인증된 상점은 제보자가 수정할 수 없습니다.");
     		}
+    		else if (userMember.getMemberType().equals("owner") && storeMember.getUsername() != username) {
+    			throw new AccessDeniedException("사장은 본인의 가게만 수정할 수 있습니다.");
+    		}
+    		
     	}
     	
     	List<Menu> menus = menuService.getMenusByStoreNo(storeNo);
@@ -247,10 +256,11 @@ public class StoreController {
 	    for (Store store : initialStores) {
 	    	if (store.getPicture() != null) {
 	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		photo.setStoreNo(store.getStoreNo());
 	    		pictures.add(photo);
 	    	}
 	    }
-        
+	    
         String userIp = "";
         if (request != null) {
             userIp = request.getHeader("X-FORWARDED-FOR");
@@ -266,6 +276,9 @@ public class StoreController {
         
         model.addAttribute("stores", initialStores);
         model.addAttribute("pictures", pictures);
+        
+        System.out.println(pictures);
+        
         model.addAttribute("keyword", keyword);
         model.addAttribute("orderType", orderType);
         
@@ -292,6 +305,7 @@ public class StoreController {
 	    for (Store store : stores) {
 	    	if (store.getPicture() != null) {
 	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		photo.setStoreNo(store.getStoreNo());
 	    		pictures.add(photo);
 	    	}
 	    }
@@ -470,6 +484,23 @@ public class StoreController {
     		return response;
     	}
     }
+    
+    // leejongseop - 마이페이지에서 본인이 사장 인증을 한 가게를 삭제할 수 있는 메소드
+	@PreAuthorize("hasRole('ROLE_OWNER')")
+	@DeleteMapping("delete/{storeNo}")
+	@ResponseBody
+	public ResponseEntity<?> deleteStore(Principal principal, @PathVariable("storeNo") int storeNo) {
+		String username = storeService.getStoreByNo(storeNo).getUsername();
+		Optional<GeneralMember> _member = generalMemberService.findByUsername(principal.getName());
+		if(!_member.isPresent()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		GeneralMember member = _member.get();
+		if(member.getMemberType().equals("owner") && username != null && username.equals(principal.getName())) {
+			// 해당 가게의 진짜 사장
+			storeService.deleteStore(storeNo);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
 
 }
 

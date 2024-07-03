@@ -25,6 +25,17 @@
     
 </head>
     <style>
+    	.owl-item {
+    		padding: 0px;
+    		margin: 0px;
+    	}
+    	.owl-stage-outer {
+    		padding: 0px;
+    		margin: 0px;
+    	}
+    	.owl-stage {
+    		padding: 0px;
+    	}
         .owl-carousel .item {
             padding: 0px;
             margin: 5px;
@@ -35,15 +46,20 @@
             width: 100%;
             height: auto;
         }
-         #storeCarousel .owl-stage {
-        display: flex;
-        flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
-    }
+        .owl-carousel owl-theme owl-loaded owl-drag {
+        	padding: 0px;
+    		margin: 0px;
+        }
+        #storeCarousel .owl-stage {
+        	display: flex;
+        	flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
+    	}
     </style>
 <body>
-	<center>
-		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 400px">
-	</center>
+	<!-- Logo -->
+	<div style="text-align: center;">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
+	</div>
 
 	<!-- Search -->
 	<div class="col-md-12">
@@ -64,13 +80,12 @@
 	</sec:authorize>
 
 
-  <div class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
-   <h5>인기 점포</h5>
-  <!-- Store Carousel -->
-	  <div id="storeCarousel" class="owl-carousel owl-theme">
-	  </div>
-  
-  </div>
+	<!-- Store Carousel -->
+	<div class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
+		<h5>인기 점포</h5>
+		<div id="storeCarousel" class="owl-carousel owl-theme">
+		</div>
+	</div>
     
     <!-- Menu -->
     <div class="row">
