@@ -31,7 +31,7 @@ public interface ReviewService {
 	Map<Review, String> getReviewListOnStore(int storeNo);
 	
 	// 가게별 리뷰 목록 가져오기 - 무한 스크롤
-	List<Review> getJSONReviewListByStoreId(@Param("storeNo") int storeNo, @Param("page") int page);
+	List<Map<String, Object>> getJSONReviewListByStoreId(@Param("storeNo") int storeNo, @Param("page") int page);
 
 	// yunbin
 	List<Review> getReviewsByUsername(String username);

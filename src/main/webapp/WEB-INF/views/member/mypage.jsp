@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -76,21 +77,54 @@
             $("#password").on("input", function () {
                 $("#confirmPasswordAlert").text("");
             });
+            
+            $("#delete-btn").click(function(){
+            	if(confirm("정말로 삭제하시겠습니까?") == true){
+            		var storeNo = Number($(this).data('store-no'));
+            		console.log("삭제할 가게번호 : " + storeNo);
+            		
+            		$.ajax({
+            			url : '/store/delete/' + storeNo,
+            			type : 'DELETE',
+            			success : function(data, textStatus, xhr){
+            				if (textStatus === "success") {
+                                console.log("삭제 성공");
+                                alert("가게가 성공적으로 삭제되었습니다.");
+                                location.reload();
+                            } else {
+                                console.log("삭제 실패");
+                                alert("삭제에 실패했습니다. 다시 시도해주세요.");
+                            }
+            				
+            			},
+            			error : function(xhr, status, error){
+            				if (xhr.status === 400) {
+                                console.error("Bad Request: " + xhr.responseText);
+                                alert("삭제할 권한이 없습니다.");
+                            } else {
+                                console.error("AJAX Error: " + status + " " + error);
+                                alert("서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+                            }
+            				
+            			}
+            		});
+            	} else{
+            		return false;
+            	} 
+            	
+            });
         });
+        
     </script>
 </head>
 <body>
-<div class="col-md-12">
-    <img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
-</div>
+	<!-- Logo -->
+	<div style="text-align: center;">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
+	</div>
 
-<div class="main">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="col-md-12 text-center" id="title">
-                <h2>마이페이지</h2>
-            </div>
-
             <div align="center" style="margin-bottom: 20px; width: 200px; height: 200px; border-radius: 50%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; text-align: center; margin: 0 auto;">
                 <sec:authentication property="principal.username" var="username"/>
                 <input type="hidden" id="memberUsername" value="${username}">
@@ -116,6 +150,9 @@
                 <c:forEach items="${registeredStores}" var="store" varStatus="status">
                     <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
                         <a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
+                        <sec:authorize access="authentication.name == '${store.username}' && hasRole('ROLE_OWNER')">
+                    	<button type="button" class="btn btn-danger" id="delete-btn" data-store-no="${store.storeNo}">삭제</button>
+                    	</sec:authorize>
                     </p>
                     <hr/>
                 </c:forEach>
@@ -140,20 +177,20 @@
                 </div>
                 <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
                     <c:forEach items="${reviews}" var="review" varStatus="status">
-                        <c:set var="loop_flag" value="true"/>
-                        <c:forEach items="${reviewStores}" var="store" varStatus="status">
-                            <c:if test="${review.storeStoreNo eq store.storeNo and loop_flag}">
-                                <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
-                                <a href="${pageContext.request.contextPath}/store/${store.storeNo}">${store.storeName}</a>
-                                <c:set var="loop_flag" value="false"/>
-                            </c:if>
-                        </c:forEach>
-                        <span>
-					    		<a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${review.content}</a>
-                        </p>
-                        </span>
-                        <hr/>
-                    </c:forEach>
+					    <c:set var="loop_flag" value="true"/>
+					    <c:forEach items="${reviewStores}" var="store" varStatus="status">
+					        <c:if test="${review.storeStoreNo eq store.storeNo and loop_flag}">
+					            <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+					                <a href="${pageContext.request.contextPath}/store/${store.storeNo}">${store.storeName}</a>
+					                <c:set var="loop_flag" value="false"/>
+					        </c:if>
+					    </c:forEach>
+					    <span>
+					            <a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${fn:substring(review.content, 0, 15)}${fn:length(review.content) > 15 ? '...' : ''}</a>
+					        </p>
+					    </span>
+					    <hr/>
+					</c:forEach>
                 </div>
             </sec:authorize>
 
@@ -186,8 +223,7 @@
             </div>
         </div>
     </div>
-</div>
-</div>
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

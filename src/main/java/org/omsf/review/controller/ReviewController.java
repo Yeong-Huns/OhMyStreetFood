@@ -2,6 +2,7 @@ package org.omsf.review.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -12,6 +13,8 @@ import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
 import org.omsf.review.validator.UserValidator;
 import org.omsf.store.service.StoreService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.google.gson.Gson;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,10 +74,14 @@ public class ReviewController {
 	// 무한 스크롤 응답
 	@GetMapping("api/{storeId}")
 	@ResponseBody
-	public List<Review> getReviewList(@PathVariable("storeId") int storeId, 
+	public ResponseEntity<?> getReviewList(@PathVariable("storeId") int storeId, 
 										@RequestParam(value = "page", defaultValue = "2") int page, Model model) {
-		List<Review> reviews = reviewServ.getJSONReviewListByStoreId(storeId, page);
-		return reviews;
+		Gson gson = new Gson();
+		List<Map<String, Object>> reviews = reviewServ.getJSONReviewListByStoreId(storeId, page);
+		if(reviews.size() <= 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.status(HttpStatus.OK)
+				.header("Content-Type", "text/plain; charset=UTF-8")
+				.body(gson.toJson(reviews));
 	}
 	
 	// 리뷰 상세 페이지

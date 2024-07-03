@@ -23,16 +23,14 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-	<div class="col-md-12">
-		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	<!-- Logo -->
+	<div style="text-align: center; margin-top: 55px;">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
 	</div>
 	
 	<div class="main">
     	<div class="row justify-content-center">
         	<div class="col-md-10">
-				<div class="col-md-12 text-center" id="title">
-					<h2>로그인</h2>
-				</div>
 				<form action="${pageContext.request.contextPath}/signin" method="post">
 					<div class="form-group">
 						<label for="username">이메일 주소</label> 
