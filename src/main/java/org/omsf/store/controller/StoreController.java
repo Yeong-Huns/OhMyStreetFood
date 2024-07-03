@@ -32,6 +32,7 @@ import org.omsf.store.service.StoreService;
 import org.omsf.store.service.ViewCountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -170,14 +171,20 @@ public class StoreController {
     @GetMapping("/{storeNo}/update")
     public String showStoreEditForm(@PathVariable("storeNo") int storeNo, Model model,
     		Principal principal) {
+    	
     	String username = principal.getName();
     	Store store = storeService.getStoreByNo(storeNo);
     	
     	if (store.getUsername() != null) {	
-    		Member member = (Member) memberService.findByUsername(store.getUsername()).get();
-    		if (member.getMemberType().equals("owner") && (!store.getUsername().equals(username))) {
-    			return "redirect:/error";
+    		Member storeMember = (Member) memberService.findByUsername(store.getUsername()).get();
+    		Member userMember = (Member) memberService.findByUsername(username).get();
+    		if (storeMember.getMemberType().equals("owner") && (!store.getUsername().equals(username))) {
+    			throw new AccessDeniedException("인증된 상점은 제보자가 수정할 수 없습니다.");
     		}
+    		else if (userMember.getMemberType().equals("owner") && storeMember.getUsername() != username) {
+    			throw new AccessDeniedException("사장은 본인의 가게만 수정할 수 있습니다.");
+    		}
+    		
     	}
     	
     	List<Menu> menus = menuService.getMenusByStoreNo(storeNo);
