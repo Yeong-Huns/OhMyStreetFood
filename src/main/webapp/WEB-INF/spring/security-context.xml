@@ -20,6 +20,7 @@
     	<intercept-url pattern="/review/insert" access="hasRole('ROLE_USER')"/>
     	<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
 	    <intercept-url pattern="/**" access="permitAll" />
+	    <intercept-url pattern="/store/delete/**" access="hasRole('ROLE_OWNER')"/>
 	    
 	    <form-login
             login-page="/signin"

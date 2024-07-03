@@ -270,6 +270,7 @@
 						<form:hidden path="memberType" value="${member.memberType}" />
 						<input type="submit" value="회원가입" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">
 					</div>
+
 			</form:form>
 		</div>
 	</div>
