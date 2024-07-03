@@ -91,19 +91,24 @@
                 <h2>마이페이지</h2>
             </div>
 
-            <div align="center" style="margin-bottom: 20px;">
-                <sec:authentication property="principal.username" var="username"/> <br>
-                <input type="hidden" id="memberUsername" value="${username }">
-                <sec:authorize access="hasRole('ROLE_OWNER')">${username }</sec:authorize>
+            <div align="center" style="margin-bottom: 20px; width: 200px; height: 200px; border-radius: 50%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; text-align: center; margin: 0 auto;">
+                <sec:authentication property="principal.username" var="username"/>
+                <input type="hidden" id="memberUsername" value="${username}">
+                <sec:authorize access="hasRole('ROLE_OWNER')">${username}</sec:authorize>
                 <sec:authorize access="hasRole('ROLE_USER')">
-                    ${member.nickName } <br>
-                    ${username }
+                	${member.nickName }<br>
+                	${username }
                 </sec:authorize>
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
                     관리자 계정입니다
                 </sec:authorize>
             </div>
-
+			
+		    <div class="col-md-12 text-center">
+            	<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmPasswordModal">회원 정보 수정</a><br>
+            	<a href="${pageContext.request.contextPath}/logout">로그아웃</a>
+        	</div>
+        
             <div style="width:100%;">
                 <i class="fas fa-store"></i>&nbsp;<strong>내가 등록한 가게</strong>
             </div>
@@ -157,11 +162,6 @@
             </div>
             <div id="custom-chat-room-container" style="width:100%; height:auto;">
             </div>
-        </div>
-
-        <div class="col-md-12 text-center">
-            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmPasswordModal">회원 정보 수정</a><br>
-            <a href="${pageContext.request.contextPath}/logout">로그아웃</a>
         </div>
 
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

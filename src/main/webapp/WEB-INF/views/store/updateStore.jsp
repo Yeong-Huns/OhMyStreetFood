@@ -23,6 +23,10 @@
 	
 </head>
 <body>
+	<div class="col-md-12">
+		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 200px">
+	</div>
+	
 	<div class="col-md-12 text-center" id="title">
 		<h3>가게 정보 수정</h3>
 	</div>
