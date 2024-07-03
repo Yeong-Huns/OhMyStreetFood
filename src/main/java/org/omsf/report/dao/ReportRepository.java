@@ -10,4 +10,6 @@ public interface ReportRepository {
 	
 	List<Report> getReports();
 
+	void deleteReport(int reportNo);
+
 }

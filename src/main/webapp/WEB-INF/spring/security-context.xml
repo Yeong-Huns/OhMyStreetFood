@@ -9,16 +9,16 @@
 	
 	<global-method-security pre-post-annotations="enabled"/>
 	
-	<http auto-config="true">
+	<http auto-config="true" use-expressions="true">
 		<csrf disabled="true"/>
     	<intercept-url pattern="/secure/**" access="authenticated" />
     	<intercept-url pattern="/chat/**" access="authenticated" />
     	<intercept-url pattern="/mypage" access="authenticated" />
     	<intercept-url pattern="/store/report/**" access="authenticated" /> 
-    	<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
     	<intercept-url pattern="/store/createstore" access="authenticated" />
     	<intercept-url pattern="/store/**/update" access="authenticated" />
     	<intercept-url pattern="/review/insert" access="hasRole('ROLE_USER')"/>
+    	<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
 	    <intercept-url pattern="/**" access="permitAll" />
 	    <intercept-url pattern="/store/delete/**" access="hasRole('ROLE_OWNER')"/>
 	    

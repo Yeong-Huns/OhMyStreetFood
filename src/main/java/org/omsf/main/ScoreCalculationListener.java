@@ -18,14 +18,14 @@ public class ScoreCalculationListener implements ApplicationListener<ContextRefr
 	
 	private static final Logger log = LoggerFactory.getLogger(ScoreCalculationListener.class);
 	private final ViewCountService viewCountService;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RedisTemplate<String, Object> redisTemplate;
 	
 	private static final String LAST_CALCULATION_KEY = "last_score_calculation_time";
 	
 	
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
-		String lastCalculation = redisTemplate.opsForValue().get(LAST_CALCULATION_KEY);
+		String lastCalculation = (String) redisTemplate.opsForValue().get(LAST_CALCULATION_KEY);
 		if (lastCalculation == null || isCalculationNeeded(lastCalculation)) {
 			viewCountService.calculateAllStoreScore();
 			redisTemplate.opsForValue().set(LAST_CALCULATION_KEY, LocalDateTime.now().toString());

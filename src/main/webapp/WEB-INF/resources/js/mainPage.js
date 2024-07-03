@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 card.classList.add('item');
                 
                 card.innerHTML = `
-                    <div class="card">
+                    <div class="card" style="width: 200px;">
+                    
                         <a href="/store/${store.storeNo}" style="text-decoration: none; color: inherit;">
                             <div class="card-img-wrapper" style="height: 0; padding-top: 100%; position: relative; overflow: hidden;">
                                 <img src="${store.picture && photo.picture ? photo.picture : '/img/00.jpg'}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 autoplayTimeout: 2500,
                 responsive: {
                     600: {
-                        items: 3
+                        items: 5
                     }
                 }
             });

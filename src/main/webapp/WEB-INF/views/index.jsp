@@ -25,6 +25,13 @@
     
 </head>
     <style>
+    	.owl-stage-outer {
+    		padding: 0px;
+    		margin: 0px;
+    	}
+    	.owl-stage {
+    		padding: 0px;
+    	}
         .owl-carousel .item {
             padding: 0px;
             margin: 5px;
@@ -35,10 +42,14 @@
             width: 100%;
             height: auto;
         }
-         #storeCarousel .owl-stage {
-        display: flex;
-        flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
-    }
+        .owl-carousel owl-theme owl-loaded owl-drag {
+        	padding: 0px;
+    		margin: 0px;
+        }
+        #storeCarousel .owl-stage {
+        	display: flex;
+        	flex-wrap: nowrap; /* Prevent items from wrapping to the next line */
+    	}
     </style>
 <body>
 	<center>

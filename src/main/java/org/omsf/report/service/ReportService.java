@@ -11,4 +11,6 @@ public interface ReportService {
 
 	Map<Integer, List<Report>> getReportsGroupedByStoreNo();
 
+	void deleteReport(int reportNo);
+
 }

@@ -30,4 +30,9 @@ public class ReportServiceImpl implements ReportService{
 		return groupedReports;
 	}
 
+	@Override
+	public void deleteReport(int reportNo) {
+		reportRepository.deleteReport(reportNo);
+	}
+
 }
