@@ -8,7 +8,7 @@
       INSERT INTO REVIEW
          (REVIEWNO, RATING, CONTENT, CREATEDAT, MEMBER_USERNAME, STORE_STORENO)
       VALUES
-         (REVIEW_SEQ.NEXTVAL, #{rating}, #{content}, sysdate, #{memberUsername}, #{storeStoreNo})
+         (REVIEW_SEQ.NEXTVAL, #{rating}, #{content}, sysdate + INTERVAL '9' HOUR, #{memberUsername}, #{storeStoreNo})
    </insert>
 	
 	<!-- 가게별 리뷰 목록 가져오기 -->
