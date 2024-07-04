@@ -1,7 +1,9 @@
 package org.omsf.error.handler;
 
+import org.omsf.error.Exception.ErrorCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * packageName    : org.omsf.error.handler
@@ -22,7 +24,12 @@ public class ErrorController {
     }
     
     @GetMapping("/error/403")
-    public String show403ErrorPage() {
-        return "error/errorPage";
+    public ModelAndView show403ErrorPage(ErrorCode errorCode, String detailMessage) {
+    	ModelAndView mav = new ModelAndView("error/errorPage"); // 에러 페이지로 이동
+    	
+        mav.addObject("code", ErrorCode.METHOD_NOT_ALLOWED.getCode());
+        mav.addObject("message", ErrorCode.METHOD_NOT_ALLOWED.getMessage());
+        mav.addObject("detail", detailMessage);
+        return mav;
     }
 }

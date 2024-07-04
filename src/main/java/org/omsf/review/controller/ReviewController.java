@@ -129,7 +129,7 @@ public class ReviewController {
 			if(requestPage != null && !requestPage.isEmpty())
 				return "redirect:/mypage";
 			else
-				return String.format("redirect:/review/list/%d", review.getStoreStoreNo());
+				return String.format("redirect:/store/%d", review.getStoreStoreNo());
 		}
 	}
 

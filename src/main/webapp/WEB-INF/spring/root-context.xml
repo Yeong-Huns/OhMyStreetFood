@@ -3,13 +3,11 @@
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
 	   xmlns:tx="http://www.springframework.org/schema/tx"
-	   xmlns:aop="http://www.springframework.org/schema/aop"
 	   xmlns:task="http://www.springframework.org/schema/task"
 	   xmlns:context="http://www.springframework.org/schema/context"
 	   xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
 	
@@ -80,7 +78,7 @@
 	
 	<tx:annotation-driven />
 
-	<aop:aspectj-autoproxy />
+
 	<!-- DAO나 Service 클래스 등의 Component 스캔
 	<context:component-scan base-package="org.omsf">
 		<context:exclude-filter type="annotation"

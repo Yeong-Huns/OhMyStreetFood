@@ -30,7 +30,7 @@
 <body>
     <!-- Logo -->
 	<div style="text-align: center;">
-		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
+		<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px"></a>
 	</div>
 	
 		<span style="display: flex; flex-direction: row; justify-content: space-between; padding: 0 40px;">
@@ -75,10 +75,11 @@
 		                    	<span>
 		                    		<sec:authorize access="hasRole('ROLE_USER')">
 		                    			<i class="like-btn far fa-heart" data-store-no="${store.storeNo }" style="cursor:pointer;"></i>
+		                    			<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#reportStoreModal"><i class="fas fa-skull-crossbones" style="cursor:pointer;" ></i></a>
 		                    		</sec:authorize>
 	  	                    		<sec:authorize access="isAnonymous()">	
 	  		                  			<a href="javascript:void(0);" onclick="showLoginAlert()">
-											<i class="fas fa-skull-crossbones"></i>
+											<i class="fas fa-skull-crossbones" style="cursor:pointer;"></i>
 										</a>
 	        	            		</sec:authorize>
 		                    	</span>
@@ -434,7 +435,7 @@
 
 	         	// URL을 직접 생성
 	            const reviewUrl = `${pageContext.request.contextPath}/review/` + review.reviewNo;
-	            
+	            console.log("날짜 생성 : " + review.createdAt.toString());
 	            // 날짜 포맷
 	            const createdAt = new Date(review.createdAt).toLocaleDateString('ko-KR', {
 	                year: 'numeric',

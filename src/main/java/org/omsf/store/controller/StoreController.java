@@ -3,7 +3,7 @@ package org.omsf.store.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -180,7 +180,7 @@ public class StoreController {
     		if (storeMember.getMemberType().equals("owner") && (!store.getUsername().equals(username))) {
     			throw new AccessDeniedException("인증된 상점은 제보자가 수정할 수 없습니다.");
     		}
-    		else if (userMember.getMemberType().equals("owner") && storeMember.getUsername() != username) {
+    		else if (userMember.getMemberType().equals("owner") && !storeMember.getUsername().equals(username)) {
     			throw new AccessDeniedException("사장은 본인의 가게만 수정할 수 있습니다.");
     		}
     		
@@ -466,13 +466,13 @@ public class StoreController {
     				pictures.add(null);
     			}
     		}
-    		Map<String, Object> response = new HashMap<>();
+    		Map<String, Object> response = new LinkedHashMap<>();
     		response.put("stores", stores);
     		response.put("pictures", pictures);
     		
 	    	return response;
     	} else {
-    		Map<String, Object> response = new HashMap<>();
+    		Map<String, Object> response = new LinkedHashMap<>();
     		response.put("storeInfos", storeInfos);
     		
     		return response;

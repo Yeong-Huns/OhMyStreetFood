@@ -25,7 +25,7 @@
 <body>
 	<!-- Logo -->
 	<div style="text-align: center; margin-top: 55px;">
-		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
+		<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px"></a>
 	</div>
   
 	<form method="post" id="storeEditForm" enctype="multipart/form-data">
