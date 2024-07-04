@@ -173,10 +173,9 @@ function connectToChannelWithOutLoginCheck(subscription, address) {
     if (match) {
         const customer = match[1];
         const storeNo = match[2];
-        const target = (customer === address) ? storeNo : customer;
         stompClient.send("/app/chat/subRequest", {}, JSON.stringify({
-            customerId: address,
-            storeNo: target,
+            customerId: customer,
+            storeNo: storeNo,
         }));
     }
 }
@@ -205,7 +204,7 @@ function startChat(customer, storeNo, address) {
             'Content-Type': 'application/json'
         }
     }).then(response => {
-        if (response.code === "no_record") {
+        if (!response.ok) {
             console.log("채팅기록 없음")
             showChatRoom([], (customer + storeNo), address);
             return;
@@ -253,7 +252,7 @@ function redirectToLogin(){
 }
 
 //messages, subscription, target 281
-function showChatRoom(messages, subscription, address) { // pictureUrl 파라미터 추가
+function showChatRoom(messages, subscription, address) {
     if (!Array.isArray(messages) || messages.length === 0) {
         messages = [{
             messageNo: 0,
@@ -268,6 +267,10 @@ function showChatRoom(messages, subscription, address) { // pictureUrl 파라미
     const customer = match[1];
     const storeNo = match[2];
     const target = (customer === address) ? customer : storeNo;
+
+    let display = target === customer ? storeNo : customer;
+    chatroomTitle(display);
+
     console.log("😋target: " + address);
     var chatMessagesContainer = document.getElementById('chat-messages');
     chatMessagesContainer.innerHTML = ''; // 초기화
@@ -285,22 +288,16 @@ function showChatRoom(messages, subscription, address) { // pictureUrl 파라미
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 }
 
+function chatroomTitle(display){
+
+}
+
+
 function showMessage(message, sender) {
     if (message.messageNo === 0) {
         let messageElement = document.createElement('div');
         messageElement.className = 'chat-message received';
-        messageElement.insertAdjacentHTML('berforeend', `
-               <div class="chat-avatar">
-               <img src="${message.picture}" alt="Avatar">
-               </div>
-               <div class="message-content">
-               <div>${message.content}</div>
-               <div class="chat-time"></div>
-               </div>`)
-
-
-
-        /*messageElement.innerHTML = `
+        messageElement.innerHTML = `
             <div class="chat-avatar">
                 <img src="${message.picture}" alt="Avatar">
             </div>
@@ -308,7 +305,7 @@ function showMessage(message, sender) {
                 <div>${message.content}</div>
                 <div class="chat-time"></div>
             </div>
-        `;*/
+        `;
         document.getElementById('chat-messages').appendChild(messageElement);
         document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
         return;
@@ -316,6 +313,8 @@ function showMessage(message, sender) {
 
     let messageNo = message.messageNo;
     let messageElement = document.createElement('div');
+    let avatarElement = document.getElementById("chat-avatar");
+    let chatRoomModalLabelElement = document.getElementById("chatRoomModalLabel");
     let date = new Date(message.createdAt);
     let hours = date.getHours();
     let minutes = date.getMinutes().toString().padStart(2, '0');
@@ -324,7 +323,6 @@ function showMessage(message, sender) {
     let chatRoomNo = message.chatRoomNo;
     let isReceived = message.isReceived;
     let isCurrentUser = message.senderId === sender;
-    // if (!isCurrentUser && !isReceived) updateMessageStatus(messageNo);
 
     messageElement.className = 'chat-message ' + (isCurrentUser ? 'sent' : 'received');
     messageElement.innerHTML = `
@@ -342,6 +340,10 @@ function showMessage(message, sender) {
 
     document.getElementById('chat-messages').appendChild(messageElement);
     document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+
+    // avatarElement와 chatRoomModalLabelElement 설정
+    avatarElement.innerHTML = `<img src="${message.picture}" alt="Avatar" style="width:100%;">`;
+    chatRoomModalLabelElement.textContent = message.displayName;
 }
 
 function sendMessage(subscription, address) {
@@ -459,7 +461,7 @@ function openChatRoomModal(message, username) {
     // })
 }
 
-function openChatRoomMyPage(message, address) {
+function openChatRoomMyPage(message, myAddress) {
 
     fetch('/chat/subscription?chatRoomNo=' + message.chatroomNo)
         .then(Response=> {
@@ -469,9 +471,9 @@ function openChatRoomMyPage(message, address) {
         let match = data.match(/(.*?)(\d+)$/);
         const customer = match[1];
         const storeNo = match[2];
-        const target = (customer === address) ? storeNo : customer;
-        connectToChannelWithOutLoginCheck((customer + storeNo), address);
-        connectModalToChatRoom(message.chatroomNo, data, address);
+        //const target = (customer === myAddress) ? storeNo : customer;
+        connectToChannelWithOutLoginCheck((customer + storeNo), myAddress);
+        connectModalToChatRoom(message.chatroomNo, data, myAddress);
     }).catch(error=>{
         console.error("/chat/subscsription 호출 에러" + error)
     })
@@ -495,7 +497,9 @@ function connectModalToChatRoom(chatRoomNo, subscription, address){
 
     fetch('/chat/chatRoomNo?chatRoomNo='+ chatRoomNo)
         .then(response=>{
-            if(!response.ok) throw new Error("메세지 조회 실패!")
+            if(!response.ok) {
+                return []
+            }
             return response.json()
         }).then(messages=>{
         showChatRoom(messages, subscription, address)

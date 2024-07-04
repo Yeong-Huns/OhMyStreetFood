@@ -65,7 +65,6 @@
     <div class="modal-dialog modal-dialog-centered modal-lg chat-modal-dialog">
         <div class="modal-content chatroom-container">
             <div class="modal-header chatroom-header" id="chatRoomModalHeader">
-                <button type="button" class="btn btn-back" onclick="goBack()"></button>
                 <div class="chat-avatar" id="chat-avatar">
 
                 </div>

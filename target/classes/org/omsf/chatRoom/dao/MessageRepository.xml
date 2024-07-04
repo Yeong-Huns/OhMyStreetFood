@@ -56,9 +56,17 @@
                s.storeName,
                mem.nickname,
                CASE
-                   WHEN s.picture IS NULL THEN 'img/00.jpg'
-                   ELSE p.picture
-                   END AS picture
+                   WHEN m.senderId = c.customer THEN
+                       CASE
+                           WHEN s.picture IS NULL THEN 'img/00.jpg'
+                           ELSE p.picture
+                           END
+                   ELSE 'img/00.jpg'
+                   END AS picture,
+               CASE
+                   WHEN m.senderId = c.customer THEN s.storeName
+                   ELSE mem.nickname
+                   END AS displayName
         FROM Message m
                  JOIN ChatRoom c ON m.chatRoomNo = c.chatRoomNo
                  LEFT JOIN store s ON c.storeNo = s.storeNo

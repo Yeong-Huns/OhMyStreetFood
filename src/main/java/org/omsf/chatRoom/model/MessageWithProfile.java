@@ -30,4 +30,5 @@ public class MessageWithProfile {
     private String storeName;
     private String nickName;
     private String picture;
+    private String displayName;
 }
