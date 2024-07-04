@@ -8,6 +8,7 @@ import org.omsf.chatRoom.controller.StompHandler;
 import org.omsf.chatRoom.model.HandleSendMessageResponse;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.model.MessageWithOwnerResponse;
+import org.omsf.chatRoom.model.MessageWithProfile;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public interface MessageRepository {
     void updateMessageStatus(@Param("messageNo") long messageNo);
 
     //3. 메세지 저장 + PK 반환
-    @Insert("INSERT INTO Message (content, senderId, chatRoomNo, isReceived, createdAt) VALUES (#{content}, #{senderId}, #{chatRoomNo}, '0', SYSDATE)")
+    @Insert("INSERT INTO Message (content, senderId, chatRoomNo, isReceived, createdAt) VALUES (#{content}, #{senderId}, #{chatRoomNo}, '0', #{createdAt})")
     @Options(useGeneratedKeys = true, keyProperty = "messageNo", keyColumn = "messageNo")
     void saveMessage(MessageVO messageVo);
     //4, pk로 조회
@@ -42,7 +43,7 @@ public interface MessageRepository {
     Optional<MessageVO> getMessageById(long messageNo);
 
     //5. chatRoomNo로 모든 Message 조회
-    List<MessageVO> findAllMessageByChatRoomNo(@Param("chatRoomNo") long chatRoomNo);
+    List<MessageWithProfile> findAllMessageByChatRoomNo(@Param("chatRoomNo") long chatRoomNo);
 
 
 

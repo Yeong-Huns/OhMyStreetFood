@@ -61,7 +61,7 @@
 	<div class="main">
         <div class="row w-100">
             <div>
-                <a href="javascript:history.go(-1);" style="text-decoration: none; color: inherit;">
+                <a href="${pageContext.request.contextPath}/admin/reports" style="text-decoration: none; color: inherit;">
                     <i class="fas fa-arrow-left"></i>
                 </a>
             </div>

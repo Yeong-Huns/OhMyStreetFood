@@ -15,6 +15,7 @@
 	<logger name="jdbc.sqlonly" level="info" />
 	<logger name="jdbc.resultsettable" level="off" />
 	<logger name="jdbc.sqltiming" level="off" />
+
 	<logger name="com.zaxxer.hikari" level="info" /> <!-- log 상세출력 debug -->
 
 	<root value="info">

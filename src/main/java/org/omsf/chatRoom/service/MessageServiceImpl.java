@@ -9,6 +9,7 @@ import org.omsf.chatRoom.dao.MessageRepository;
 import org.omsf.chatRoom.model.MessageResponse;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.model.MessageWithOwnerResponse;
+import org.omsf.chatRoom.model.MessageWithProfile;
 import org.omsf.error.Exception.ErrorCode;
 import org.omsf.error.Exception.NotFoundException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -66,8 +67,8 @@ public class MessageServiceImpl implements MessageService {
     }
     //4. chatRoomNo로 모든 Message 조회
     @Override
-    public List<MessageVO> findAllMessageByChatRoomNo(long chatRoomNo) {
-        List<MessageVO> messages = messageRepository.findAllMessageByChatRoomNo(chatRoomNo);
+    public List<MessageWithProfile> findAllMessageByChatRoomNo(long chatRoomNo) {
+        List<MessageWithProfile> messages = messageRepository.findAllMessageByChatRoomNo(chatRoomNo);
         if(messages.isEmpty()) throw new NotFoundException(ErrorCode.NOT_FOUND_MESSAGE);
         return messages;
     }

@@ -27,7 +27,7 @@
         		MENU_SEQ.NEXTVAL,
         		#{menuName},
         		#{price},
-        	 	sysdate,
+        	 	sysdate + INTERVAL '9' HOUR,
         	 	#{storeNo}
         	 )
        	<selectKey keyProperty="menuNo" resultType="int" order="AFTER">
@@ -46,7 +46,7 @@
     	SET
     		MENUNAME = #{menuName},
         	PRICE = #{price},
-        	MODIFIEDAT = sysdate
+        	MODIFIEDAT = sysdate + INTERVAL '9' HOUR
         WHERE MENUNO = #{menuNo}
     </update>
     <update id="deleteMenu">

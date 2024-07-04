@@ -58,7 +58,7 @@
             #{latitude},
             #{longitude},
             #{address},
-            sysdate,
+            sysdate + INTERVAL '9' HOUR,
             <trim suffixOverrides=",">
                 #{username},
                 <if test="picture != null">#{picture},</if> 
@@ -92,7 +92,7 @@
         #{contentType},
         #{fileSize},
         #{picture},
-        sysdate,
+        sysdate + INTERVAL '9' HOUR,
         #{storeNo},
         #{username}
     )
@@ -127,7 +127,7 @@
 	        contentType = #{contentType},
 	        fileSize = #{fileSize},
 	        picture = #{picture},
-	        createdAt = sysdate,
+	        createdAt = sysdate + INTERVAL '9' HOUR,
 	        USERNAME = #{username}
 	    WHERE photoNo = #{photoNo}
 	</update>
@@ -142,7 +142,7 @@
 	        INTRODUCE = #{introduce},
 	        OPERATINGDATE = #{operatingDate},
 	        OPERATINGHOURS = #{operatingHours},
-	        MODIFIEDAT = sysdate,
+	        MODIFIEDAT = sysdate + INTERVAL '9' HOUR,
 	        PICTURE = #{picture, jdbcType=NUMERIC}
 	    WHERE
 	        STORENO = #{storeNo}

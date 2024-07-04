@@ -107,8 +107,11 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Override
 	public void updatePhotoOrder(List<Integer> photoOrder, int storeNo, String username) {
+		
 		List<Photo> photos = storeService.getStoreGallery(storeNo);
-
+		if (photoOrder.size() != photos.size()) {
+			return;
+		}
 		for (int i = 0; i < photoOrder.size(); i++) {
 	       int photoNo = photoOrder.get(i);
 	       Photo photo = photos.get(i);

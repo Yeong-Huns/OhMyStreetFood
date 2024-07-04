@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.omsf.chatRoom.dao.ChatRepository;
 import org.omsf.chatRoom.model.ChatRoomVO;
+import org.omsf.chatRoom.model.DisplayName;
 import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.model.chat.ChatRoom;
@@ -67,6 +68,11 @@ public class ChatServiceImpl implements ChatService{
     @Override
     public List<GetChatRoomNoBySubscriptionRequest> getChatRoomsWithLastMessage(String username){
         return chatRepository.getChatRoomsWithLastMessage(username);
+    }
+
+    @Override
+    public DisplayName getDisplayNameByIdentifier(String identifier) {
+        return chatRepository.getDisplayNameByIdentifier(identifier).orElseThrow(NotFoundException::new);
     }
 
     @Override
