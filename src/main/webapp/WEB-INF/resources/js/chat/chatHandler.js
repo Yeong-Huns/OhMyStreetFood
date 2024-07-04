@@ -274,8 +274,11 @@ function showChatRoom(messages, subscription, address) {
     console.log("😋target: " + address);
     var chatMessagesContainer = document.getElementById('chat-messages');
     chatMessagesContainer.innerHTML = ''; // 초기화
+
+
+    let avatarImg = document.querySelector("#chat-avatar img");
     messages.forEach(function (message) {
-        showMessage(message, address);
+        showMessage(message, address, avatarImg);
     });
    /* var chatAvatarElement = document.getElementById('chat-avatar');
     chatAvatarElement.innerHTML = `<img src="${pictureUrl}" alt="Avatar" style="width:100%;">`; // 이미지 URL과 alt 텍스트 설정
@@ -300,13 +303,34 @@ function chatroomTitle(identifier){
 }
 
 
-function showMessage(message, sender) {
+function getDisplay(identifier){
+    fetch("/chat/getDisPlayName?identifier=" + identifier)
+        .then(response=>response.json())
+        .then(data=>{
+            return {
+                displayName : data.displayName,
+                displayImg : data.displayImg
+            }
+        }).catch(error=>{
+            console.error("디스플레이 네임을 찾던 중 오류 발생 : "+ error)
+        return {
+                displayName : null,
+                displayImg : null
+        }
+    })
+}
+
+
+function showMessage(message, sender, avatarImg) {
+
+    console.log("new Avatar : " + avatarImg);
+
     if (message.messageNo === 0) {
         let messageElement = document.createElement('div');
         messageElement.className = 'chat-message received';
         messageElement.innerHTML = `
-            <div class="chat-avatar">
-                <img src="${message.picture}" alt="Avatar">
+             <div class="chat-avatar">
+                <img src=" `+ avatarImg.src + ` " alt="Avatar">
             </div>
             <div class="message-content">
                 <div>${message.content}</div>
@@ -330,12 +354,12 @@ function showMessage(message, sender) {
     let chatRoomNo = message.chatRoomNo;
     let isReceived = message.isReceived;
     let isCurrentUser = message.senderId === sender;
-
+    let avatarSrc = isCurrentUser ? message.picture : "/img/00.jpg";
     messageElement.className = 'chat-message ' + (isCurrentUser ? 'sent' : 'received');
     messageElement.innerHTML = `
         ${!isCurrentUser ? `
         <div class="chat-avatar">
-            <img src="${message.picture}" alt="Avatar">
+            <img src=" ` + avatarImg.src + ` " alt="Avatar">
         </div>` : ''}
         <div class="message-content">
             <div>${message.content.replace(/\n/g, '<br>')}</div>
@@ -409,7 +433,8 @@ function handleReceivedMessage(message, channel, address) {
     const target = (customer === messageBody.senderId) ? customer : storeNo;
     console.log("수신자 target : " + target)
     console.log("수신자 message.senderId : " + messageBody.senderId)
-    showMessage(messageBody, address);
+    let avatarImg = document.querySelector("#chat-avatar img");
+    showMessage(messageBody, address, avatarImg);
     // 모달 창 활성화 확인
     let chatRoomModal = document.getElementById('chatRoomModal');
     let isModalShown = chatRoomModal.classList.contains('show');

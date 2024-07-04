@@ -15,7 +15,7 @@
                s.storeName,
                mem.nickname,
                CASE
-                   WHEN s.picture IS NULL THEN 'img/00.jpg'
+                   WHEN s.picture IS NULL THEN '/img/00.jpg'
                    ELSE p.picture
                    END AS picture
         FROM Message m
@@ -58,7 +58,7 @@
                CASE
                    WHEN m.senderId = c.customer THEN
                        CASE
-                           WHEN s.picture IS NULL THEN 'img/00.jpg'
+                           WHEN s.picture IS NULL THEN '/img/00.jpg'
                            ELSE p.picture
                            END
                    ELSE 'img/00.jpg'
