@@ -6,7 +6,7 @@
 
     <insert id="insertKeyword" parameterType="map">
         INSERT INTO search (userIp, keyword, createdAt)
-        VALUES (#{userIp}, #{keyword}, SYSDATE)
+        VALUES (#{userIp}, #{keyword}, sysdate + INTERVAL '9' HOUR)
     </insert>
 
     <select id="getAllKeywords" resultType="map">
