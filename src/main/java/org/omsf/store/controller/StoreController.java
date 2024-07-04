@@ -3,7 +3,7 @@ package org.omsf.store.controller;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -466,13 +466,13 @@ public class StoreController {
     				pictures.add(null);
     			}
     		}
-    		Map<String, Object> response = new HashMap<>();
+    		Map<String, Object> response = new LinkedHashMap<>();
     		response.put("stores", stores);
     		response.put("pictures", pictures);
     		
 	    	return response;
     	} else {
-    		Map<String, Object> response = new HashMap<>();
+    		Map<String, Object> response = new LinkedHashMap<>();
     		response.put("storeInfos", storeInfos);
     		
     		return response;
