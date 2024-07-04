@@ -5,15 +5,24 @@
 
 
     <!-- findAllMessageBySubscription -->
-    <select id="findAllMessageBySubscription" resultType="org.omsf.chatRoom.model.MessageVO">
+    <select id="findAllMessageBySubscription" resultType="org.omsf.chatRoom.model.MessageWithProfile">
         SELECT m.messageNo,
                m.content,
                m.senderId,
                m.chatRoomNo,
                m.isReceived,
-               m.createdAt
+               m.createdAt,
+               s.storeName,
+               mem.nickname,
+               CASE
+                   WHEN s.picture IS NULL THEN 'img/00.jpg'
+                   ELSE p.picture
+                   END AS picture
         FROM Message m
                  JOIN ChatRoom c ON m.chatRoomNo = c.chatRoomNo
+                 LEFT JOIN store s ON c.storeNo = s.storeNo
+                 LEFT JOIN member mem ON c.customer = mem.username
+                 LEFT JOIN photo p ON s.picture = p.photoNo
         WHERE c.customer = #{customer}
           AND c.storeNo = #{storeNo}
         ORDER BY m.createdAt
@@ -37,20 +46,34 @@
     </insert>
 
     <!-- findAllMessageByChatRoomNo -->
-    <select id="findAllMessageByChatRoomNo" resultType="org.omsf.chatRoom.model.MessageVO">
-        SELECT
-            m.messageNo,
-            m.content,
-            m.senderId,
-            m.chatRoomNo,
-            m.isReceived,
-            m.createdAt
-        FROM
-            Message m
-        WHERE
-            m.chatRoomNo = #{chatRoomNo}
-        ORDER BY
-            m.createdAt
+    <select id="findAllMessageByChatRoomNo" resultType="org.omsf.chatRoom.model.MessageWithProfile">
+        SELECT m.messageNo,
+               m.content,
+               m.senderId,
+               m.chatRoomNo,
+               m.isReceived,
+               m.createdAt,
+               s.storeName,
+               mem.nickname,
+               CASE
+                   WHEN m.senderId = c.customer THEN
+                       CASE
+                           WHEN s.picture IS NULL THEN 'img/00.jpg'
+                           ELSE p.picture
+                           END
+                   ELSE 'img/00.jpg'
+                   END AS picture,
+               CASE
+                   WHEN m.senderId = c.customer THEN s.storeName
+                   ELSE mem.nickname
+                   END AS displayName
+        FROM Message m
+                 JOIN ChatRoom c ON m.chatRoomNo = c.chatRoomNo
+                 LEFT JOIN store s ON c.storeNo = s.storeNo
+                 LEFT JOIN member mem ON c.customer = mem.username
+                 LEFT JOIN photo p ON s.picture = p.photoNo
+        WHERE m.chatRoomNo = #{chatRoomNo}
+        ORDER BY m.createdAt
     </select>
 
 

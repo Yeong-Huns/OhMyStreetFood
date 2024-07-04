@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.model.MessageWithOwnerResponse;
+import org.omsf.chatRoom.model.MessageWithProfile;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.service.MessageService;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class MessageController {
     }
 
     @GetMapping("/chatRoomNo")
-    public List<MessageVO> findAllMessageByChatRoomNo(@RequestParam long chatRoomNo){
+    public List<MessageWithProfile> findAllMessageByChatRoomNo(@RequestParam long chatRoomNo){
         return messageService.findAllMessageByChatRoomNo(chatRoomNo);
     }
 

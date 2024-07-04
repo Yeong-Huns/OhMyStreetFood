@@ -58,7 +58,7 @@
             WHERE m.username = #{username}
         ),
              OwnerStores AS (
-                 SELECT storeNo
+                 SELECT DISTINCT storeNo
                  FROM store
                  WHERE member_username = (SELECT username FROM UserType WHERE type = 'owner')
              ),
@@ -78,14 +78,17 @@
                          WHEN ut.type = 'owner' THEN 'img/00.jpg'
                          WHEN s.picture IS NULL THEN 'img/00.jpg'
                          ELSE p.picture
-                         END AS img
+                         END AS img,
+                     CASE
+                         WHEN ut.type = 'owner' THEN TO_CHAR(cr.storeNo)
+                         ELSE cr.customer
+                         END AS myAddress
                  FROM chatroom cr
                           JOIN UserType ut ON cr.customer = ut.username
                      OR (ut.type = 'owner' AND cr.storeNo IN (SELECT storeNo FROM OwnerStores))
                           LEFT JOIN store s ON cr.storeNo = s.storeNo
                           LEFT JOIN photo p ON s.picture = p.photoNo
                  ORDER BY cr.updatedAt DESC
-                     FETCH FIRST 5 ROWS ONLY
              )
         SELECT
             cr.chatroomNo,
@@ -94,6 +97,7 @@
             cr.updatedAt,
             cr.target,
             cr.img,
+            cr.myAddress,
             m.content AS lastMessage,
             m.senderId AS senderId
         FROM ChatRooms cr
@@ -105,7 +109,7 @@
                 ROW_NUMBER() OVER (PARTITION BY chatRoomNo ORDER BY createdAt DESC) AS rn
             FROM Message
         ) m ON cr.chatroomNo = m.chatRoomNo
-        WHERE m.rn = 1
+        WHERE m.rn = 1 OR m.rn IS NULL
     </select>
 
 
@@ -168,4 +172,26 @@
         FROM ChatRoom cr
         WHERE cr.chatRoomNo = #{chatRoomNo}
     </select>
+
+    <select id="getDisplayNameByIdentifier" resultType="org.omsf.chatRoom.model.DisplayName">
+        SELECT
+            COALESCE(mem.nickname, s.storeName) AS displayName,
+            CASE
+                WHEN mem.username IS NOT NULL THEN 'img/00.jpg'
+                WHEN s.picture IS NULL THEN 'img/00.jpg'
+                ELSE p.picture
+                END AS displayImg
+        FROM
+            (
+                SELECT #{identify} AS identifier
+                FROM dual
+            ) d
+                LEFT JOIN member mem ON d.identifier = TO_CHAR(mem.username)
+                LEFT JOIN store s ON d.identifier = TO_CHAR(s.storeNo)
+                LEFT JOIN photo p ON s.picture = p.photoNo
+        WHERE mem.username IS NOT NULL OR s.storeNo IS NOT NULL
+    </select>
+
+
+
 </mapper>

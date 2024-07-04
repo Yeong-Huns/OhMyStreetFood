@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.mapping.StatementType;
 import org.omsf.chatRoom.model.ChatRoomVO;
+import org.omsf.chatRoom.model.DisplayName;
 import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
 import org.springframework.stereotype.Repository;
 
@@ -43,6 +44,9 @@ public interface ChatRepository {
     Optional<Long> getChatRoomNoBySubscription(@Param("customer") String customer, @Param("storeNo") long storeNo);
     //5. username chatroom get 5 order by updatedAt 😋
     List<GetChatRoomNoBySubscriptionRequest> getChatRoomsWithLastMessage(@Param("username") String username);
+    //6. find DisplayName
+    Optional<DisplayName> getDisplayNameByIdentifier(@Param("identify") String identify);
+
 
     List<ChatRoomVO> findSubListByAddress(@Param("address") String address);
     List<Integer> findStoreListByAddress(@Param("address") String address);

@@ -4,7 +4,7 @@
     border: 1px solid #ddd;
     border-radius: 5px;
     overflow: hidden;
-    position: relative; /* Ensure the modal can be positioned */
+    position: relative;
 }
 .chatroom-header {
     display: flex;
@@ -15,7 +15,7 @@
     position: sticky;
     top: 0;
     z-index: 1000;
-    cursor: move; /* Indicate draggable area */
+    cursor: move;
 }
 .chatroom-list {
     max-height: 600px;
@@ -77,9 +77,9 @@
     background-color: #f8f9fa;
 }
 .chat-messages {
-    max-height: 400px;
+    max-height: 350px;
     overflow-y: auto;
-    padding: 10px;
+    padding: 20px;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
 }
@@ -88,7 +88,7 @@
     margin-bottom: 10px;
 }
 .chat-message .message-content {
-    max-width: 70%;
+    max-width: 90%;
     padding: 10px;
     border-radius: 10px;
     position: relative;
@@ -145,7 +145,7 @@
     border: none;
     border-radius: 5px;
 }
-@media (max-width: 600px) {
+@media (max-width: 700px) {
     .chat-message .message-content {
         max-width: 100%;
     }

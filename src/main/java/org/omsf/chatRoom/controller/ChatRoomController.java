@@ -3,6 +3,7 @@ package org.omsf.chatRoom.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.omsf.chatRoom.model.ChatRoomVO;
+import org.omsf.chatRoom.model.DisplayName;
 import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.service.ChatService;
@@ -65,7 +66,11 @@ public class ChatRoomController {
     public ResponseEntity<List<GetChatRoomNoBySubscriptionRequest>> getChatRoomsWithLastMessage(String username){
         return ResponseEntity.ok(chatService.getChatRoomsWithLastMessage(username));
     }
-
+    //6. displayName
+    @GetMapping("/getDisPlayName")
+    public ResponseEntity<DisplayName> getDisplayNameByIdentifier(String identifier){
+        return ResponseEntity.ok(chatService.getDisplayNameByIdentifier(identifier));
+    }
 
     @GetMapping("/chatList")
     public ResponseEntity<List<ChatRoomVO>> findSubListByAddress(@RequestParam String address){
