@@ -11,14 +11,26 @@
 	
 	<http auto-config="true" use-expressions="true">
 		<csrf disabled="true"/>
-    	<intercept-url pattern="/secure/**" access="authenticated" />
-    	<intercept-url pattern="/chat/**" access="authenticated" />
+    	
     	<intercept-url pattern="/mypage" access="authenticated" />
+    	<intercept-url pattern="/modifyMember/**" access="authenticated"/>
+    	<intercept-url pattern="/withdrawal" access="authenticated"/>
+    	<intercept-url pattern="/signin" access="anonymous"/>
+    	<intercept-url pattern="/signup/**" access="anonymous"/>
+    	
     	<intercept-url pattern="/store/report/**" access="authenticated" /> 
     	<intercept-url pattern="/store/createstore" access="authenticated" />
     	<intercept-url pattern="/store/**/update" access="authenticated" />
-    	<intercept-url pattern="/review/insert" access="hasRole('ROLE_USER')"/>
+    	<intercept-url pattern="/store/like/**" access="hasRole('ROLE_USER')" />
+    	
+    	<intercept-url pattern="/review/list/**" access="permitAll"/>
+    	<intercept-url pattern="/review/api/**" access="permitAll"/>
+    	<intercept-url pattern="/review/**" access="hasRole('ROLE_USER')"/>
+    	
     	<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+
+    	<intercept-url pattern="/chat/**" access="authenticated" />
+    	
 	    <intercept-url pattern="/**" access="permitAll" />
 	    <intercept-url pattern="/store/delete/**" access="hasRole('ROLE_OWNER')"/>
 	    
@@ -33,6 +45,7 @@
 	        logout-success-url="/"
 	        delete-cookies="JSESSIONID" />
 	        
+	    <access-denied-handler error-page="/error/403" />
 	</http>
     
 	<beans:bean id="customUserDetailsService" class="org.omsf.security.UserSecurityService"/>

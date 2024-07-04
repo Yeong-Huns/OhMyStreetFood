@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.omsf.member.model.GeneralMember;
@@ -27,6 +28,7 @@ import org.omsf.store.model.Store;
 import org.omsf.store.service.LikeService;
 import org.omsf.store.service.StoreService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,6 +47,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -234,58 +237,65 @@ public class MemberController { // yunbin
 		return "member/mypage";
 	}
 
-	@GetMapping("/findPassword")
-	public String showFindPasswordPage() {
-		return "member/findPassword";
-	}
-
 	@PostMapping("/findPassword")
-	public String processFindPassword(String username) {
-		try {
-			emailService.sendEmail(username);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "redirect:/signin";
+	public ResponseEntity<String> processFindPassword(@RequestParam String username) {
+	    try {
+	        emailService.sendEmail(username);
+	        return ResponseEntity.ok()
+	                             .contentType(MediaType.APPLICATION_JSON)
+	                             .body("임시비밀번호를 전송 했습니다.");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.badRequest()
+	                             .contentType(MediaType.APPLICATION_JSON)
+	                             .body("서버 오류입니다. 다시 시도해주세요.");
+	    }
 	}
 
 	@PostMapping("/confirmPassword")
 	@ResponseBody
-	public boolean confirmPassword(Principal principal, String password, Model model) {
+	public boolean confirmPassword(Principal principal, String password, Model model, HttpSession session) {
 		Optional<Member> _member = memberService.findByUsername(principal.getName());
 
 		if (_member.isPresent()) {
 			Member member = _member.get();
+			session.setAttribute("passwordConfirmed", true);
 			return passwordEncoder.matches(password, member.getPassword());
 		}
 		return false;
 	}
 
 	@GetMapping("/modifyMember")
-	public String showModifyMemberFormPage(Model model, Principal principal) {
+	public String showModifyMemberFormPage(Model model, Principal principal, HttpSession session) {
+		Boolean passwordConfirmed = (Boolean) session.getAttribute("passwordConfirmed");
 
-		for (String authority : currentUserAuthority()) {
-			if (authority.equals("ROLE_USER")) {
-				Optional<GeneralMember> _member = generalMemberService.findByUsername(principal.getName());
+		if (passwordConfirmed != null && passwordConfirmed) {
+	        for (String authority : currentUserAuthority()) {
+	            if (authority.equals("ROLE_USER")) {
+	                Optional<GeneralMember> _member = generalMemberService.findByUsername(principal.getName());
 
-				if (_member.isPresent()) {
-					GeneralMember member = _member.get();
-					model.addAttribute("member", member);
-				}
+	                if (_member.isPresent()) {
+	                    GeneralMember member = _member.get();
+	                    model.addAttribute("member", member);
+	                }
+	            } else if (authority.equals("ROLE_OWNER")) {
+	                Optional<Owner> _member = ownerService.findByUsername(principal.getName());
 
-			} else if (authority.equals("ROLE_OWNER")) {
-				Optional<Owner> _member = ownerService.findByUsername(principal.getName());
+	                if (_member.isPresent()) {
+	                    Owner member = _member.get();
+	                    model.addAttribute("member", member);
+	                }
+	            }
+	        }
+	        return "member/modify";
+	    } else {
+	        // 비밀번호 확인이 필요한 경우 처리
+	        return "redirect:/mypage"; // 예시로 비밀번호 확인 페이지로 리다이렉트
+	    }
 
-				if (_member.isPresent()) {
-					Owner member = _member.get();
-					model.addAttribute("member", member);
-				}
-			}
-		}
-
-		return "member/modify";
 	}
 
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/modifyMember/general")
 	public String processModifyMember(@Valid @ModelAttribute("member") GeneralMember generalMember,
 			BindingResult result, Model model) {
@@ -308,6 +318,7 @@ public class MemberController { // yunbin
 		return "redirect:/mypage";
 	}
 
+	@PreAuthorize("hasRole('ROLE_OWNER')")
 	@PostMapping("/modifyMember/owner")
 	public String processModifyMember(@Valid @ModelAttribute("member") Owner owner, BindingResult result, Model model) {
 

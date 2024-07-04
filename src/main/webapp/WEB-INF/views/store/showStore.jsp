@@ -185,28 +185,28 @@
 				    </span>
 				</span>
 			
-				<c:forEach items="${reviews}" var="review">
-					<div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-				    	<span style="display: flex; flex-direction: row; justify-content: space-between;">
-				    		<c:choose>
-				    			<c:when test="${not empty review.memberUsername}">
-				    				<span><strong>${review.memberUsername}</strong></span>
-				    			</c:when>
-				    			<c:otherwise>
-				    				<span><strong>탈퇴한 회원</strong></span>
-				    			</c:otherwise>
-				    		</c:choose>
-					    	<span>${review.createdAt}</span>
-					    </span>
-						<sec:authorize access="authentication.name == '${review.memberUsername}'">
-			                <a href="<c:url value='/review/${review.reviewNo}'/>">${review.content}</a>
-			            </sec:authorize>
-			            <sec:authorize access="authentication.name != '${review.memberUsername}'">
-			            <c:if test="${empty review.memberUsername or review.memberUsername ne principal.username }">
-			                ${review.content}
-			            </c:if>
-			            </sec:authorize>
-					</div>			    
+				<c:forEach items="${reviews.keySet()}" var="review">
+				    <div style="width: 100%; height: auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+				        <span style="display: flex; flex-direction: row; justify-content: space-between;">
+				            <c:choose>
+				                <c:when test="${not empty review.memberUsername}">
+				                    <span><strong>${reviews.get(review)}</strong></span>
+				                </c:when>
+				                <c:otherwise>
+				                    <span><strong>탈퇴한 회원</strong></span>
+				                </c:otherwise>
+				            </c:choose>
+				            <span>${review.createdAt}</span>
+				        </span>
+				        <sec:authorize access="authentication.name == '${review.memberUsername}'">
+				            <a href="<c:url value='/review/${review.reviewNo}'/>">${review.content}</a>
+				        </sec:authorize>
+				        <sec:authorize access="authentication.name != '${review.memberUsername}'">
+				            <c:if test="${empty review.memberUsername or review.memberUsername ne principal.username }">
+				                ${review.content}
+				            </c:if>
+				        </sec:authorize>
+				    </div>               
 				</c:forEach>
 			</c:if>
 			
@@ -217,7 +217,7 @@
 				    </span>
 				</div>	
 			</c:if>
-			<div>
+<!-- 			<div> -->
 <!-- 		    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;"> -->
 <%--                   <span><h5><spring:message code="review.info" /></h5></span> --%>
 <%--                   <sec:authorize access="isAnonymous() or hasRole('ROLE_USER')"> --%>
@@ -280,9 +280,9 @@
 <%-- 				</c:if> --%>
 <!-- 			</div> -->
 			
-			<div id="spinner" class="spinner"></div>
-	    </div>
+<!-- 	    </div> -->
 	   
+			<div id="spinner" class="spinner"></div>
 	    <!-- 찜 목록 효과 -->
 	    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
 	    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
@@ -444,13 +444,25 @@
 	            
 	            reviewDiv.innerHTML = `
 	                <span style="display: flex; flex-direction: row; justify-content: space-between;">
-	                    <span> ` + review.memberUsername + `</span>
+	                    <span><strong> ` + review.nickName + `</strong></span>
 	                    <span> ` + createdAt + `</span>
 	                </span>
 	                <span>
-	                    <a href= ` + reviewUrl + `>` + review.content + `</a>
+	                	` + review.content + `
 	                </span>
 	            `;
+	            
+	            if(review.memberUsername === '${pageContext.request.userPrincipal.name}'){
+	            	reviewDiv.innerHTML = `
+		                <span style="display: flex; flex-direction: row; justify-content: space-between;">
+		                    <span><strong> ` + review.nickName + `</strong></span>
+		                    <span> ` + createdAt + `</span>
+		                </span>
+		                <span>
+		                    <a href= ` + reviewUrl + `>` + review.content + `</a>
+		                </span>
+		            `;
+                }
 	            
 	            reviewContainer.appendChild(reviewDiv);
 	        });
@@ -521,9 +533,6 @@
 		            processData: true,
 		            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
 		            success: function(data) {
-		            	console.log(data); // 서버 응답 로그 출력
-		                //console.log("Context Path: " +${pageContext.request.contextPath});
-		            	
 		                if (data.errors) {
 		                    // 유효성 검사 오류가 있는 경우
 		                    $('#error-title').text(data.errors.title || "");

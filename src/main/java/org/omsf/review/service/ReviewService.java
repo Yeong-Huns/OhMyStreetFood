@@ -1,6 +1,7 @@
 package org.omsf.review.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.omsf.review.model.RequestReview;
@@ -27,10 +28,10 @@ public interface ReviewService {
 	void deleteReview(int reviewNo);
 	
 	// 가게별 최근 리뷰 5개 가져오기
-	List<Review> getReviewListOnStore(int storeNo);
+	Map<Review, String> getReviewListOnStore(int storeNo);
 	
 	// 가게별 리뷰 목록 가져오기 - 무한 스크롤
-	List<Review> getJSONReviewListByStoreId(@Param("storeNo") int storeNo, @Param("page") int page);
+	List<Map<String, Object>> getJSONReviewListByStoreId(@Param("storeNo") int storeNo, @Param("page") int page);
 
 	// yunbin
 	List<Review> getReviewsByUsername(String username);

@@ -5,6 +5,7 @@ import javax.mail.internet.MimeMessage;
 import org.omsf.member.dao.MemberRepository;
 import org.omsf.member.model.Member;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,16 +20,18 @@ public class EmailService { // yunbin
 	private final JavaMailSenderImpl mailSender;
 	private final MemberRepository<Member> memberRepository;
 	private final PasswordEncoder passwordEncoder;
+	
+	// 보내는 사람
+	@Value("${mail.username}")
+	String from;
 
 	public void sendEmail(String username) throws Exception {
 		String temporaryPassword = getTemporaryPassword();
+		
 		// 메일 내용
-		String subject = "OhMyStreetFood 임시 비밀번호 안내 이메일입니다.";
-		String content = "안녕하세요. OhMyStreetFood 임시 비밀번호 안내 이메일입니다. 회원님의 임시 비밀번호는 " + temporaryPassword
+		String subject = "[OhMyStreetFood] 임시 비밀번호 안내 이메일입니다.";
+		String content = "안녕하세요. OhMyStreetFood 입니다. 회원님의 임시 비밀번호는 " + temporaryPassword
 				+ "입니다. 로그인 후 비밀번호를 변경해주세요.";
-
-		// 보내는 사람
-		String from = "OhMyStreetFood@naver.com";
 
 		try {
 			MimeMessage mail = mailSender.createMimeMessage();
