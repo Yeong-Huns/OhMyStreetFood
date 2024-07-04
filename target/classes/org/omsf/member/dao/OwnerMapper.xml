@@ -19,7 +19,7 @@
 	</resultMap>
 	
 	<select id="findByUsername" resultMap="ownerMap">
-		SELECT username, password, membertype, logintype, businessregistrationnumber, createdat, modifiedat
+		SELECT username, password, membertype, businessregistrationnumber, createdat, modifiedat
 		FROM MEMBER
 		WHERE USERNAME = #{username}
 	</select>
