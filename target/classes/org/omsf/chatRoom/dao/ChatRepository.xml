@@ -172,4 +172,26 @@
         FROM ChatRoom cr
         WHERE cr.chatRoomNo = #{chatRoomNo}
     </select>
+
+    <select id="getDisplayNameByIdentifier" resultType="org.omsf.chatRoom.model.DisplayName">
+        SELECT
+            COALESCE(mem.nickname, s.storeName) AS displayName,
+            CASE
+                WHEN mem.username IS NOT NULL THEN 'img/00.jpg'
+                WHEN s.picture IS NULL THEN 'img/00.jpg'
+                ELSE p.picture
+                END AS displayImg
+        FROM
+            (
+                SELECT #{identify} AS identifier
+                FROM dual
+            ) d
+                LEFT JOIN member mem ON d.identifier = TO_CHAR(mem.username)
+                LEFT JOIN store s ON d.identifier = TO_CHAR(s.storeNo)
+                LEFT JOIN photo p ON s.picture = p.photoNo
+        WHERE mem.username IS NOT NULL OR s.storeNo IS NOT NULL
+    </select>
+
+
+
 </mapper>

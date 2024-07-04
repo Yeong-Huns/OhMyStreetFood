@@ -268,8 +268,8 @@ function showChatRoom(messages, subscription, address) {
     const storeNo = match[2];
     const target = (customer === address) ? customer : storeNo;
 
-    let display = target === customer ? storeNo : customer;
-    chatroomTitle(display);
+    let identifier = target === customer ? storeNo : customer;
+    chatroomTitle(identifier);
 
     console.log("😋target: " + address);
     var chatMessagesContainer = document.getElementById('chat-messages');
@@ -288,8 +288,13 @@ function showChatRoom(messages, subscription, address) {
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 }
 
-function chatroomTitle(display){
-
+function chatroomTitle(identifier){
+    fetch("/chat/getDisPlayName?identifier=" + identifier)
+        .then(response=>response.json())
+        .then(data=>{
+            document.getElementById("chatRoomModalLabel").innerText = data.displayName;
+            document.getElementById("chat-avatar").innerHTML = `<img src="`+data.displayImg+`" alt="Avatar" style="width:100%;">`;
+        })
 }
 
 
@@ -342,8 +347,8 @@ function showMessage(message, sender) {
     document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
 
     // avatarElement와 chatRoomModalLabelElement 설정
-    avatarElement.innerHTML = `<img src="${message.picture}" alt="Avatar" style="width:100%;">`;
-    chatRoomModalLabelElement.textContent = message.displayName;
+    //avatarElement.innerHTML = `<img src="${message.picture}" alt="Avatar" style="width:100%;">`;
+    //chatRoomModalLabelElement.textContent = message.displayName;
 }
 
 function sendMessage(subscription, address) {

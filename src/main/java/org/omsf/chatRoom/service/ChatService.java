@@ -2,6 +2,7 @@ package org.omsf.chatRoom.service;
 
 import org.apache.ibatis.annotations.Param;
 import org.omsf.chatRoom.model.ChatRoomVO;
+import org.omsf.chatRoom.model.DisplayName;
 import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.model.chat.ChatRoom;
@@ -35,7 +36,8 @@ public interface ChatService {
     long getChatRoomNoBySubscription(String customer, long storeNo);
     //5. get 5 chatroom
     List<GetChatRoomNoBySubscriptionRequest> getChatRoomsWithLastMessage(String username);
-
+    //6.
+    DisplayName getDisplayNameByIdentifier(String identifier);
 
     List<ChatRoomVO> findSubListByAddress(String address);
     List<Integer> findStoreListByAddress(@Param("address") String address);
