@@ -274,16 +274,21 @@ function showChatRoom(messages, subscription, address) {
     console.log("😋target: " + address);
     var chatMessagesContainer = document.getElementById('chat-messages');
     chatMessagesContainer.innerHTML = ''; // 초기화
+
+
+    let avatarImg = document.querySelector("#chat-avatar img");
     messages.forEach(function (message) {
-        showMessage(message, address);
+        showMessage(message, address, avatarImg);
     });
    /* var chatAvatarElement = document.getElementById('chat-avatar');
     chatAvatarElement.innerHTML = `<img src="${pictureUrl}" alt="Avatar" style="width:100%;">`; // 이미지 URL과 alt 텍스트 설정
 */
     var chatRoomModalElement = document.getElementById('chatRoomModal');
-    chatRoomModalElement.setAttribute('data-store-no', storeNo);
+    chatRoomModalElement.setAttribute('data-subscription', subscription);
     var chatRoomModal = new bootstrap.Modal(chatRoomModalElement);
     chatRoomModal.show();
+    let sendButton = document.getElementById('send-button')
+
     document.getElementById('send-button').setAttribute('onclick', `sendMessage('${subscription}', '${target}')`);
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 }
@@ -293,18 +298,39 @@ function chatroomTitle(identifier){
         .then(response=>response.json())
         .then(data=>{
             document.getElementById("chatRoomModalLabel").innerText = data.displayName;
-            document.getElementById("chat-avatar").innerHTML = `<img src="/`+data.displayImg+`" alt="Avatar" style="width:100%;">`;
+            document.getElementById("chat-avatar").innerHTML = `<img src="`+data.displayImg+`" alt="Avatar" style="width:100%;">`;
         })
 }
 
 
-function showMessage(message, sender) {
+function getDisplay(identifier){
+    fetch("/chat/getDisPlayName?identifier=" + identifier)
+        .then(response=>response.json())
+        .then(data=>{
+            return {
+                displayName : data.displayName,
+                displayImg : data.displayImg
+            }
+        }).catch(error=>{
+            console.error("디스플레이 네임을 찾던 중 오류 발생 : "+ error)
+        return {
+                displayName : null,
+                displayImg : null
+        }
+    })
+}
+
+
+function showMessage(message, sender, avatarImg) {
+
+    console.log("new Avatar : " + avatarImg);
+
     if (message.messageNo === 0) {
         let messageElement = document.createElement('div');
         messageElement.className = 'chat-message received';
         messageElement.innerHTML = `
-            <div class="chat-avatar">
-                <img src="${message.picture}" alt="Avatar">
+             <div class="chat-avatar">
+                <img src=" `+ avatarImg.src + ` " alt="Avatar">
             </div>
             <div class="message-content">
                 <div>${message.content}</div>
@@ -328,12 +354,12 @@ function showMessage(message, sender) {
     let chatRoomNo = message.chatRoomNo;
     let isReceived = message.isReceived;
     let isCurrentUser = message.senderId === sender;
-
+    let avatarSrc = isCurrentUser ? message.picture : "/img/00.jpg";
     messageElement.className = 'chat-message ' + (isCurrentUser ? 'sent' : 'received');
     messageElement.innerHTML = `
         ${!isCurrentUser ? `
         <div class="chat-avatar">
-            <img src="${message.picture}" alt="Avatar">
+            <img src=" ` + avatarImg.src + ` " alt="Avatar">
         </div>` : ''}
         <div class="message-content">
             <div>${message.content.replace(/\n/g, '<br>')}</div>
@@ -354,9 +380,11 @@ function showMessage(message, sender) {
 function sendMessage(subscription, address) {
     var messageInput = document.getElementById("message-input");
     var content = messageInput.value;
+    let sendButton = document.getElementById("send-button");
     if (!content) {
         return;
     }
+
 
     console.log("sendMessage 의 address : " + address)
 
@@ -405,7 +433,8 @@ function handleReceivedMessage(message, channel, address) {
     const target = (customer === messageBody.senderId) ? customer : storeNo;
     console.log("수신자 target : " + target)
     console.log("수신자 message.senderId : " + messageBody.senderId)
-    showMessage(messageBody, address);
+    let avatarImg = document.querySelector("#chat-avatar img");
+    showMessage(messageBody, address, avatarImg);
     // 모달 창 활성화 확인
     let chatRoomModal = document.getElementById('chatRoomModal');
     let isModalShown = chatRoomModal.classList.contains('show');
@@ -573,6 +602,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const scrollContainer = document.getElementById('chat-messages');
     // 스크롤 위치를 200px로 설정
     scrollContainer.scrollTop = 20000;
+
+
+    var input = document.getElementById('message-input');
+    var sendButton = document.getElementById('send-button');
+
+
+    input.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendButton.click();
+        }
+    });
+
+    // 메시지 전송 함수
+    sendButton.onclick = function() {
+        var message = input.value;
+        if (message.trim() !== '') {
+            sendMessage('${subscription}', '${target}')
+            input.value = '';  // 입력 필드 클리어
+        }
+    };
 
 });
 
