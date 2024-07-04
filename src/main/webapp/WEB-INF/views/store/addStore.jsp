@@ -21,7 +21,7 @@
 <body>
     <!-- Logo -->
 	<div style="text-align: center;">
-		<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px">
+		<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px"></a>
 	</div>
 		
 		<div class="col-md-12 text-center" id="title">
