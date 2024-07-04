@@ -46,7 +46,7 @@
 </div>
 
 <!-- 채팅방 목록 모달 -->
-<div class="modal fade" id="chatRoomListModal" tabindex="-1" aria-labelledby="chatRoomListModalLabel" aria-hidden="true" data-store-no="">
+<div class="modal fade" id="chatRoomListModal" tabindex="-1" aria-labelledby="chatRoomListModalLabel" aria-hidden="true" data-subscription="">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content chatroom-container">
             <div class="modal-header chatroom-header" id="chatRoomListModalHeader">

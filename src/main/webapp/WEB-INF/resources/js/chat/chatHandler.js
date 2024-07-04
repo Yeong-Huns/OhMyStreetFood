@@ -281,9 +281,11 @@ function showChatRoom(messages, subscription, address) {
     chatAvatarElement.innerHTML = `<img src="${pictureUrl}" alt="Avatar" style="width:100%;">`; // 이미지 URL과 alt 텍스트 설정
 */
     var chatRoomModalElement = document.getElementById('chatRoomModal');
-    chatRoomModalElement.setAttribute('data-store-no', storeNo);
+    chatRoomModalElement.setAttribute('data-subscription', subscription);
     var chatRoomModal = new bootstrap.Modal(chatRoomModalElement);
     chatRoomModal.show();
+    let sendButton = document.getElementById('send-button')
+
     document.getElementById('send-button').setAttribute('onclick', `sendMessage('${subscription}', '${target}')`);
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 }
@@ -293,7 +295,7 @@ function chatroomTitle(identifier){
         .then(response=>response.json())
         .then(data=>{
             document.getElementById("chatRoomModalLabel").innerText = data.displayName;
-            document.getElementById("chat-avatar").innerHTML = `<img src="/`+data.displayImg+`" alt="Avatar" style="width:100%;">`;
+            document.getElementById("chat-avatar").innerHTML = `<img src="`+data.displayImg+`" alt="Avatar" style="width:100%;">`;
         })
 }
 
@@ -354,9 +356,11 @@ function showMessage(message, sender) {
 function sendMessage(subscription, address) {
     var messageInput = document.getElementById("message-input");
     var content = messageInput.value;
+    let sendButton = document.getElementById("send-button");
     if (!content) {
         return;
     }
+
 
     console.log("sendMessage 의 address : " + address)
 
@@ -573,6 +577,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const scrollContainer = document.getElementById('chat-messages');
     // 스크롤 위치를 200px로 설정
     scrollContainer.scrollTop = 20000;
+
+
+    var input = document.getElementById('message-input');
+    var sendButton = document.getElementById('send-button');
+
+
+    input.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            sendButton.click();
+        }
+    });
+
+    // 메시지 전송 함수
+    sendButton.onclick = function() {
+        var message = input.value;
+        if (message.trim() !== '') {
+            sendMessage('${subscription}', '${target}')
+            input.value = '';  // 입력 필드 클리어
+        }
+    };
 
 });
 

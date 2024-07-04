@@ -177,8 +177,8 @@
         SELECT
             COALESCE(mem.nickname, s.storeName) AS displayName,
             CASE
-                WHEN mem.username IS NOT NULL THEN 'img/00.jpg'
-                WHEN s.picture IS NULL THEN 'img/00.jpg'
+                WHEN mem.username IS NOT NULL THEN '/img/00.jpg'
+                WHEN s.picture IS NULL THEN '/img/00.jpg'
                 ELSE p.picture
                 END AS displayImg
         FROM

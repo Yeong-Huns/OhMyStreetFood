@@ -86,7 +86,7 @@
                     $('.custom-chat-room').each(function(index) {
                         if (index >= 5) {
                             $(this).slideUp(function() {
-                                $(this).addClass('hidden').css('display', 'none');
+                                $(this).css('display', 'none').addClass('hidden');
                             });
                         }
                     });
@@ -94,6 +94,7 @@
                 }
             });
         });
+
 
         document.addEventListener("DOMContentLoaded", function () {
             fetch(`/chat/getChatRoomsWithMessage?username=${username}`)
@@ -107,13 +108,13 @@
                         chatRoomElement.className = 'custom-chat-room';
                         if (index >= 5) chatRoomElement.classList.add('hidden');
                         chatRoomElement.innerHTML = `
-                            <img src="` + chatRoom.img + `" alt="Avatar" width="50" height="50">
-                            <div>
-                                <p><strong>` + chatRoom.target + `와의 대화</strong></p>
-                                <p>` + chatRoom.lastMessage + `</p>
-                                <input type="hidden" value="` + chatRoom.chatroomNo + `">
-                            </div>
-                        `;
+                    <img src="` + chatRoom.img + `" alt="Avatar" width="50" height="50">
+                    <div>
+                        <p><strong>` + chatRoom.target + `와의 대화</strong></p>
+                        <p>` + chatRoom.lastMessage + `</p>
+                        <input type="hidden" value="` + chatRoom.chatroomNo + `">
+                    </div>
+                `;
                         chatRoomElement.onclick = function () {
                             const principal = '${pageContext.request.userPrincipal.name}';
                             if (principal) {
@@ -126,11 +127,11 @@
                         chatRoomContainer.appendChild(chatRoomElement);
                     });
 
-                    // 더보기 버튼 표시 여부 결정
+                    var showMoreButton = document.getElementById('show-more-chatrooms');
                     if (data.length > 5) {
-                        $('#show-more-chatrooms').removeClass('hidden');
+                        showMoreButton.style.display = 'block'; // 더보기 버튼 보이기
                     } else {
-                        $('#show-more-chatrooms').addClass('hidden');
+                        showMoreButton.style.display = 'none'; // 더보기 버튼 숨기기
                     }
                 })
                 .catch(error => console.error('Error fetching chat rooms:', error));
