@@ -435,7 +435,7 @@
 
 	         	// URL을 직접 생성
 	            const reviewUrl = `${pageContext.request.contextPath}/review/` + review.reviewNo;
-	            
+	            console.log("날짜 생성 : " + review.createdAt.toString());
 	            // 날짜 포맷
 	            const createdAt = new Date(review.createdAt).toLocaleDateString('ko-KR', {
 	                year: 'numeric',
