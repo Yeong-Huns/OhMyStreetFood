@@ -89,7 +89,7 @@
 	</select>
 	
 		<!-- 가게별 리뷰 목록 가져오기 -->
-	<select id="getJSONReviewListByStoreId" resultType="hashmap">
+	<select id="getJSONReviewListByStoreId" resultType="map">
 		SELECT
 			R.REVIEWNO AS "reviewNo",
 			R.RATING AS "rating",
