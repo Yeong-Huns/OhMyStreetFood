@@ -180,7 +180,7 @@ public class StoreController {
     		if (storeMember.getMemberType().equals("owner") && (!store.getUsername().equals(username))) {
     			throw new AccessDeniedException("인증된 상점은 제보자가 수정할 수 없습니다.");
     		}
-    		else if (userMember.getMemberType().equals("owner") && storeMember.getUsername() != username) {
+    		else if (userMember.getMemberType().equals("owner") && !storeMember.getUsername().equals(username)) {
     			throw new AccessDeniedException("사장은 본인의 가게만 수정할 수 있습니다.");
     		}
     		

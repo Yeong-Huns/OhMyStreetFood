@@ -14,7 +14,9 @@ public interface ViewCountService {
 	 public void updateTop10Stores();
 	 public void removeStoreRankings(int storeNo);
 	 
+	 void checkPopularChanged();
 	 Cookie findCookie(Cookie[] cookies, String name);
 	 List<StoreInfo> getTop10PopularStores();
 	 StoreInfo getPopularStoreInfo(int StoreNo);
+	 void markAsChanged();
 }

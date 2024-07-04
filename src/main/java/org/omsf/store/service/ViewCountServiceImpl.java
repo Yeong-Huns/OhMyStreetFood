@@ -177,7 +177,8 @@ public class ViewCountServiceImpl implements ViewCountService{
             e.printStackTrace();
         }
     }
-    
+     
+    @Override
     @Scheduled(fixedRate = 60000) 
     public void checkPopularChanged() {
         String newTopStores = (String) redisTemplate.opsForValue().get(POPULAR_STORES_KEY);
@@ -215,7 +216,7 @@ public class ViewCountServiceImpl implements ViewCountService{
             redisTemplate.delete(keys);
         }
 
-        ViewCountServiceImpl.markAsChanged();
+        this.markAsChanged();
     }
     
     public List<StoreInfo> getTop10PopularStores() {
@@ -264,7 +265,8 @@ public class ViewCountServiceImpl implements ViewCountService{
         }
     }
     
-    public static void markAsChanged() {
+
+    public void markAsChanged() {
         isChanged = true;
     }
 }
