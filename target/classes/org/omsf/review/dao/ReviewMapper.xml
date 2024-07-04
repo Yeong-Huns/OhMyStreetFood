@@ -94,7 +94,7 @@
 			R.REVIEWNO AS "reviewNo",
 			R.RATING AS "rating",
 			R.CONTENT AS "content",
-			R.CREATEDAT AS "createdAt",
+			TO_CHAR(R.CREATEDAT, 'YYYY-MM-DD') AS "createdAt",
 			R.MODIFIEDAT AS "modifiedAt",
 			R.MEMBER_USERNAME AS "memberUsername",
 			NVL(M.NICKNAME, '탈퇴한 회원') AS "nickName",
