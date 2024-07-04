@@ -75,6 +75,8 @@
 		                    	<span>
 		                    		<sec:authorize access="hasRole('ROLE_USER')">
 		                    			<i class="like-btn far fa-heart" data-store-no="${store.storeNo }" style="cursor:pointer;"></i>
+		                    		</sec:authorize>
+		                    		<sec:authorize access="hasRole('ROLE_USER') or hasRole('ROLE_OWNER')">
 		                    			<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#reportStoreModal"><i class="fas fa-skull-crossbones" style="cursor:pointer;" ></i></a>
 		                    		</sec:authorize>
 	  	                    		<sec:authorize access="isAnonymous()">	
