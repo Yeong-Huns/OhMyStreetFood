@@ -293,7 +293,7 @@ function chatroomTitle(identifier){
         .then(response=>response.json())
         .then(data=>{
             document.getElementById("chatRoomModalLabel").innerText = data.displayName;
-            document.getElementById("chat-avatar").innerHTML = `<img src="`+data.displayImg+`" alt="Avatar" style="width:100%;">`;
+            document.getElementById("chat-avatar").innerHTML = `<img src="/`+data.displayImg+`" alt="Avatar" style="width:100%;">`;
         })
 }
 
