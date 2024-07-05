@@ -1,5 +1,9 @@
 /**
- * 
+ * author         : leejongseop
+ * ===========================================================
+          AUTHOR             NOTE
+ * -----------------------------------------------------------
+       leejongseop       최초 생성
  */
 function enableEditing() {
 	var stars = document.querySelectorAll('.rating input[name="rating"]');

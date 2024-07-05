@@ -1,5 +1,9 @@
 /**
- * 
+ * author         : leejongseop
+ * ===========================================================
+          AUTHOR             NOTE
+ * -----------------------------------------------------------
+       leejongseop       최초 생성
  */
 
 //document.querySelector('.review-close-button').onclick = function() {

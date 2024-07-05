@@ -2,7 +2,13 @@ package org.omsf.report.service;
 
 import java.util.List;
 import java.util.Map;
-
+/**
+ * author         : leejongseop
+ * ===========================================================
+          AUTHOR             NOTE
+ * -----------------------------------------------------------
+       leejongseop       최초 생성
+ */
 //leejongseop
 public interface LogStoreService {
 

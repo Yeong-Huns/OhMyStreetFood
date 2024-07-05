@@ -7,7 +7,13 @@ import org.omsf.report.dao.LogStoreRepository;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-
+/**
+ * author         : leejongseop
+ * ===========================================================
+          AUTHOR             NOTE
+ * -----------------------------------------------------------
+       leejongseop       최초 생성
+ */
 //leejongseop
 @Service
 @RequiredArgsConstructor
