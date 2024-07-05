@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.omsf.report.model.Report;
 
+// yunbin
 public interface ReportRepository {
 
 	void insertReport(Report report);

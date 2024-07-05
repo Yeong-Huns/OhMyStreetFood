@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.omsf.report.model.Report;
 
-public interface ReportService {
+public interface ReportService { // yunbin
 
 	void insertReport(Report report);
 

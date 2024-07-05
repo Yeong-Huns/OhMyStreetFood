@@ -165,11 +165,6 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	// yunbin
-//	@Override
-//	public String getStoreNameByStoreNo(int storeNo) {
-//		return storeRepository.getStoreNameByStoreNo(storeNo);
-//	}
-	
 	@Override
 	public void deleteStoreByUsername(String username) {
 		storeRepository.deleteStoreByUsername(username);

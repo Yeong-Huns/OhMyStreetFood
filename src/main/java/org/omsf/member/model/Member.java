@@ -18,7 +18,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Member {
+public class Member { // yunbin
 	
 	@NotEmpty(message = "아이디(이메일) 입력은 필수입니다.")
 	@Email(message = "유효한 이메일 주소를 입력하세요.")

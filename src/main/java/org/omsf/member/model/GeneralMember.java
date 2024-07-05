@@ -15,7 +15,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GeneralMember extends Member {
+public class GeneralMember extends Member { // yunbin
 	@NotEmpty(message = "닉네임 입력은 필수입니다.")
 	@Size(min = 2, max=20)
 	private String nickName;
