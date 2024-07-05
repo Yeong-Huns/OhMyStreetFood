@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class UserSecurityService implements UserDetailsService {
+public class UserSecurityService implements UserDetailsService { // yunbin
 	
 	private final MemberRepository<Member> memberRepository;
 

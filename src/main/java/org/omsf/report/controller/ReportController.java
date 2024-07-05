@@ -41,7 +41,8 @@ public class ReportController {
 	// leejongseop
 	private final LogStoreService logStoreService;
 	
-	@PostMapping("/store/report/{storeNo}")
+	// yunbin
+	@PostMapping("/store/report/{storeNo}") 
 	public ResponseEntity<?> processStoreReport(@Valid @ModelAttribute Report report, BindingResult result, Principal principal) {
 	    if (result.hasErrors()) {
 	        // 유효성 검사 오류가 있는 경우 JSON으로 오류 메시지 반환
@@ -62,7 +63,7 @@ public class ReportController {
 	    return ResponseEntity.ok(response);
 	}
 	
-	@GetMapping("/admin/reports")
+	@GetMapping("/admin/reports") 
 	public String showReportList(Model model) {
 		Map<Integer, List<Report>> groupedReports = reportService.getReportsGroupedByStoreNo();
 		model.addAttribute("groupedReports", groupedReports);

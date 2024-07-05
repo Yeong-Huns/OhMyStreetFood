@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class OnwerServiceImpl implements OwnerService {
+public class OnwerServiceImpl implements OwnerService { // yunbin
 	private final OwnerRepository ownerRepository;
 	private final MemberRepository<Member> memberRepository;
 	private final PasswordEncoder passwordEncoder;

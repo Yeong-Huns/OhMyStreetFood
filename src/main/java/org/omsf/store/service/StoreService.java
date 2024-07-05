@@ -47,7 +47,6 @@ public interface StoreService {
 	List<Store> showStoreList(String keyword, String orderType, Double latitude, Double longitude, int offset, int limit);
 	
 	// yunbin
-	//String getStoreNameByStoreNo(int storeNo);
 	void deleteStoreByUsername(String username);
 	List<Store> getStoresByUsername(String name);
 

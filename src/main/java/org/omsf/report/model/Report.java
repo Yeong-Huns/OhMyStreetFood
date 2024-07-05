@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @AllArgsConstructor
-public class Report {
+public class Report { // yunbin
 	private Integer reportNo;
 	private int storeNo;
 	private String username;

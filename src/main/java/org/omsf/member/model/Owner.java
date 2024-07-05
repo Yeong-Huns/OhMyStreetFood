@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Owner extends Member{
+public class Owner extends Member{ // yunbin
 	@NotEmpty(message = "사업자 등록 번호 입력은 필수입니다.")
 	@Pattern(regexp = "\\d{10}", message = "10자리 숫자만 입력 가능합니다.")
 	private String businessRegistrationNumber;
