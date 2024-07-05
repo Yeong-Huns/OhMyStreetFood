@@ -101,7 +101,7 @@
                 $("#confirmPasswordAlert").text("");
             });
             
-            $("#delete-btn").click(function(){
+            $(".delete-btn").click(function(){
             	if(confirm("정말로 삭제하시겠습니까?") == true){
             		var storeNo = Number($(this).data('store-no'));
             		console.log("삭제할 가게번호 : " + storeNo);
@@ -232,7 +232,7 @@
                 <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
                     <a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
                     <sec:authorize access="authentication.name == '${store.username}' && hasRole('ROLE_OWNER')">
-                        <button type="button" class="btn btn-danger" id="delete-btn" data-store-no="${store.storeNo}">삭제</button>
+                        <button type="button" class="btn btn-danger delete-btn" id="delete-btn" data-store-no="${store.storeNo}">삭제</button>
                     </sec:authorize>
                 </p>
                 <hr/>
