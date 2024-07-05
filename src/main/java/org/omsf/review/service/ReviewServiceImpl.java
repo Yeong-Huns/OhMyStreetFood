@@ -14,14 +14,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-/**
- * author         : leejongseop
- * description    :
- * ===========================================================
- *    AUTHOR            NOTE
- * -----------------------------------------------------------
- *  leejongseop       최초 생성
- */
+
 @Service("reviewServ")
 @RequiredArgsConstructor
 @Slf4j

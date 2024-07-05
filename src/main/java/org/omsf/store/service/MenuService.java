@@ -4,6 +4,17 @@ import java.util.List;
 
 import org.omsf.store.model.Menu;
 
+/**
+ * packageName    : org.omsf.store.service
+ * fileName       : MenuService
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
 
 public interface MenuService {
 	

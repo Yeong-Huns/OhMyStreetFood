@@ -7,6 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.omsf.store.model.StoreInfo;
 
+/**
+ * packageName    : org.omsf.store.service
+ * fileName       : ViewCountService
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
 public interface ViewCountService {
 	 public void incrementViewCount(Integer storeNo);
 	 public void calculateAllStoreScore();

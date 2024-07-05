@@ -3,14 +3,7 @@ package org.omsf.review.model;
 import java.sql.Date;
 
 import lombok.Data;
-/**
- * author         : leejongseop
- * description    :
- * ===========================================================
- *    AUTHOR            NOTE
- * -----------------------------------------------------------
- *  leejongseop       최초 생성
- */
+
 @Data
 public class Review {
 

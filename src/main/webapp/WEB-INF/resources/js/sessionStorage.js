@@ -1,12 +1,3 @@
-/**
- * author         : leejongseop
- * description    :
- * ===========================================================
- *    AUTHOR            NOTE
- * -----------------------------------------------------------
- *  leejongseop       최초 생성
- */
-
 async function getCurrentLocationAsync() {
 	if (!navigator.geolocation) {
 		throw new Error("Geolocation is not supported by this browser.");

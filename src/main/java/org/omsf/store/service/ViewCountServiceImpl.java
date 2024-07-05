@@ -29,6 +29,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * packageName    : org.omsf.store.service
+ * fileName       : ViewCountServiceImpl
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
+
 @Service
 @RequiredArgsConstructor
 public class ViewCountServiceImpl implements ViewCountService{

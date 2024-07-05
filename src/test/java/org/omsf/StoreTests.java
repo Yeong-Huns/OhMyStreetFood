@@ -30,6 +30,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * packageName    : org.omsf
+ * fileName       : StoreTests
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
 @WebAppConfiguration
 @SpringJUnitConfig(locations = {"file:**/*-context.xml"})
 @Transactional

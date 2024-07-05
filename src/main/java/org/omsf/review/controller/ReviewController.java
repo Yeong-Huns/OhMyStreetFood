@@ -32,14 +32,7 @@ import com.google.gson.Gson;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-/**
- * author         : leejongseop
- * description    :
- * ===========================================================
- *    AUTHOR            NOTE
- * -----------------------------------------------------------
- *  leejongseop       최초 생성
- */
+
 @RequiredArgsConstructor
 @Controller
 @Slf4j

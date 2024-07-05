@@ -74,12 +74,13 @@ public class StoreController {
 	private final ViewCountService viewCountService;
 	private final GeneralMemberService generalMemberService;
 
-	
+	// KIMCHANGHWAN - 가게 생성 폼
 	@GetMapping("/createstore")
 	public String showAddStoreGeneralPage() {
 	    return "store/addStore";
 	}
-
+	
+	// KIMCHANGHWAN - 가게 생성 요청
 	@PostMapping("/createstore")
 	@ResponseBody
 	public ResponseEntity<String> createStore(
@@ -107,6 +108,7 @@ public class StoreController {
         return ResponseEntity.ok("");
 	}
 	
+	// KIMCHANGHWAN - 가게정보
 	@GetMapping("/{storeNo}")
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model, HttpServletRequest request, HttpServletResponse response, @ModelAttribute Report report) {
 		Cookie cookie = viewCountService.addViewCount(request, storeNo);
@@ -166,7 +168,8 @@ public class StoreController {
 		
 		return "store/showStore";
 	}
-
+	
+	// KIMCHANGHWAN - 가게 업데이트
     @GetMapping("/{storeNo}/update")
     public String showStoreEditForm(@PathVariable("storeNo") int storeNo, Model model,
     		Principal principal) {
@@ -198,6 +201,7 @@ public class StoreController {
         return "store/updateStore"; 
     }
 	
+    // KIMCHANGHWAN - 가게 업데이트
     @ResponseBody
     @PostMapping("/{storeNo}")
     @Transactional
@@ -314,7 +318,7 @@ public class StoreController {
 	    return "search/searchItems";
 	}
 	
-	// leejongseop - 현재 위치를 기반으로 가게 정보 가져오기
+	
 	@ResponseBody
 	@GetMapping("api")
 	public ResponseEntity<?> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position) throws JsonProcessingException{
@@ -326,6 +330,7 @@ public class StoreController {
 				.body(gson.toJson(storeList));
 	}	
 	
+	// KIMCHANGHWAN - 사진 삭제
 	@ResponseBody
     @DeleteMapping("/{storeNo}/{photoNo}")
     public ResponseEntity<?> deleteStoreGallery(@PathVariable int storeNo,
@@ -354,6 +359,7 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("사진을 삭제하였습니다.");
     }
 	
+	// KIMCHANGHWAN - 사진 수정
 	@PutMapping("/{storeNo}/{photoNo}")
 	@ResponseBody
 	@Transactional
@@ -397,6 +403,7 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(newPhotoNo);
     }
 	
+	// KIMCHANGHWAN - 사진 업로드
 	@PostMapping("/{storeNo}/upload-photo")
     public ResponseEntity<Photo> uploadStorePicture(@PathVariable int storeNo, @RequestParam("photo") ArrayList<MultipartFile> photos,
     		Principal principal) throws IOException {
@@ -407,7 +414,8 @@ public class StoreController {
             return ResponseEntity.ok(photo);
     }
 	
-	// leejongseop - 좋아요 등록
+	
+	// leejongseop - like 기능
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@PostMapping("like/insert")
@@ -421,7 +429,6 @@ public class StoreController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	// leejongseop - 좋아요 취소
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@DeleteMapping("like/delete")
@@ -435,7 +442,7 @@ public class StoreController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	// leejongseop - 좋아요 누른 가게인지 체크
+	// LIKE돼 있는 지 확인 하는 메소드
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@GetMapping("like/check")
@@ -480,7 +487,7 @@ public class StoreController {
     	}
     }
     
-    // leejongseop - 사장 검증 후 삭제
+    // leejongseop - 마이페이지에서 본인이 사장 인증을 한 가게를 삭제할 수 있는 메소드
 	@PreAuthorize("hasRole('ROLE_OWNER')")
 	@DeleteMapping("delete/{storeNo}")
 	@ResponseBody
@@ -490,6 +497,7 @@ public class StoreController {
 		if(!_member.isPresent()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		GeneralMember member = _member.get();
 		if(member.getMemberType().equals("owner") && username != null && username.equals(principal.getName())) {
+			// 해당 가게의 진짜 사장
 			storeService.deleteStore(storeNo);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}

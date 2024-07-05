@@ -12,6 +12,18 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * packageName    : org.omsf.main
+ * fileName       : ScoreCalculationListener
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
 @Component
 @RequiredArgsConstructor
 public class ScoreCalculationListener implements ApplicationListener<ContextRefreshedEvent> {

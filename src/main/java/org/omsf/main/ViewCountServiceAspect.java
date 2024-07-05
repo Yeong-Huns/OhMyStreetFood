@@ -12,6 +12,18 @@ import org.springframework.stereotype.Component;
 
 import groovy.util.logging.Slf4j;
 
+/**
+ * packageName    : org.omsf.main
+ * fileName       : ViewCountServiceAspect
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
 @Aspect
 @Component
 @Slf4j

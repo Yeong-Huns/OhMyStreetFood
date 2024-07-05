@@ -10,14 +10,7 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 
 import org.omsf.review.validator.RatingValidator;
-/**
- * author         : leejongseop
- * description    :
- * ===========================================================
- *    AUTHOR            NOTE
- * -----------------------------------------------------------
- *  leejongseop       최초 생성
- */
+
 @Documented
 @Constraint(validatedBy = RatingValidator.class)
 @Target( { ElementType.METHOD, ElementType.FIELD })
