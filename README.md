@@ -1,5 +1,5 @@
 <h1>길거리 음식점 웹사이트, 'OH MY STREET FOOD!'</h1>
-<img src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/b9c5e6df-6bca-4330-8f95-7ddaf5e96ff2">
+<img src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/0292ecec-f08b-45f1-92e2-572548b76a17">
 <br>
 
 <h3>프로젝트 소개</h3>
