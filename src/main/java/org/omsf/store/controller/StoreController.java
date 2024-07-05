@@ -314,6 +314,7 @@ public class StoreController {
 	    return "search/searchItems";
 	}
 	
+	// leejongseop - 현재 위치를 기반으로 가게 정보 가져오기
 	@ResponseBody
 	@GetMapping("api")
 	public ResponseEntity<?> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position) throws JsonProcessingException{
@@ -406,8 +407,7 @@ public class StoreController {
             return ResponseEntity.ok(photo);
     }
 	
-	
-	// leejongseop - like 기능
+	// leejongseop - 좋아요 등록
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@PostMapping("like/insert")
@@ -421,6 +421,7 @@ public class StoreController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	// leejongseop - 좋아요 취소
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@DeleteMapping("like/delete")
@@ -434,7 +435,7 @@ public class StoreController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	// LIKE돼 있는 지 확인 하는 메소드
+	// leejongseop - 좋아요 누른 가게인지 체크
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@GetMapping("like/check")
@@ -479,7 +480,7 @@ public class StoreController {
     	}
     }
     
-    // leejongseop - 마이페이지에서 본인이 사장 인증을 한 가게를 삭제할 수 있는 메소드
+    // leejongseop - 사장 검증 후 삭제
 	@PreAuthorize("hasRole('ROLE_OWNER')")
 	@DeleteMapping("delete/{storeNo}")
 	@ResponseBody
@@ -489,7 +490,6 @@ public class StoreController {
 		if(!_member.isPresent()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		GeneralMember member = _member.get();
 		if(member.getMemberType().equals("owner") && username != null && username.equals(principal.getName())) {
-			// 해당 가게의 진짜 사장
 			storeService.deleteStore(storeNo);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}

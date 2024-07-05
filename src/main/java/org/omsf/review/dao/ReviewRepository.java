@@ -7,7 +7,14 @@ import org.apache.ibatis.annotations.Param;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
 import org.springframework.stereotype.Repository;
-
+/**
+ * author         : leejongseop
+ * description    :
+ * ===========================================================
+ *    AUTHOR            NOTE
+ * -----------------------------------------------------------
+ *  leejongseop       최초 생성
+ */
 @Repository("reviewDao")
 public interface ReviewRepository {
 

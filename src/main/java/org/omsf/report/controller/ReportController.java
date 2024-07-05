@@ -95,11 +95,10 @@ public class ReportController {
 		}
 	}
 	
-	// leejongseop
+	// leejongseop - 로그 페이지 응답
 	@GetMapping("/admin/store/log/{storeId}")
 	public String showLogList(@PathVariable("storeId") int storeId, Model model) {
 		List<Map<String, Object>> list = logStoreService.getLogListByStoreNo(storeId);
-		log.info("로그 정보 : {}", list);
 		model.addAttribute("list", list);
 		return "admin/logList";
 	}
@@ -115,14 +114,12 @@ public class ReportController {
 			return false;
 		}
 	}
-	
+	// leejongseop - 로그 무한 스크롤 요청
 	@ResponseBody
 	@GetMapping("/admin/store/log/{storeId}/api")
 	public ResponseEntity<?> getLogNextPage(@PathVariable("storeId") int storeId, 
 			@RequestParam(value = "page", defaultValue = "2") int page){
-		log.info("ajax로 로그 정보 호출");
 		List<Map<String, Object>> list = logStoreService.getLogListJSONByStoreNo(storeId, page);
-		log.info("로그 api 결과 정보 : {}",list.toString());
 		if(list.size() < 1) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(list);
