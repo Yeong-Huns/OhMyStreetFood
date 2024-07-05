@@ -6,7 +6,13 @@ import javax.validation.constraints.NotEmpty;
 import org.omsf.review.annotation.Rating;
 
 import lombok.Data;
-
+/**
+ * author         : leejongseop
+ * ===========================================================
+          AUTHOR             NOTE
+ * -----------------------------------------------------------
+       leejongseop       최초 생성
+ */
 @Data
 public class RequestReview {
 

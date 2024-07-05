@@ -318,7 +318,7 @@ public class StoreController {
 	    return "search/searchItems";
 	}
 	
-	
+	// leejongseop - 현재 위치에 기반하여 주변 가게 리스트 가져오기
 	@ResponseBody
 	@GetMapping("api")
 	public ResponseEntity<?> getStoresByPosition(@RequestParam(value = "position", defaultValue = "서울 종로구") String position) throws JsonProcessingException{
@@ -415,7 +415,7 @@ public class StoreController {
     }
 	
 	
-	// leejongseop - like 기능
+	// leejongseop - "좋아요" 추가
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@PostMapping("like/insert")
@@ -429,6 +429,7 @@ public class StoreController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	// leejongseop - "좋아요" 취소
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@ResponseBody
 	@DeleteMapping("like/delete")
