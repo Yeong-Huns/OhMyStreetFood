@@ -10,7 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-
+/**
+ * author         : leejongseop
+ * description    :
+ * ===========================================================
+ *    AUTHOR            NOTE
+ * -----------------------------------------------------------
+ *  leejongseop       최초 생성
+ */
 @Component
 public class UserValidator implements Validator {
 

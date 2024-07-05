@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- /** -->
+<!--  * author         : leejongseop -->
+<!--  * description    : -->
+<!--  * =========================================================== -->
+<!--  *    AUTHOR            NOTE -->
+<!--  * ----------------------------------------------------------- -->
+<!--  *  leejongseop       최초 생성 -->
+<!--  */ -->
 <mapper namespace="org.omsf.review.dao.ReviewRepository">
 
    <!-- 리뷰 생성 -->

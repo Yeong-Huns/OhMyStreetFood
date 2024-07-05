@@ -4,7 +4,14 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.omsf.review.annotation.Rating;
-
+/**
+ * author         : leejongseop
+ * description    :
+ * ===========================================================
+ *    AUTHOR            NOTE
+ * -----------------------------------------------------------
+ *  leejongseop       최초 생성
+ */
 public class RatingValidator implements ConstraintValidator<Rating, Integer>{
 
 	@Override

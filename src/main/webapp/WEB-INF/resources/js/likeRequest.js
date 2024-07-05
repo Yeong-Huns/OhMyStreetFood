@@ -1,3 +1,12 @@
+/**
+ * author         : leejongseop
+ * description    :
+ * ===========================================================
+ *    AUTHOR            NOTE
+ * -----------------------------------------------------------
+ *  leejongseop       최초 생성
+ */
+
 document.addEventListener("DOMContentLoaded", function() {
 
     const sendDataButtons = document.querySelectorAll(".like-btn");
