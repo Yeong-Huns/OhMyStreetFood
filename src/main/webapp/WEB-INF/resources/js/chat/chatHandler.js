@@ -1,7 +1,7 @@
 var stompClient = null;
 var socket = null;
 var currentPath = window.location.pathname;
-var subscribedChannels = {};
+let subscribedChannels = {};
 
 
 function subscribeNewRoomRequest(currentUser, storeNo) {
@@ -91,7 +91,7 @@ function connect(username) {
             })
             .then(addressList => {
                 addressList.forEach(function (address) {
-                    subscribeAddress(address,username);
+                    subscribeAddress(address, username);
                     initialize(address, username);
                 })
             }).catch(error => console.error("/chat/getAddress 호출 오류 : ", error));
@@ -137,6 +137,7 @@ function subscribeToChannel(channel, address) {
         subscribedChannels[channel] = true;
     }
 }
+
 //qwer@gmail.com -> /queue/chat/qwer@gmail.com281 ->
 
 function isValidJSON(str) {
@@ -165,7 +166,7 @@ function initialize(address, username) {
 }
 
 function connectToChannelWithOutLoginCheck(subscription, address) {
-    if(!address){
+    if (!address) {
         console.log("로그인 상태가 아닙니당.");
         return
     }
@@ -179,7 +180,6 @@ function connectToChannelWithOutLoginCheck(subscription, address) {
         }));
     }
 }
-
 
 
 function connectToChannel(subscription, address) {
@@ -198,17 +198,18 @@ function connectToChannel(subscription, address) {
 
 function startChat(customer, storeNo, address) {
     const url = '/chat/room?customer=' + customer + '&storeNo=' + storeNo
-    fetch( url,{
+    fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
     }).then(response => {
-        if (!response.ok) {
+        if (response.status===404) {
             console.log("채팅기록 없음")
+            connectToChannelWithOutLoginCheck((customer + storeNo), address)
             showChatRoom([], (customer + storeNo), address);
             return;
-        }
+        } else if(!response.ok) throw new Error("Start Chat 호출 중 에러 발생 !! : ")
         return response.json();
     })
         .then(data => {
@@ -217,7 +218,7 @@ function startChat(customer, storeNo, address) {
         })
         .catch(error => {
             console.error(error);
-            showLoginModal();
+            //showLoginModal();
         });
 }
 
@@ -247,7 +248,7 @@ function showLoginModal() {
     loginModal.show();
 }
 
-function redirectToLogin(){
+function redirectToLogin() {
     window.location.href = '/signin';
 }
 
@@ -269,20 +270,17 @@ function showChatRoom(messages, subscription, address) {
     const target = (customer === address) ? customer : storeNo;
 
     let identifier = target === customer ? storeNo : customer;
-    chatroomTitle(identifier);
 
-    console.log("😋target: " + address);
-    var chatMessagesContainer = document.getElementById('chat-messages');
-    chatMessagesContainer.innerHTML = ''; // 초기화
-
-
-    let avatarImg = document.querySelector("#chat-avatar img");
-    messages.forEach(function (message) {
-        showMessage(message, address, avatarImg);
+    chatroomTitle(identifier).then(() => {
+        console.log("😋target: " + address);
+        var chatMessagesContainer = document.getElementById('chat-messages');
+        chatMessagesContainer.innerHTML = ''; // 초기화
+        let avatarImg = document.querySelector("#chat-avatar img");
+        messages.forEach(function (message) {
+            showMessage(message, address, avatarImg);
+        });
     });
-   /* var chatAvatarElement = document.getElementById('chat-avatar');
-    chatAvatarElement.innerHTML = `<img src="${pictureUrl}" alt="Avatar" style="width:100%;">`; // 이미지 URL과 alt 텍스트 설정
-*/
+
     var chatRoomModalElement = document.getElementById('chatRoomModal');
     chatRoomModalElement.setAttribute('data-subscription', subscription);
     var chatRoomModal = new bootstrap.Modal(chatRoomModalElement);
@@ -293,44 +291,43 @@ function showChatRoom(messages, subscription, address) {
     chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
 }
 
-function chatroomTitle(identifier){
-    fetch("/chat/getDisPlayName?identifier=" + identifier)
-        .then(response=>response.json())
-        .then(data=>{
+function chatroomTitle(identifier) {
+    return fetch("/chat/getDisPlayName?identifier=" + identifier)
+        .then(response => response.json())
+        .then(data => {
             document.getElementById("chatRoomModalLabel").innerText = data.displayName;
-            document.getElementById("chat-avatar").innerHTML = `<img src="`+data.displayImg+`" alt="Avatar" style="width:100%;">`;
+            document.getElementById("chat-avatar").innerHTML = `<img src="` + data.displayImg + `" alt="Avatar" style="width:100%;">`;
         })
 }
 
 
-function getDisplay(identifier){
+async function getDisplay(identifier) {
     fetch("/chat/getDisPlayName?identifier=" + identifier)
-        .then(response=>response.json())
-        .then(data=>{
+        .then(response => response.json())
+        .then(data => {
             return {
-                displayName : data.displayName,
-                displayImg : data.displayImg
+                displayName: data.displayName,
+                displayImg: data.displayImg
             }
-        }).catch(error=>{
-            console.error("디스플레이 네임을 찾던 중 오류 발생 : "+ error)
+        }).catch(error => {
+        console.error("디스플레이 네임을 찾던 중 오류 발생 : " + error)
         return {
-                displayName : null,
-                displayImg : null
+            displayName: null,
+            displayImg: null
         }
     })
 }
 
 
 function showMessage(message, sender, avatarImg) {
-
     console.log("new Avatar : " + avatarImg);
-
+    console.log("new Avatar SRC : " + avatarImg.src)
     if (message.messageNo === 0) {
         let messageElement = document.createElement('div');
         messageElement.className = 'chat-message received';
         messageElement.innerHTML = `
              <div class="chat-avatar">
-                <img src=" `+ avatarImg.src + ` " alt="Avatar">
+                <img src=" ` + avatarImg.src + ` " alt="Avatar">
             </div>
             <div class="message-content">
                 <div>${message.content}</div>
@@ -380,12 +377,12 @@ function showMessage(message, sender, avatarImg) {
 function sendMessage(subscription, address) {
     var messageInput = document.getElementById("message-input");
     var content = messageInput.value;
-    let sendButton = document.getElementById("send-button");
+    // let sendButton = document.getElementById("send-button");
     if (!content) {
         return;
     }
 
-
+    //address = target (sendButton 에서 넘어옴) //검증 결과 -> qwer@gmail.com
     console.log("sendMessage 의 address : " + address)
 
     const match = subscription.match(/(.*?)(\d+)$/);
@@ -393,37 +390,42 @@ function sendMessage(subscription, address) {
     const storeNo = match[2];
     const recentUser = (address === customer) ? customer : storeNo;
 
+
     console.log("resentUser 검증 : address = " + address + " , customer = " + customer + " , storeNo = " + storeNo + " recentUser = " + recentUser);
     //qwer@gmail.com  / 281
 
-    fetch('/chat/chatRoomNoBySubscription?customer='+customer+'&storeNo='+storeNo)
-        .then(response=>{
-            if(!response.ok) throw new Error("구독주소로 chatRoomNo 조회 실패 : ")
+    fetch('/chat/chatRoomNoBySubscription?customer=' + customer + '&storeNo=' + storeNo)
+        .then(response => {
+            if (!response.ok) console.log("구독주소로 chatRoomNo 조회 실패 : ")
             return response.json()
         })
-        .then(data=> {
+        .then(data => {
             console.log("chatRoomNo : " + data)
             chatRoomNoBySubscription(content, recentUser, data);
         })
-        .catch(error=>{
+        .catch(error => {
             console.error("/chat/chatRoomNoBySubscription 호출 중 에러 발생 : " + error)
         })
     messageInput.value = '';
 }
 
 
-function chatRoomNoBySubscription(content, address, data){
+function chatRoomNoBySubscription(content, address, data) {
     console.log("sendRequest 브로커에 요청한 내역 : content -> " + content + ", address : " + address + ", data : " + data)
     stompClient.send('/app/chat/sendRequest', {}, JSON.stringify({
         content: content,
         senderId: address,
         chatRoomNo: data
     }))
+    //senderId => 브로커가 뿌리는 데이터는 기본적으로 sender 와 receiver 둘 다 동일한 데이터를 뿌려준다.
+    //수신하는 입장에서 senderId 를 통해 자신이 발신한 메세지인지 수신한 메세지인지 검증하기 위한 데이터.
+    //그럼 애초에 사진+ 표시할 이름까지도 보내는게 나을듯?
+    //
 }
 
 
 function handleReceivedMessage(message, channel, address) {
-    console.log("handle message : "+ message)
+    console.log("handle message : " + message)
     const messageBody = JSON.parse(message.body);
     console.log(" -> 핸들러 accept : ", messageBody);
     const match = channel.match(/(.*?)(\d+)$/);
@@ -431,35 +433,46 @@ function handleReceivedMessage(message, channel, address) {
     const storeNo = match[2];
 
     const target = (customer === messageBody.senderId) ? customer : storeNo;
-    console.log("수신자 target : " + target)
-    console.log("수신자 message.senderId : " + messageBody.senderId)
-    let avatarImg = document.querySelector("#chat-avatar img");
-    showMessage(messageBody, address, avatarImg);
-    // 모달 창 활성화 확인
-    let chatRoomModal = document.getElementById('chatRoomModal');
-    let isModalShown = chatRoomModal.classList.contains('show');
-    if (!isModalShown) {
-        showNotification(messageBody);
-    }
+
+    //showMessage(messageBody, address);
+
+    let identifier = address === customer ? storeNo : customer;
+    //chatRoomTitle을  address 로 변경 -> address = !address 와 동일하게 변경
+    chatroomTitle(identifier).then(() => {
+        console.log("😋handleReceivedMessage Target : " + address);
+        console.log("수신자 message.senderId : " + messageBody.senderId);
+        let avatarImg = document.querySelector("#chat-avatar img");
+        showMessage(messageBody, address, avatarImg);
+        // 여기선 초기화가 필요없지않나?
+
+        // 모달 창 활성화 확인
+        let chatRoomModal = document.getElementById('chatRoomModal');
+        let isModalShown = chatRoomModal.classList.contains('show');
+        if (!isModalShown) {
+            showNotification(messageBody);
+        }
+    });
+    loadChatRooms()
 }
 
 
 function showNotification(message) {
     let notification = document.createElement('div');
-
-    console.log("showNoti : " + message.senderId + " : " +message.content);
+    let displayName = document.getElementById("chatRoomModalLabel").innerText;
+    let displayImg = document.querySelector("#chat-avatar img").src;
+    console.log("showNoti : " + message.senderId + " : " + message.content);
     notification.className = 'chat-notification';
     notification.innerHTML = `
         <div class="chat-notification-content">
-            <img src="../../img/00_1.jpg" alt="Profile Picture">
-            <span>`+message.senderId+`</span>
-            <span class="message">`+message.content+`</span>
+            <img src="`+ displayImg +`" alt="Profile Picture">
+            <span>` + displayName + `</span>
+            <span class="message">` + message.content + `</span>
         </div>
     `;
     document.body.appendChild(notification);
     // 클릭 이벤트 추가
     notification.addEventListener('click', function () {
-        console.log("addEventListener : "+ message.content)
+        console.log("addEventListener : " + message.content)
         openChatRoomModal(message);
     });
     setTimeout(function () {
@@ -471,20 +484,20 @@ function showNotification(message) {
 function openChatRoomModal(message, username) {
     let sender = message.senderId;
     let chatRoomNo = message.chatRoomNo;
-    console.log("message"+chatRoomNo + " sender : " + sender);
-    console.log("messageBody"+message.chatRoomNo)
+    console.log("message" + chatRoomNo + " sender : " + sender);
+    console.log("messageBody" + message.chatRoomNo)
     fetch('/chat/subscription?chatRoomNo=' + chatRoomNo)
-        .then(Response=> {
-            if(!Response.ok) throw new Error("구독목록 조회에 실패!") //response
+        .then(Response => {
+            if (!Response.ok) throw new Error("구독목록 조회에 실패!") //response
             return Response.text()
-        }).then(data=>{
+        }).then(data => {
         let match = data.match(/(.*?)(\d+)$/);
         const customer = match[1];
         const storeNo = match[2];
         const target = (customer === sender) ? storeNo : customer;
         connectModalToChatRoom(chatRoomNo, data, target);
-        }).catch(error=>{
-            console.error("/chat/subscsription 호출 에러" + error)
+    }).catch(error => {
+        console.error("/chat/subscsription 호출 에러" + error)
     })
 
     // fetch('/chat/chatRoomNo?chatRoomNo='+ chatRoomNo)
@@ -498,29 +511,22 @@ function openChatRoomModal(message, username) {
 function openChatRoomMyPage(message, myAddress) {
 
     fetch('/chat/subscription?chatRoomNo=' + message.chatroomNo)
-        .then(Response=> {
-            if(!Response.ok) throw new Error("구독목록 조회에 실패!") //response
+        .then(Response => {
+            if (!Response.ok) throw new Error("구독목록 조회에 실패!") //response
             return Response.text()
-        }).then(data=>{
+        }).then(data => {
         let match = data.match(/(.*?)(\d+)$/);
         const customer = match[1];
         const storeNo = match[2];
         //const target = (customer === myAddress) ? storeNo : customer;
         connectToChannelWithOutLoginCheck((customer + storeNo), myAddress);
         connectModalToChatRoom(message.chatroomNo, data, myAddress);
-    }).catch(error=>{
+    }).catch(error => {
         console.error("/chat/subscsription 호출 에러" + error)
     })
-    //
-    // fetch('/chat/chatRoomNo?chatRoomNo='+ chatRoomNo)
-    //     .then(response=>{
-    //         if(!response.ok) throw new Error("메세지 조회 실패!")
-    //     }).then(data=>{
-    //
-    // })
 }
 
-function connectModalToChatRoom(chatRoomNo, subscription, address){
+function connectModalToChatRoom(chatRoomNo, subscription, address) {
 
     let match = subscription.match(/(.*?)(\d+)$/);
     const customer = match[1];
@@ -529,16 +535,16 @@ function connectModalToChatRoom(chatRoomNo, subscription, address){
 
     console.log("connectModalToChatRoom target -> : " + address)
 
-    fetch('/chat/chatRoomNo?chatRoomNo='+ chatRoomNo)
-        .then(response=>{
-            if(!response.ok) {
+    fetch('/chat/chatRoomNo?chatRoomNo=' + chatRoomNo)
+        .then(response => {
+            if (!response.ok) {
                 return []
             }
             return response.json()
-        }).then(messages=>{
+        }).then(messages => {
         showChatRoom(messages, subscription, address)
-    }).catch(error=>{
-        console.log("/chat/chatRoomNo 호출 중 예외 "  + error);
+    }).catch(error => {
+        console.log("/chat/chatRoomNo 호출 중 예외 " + error);
     })
 }
 
@@ -600,7 +606,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const scrollContainer = document.getElementById('chat-messages');
-    // 스크롤 위치를 200px로 설정
     scrollContainer.scrollTop = 20000;
 
 
@@ -608,7 +613,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var sendButton = document.getElementById('send-button');
 
 
-    input.addEventListener('keypress', function(event) {
+    input.addEventListener('keypress', function (event) {
         if (event.key === 'Enter') {
             event.preventDefault();
             sendButton.click();
@@ -616,11 +621,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 메시지 전송 함수
-    sendButton.onclick = function() {
+    sendButton.onclick = function () {
         var message = input.value;
         if (message.trim() !== '') {
             sendMessage('${subscription}', '${target}')
-            input.value = '';  // 입력 필드 클리어
+            input.value = '';
         }
     };
 
