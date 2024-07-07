@@ -23,6 +23,7 @@ public class ErrorController {
         return "error/errorTestPage";
     }
     
+    // yunbin
     @GetMapping("/error/403")
     public ModelAndView show403ErrorPage(ErrorCode errorCode, String detailMessage) {
     	ModelAndView mav = new ModelAndView("error/errorPage"); // 에러 페이지로 이동

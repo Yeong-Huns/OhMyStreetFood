@@ -1,5 +1,9 @@
 /**
- * 
+ * author         : leejongseop
+ * ===========================================================
+          AUTHOR             NOTE
+ * -----------------------------------------------------------
+       leejongseop       최초 생성
  */
 document.addEventListener('DOMContentLoaded', () => {
     let page = 2; // 페이지 번호

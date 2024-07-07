@@ -1,3 +1,11 @@
+/**
+ * author         : leejongseop
+ * ===========================================================
+          AUTHOR             NOTE
+ * -----------------------------------------------------------
+       leejongseop       최초 생성
+ */
+
 document.getElementById('openModalBtn').onclick = function() {
     document.getElementById('customModal').style.display = 'block';
 };

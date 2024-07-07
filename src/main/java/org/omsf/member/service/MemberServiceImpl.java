@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class MemberServiceImpl implements MemberService<Member> {
+public class MemberServiceImpl implements MemberService<Member> { // yunbin
 
 	private final MemberRepository<Member> memberRepository;
 	

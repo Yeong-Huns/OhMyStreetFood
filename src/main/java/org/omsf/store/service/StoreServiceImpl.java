@@ -25,6 +25,18 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
+/**
+ * packageName    : org.omsf.store.service
+ * fileName       : StoreServiceImpl
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
 @Service
 //@RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
@@ -165,11 +177,6 @@ public class StoreServiceImpl implements StoreService {
 	}
 	
 	// yunbin
-//	@Override
-//	public String getStoreNameByStoreNo(int storeNo) {
-//		return storeRepository.getStoreNameByStoreNo(storeNo);
-//	}
-	
 	@Override
 	public void deleteStoreByUsername(String username) {
 		storeRepository.deleteStoreByUsername(username);

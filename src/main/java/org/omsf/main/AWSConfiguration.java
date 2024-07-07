@@ -12,6 +12,18 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
+/**
+ * packageName    : org.omsf.main
+ * fileName       : AWSConfiguration
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
 @Configuration
 @EnableWebMvc
 public class AWSConfiguration implements WebMvcConfigurer{

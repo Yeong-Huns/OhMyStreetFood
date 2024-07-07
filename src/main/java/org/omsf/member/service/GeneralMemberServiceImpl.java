@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
-public class GeneralMemberServiceImpl implements GeneralMemberService {
+public class GeneralMemberServiceImpl implements GeneralMemberService { // yunbin
 	private final GeneralMemberRepository generalMemberRepository;
 	private final MemberRepository<Member> memberRepository;
 	private final PasswordEncoder passwordEncoder;

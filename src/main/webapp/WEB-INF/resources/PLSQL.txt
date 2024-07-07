@@ -1,0 +1,405 @@
+--
+-- packageName    : org.omsf.chatRoom.config
+-- fileName       : ObjeectMapperConfig
+-- author         : leejongseop
+-- description    :
+-- ===========================================================
+--    AUTHOR            NOTE
+-- -----------------------------------------------------------
+--  leejongseop       최초 생성
+
+
+-- 리뷰 업데이트 시 해당 STORE의 리뷰 평점 및 리뷰 갯수 갱신
+create or replace TRIGGER UPDATE_REVIEW_AND_RATING_ON_STORE_BY_REVIEW_UPDATE
+AFTER UPDATE ON REVIEW 
+FOR EACH ROW
+DECLARE
+    V_STORE_NO NUMBER;
+    V_TOTAL_RATING NUMBER;
+    V_TOTAL_REVIEW NUMBER;
+
+    V_TOTAL_SCORE NUMBER; -- 리뷰 평점 * 리뷰 갯수한 값
+
+    V_RATING NUMBER; -- 새롭게 UPDATE된 REVIEW의 평점
+
+    V_NEW_TOTAL_RATING NUMBER;
+BEGIN
+  -- INSERT된 REVIEW의 STORENO를 확보
+  V_STORE_NO := :NEW.STORE_STORENO;
+
+  -- INSERT된 REVIEW의 평점 확보
+  V_RATING := :NEW.RATING;
+
+  -- 해당 STORE의 평점과 리뷰 갯수 확보
+  SELECT
+    TOTALREVIEW, TOTALRATING
+  INTO V_TOTAL_REVIEW, V_TOTAL_RATING
+  FROM STORE
+  WHERE STORENO = V_STORE_NO;
+
+  -- 총 점수 구하기
+  V_TOTAL_SCORE := V_TOTAL_RATING * V_TOTAL_REVIEW;
+
+  -- 총 점수 재계산
+  V_TOTAL_SCORE := V_TOTAL_SCORE - :OLD.RATING + :NEW.RATING;
+
+  -- 해당 STORE의 평점과 리뷰 갯수 구하기
+  V_NEW_TOTAL_RATING := ROUND((V_TOTAL_SCORE / V_TOTAL_REVIEW) , 2);
+
+  -- STORE에 평점 UPDATE
+  UPDATE STORE
+  SET
+  TOTALRATING = V_NEW_TOTAL_RATING
+  WHERE STORENO = V_STORE_NO;
+  
+    EXCEPTION
+        WHEN no_data_found THEN
+        dbms_output.put_line('없는 데이터 입니다.');
+        
+        WHEN OTHERS THEN
+        NULL;
+
+END;
+
+
+-- 리뷰 삽입 시 해당 STORE의 리뷰 평점 및 리뷰 갯수 갱신
+create or replace TRIGGER UPDATE_REVIEW_AND_RATING_ON_STORE_BY_REVIEW_INSERT
+AFTER INSERT ON REVIEW 
+FOR EACH ROW
+DECLARE
+    V_STORE_NO NUMBER;
+    V_TOTAL_RATING NUMBER;
+    V_TOTAL_REVIEW NUMBER;
+
+    V_RATING NUMBER; -- 새롭게 INSERT된 REVIEW의 평점
+
+    V_NEW_TOTAL_RATING NUMBER;
+    V_NEW_TOTAL_REVIEW NUMBER;
+BEGIN
+  -- INSERT된 REVIEW의 STORENO를 확보
+  V_STORE_NO := :NEW.STORE_STORENO;
+
+  -- INSERT된 REVIEW의 평점 확보
+  V_RATING := :NEW.RATING;
+
+  -- 해당 STORE의 평점과 리뷰 갯수 확보
+  SELECT
+    TOTALREVIEW, TOTALRATING
+  INTO V_TOTAL_REVIEW, V_TOTAL_RATING
+  FROM STORE
+  WHERE STORENO = V_STORE_NO;
+
+  -- 해당 STORE의 평점과 리뷰 갯수 구하기
+  V_NEW_TOTAL_REVIEW := V_TOTAL_REVIEW + 1;
+  V_NEW_TOTAL_RATING := ROUND(((V_TOTAL_RATING * V_TOTAL_REVIEW) + (V_RATING)) / V_NEW_TOTAL_REVIEW , 2);
+
+  -- STORE에 평점과 리뷰 갯수 UPDATE
+  UPDATE STORE
+  SET
+  TOTALREVIEW = V_NEW_TOTAL_REVIEW,
+  TOTALRATING = V_NEW_TOTAL_RATING
+  WHERE STORENO = V_STORE_NO;
+  
+    EXCEPTION
+        WHEN no_data_found THEN
+        dbms_output.put_line('없는 데이터 입니다.');
+        
+        WHEN OTHERS THEN
+        NULL;
+
+END;
+
+
+-- 리뷰 삭제 시 해당 STORE의 리뷰 평점 및 리뷰 갯수 갱신
+create or replace TRIGGER update_review_and_rating_on_store_by_review_delete
+AFTER DELETE ON REVIEW
+FOR EACH ROW
+BEGIN
+    -- 저장 프로시저 호출
+    update_store_rating_and_review(:OLD.STORE_STORENO, :OLD.REVIEWNO);
+END;
+
+create or replace PROCEDURE update_store_rating_and_review(p_store_no IN NUMBER, p_review_no IN NUMBER) IS
+    PRAGMA AUTONOMOUS_TRANSACTION;
+
+    V_RATING NUMBER; -- 삭제되는 행의 RATING
+
+    V_TOTAL_RATING NUMBER;
+    V_TOTAL_REVIEW NUMBER;
+
+    V_NEW_TOTAL_RATING NUMBER;
+    V_NEW_TOTAL_REVIEW NUMBER;
+BEGIN
+    -- 삭제되는 행의 리뷰 평점 구하기
+    SELECT
+      RATING
+    INTO V_RATING
+    FROM REVIEW
+    WHERE REVIEWNO = p_review_no;
+
+    -- 해당하는 가게의 리뷰 및 리뷰 개수 구하기
+    SELECT 
+    TOTALRATING, TOTALREVIEW
+    INTO V_TOTAL_RATING, V_TOTAL_REVIEW
+    FROM STORE
+    WHERE STORENO = p_store_no;
+
+    -- 해당 STORE의 평점과 리뷰 갯수 구하기
+    IF NOT V_TOTAL_REVIEW = 1 THEN
+      V_NEW_TOTAL_RATING := ROUND(((V_TOTAL_RATING * V_TOTAL_REVIEW) - V_RATING) / (V_TOTAL_REVIEW - 1),2);
+      V_NEW_TOTAL_REVIEW := V_TOTAL_REVIEW - 1;
+    ELSE
+     V_NEW_TOTAL_RATING := 0;
+     V_NEW_TOTAL_REVIEW := 0;
+    END IF;
+    
+    IF V_NEW_TOTAL_RATING < 0 THEN
+      V_NEW_TOTAL_RATING := 0;
+    END IF;
+    
+    IF V_NEW_TOTAL_REVIEW < 0 THEN
+      V_NEW_TOTAL_REVIEW := 0;
+    END IF;
+
+    -- STORE에 평점 UPDATE
+    UPDATE STORE
+    SET TOTALREVIEW = V_NEW_TOTAL_REVIEW,
+        TOTALRATING = V_NEW_TOTAL_RATING
+    WHERE STORENO = p_store_no;
+
+    COMMIT;
+    
+    EXCEPTION
+        WHEN no_data_found THEN
+        dbms_output.put_line('없는 데이터 입니다.');
+        
+        WHEN OTHERS THEN
+        NULL;
+
+END;
+
+
+-- 좋아요를 눌렀을때 해당 STORE의 LIKE컬럼 갱신
+create or replace TRIGGER UPDATE_LIKES_ON_STORE_BY_LIKE_INSERT
+AFTER INSERT ON "LIKE" 
+FOR EACH ROW
+DECLARE
+    V_STORE_STORENO NUMBER;
+    V_STORE_LIKES NUMBER;
+--    V_MEMBER_USERNAME VARCHAR2(255);
+--    V_NOW_COUNT NUMBER;
+BEGIN
+  -- INSERT된 LIKE의 STORENO를 확보
+  V_STORE_STORENO := :NEW.STORE_STORENO;
+  -- V_MEMBER_USERNAME := :NEW.MEMBER_USERNAME;
+
+  -- 이미 좋아요 눌렀는지 확인
+--  SELECT
+--    COUNT(*)
+--  INTO V_NOW_COUNT
+--  FROM "LIKE"
+--  WHERE STORE_STORENO = V_STORE_STORENO 
+--  AND MEMBER_USERNAME = :NEW.MEMBER_USERNAME;
+  
+--  IF V_NOW_COUNT >= 1 THEN
+--    RAISE_APPLICATION_ERROR(-20001, '이미 좋아요를 눌렀습니다.');
+--  END IF;
+
+  -- 해당하는 STORE의 LIKES확보
+  SELECT
+    LIKES
+  INTO V_STORE_LIKES
+  FROM STORE
+  WHERE STORENO = V_STORE_STORENO;
+
+  -- STORE에 LIKES UPDATE
+  UPDATE STORE
+  SET
+  LIKES = V_STORE_LIKES + 1
+  WHERE STORENO =  V_STORE_STORENO;
+
+  EXCEPTION
+     WHEN no_data_found THEN
+       dbms_output.put_line('없는 데이터 입니다.');
+       
+
+END;
+
+
+
+-- 좋아요를 취소했을때 해당 STORE의 LIKE컬럼 갱신
+create or replace TRIGGER UPDATE_LIKES_ON_STORE_BY_LIKE_DELETE
+AFTER DELETE ON "LIKE"
+FOR EACH ROW
+DECLARE
+    v_store_storeno NUMBER;
+    v_store_likes NUMBER;
+BEGIN
+    -- DELETE된 LIKE의 STORENO를 확보
+    v_store_storeno := :OLD.STORE_STORENO;
+
+    -- 해당하는 STORE의 LIKES 확보
+    SELECT LIKES
+    INTO v_store_likes
+    FROM STORE
+    WHERE STORENO = v_store_storeno;
+
+    IF v_store_likes <= 1 then
+      v_store_likes := 1;
+    END IF;
+
+    -- STORE에 LIKES UPDATE
+    UPDATE STORE
+    SET LIKES = v_store_likes - 1
+    WHERE STORENO = v_store_storeno;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        dbms_output.put_line('없는 데이터 입니다.');
+    WHEN OTHERS THEN
+        NULL;
+END;
+
+
+-- STORE에 INSERT, UPDATE할때 LOG기록 저장하는 트리거
+create or replace TRIGGER STORE_INSERT_AND_UPDATE_TRIGGER
+AFTER INSERT OR UPDATE ON STORE
+FOR EACH ROW
+BEGIN
+
+  INSERT INTO LOG_STORE (
+    logno, storeno, storename, latitude, longitude, address, introduce, 
+    operatingdate, operatinghours, totalreview, totalrating, likes, 
+    createdat, modifiedat, modifier )
+ VALUES (
+    store_log_seq.NEXTVAL, :NEW.storeno, :NEW.storename, :NEW.latitude, :NEW.longitude, 
+    :NEW.address, :NEW.introduce, :NEW.operatingdate, :NEW.operatinghours, 
+    :NEW.totalreview, :NEW.totalrating, :NEW.likes, :NEW.createdat, 
+    :NEW.modifiedat, :NEW.member_username);
+
+END;
+
+
+-- STORE에 DELETE할때 LOG기록 저장하는 트리거
+create or replace TRIGGER STORE_DELETE_TRIGGER
+AFTER DELETE ON STORE
+FOR EACH ROW
+BEGIN
+
+  INSERT INTO LOG_STORE (
+    logno, storeno, storename, latitude, longitude, address, introduce, 
+    operatingdate, operatinghours, totalreview, totalrating, likes, 
+    createdat, modifiedat, modifier )
+ VALUES (
+    store_log_seq.NEXTVAL, :OLD.storeno, :OLD.storename, :OLD.latitude, :OLD.longitude, 
+    :OLD.address, :OLD.introduce, :OLD.operatingdate, :OLD.operatinghours, 
+    :OLD.totalreview, :OLD.totalrating, :OLD.likes, :OLD.createdat, 
+    :OLD.modifiedat, :OLD.member_username);
+
+END;
+
+
+-- 롤백기능 프로시저
+create or replace procedure store_update_by_log_store (p_log_no in number)
+is
+	REC_LOG_STORE LOG_STORE%rowtype;
+    REC_STORE STORE%rowtype;
+
+begin
+	-- storeId 확보
+    dbms_output.put_line('storeId 확보 시작');
+    
+	SELECT
+		*
+	into REC_LOG_STORE
+	FROM LOG_STORE
+	WHERE LOGNO = p_log_no AND ROWNUM = 1;
+    dbms_output.put_line('storeId 확보 완료');
+    dbms_output.put_line('storeId ' || REC_LOG_STORE.STORENO);
+    dbms_output.put_line('LOGNO ' || p_log_no);
+    
+    -- store 데이터 확인
+    SELECT * 
+    INTO REC_STORE
+    FROM STORE 
+    WHERE STORENO = REC_LOG_STORE.STORENO;
+    
+	-- store 갱신
+	UPDATE STORE
+	SET
+		STORENAME = REC_LOG_STORE.STORENAME,
+		LATITUDE = REC_LOG_STORE.LATITUDE,
+		LONGITUDE = REC_LOG_STORE.LONGITUDE,
+		ADDRESS = REC_LOG_STORE.ADDRESS,
+		INTRODUCE = REC_LOG_STORE.INTRODUCE,
+		OPERATINGDATE = REC_LOG_STORE.OPERATINGDATE,
+		OPERATINGHOURS = REC_LOG_STORE.OPERATINGHOURS,
+--		TOTALREVIEW = REC_LOG_STORE.TOTALREVIEW,
+--		TOTALRATING = REC_LOG_STORE.TOTALRATING,
+--		LIKES = REC_LOG_STORE.LIKES,
+		CREATEDAT = REC_LOG_STORE.CREATEDAT,
+		MODIFIEDAT = REC_LOG_STORE.MODIFIEDAT,
+		MEMBER_USERNAME = REC_LOG_STORE.MODIFIER
+	WHERE STORENO = REC_LOG_STORE.STORENO;
+    
+    
+    dbms_output.put_line('store 갱신 완료');
+	EXCEPTION
+        -- store가 삭제된 경우
+		WHEN no_data_found then
+			dbms_output.put_line('삭제된 데이터입니다.');
+
+			INSERT INTO STORE
+			(
+				STORENO,
+				STORENAME,
+				LATITUDE,
+				LONGITUDE,
+				ADDRESS,
+				INTRODUCE,
+				OPERATINGDATE,
+				OPERATINGHOURS,
+				TOTALREVIEW,
+				TOTALRATING,
+				LIKES,
+				CREATEDAT,
+				MODIFIEDAT,
+				MEMBER_USERNAME
+			)
+			VALUES
+			(
+				REC_LOG_STORE.STORENO,
+				REC_LOG_STORE.STORENAME,
+				REC_LOG_STORE.LATITUDE,
+				REC_LOG_STORE.LONGITUDE,
+				REC_LOG_STORE.ADDRESS,
+				REC_LOG_STORE.INTRODUCE,
+				REC_LOG_STORE.OPERATINGDATE,
+				REC_LOG_STORE.OPERATINGHOURS,
+				0,
+				0,
+				0,
+				REC_LOG_STORE.CREATEDAT,
+				REC_LOG_STORE.MODIFIEDAT,
+				REC_LOG_STORE.MODIFIER
+			);
+
+		--WHEN OTHERS THEN
+		--	NULL;
+    COMMIT;
+end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

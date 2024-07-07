@@ -10,8 +10,20 @@ import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface StoreService {
+/**
+ * packageName    : org.omsf.store.service
+ * fileName       : StoreService
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
 
+public interface StoreService {
+	
 //	List<Store> getStoreByposition(String position);
 	List<Map<String, Object>> getStoreList(StorePagination page);
 	
@@ -35,7 +47,6 @@ public interface StoreService {
 	List<Store> showStoreList(String keyword, String orderType, Double latitude, Double longitude, int offset, int limit);
 	
 	// yunbin
-	//String getStoreNameByStoreNo(int storeNo);
 	void deleteStoreByUsername(String username);
 	List<Store> getStoresByUsername(String name);
 

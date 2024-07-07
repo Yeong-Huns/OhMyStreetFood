@@ -20,6 +20,18 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * packageName    : org.omsf
+ * fileName       : MenuTests
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
 @WebAppConfiguration
 @SpringJUnitConfig(locations = {"file:**/*-context.xml"})
 @Transactional

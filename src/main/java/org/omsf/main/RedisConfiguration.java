@@ -11,6 +11,18 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+/**
+ * packageName    : org.omsf.main
+ * fileName       : RedisCinfiguration
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
 @Configuration
 @EnableScheduling
 public class RedisConfiguration {

@@ -8,6 +8,18 @@ import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StorePagination;
 
+/**
+ * packageName    : org.omsf.store.dao
+ * fileName       : StoreRepository
+ * author         : KIMCHANGHWAN
+ * date           : 2024-07-05
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 2024-07-05      KIMCHANGHWAN       
+ */
+
 public interface StoreRepository {
 	     
 	List<Store> selectAllStore();

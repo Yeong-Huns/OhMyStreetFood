@@ -6,7 +6,13 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.omsf.review.model.RequestReview;
 import org.omsf.review.model.Review;
-
+/**
+ * author         : leejongseop
+ * ===========================================================
+          AUTHOR             NOTE
+ * -----------------------------------------------------------
+       leejongseop       최초 생성
+ */
 public interface ReviewService {
 
 	// 리뷰 등록

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.omsf.report.dao.ReportRepository">
+<mapper namespace="org.omsf.report.dao.ReportRepository"> <!-- yunbin -->
 	<insert id="insertReport">
 		INSERT INTO report(
 		reportno, storeno, username, title, content, createdat)

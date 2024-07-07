@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class ReportServiceImpl implements ReportService{
+public class ReportServiceImpl implements ReportService{ // yunbin
 	private final ReportRepository reportRepository;
 	
 	@Override
