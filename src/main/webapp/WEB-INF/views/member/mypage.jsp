@@ -157,6 +157,11 @@
 
 
         document.addEventListener("DOMContentLoaded", function () {
+            loadChatRooms();
+        });
+
+
+        function loadChatRooms(){
             fetch(`/chat/getChatRoomsWithMessage?username=${username}`)
                 .then(response => response.json())
                 .then(data => {
@@ -195,7 +200,7 @@
                     }
                 })
                 .catch(error => console.error('Error fetching chat rooms:', error));
-        });
+        }
     </script>
 </head>
 <body>

@@ -49,8 +49,6 @@ public class StompHandler {
     @MessageMapping("/chat/sendRequest")
     public void handleSendMessage(MessageVO request) throws JsonProcessingException {
         MessageResponse response = messageService.handleSendMessage(request);
-        log.info("🤕🤕🤕🤕🤕"+String.valueOf(response.getMessageVO()));
-        log.info("😋JVM 기본 시간대: " + TimeZone.getDefault().getID());
         messagingTemplate.convertAndSend("/queue/chat/" + response.getSubscription(), response.getMessageVO());
     }
 

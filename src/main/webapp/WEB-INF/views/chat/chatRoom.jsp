@@ -1,10 +1,8 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: KOSA
-  Date: 2024-06-19
-  Time: PM 2:36
-  To change this template use File | Settings | File Templates.
---%>
+<%--* author         : Yeong-Huns
+* ===========================================================
+AUTHOR             NOTE
+* -----------------------------------------------------------
+Yeong-Huns       최초 생성--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>

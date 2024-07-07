@@ -1,3 +1,8 @@
+<%--* author         : Yeong-Huns
+* ===========================================================
+AUTHOR             NOTE
+* -----------------------------------------------------------
+Yeong-Huns       최초 생성--%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
