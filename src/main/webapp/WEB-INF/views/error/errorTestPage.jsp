@@ -1,4 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+
+<%--* author         : Yeong-Huns
+* ===========================================================
+AUTHOR             NOTE
+* -----------------------------------------------------------
+Yeong-Huns       최초 생성--%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>

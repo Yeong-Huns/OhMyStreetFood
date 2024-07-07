@@ -1,3 +1,11 @@
+/**
+ * author         : Yeong-Huns
+ * ===========================================================
+ AUTHOR             NOTE
+ * -----------------------------------------------------------
+ Yeong-Huns       최초 생성
+ */
+
 var stompClient = null;
 var socket = null;
 var currentPath = window.location.pathname;

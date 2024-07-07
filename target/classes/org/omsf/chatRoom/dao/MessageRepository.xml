@@ -4,6 +4,14 @@
 <mapper namespace="org.omsf.chatRoom.dao.MessageRepository">
 
 
+    <!-- /** -->
+    <!--  * author         : Yeong-Huns -->
+    <!--  * =========================================================== -->
+    <!--           AUTHOR             NOTE -->
+    <!--  * =========================================================== -->
+    <!--        Yeong-Huns       최초 생성 -->
+    <!--  */ -->
+
     <!-- findAllMessageBySubscription -->
     <select id="findAllMessageBySubscription" resultType="org.omsf.chatRoom.model.MessageWithProfile">
         SELECT m.messageNo,
