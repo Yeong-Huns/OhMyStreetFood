@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.omsf.member.dao.GeneralMemberRepository;
 import org.omsf.member.dao.MemberRepository;
-import org.omsf.member.dao.OwnerRepository;
-import org.omsf.member.model.GeneralMember;
 import org.omsf.member.model.Member;
-import org.omsf.member.model.Owner;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -19,6 +15,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+
+/**
+* @packageName    : org.omsf.security
+* @fileName       : UserSecurityService.java
+* @author         : leeyunbin
+* @date           : 2024.06.18
+* @description    :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2024.06.18        leeyunbin       최초 생성
+*/
 
 @RequiredArgsConstructor
 @Service

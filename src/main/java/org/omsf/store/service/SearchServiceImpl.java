@@ -9,6 +9,18 @@ import org.omsf.store.dao.SearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+* @packageName    : org.omsf.store.service
+* @fileName       : SearchServiceImpl.java
+* @author         : iamjaeeuncho
+* @date           : 2024.06.20
+* @description    :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2024.06.20        iamjaeeuncho       최초 생성
+*/
+
 @Service
 public class SearchServiceImpl implements SearchService{
 

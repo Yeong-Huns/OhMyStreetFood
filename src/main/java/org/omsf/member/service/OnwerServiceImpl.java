@@ -8,13 +8,24 @@ import org.omsf.member.model.Member;
 import org.omsf.member.model.Owner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+* @packageName    : org.omsf.member.service
+* @fileName       : OnwerServiceImpl.java
+* @author         : leeyunbin
+* @date           : 2024.06.18
+* @description    :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2024.06.18        leeyunbin       최초 생성
+*/
+
 @RequiredArgsConstructor
 @Service
-public class OnwerServiceImpl implements OwnerService { // yunbin
+public class OnwerServiceImpl implements OwnerService {
 	private final OwnerRepository ownerRepository;
 	private final MemberRepository<Member> memberRepository;
 	private final PasswordEncoder passwordEncoder;

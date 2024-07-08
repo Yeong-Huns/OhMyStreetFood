@@ -4,7 +4,6 @@ import javax.mail.internet.MimeMessage;
 
 import org.omsf.member.dao.MemberRepository;
 import org.omsf.member.model.Member;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,9 +12,21 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+* @packageName    : org.omsf.member.service
+* @fileName       : EmailService.java
+* @author         : leeyunbin
+* @date           : 2024.06.18
+* @description    :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2024.06.18        leeyunbin       최초 생성
+*/
+
 @RequiredArgsConstructor
 @Service
-public class EmailService { // yunbin
+public class EmailService {
 
 	private final JavaMailSenderImpl mailSender;
 	private final MemberRepository<Member> memberRepository;

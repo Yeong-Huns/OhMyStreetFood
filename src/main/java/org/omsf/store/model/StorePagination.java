@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-
 /**
  * packageName    : org.omsf.store.model
  * fileName       : StorePagination

@@ -53,9 +53,21 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+* @packageName    : org.omsf.member.controller
+* @fileName       : MemberController.java
+* @author         : leeyunbin
+* @date           : 2024.06.18
+* @description    :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2024.06.18        leeyunbin       최초 생성
+*/
+
 @RequiredArgsConstructor
 @Controller
-public class MemberController { // yunbin
+public class MemberController {
 
 	private final GeneralMemberService generalMemberService;
 	private final OwnerService ownerService;
