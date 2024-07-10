@@ -232,7 +232,8 @@ public class StoreController {
 		
 	    return "store/{storeNo}";
 	}
-
+    
+    // jaeeun - 검색
     @GetMapping("/search")
     public String searchPage(Model model) {
         List<Map<String, Object>> search = searchService.getAllKeywords();
@@ -240,7 +241,8 @@ public class StoreController {
         model.addAttribute("searchs", search);
         return "search/searchTag";
     }
-
+    
+    // jaeeun - 리스트
 	@GetMapping("/list")
 	public String searchPage(
 	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
@@ -291,6 +293,7 @@ public class StoreController {
         }
     }
 
+	// jaeeun - 페이징
 	@GetMapping("/lists")
 	public String searchStores(
 	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,

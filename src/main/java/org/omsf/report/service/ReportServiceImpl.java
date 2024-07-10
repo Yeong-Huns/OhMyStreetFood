@@ -10,9 +10,21 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+* @packageName    : org.omsf.report.service
+* @fileName       : ReportServiceImpl.java
+* @author         : leeyunbin
+* @date           : 2024.06.18
+* @description    :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2024.06.18        leeyunbin       최초 생성
+*/
+
 @RequiredArgsConstructor
 @Service
-public class ReportServiceImpl implements ReportService{ // yunbin
+public class ReportServiceImpl implements ReportService{
 	private final ReportRepository reportRepository;
 	
 	@Override

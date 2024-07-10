@@ -9,6 +9,7 @@
 <!--  * =========================================================== -->
 <!--        leejongseop       최초 생성 -->
 <!--  */ -->
+
 <mapper namespace="org.omsf.report.dao.LogStoreRepository">
 
 	<select id="getLogListByStoreNo" resultType="hashmap">

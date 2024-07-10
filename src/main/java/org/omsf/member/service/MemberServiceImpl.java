@@ -8,9 +8,21 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+* @packageName    : org.omsf.member.service
+* @fileName       : MemberServiceImpl.java
+* @author         : leeyunbin
+* @date           : 2024.06.18
+* @description    :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2024.06.18        leeyunbin       최초 생성
+*/
+
 @RequiredArgsConstructor
 @Service
-public class MemberServiceImpl implements MemberService<Member> { // yunbin
+public class MemberServiceImpl implements MemberService<Member> { 
 
 	private final MemberRepository<Member> memberRepository;
 	

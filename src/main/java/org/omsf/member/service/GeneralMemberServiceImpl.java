@@ -11,9 +11,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+
+/**
+* @packageName    : org.omsf.member.service
+* @fileName       : GeneralMemberServiceImpl.java
+* @author         : leeyunbin
+* @date           : 2024.06.18
+* @description    :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2024.06.18        leeyunbin       최초 생성
+*/
+
 @Service
 @RequiredArgsConstructor
-public class GeneralMemberServiceImpl implements GeneralMemberService { // yunbin
+public class GeneralMemberServiceImpl implements GeneralMemberService {
 	private final GeneralMemberRepository generalMemberRepository;
 	private final MemberRepository<Member> memberRepository;
 	private final PasswordEncoder passwordEncoder;

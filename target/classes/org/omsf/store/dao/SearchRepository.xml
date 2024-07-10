@@ -3,7 +3,8 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="org.omsf.store.dao.SearchRepository">
-
+	
+	<!-- jaeeun -->
     <insert id="insertKeyword" parameterType="map">
         INSERT INTO search (userIp, keyword, createdAt)
         VALUES (#{userIp}, #{keyword}, sysdate + INTERVAL '9' HOUR)

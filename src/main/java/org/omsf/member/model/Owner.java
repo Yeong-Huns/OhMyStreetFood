@@ -4,13 +4,24 @@ import java.sql.Date;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+/**
+* @packageName    : org.omsf.member.model
+* @fileName       : Owner.java
+* @author         : leeyunbin
+* @date           : 2024.07.08
+* @description    :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2024.06.18        leeyunbin       최초 생성
+*/
 
 @ToString
 @Getter
