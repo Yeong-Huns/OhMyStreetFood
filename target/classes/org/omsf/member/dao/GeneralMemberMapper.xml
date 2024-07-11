@@ -11,9 +11,9 @@
     <!--  */ -->
 	<insert id="insertGeneralMember">
 		INSERT INTO member (
-		username, nickname, password, membertype, createdat, modifiedat)
+		username, nickname, password, membertype, createdat, modifiedat, profileimage)
 		VALUES (
-		#{username}, #{nickName}, #{password}, #{memberType}, SYSDATE, SYSDATE)
+		#{username}, #{nickName}, #{password}, #{memberType}, SYSDATE, SYSDATE, #{profileImage})
 	</insert>
 	
 	<select id="checkMemberNickName" resultType="boolean">

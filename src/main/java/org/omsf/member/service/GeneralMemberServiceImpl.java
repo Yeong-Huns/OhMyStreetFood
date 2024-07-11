@@ -1,5 +1,6 @@
 package org.omsf.member.service;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.omsf.member.dao.GeneralMemberRepository;
@@ -9,6 +10,7 @@ import org.omsf.member.model.Member;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,10 +32,20 @@ public class GeneralMemberServiceImpl implements GeneralMemberService {
 	private final GeneralMemberRepository generalMemberRepository;
 	private final MemberRepository<Member> memberRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final UploadService uploadService;
 	
 	@Override
 	public void insertGeneralMember(GeneralMember generalMember) {
 		generalMember.setPassword(passwordEncoder.encode(generalMember.getPassword()));
+		
+		try {
+			MultipartFile file = uploadService.getImageAsMultipartFile("https://avatar.iran.liara.run/public");
+			String url = uploadService.uploadImage(file);
+			generalMember.setProfileImage(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		generalMemberRepository.insertGeneralMember(generalMember);
 	}
 
@@ -64,4 +76,5 @@ public class GeneralMemberServiceImpl implements GeneralMemberService {
 			generalMember.setPassword(passwordEncoder.encode(generalMember.getPassword()));
 		generalMemberRepository.updateMember(generalMember);
 	}
+
 }
