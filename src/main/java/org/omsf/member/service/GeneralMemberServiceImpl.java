@@ -74,6 +74,8 @@ public class GeneralMemberServiceImpl implements GeneralMemberService {
 	public void updateMember(GeneralMember generalMember) {
 		if (!generalMember.getPassword().isEmpty())
 			generalMember.setPassword(passwordEncoder.encode(generalMember.getPassword()));
+		
+		System.out.println("받은 사진");
 		generalMemberRepository.updateMember(generalMember);
 	}
 
