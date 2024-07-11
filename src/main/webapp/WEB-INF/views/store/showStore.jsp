@@ -28,11 +28,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
 </head>
 <body>
-    <!-- Logo -->
-	<div style="text-align: center;">
-		<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px"></a>
-	</div>
-	
+	<div class="container">
 		<span style="display: flex; flex-direction: row; justify-content: space-between; padding: 0 40px;">
               <c:choose>
 			    <c:when test="${isOwner eq true }">
@@ -284,96 +280,92 @@
 <!-- 			</div> -->
 			
 <!-- 	    </div> -->
-	   
+		   
 			<div id="spinner" class="spinner"></div>
-	    <!-- 찜 목록 효과 -->
-	    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
-	    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
-	    
+		    
+		    <!-- 찜 목록 효과 -->
+		    <div id="notification-insert" class="notification"><spring:message code="like.insert" /></div>
+		    <div id="notification-delete" class="notification"><spring:message code="like.delete" /></div>
+		</div>
+		
+		<!-- 리뷰 모달 화면 -->
+		<div id="review-modal" class="review-modal" <c:if test="${modalOn}"> style="display: block;"</c:if>>
+	        <div class="review-modal-content">
+				<div class="review-container">
+					<span class="review-close-button">&times;</span>
+					<h1><spring:message code="review.write" /></h1>
+					<form:form id="reviewForm" method="post" modelAttribute="requestReview" action="${pageContext.request.contextPath}/review/insert">
+						<p>
+							<form:hidden path="storeStoreNo" />
+							<form:errors path="storeStoreNo" id="error"/>
+						</p>
+						<label for="username"><spring:message code="user" /></label>
+						<form:input path="memberUsername" disabled="true"/>
+						<form:hidden path="memberUsername" />
+						
+						<label for="rating"><spring:message code="rating" /></label>
+						<div class="rating">
+							<form:radiobutton path="rating" value="1" id="star1"/>
+							<label for="star1" title="1 stars"><i class="fas fa-star"></i></label>
+							<form:radiobutton path="rating" value="2" id="star2"/>
+							<label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
+							<form:radiobutton path="rating" value="3" id="star3"/>
+							<label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
+							<form:radiobutton path="rating" value="4" id="star4"/>
+							<label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
+							<form:radiobutton path="rating" value="5" id="star5"/>
+							<label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
+						</div>
+						<label for="content"><spring:message code="review.content" /></label>
+						<form:textarea path="content" rows="5" />
+						<c:if test="${not empty errors}">
+					        <ul>
+					            <c:forEach var="error" items="${errors}">
+					                <div style="text-align: center;">
+										<span id="error">${error.defaultMessage}</span>
+									</div>
+					            </c:forEach>
+					        </ul>
+					    </c:if>
+						<input id="review-btn" type="submit" value="<spring:message code="write.btn" />" />
+					</form:form>
+				</div>
+	        </div>
+	    </div>
+		
+		<!-- 신고 모달 화면 -->
+		<div class="modal fade" id="reportStoreModal" tabindex="-1" aria-labelledby="reportStoreLabel" aria-hidden="true">
+	        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <h5 class="modal-title" id="reportStoreLabel">가게 신고</h5>
+	                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	                </div>
+	                <div class="modal-body">
+	                	<form id="reportStoreForm">
+						    <div class="form-group">
+						        <label for="title" class="form-label">신고 제목</label>
+						        <input type="text" id="title" name="title" placeholder="title" class="form-control"/>
+						        <span id="error-title" class="text-danger"></span>
+						    </div>
+						    <div class="form-group">
+						        <label for="content" class="form-label">신고 내용</label>
+						        <textarea id="content" name="content" placeholder="content" class="form-control"></textarea>
+						        <span id="error-content" class="text-danger"></span>
+						    </div>
+						    <input type="hidden" name="storeNo" value="${storeNo}"/>
+						</form>
+	                </div>
+	                <div class="modal-footer">
+	                	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	                	<button type="submit" class="btn btn-primary" id="reportStoreModalBtn" form="reportStoreForm">신고</button>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
 	</div>
-	
-	<!-- 리뷰 모달 화면 -->
-	<div id="review-modal" class="review-modal" <c:if test="${modalOn}"> style="display: block;"</c:if>>
-        <div class="review-modal-content">
-			<div class="review-container">
-				<span class="review-close-button">&times;</span>
-				<h1><spring:message code="review.write" /></h1>
-				<form:form id="reviewForm" method="post" modelAttribute="requestReview" action="${pageContext.request.contextPath}/review/insert">
-					<p>
-						<form:hidden path="storeStoreNo" />
-						<form:errors path="storeStoreNo" id="error"/>
-					</p>
-					<label for="username"><spring:message code="user" /></label>
-					<form:input path="memberUsername" disabled="true"/>
-					<form:hidden path="memberUsername" />
-					
-					<label for="rating"><spring:message code="rating" /></label>
-					<div class="rating">
-						<form:radiobutton path="rating" value="1" id="star1"/>
-						<label for="star1" title="1 stars"><i class="fas fa-star"></i></label>
-						<form:radiobutton path="rating" value="2" id="star2"/>
-						<label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
-						<form:radiobutton path="rating" value="3" id="star3"/>
-						<label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
-						<form:radiobutton path="rating" value="4" id="star4"/>
-						<label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
-						<form:radiobutton path="rating" value="5" id="star5"/>
-						<label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
-					</div>
-					<label for="content"><spring:message code="review.content" /></label>
-					<form:textarea path="content" rows="5" />
-					<c:if test="${not empty errors}">
-				        <ul>
-				            <c:forEach var="error" items="${errors}">
-				                <div style="text-align: center;">
-									<span id="error">${error.defaultMessage}</span>
-								</div>
-				            </c:forEach>
-				        </ul>
-				    </c:if>
-					<input id="review-btn" type="submit" value="<spring:message code="write.btn" />" />
-				</form:form>
-			</div>
-        </div>
-    </div>
-	
-	<!-- 신고 모달 화면 -->
-	<div class="modal fade" id="reportStoreModal" tabindex="-1" aria-labelledby="reportStoreLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reportStoreLabel">가게 신고</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                	<form id="reportStoreForm">
-					    <div class="form-group">
-					        <label for="title" class="form-label">신고 제목</label>
-					        <input type="text" id="title" name="title" placeholder="title" class="form-control"/>
-					        <span id="error-title" class="text-danger"></span>
-					    </div>
-					    <div class="form-group">
-					        <label for="content" class="form-label">신고 내용</label>
-					        <textarea id="content" name="content" placeholder="content" class="form-control"></textarea>
-					        <span id="error-content" class="text-danger"></span>
-					    </div>
-					    <input type="hidden" name="storeNo" value="${storeNo}"/>
-					</form>
-                </div>
-                <div class="modal-footer">
-                	<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                	<button type="submit" class="btn btn-primary" id="reportStoreModalBtn" form="reportStoreForm">신고</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Menu -->
-    <div class="row">
-        <div class="col-md-12">
-            <jsp:include page="../menu.jsp" />
-        </div>
-    </div>
+    <jsp:include page="../menu.jsp" />
     
     <!-- Bootstrap JS -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -416,8 +408,6 @@
     });
 
     marker.setMap(map);
-
-
 	</script>
 	<script>
 	document.addEventListener('DOMContentLoaded', () => {
@@ -570,7 +560,6 @@
 		$('#content').on('input', function() {
 	        $('#error-content').text("");
 	    });
-		
 	</script>
 </body>
 </html>

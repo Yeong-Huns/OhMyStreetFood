@@ -18,7 +18,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-	<div class="main">
+	<div class="container">
 		<div class="row">
 			<div class="col-md-12 d-flex justify-content-between align-items-center" id="title">
 				<h3 class="text-center flex-grow-1">관리자 페이지</h3>
