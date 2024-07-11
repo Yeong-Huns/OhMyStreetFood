@@ -15,47 +15,59 @@
 	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <!-- CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    <style>
+    	.navbar-nav {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    width: 100%;
+		}
+		
+		.nav-item {
+		    display: flex;
+		    align-items: center;
+		}
+		
+		.nav-link {
+		    display: flex;
+		    align-items: center;
+		}
+    </style>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light fixed-bottom">
+	<nav class="navbar navbar-expand-lg navbar-light fixed-top">
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav d-flex justify-content-between w-100">
 				<li class="nav-item active">
 					<a class="nav-link" href="/">
-						<i class="fas fa-home"></i>
-						&nbsp;홈
+						<img src="${pageContext.request.contextPath}/img/logo.png" style="width: 250px">
 					</a>
 				</li>
 				
 				<li class="nav-item">
 					<a class="nav-link" href="${pageContext.request.contextPath}/store/search">
-						<i class="fas fa-search"></i>
-						&nbsp;검색
+						검색
 					</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/store/list">
-						<i class="fas fa-store"></i>
-						&nbsp;점포
+						점포
 					</a>
 				</li>
 				<li class="nav-item">
 					<sec:authorize access="isAnonymous()">
 						<a class="nav-link" href="${pageContext.request.contextPath}/signin">
-							<i class="fas fa-user"></i>
-							&nbsp;로그인
+							로그인
 						</a>
 					</sec:authorize>
 					<sec:authorize access="hasRole('ROLE_OWNER') or hasRole('ROLE_USER')">
 						<a class="nav-link" href="${pageContext.request.contextPath}/mypage">
-							<i class="fas fa-user"></i>
-							&nbsp;마이페이지
+							마이페이지
 						</a>
 					</sec:authorize>
 					<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<a class="nav-link" href="${pageContext.request.contextPath}/admin/reports">
-							<i class="fas fa-user"></i>
-							&nbsp;관리자 페이지
+							관리자 페이지
 						</a>
 					</sec:authorize>
 				</li>

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:forEach items="${stores}" var="store">               
-    <div class="card" style="width: 100%; height: 220px; cursor: pointer; margin-bottom: 20px;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
+    <div class="card" style="width: 100%; height: 250px; cursor: pointer; margin-bottom: 20px;" onclick="location.href='${pageContext.request.contextPath}/store/${store.storeNo}'">
         <div class="row g-0">
             <div class="col-md-3" style="padding: 0 20px;">
                 <c:set var="foundMatch" value="false" />

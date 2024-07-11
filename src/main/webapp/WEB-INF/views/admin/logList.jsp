@@ -22,19 +22,7 @@
 <%-- <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css"> --%>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <style>
-        .custom-container {
-            max-width: 90%; /* 필요한 만큼 너비를 조정하세요. */
-            margin: 20px auto; /* 중앙 정렬을 위해 추가 */
-        }
-        .custom-card {
-            width: 100%; /* 카드의 너비를 100%로 설정 */
-        }
-        .main {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
+        
         .spinner {
 		    display: none;
 		    width: 40px;
@@ -56,9 +44,8 @@
 		}
 </style>
 </head>
-
 <body>
-	<div class="main">
+	<div class="container">
         <div class="row w-100">
             <div>
                 <a href="${pageContext.request.contextPath}/admin/reports" style="text-decoration: none; color: inherit;">
@@ -68,27 +55,27 @@
             <div class="col-md-12 text-center" id="title">
                 <h3>관리자 페이지</h3>
             </div>
-            <div class="container custom-container">
+            <div class="custom-container">
                 <div class="card custom-card">
-<!--                     <div class="card-header d-flex justify-content-between align-items-center"> -->
-<!--                         <h5 class="d-inline">점포번호: temp</h5> -->
-<!--                     </div> -->
+               		<div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="d-inline">점포번호 및 점포주소: temp</h5>
+                    </div>
                     <div class="card-body">
                         <table class="table table-bordered">
                             <thead class="thead-dark">
                                 <tr>
                                     <th>로그번호</th>
-                                    <th>가게번호</th>
+                                    <!-- <th>가게번호</th> -->
                                     <th>가게이름</th>
-                                    <th>위도</th>
-                                    <th>경도</th>
-                                    <th>주소</th>
+                                    <!-- <th>위도</th> -->
+	                                <!-- <th>경도</th> -->
+                                    <!-- <th>주소</th> -->
                                     <th>소개</th>
                                     <th>운영일자</th>
                                     <th>운영시간</th>
-                                    <th>리뷰수</th>
-                                    <th>평점</th>
-                                    <th>찜</th>
+                                    <!-- <th>리뷰수</th> -->
+                                    <!-- <th>평점</th> -->
+                                    <!-- <th>찜</th> -->
                                     <th>생성일자</th>
                                     <th>수정일자</th>
                                     <th>수정자</th>
@@ -100,17 +87,17 @@
                                 <c:forEach items="${list}" var="log" varStatus="status">
                                     <tr class="log-row">
                                         <td>${log.LOGNO}</td>
-                                        <td>${log.STORENO}</td>
+                                        <%-- <td>${log.STORENO}</td> --%>
                                         <td>${log.STORENAME}</td>
-                                        <td>${log.LATITUDE}</td>
-                                        <td>${log.LONGITUDE}</td>
-                                        <td>${log.ADDRESS}</td>
+                                        <%-- <td>${log.LATITUDE}</td> --%>
+	                                    <%-- <td>${log.LONGITUDE}</td> --%>
+                                        <%-- <td>${log.ADDRESS}</td> --%>
                                         <td>${log.INTRODUCE}</td>
                                         <td>${log.OPERATINGDATE}</td>
                                         <td>${log.OPERATINGHOURS}</td>
-                                        <td>${log.TOTALREVIEW}</td>
-                                        <td>${log.TOTALRATING}</td>
-                                        <td>${log.LIKES}</td>
+                                        <%-- <td>${log.TOTALREVIEW}</td> --%>
+                                       <%-- <td>${log.TOTALRATING}</td> --%>
+                                        <%-- <td>${log.LIKES}</td> --%>
                                         <td>${log.CREATEDAT}</td>
                                         <td>${log.MODIFIEDAT}</td>
                                         <td>${log.MODIFIER}</td>
