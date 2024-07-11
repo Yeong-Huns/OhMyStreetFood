@@ -58,6 +58,30 @@
             float: right;
             margin-top: -8px;
         }
+        .profile-container {
+            margin-bottom: 20px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .profile-info {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
     <title>OhMyStreetFood!</title>
     <!-- Bootstrap CSS -->
@@ -79,20 +103,18 @@
 <div class="container">
 	<div class="row justify-content-center">
 	    <div class="col-md-10">
-	        <div align="center" style="margin-bottom: 20px; width: 200px; height: 200px; border-radius: 50%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; text-align: center; margin: 0 auto;">
-	            <sec:authentication property="principal.username" var="username"/>
-	            <input type="hidden" id="memberUsername" value="${username}">
-	            <sec:authorize access="hasRole('ROLE_OWNER')">${username}</sec:authorize>
-	            <sec:authorize access="hasRole('ROLE_USER')">
-	                ${member.nickName }<br>
-	                ${username }
-	            </sec:authorize>
-	            <sec:authorize access="hasRole('ROLE_ADMIN')">
-	                관리자 계정입니다
-	            </sec:authorize>
+	        <div align="center" style="margin-bottom: 20px; width: 200px; height: 200px; border-radius: 50%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; text-align: center; margin: 0 auto; object-fit: cover; padding: 0">
+	                <img src="${member.profileImage}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
 	        </div>
 	
 	        <div class="col-md-12 text-center">
+	            <sec:authentication property="principal.username" var="username"/>
+	            <input type="hidden" id="memberUsername" value="${username}">
+	               
+	            <sec:authorize access="hasRole('ROLE_ADMIN')">
+	                관리자 계정입니다
+	            </sec:authorize>
+	         	${member.nickName }<br>
 	            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmPasswordModal">회원 정보 수정</a><br>
 	            <a href="${pageContext.request.contextPath}/logout">로그아웃</a>
 	        </div>

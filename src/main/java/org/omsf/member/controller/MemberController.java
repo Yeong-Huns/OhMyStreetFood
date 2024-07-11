@@ -21,6 +21,7 @@ import org.omsf.member.service.EmailService;
 import org.omsf.member.service.GeneralMemberService;
 import org.omsf.member.service.MemberService;
 import org.omsf.member.service.OwnerService;
+import org.omsf.member.service.UploadService;
 import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
 import org.omsf.store.model.Like;
@@ -49,7 +50,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.amazonaws.services.s3.metrics.S3ServiceMetric;
 
 import lombok.RequiredArgsConstructor;
 
@@ -76,6 +80,7 @@ public class MemberController {
 	private final StoreService storeService;
 	private final LikeService likeService;
 	private final ReviewService reviewService;
+	private final UploadService uploadService;
 
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
@@ -309,7 +314,7 @@ public class MemberController {
 
 	@PreAuthorize("hasRole('ROLE_USER')")
 	@PostMapping("/modifyMember/general")
-	public String processModifyMember(@Valid @ModelAttribute("member") GeneralMember generalMember,
+	public String processModifyMember(@Valid @ModelAttribute("member") GeneralMember generalMember, @RequestParam("profileFile") MultipartFile profileFile,
 			BindingResult result, Model model) {
 
 		if (generalMember.getPassword() != null && !generalMember.getPassword().isEmpty()) {
@@ -323,6 +328,9 @@ public class MemberController {
 				model.addAttribute("member", generalMember);
 				return "member/modify";
 			}
+			
+			String profileImage = uploadService.uploadImage(profileFile);
+			generalMember.setProfileImage(profileImage);
 		}
 
 		generalMemberService.updateMember(generalMember);
