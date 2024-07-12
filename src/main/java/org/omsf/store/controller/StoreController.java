@@ -111,8 +111,7 @@ public class StoreController {
 	// KIMCHANGHWAN - 가게정보
 	@GetMapping("/{storeNo}")
 	public String showStoreDetailPage(Principal principal, @PathVariable Integer storeNo, Model model, HttpServletRequest request, HttpServletResponse response, @ModelAttribute Report report) {
-		Cookie cookie = viewCountService.addViewCount(request, storeNo);
-		response.addCookie(cookie);
+		
 		StoreInfo storeInfo = viewCountService.getPopularStoreInfo(storeNo);
 	    
 		Store store;
@@ -127,6 +126,7 @@ public class StoreController {
 	        menu = storeInfo.getMenus();
 	        storePhoto = storeInfo.getPhoto();
 	        gallery = storeInfo.getGallery();
+	        
 	    } else {
 
 	        store = storeService.getStoreByNo(storeNo);
@@ -139,6 +139,9 @@ public class StoreController {
 		model.addAttribute("menus", menu);
 		model.addAttribute("storePhoto", storePhoto);
 		model.addAttribute("gallery", gallery);
+		
+		Cookie cookie = viewCountService.addViewCount(request, storeNo);
+		response.addCookie(cookie);
 		
 		// leejongseop - 리뷰 작성 폼 바인딩
 		if (!model.containsAttribute("requestReview")) {
