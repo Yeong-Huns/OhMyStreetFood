@@ -110,7 +110,7 @@
 	    <div>
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                  <span><h5>가게 정보</h5></span>
-				<span><a href="javascript:void(0)" onclick="registerNewsFeed(`${store.storeNo}`)">뉴스피드 테스트</a></span>
+<%--				<span><a href="javascript:void(0)" onclick="registerNewsFeed(`${store.storeNo}`)">뉴스피드 테스트</a></span>--%>
                  <sec:authorize access="isAuthenticated()">
 	                 <sec:authentication property="principal.username" var="currentUsername"/>
 	                 <c:if test="${isOwner eq false || owner.username eq currentUsername}">
