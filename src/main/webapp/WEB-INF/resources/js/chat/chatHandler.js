@@ -81,6 +81,14 @@ function fetchChatRooms(username) {
         .catch(error => console.error('Error fetching chat rooms:', error));
 }
 
+function sendTestMessage(content, event){
+    stompClient.send("/app/chat/chatBot", {}, JSON.stringify(content));
+}
+
+function onMessageReceived(payload){
+    console.log(payload);
+}
+
 function connect(username) {
     if (!username) {
         console.log("로그인상태가 아닙니당.");
@@ -89,6 +97,12 @@ function connect(username) {
     socket = new SockJS('/ws/chat');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
+
+        // 테스트 용
+        stompClient.subscribe('/topic/public', onMessageReceived);
+        sendTestMessage("지금 뭐하고 있니");
+        // 테스트 용 종료
+
         console.log('웹소켓 연결됨 : ' + frame);
         console.log("유저명 : " + username);
 
