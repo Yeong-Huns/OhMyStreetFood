@@ -42,10 +42,10 @@
 <%-- 					    </c:otherwise> --%>
 <%-- 					</c:choose> --%>
 <!-- 				</div> -->
-				<h4 style="text-align: center;">회원가입</h4>
+				<h3 style="text-align: center;">회원가입</h3>
 				<form:form modelAttribute="member" id="signupForm" action="${pageContext.request.contextPath}/signup/${member.memberType}" method="post">
 					<div class="form-group">
-						<label for="username">아이디(이메일 주소)</label> 
+						<label for="username">아이디(이메일 주소)<span style="color: red;">&nbsp;*&nbsp;</span></label> 
 						<span style="display: flex; align-items: center;"> 
 						<form:input type="email" path="username" class="form-control" aria-describedby="emailHelp" placeholder="Id" /> 
 						<input type="button" id="idDuplicateConfirm" class="btn btn-primary" value="중복 확인" />
@@ -55,7 +55,7 @@
 					</div>
 					<c:if test="${member.memberType != 'owner'}">
 						<div class="form-group" id="nickNameGroup">
-							<label for="nickName">닉네임</label> 
+							<label for="nickName">닉네임<span style="color: red;">&nbsp;*&nbsp;</span></label> 
 							<span style="display: flex; align-items: center;"> 
 							<form:input type="text" path="nickName" class="form-control" placeholder="NickName" /> 
 							<input type="button" id="nickNameDuplicateConfirm" class="btn btn-primary" value="중복 확인" />
@@ -66,7 +66,7 @@
 					</c:if>
 					<c:if test="${member.memberType == 'owner'}">
 						<div class="form-group" id="businessRegistrationNumberGroup">
-							<label for="businessRegistrationNumber">사업자 등록 번호</label> 
+							<label for="businessRegistrationNumber">사업자 등록 번호<span style="color: red;">&nbsp;*&nbsp;</span></label> 
 							<span style="display: flex; align-items: center;"> 
 							<form:input type="text" path="businessRegistrationNumber" class="form-control" placeholder="businessRegistrationNumber" /> 
 							<input type="button" id="businessRegistrationNumberConfirm" class="btn btn-primary" value="중복 확인" />
@@ -76,12 +76,12 @@
 						</div>
 					</c:if>
 					<div class="form-group">
-						<label for="password">비밀번호</label>
+						<label for="password">비밀번호<span style="color: red;">&nbsp;*&nbsp;</span></label>
 						<form:password path="password" class="form-control" placeholder="비밀번호는 8~16자의 영문 대/소문자, 숫자, 특수문자를 포함해야 합니다." />
 						<form:errors path="password" cssClass="text-danger" />
 					</div>
 					<div class="form-group">
-						<label for="passwordConfirm">비밀번호 확인</label>
+						<label for="passwordConfirm">비밀번호 확인<span style="color: red;">&nbsp;*&nbsp;</span></label>
 						<form:password path="passwordConfirm" class="form-control" placeholder="Password Confirm" />
 						<form:errors path="passwordConfirm" cssClass="text-danger" />
 					</div>

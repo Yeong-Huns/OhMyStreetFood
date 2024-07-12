@@ -29,9 +29,7 @@
 	<div class="container">
     	<div class="row justify-content-center">
         	<div class="col-md-10">
-<!-- 			<div class="col-md-12 text-center" id="title"> -->
-<!-- 				<h3>회원 정보 수정</h3> -->
-<!-- 			</div> -->
+			<h3 style="text-align: center;">회원정보수정</h3>
 			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/modifyMember/${member.memberType}" method="post">
 				<sec:authorize access="hasRole('ROLE_USER')">
 					<div class="form-group">

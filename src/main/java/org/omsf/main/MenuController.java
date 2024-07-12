@@ -47,4 +47,8 @@ public class MenuController {
     	return "index";
     }
     
+    @GetMapping("/alarm")
+    public String showChart() {
+    	return "alarm";
+    }
 }

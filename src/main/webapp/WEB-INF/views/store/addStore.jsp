@@ -20,9 +20,7 @@
 </head>
 <body>
 	<div class="container">
-		<div class="col-md-12 text-center" id="title">
-			<h3>가게 정보 등록</h3>
-		</div>
+		<h3 style="text-align: center;">점포 정보 등록</h3>
 		<form method="post" id="storeForm" enctype="multipart/form-data">
 			
 			<div>

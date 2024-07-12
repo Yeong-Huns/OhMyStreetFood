@@ -24,6 +24,7 @@
 </head>
 <body>
 	<div class="container">
+		<h3 style="text-align: center;">점포 정보 수정</h3>
 		<form method="post" id="storeEditForm" enctype="multipart/form-data">
 			<div>
 				<div class="col-md-12" id="map" style="width: 100%; height: 400px; border-radius: 20px"></div>

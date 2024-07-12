@@ -26,7 +26,7 @@
 	<div class="container">
     	<div class="row justify-content-center">
         	<div class="col-md-10">
-        		<h4 style="text-align: center;">로그인</h4>
+        		<h3 style="text-align: center;">로그인</h3>
 				<form action="${pageContext.request.contextPath}/signin" method="post">
 					<div class="form-group">
 						<label for="username">이메일 주소</label> 
