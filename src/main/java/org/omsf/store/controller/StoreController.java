@@ -2,6 +2,8 @@ package org.omsf.store.controller;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,11 +24,13 @@ import org.omsf.review.model.Review;
 import org.omsf.review.service.ReviewService;
 import org.omsf.store.model.Like;
 import org.omsf.store.model.Menu;
+import org.omsf.store.model.Order;
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
 import org.omsf.store.model.StoreInfo;
 import org.omsf.store.service.LikeService;
 import org.omsf.store.service.MenuService;
+import org.omsf.store.service.OrderService;
 import org.omsf.store.service.SearchService;
 import org.omsf.store.service.StoreService;
 import org.omsf.store.service.ViewCountService;
@@ -64,6 +68,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StoreController {
 	
 	private final StoreService storeService;
+	private final OrderService orderService;
 	private final MenuService menuService;
 	private final MemberService<Member> memberService;
 	private final ReviewService reviewService;
@@ -297,39 +302,89 @@ public class StoreController {
     }
 	
 	// jaeeun - 페이징
-		@GetMapping("/lists")
-		public String searchStores(
-		    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-		    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
-		    @RequestParam(value = "latitude", required = false, defaultValue = "") Double latitude,
-	        @RequestParam(value = "longitude", required = false, defaultValue = "") Double longitude,
-		    @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
-		    @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
-		    Model model) {
-		    
-			List<Store> stores = storeService.showStoreList(keyword, orderType, latitude, longitude, offset, limit);
-		    
-		    List<Photo> pictures = new ArrayList<>();
-		    for (Store store : stores) {
-		    	if (store.getPicture() != null) {
-		    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
-		    		photo.setStoreNo(store.getStoreNo());
-		    		pictures.add(photo);
-		    	}
-		    }
-		    
-		    model.addAttribute("stores", stores);
-		    model.addAttribute("pictures", pictures);
-		    
-		    return "search/searchItems";
-		}
+	@GetMapping("/lists")
+	public String searchStores(
+	    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+	    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+	    @RequestParam(value = "latitude", required = false, defaultValue = "") Double latitude,
+        @RequestParam(value = "longitude", required = false, defaultValue = "") Double longitude,
+	    @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
+	    @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
+	    Model model) {
+
+		List<Store> stores = storeService.showStoreList(keyword, orderType, latitude, longitude, offset, limit);
+
+	    List<Photo> pictures = new ArrayList<>();
+	    for (Store store : stores) {
+	    	if (store.getPicture() != null) {
+	    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+	    		photo.setStoreNo(store.getStoreNo());
+	    		pictures.add(photo);
+	    	}
+	    }
+
+	    model.addAttribute("stores", stores);
+	    model.addAttribute("pictures", pictures);
+
+	    return "search/searchItems";
+	}
 
 	// jaeeun - 주문하기
 	@GetMapping("/{storeNo}/order")
-	public String showOrderPage() {
-	    return "order/cart";
+	public String showOrderPage(Model model,
+								@PathVariable("storeNo") int storeNo) {
+		Store store = storeService.getStoreByNo(storeNo);
+		List<Menu> menus = menuService.getMenusByStoreNo(storeNo);
+		
+		model.addAttribute("store", store);
+		model.addAttribute("menus", menus);
+	    return "store/placeOrder";
 	}
 	
+	// jaeeun - 주문내역저장
+	@PostMapping("/{storeNo}/order/submit")
+	public String submitOrder(Model model,
+							@ModelAttribute Order order, 
+							@PathVariable("storeNo") int storeNo,
+							@RequestParam("pickupDate") String pickupDate,
+							@RequestParam("pickupTime") String pickupTime,
+							@RequestParam("totalPrice") int totalPrice,
+							Principal principal) {
+        
+		String username = principal.getName();
+		
+		LocalDateTime pickupDateTime = LocalDateTime.parse(pickupDate + "T" + pickupTime);
+		Timestamp pickupat = Timestamp.valueOf(pickupDateTime);
+		
+		order.setStoreno(storeNo);
+		order.setUsername(username);
+		order.setTotalprice(totalPrice);
+		order.setPickupat(pickupat);
+	    
+	    orderService.saveOrder(order);
+	    
+	    int orderNo = order.getOrderno();
+	    System.out.println("orderNo" + orderNo);
+	    model.addAttribute("order", order);
+	    
+	    return "redirect:/{storeNo}/order/status?orderno=" + orderNo;
+    }
+	
+	// jaeeun - 주문진행상황
+	@GetMapping("/{storeNo}/order/status")
+	public String showOrder(Model model,
+							@PathVariable("storeNo") int storeNo,
+							@PathVariable("orderNo") int orderNo) {
+        
+		Store store = storeService.getStoreByNo(storeNo);
+		Order order = orderService.getOrderByNo(orderNo);
+
+		model.addAttribute("store", store);
+	    model.addAttribute("order", order);
+	    
+        return "store/submitOrder";
+    }
+		
 	// leejongseop - 현재 위치에 기반하여 주변 가게 리스트 가져오기
 	@ResponseBody
 	@GetMapping("api")

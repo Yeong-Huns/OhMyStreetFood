@@ -54,4 +54,5 @@ public interface StoreService {
 	List<Map<String, Object>> getStoresByPosition(String position);
 
 
+
 }

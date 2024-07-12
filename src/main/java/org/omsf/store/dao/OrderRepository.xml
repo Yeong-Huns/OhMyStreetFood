@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="org.omsf.store.dao.OrderRepository">
+	<resultMap id="orderResultMap" type="org.omsf.store.model.Order">
+        <id property="orderno" column="orderno"/>
+        <result property="storeno" column="storeno"/>
+        <result property="username" column="username"/>
+        <result property="totalprice" column="totalprice"/>
+        <result property="approval" column="approval"/>
+        <result property="paymentstatus" column="paymentstatus"/>
+        <result property="paymentmethod" column="paymentmethod"/>
+        <result property="createdat" column="createdat"/>
+        <result property="pickupat" column="pickupat"/>
+        <result property="approvedat" column="approvedat"/>
+        <result property="paidat" column="paidat"/>
+    </resultMap>
+	
+	<insert id="saveOrder">
+        INSERT INTO orders (storeno, username, totalprice, pickupat)
+        VALUES (#{storeno}, #{username}, #{totalprice}, #{pickupat})
+    </insert>
+    
+    <select id="getOrderByNo" parameterType="int" resultMap="orderResultMap">
+		SELECT * FROM orders WHERE orderno = #{orderno}
+	</select>
+</mapper>
