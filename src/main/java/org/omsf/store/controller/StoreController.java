@@ -292,6 +292,34 @@ public class StoreController {
             return "search/searchList"; 
         }
     }
+	
+	// jaeeun - 페이징
+		@GetMapping("/lists")
+		public String searchStores(
+		    @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+		    @RequestParam(value = "orderType", required = false, defaultValue = "storeNo") String orderType,
+		    @RequestParam(value = "latitude", required = false, defaultValue = "") Double latitude,
+	        @RequestParam(value = "longitude", required = false, defaultValue = "") Double longitude,
+		    @RequestParam(value = "offset", required = false, defaultValue = "0") int offset,
+		    @RequestParam(value = "limit", required = false, defaultValue = "5") int limit,
+		    Model model) {
+		    
+			List<Store> stores = storeService.showStoreList(keyword, orderType, latitude, longitude, offset, limit);
+		    
+		    List<Photo> pictures = new ArrayList<>();
+		    for (Store store : stores) {
+		    	if (store.getPicture() != null) {
+		    		Photo photo = storeService.getPhotoByPhotoNo(store.getPicture());
+		    		photo.setStoreNo(store.getStoreNo());
+		    		pictures.add(photo);
+		    	}
+		    }
+		    
+		    model.addAttribute("stores", stores);
+		    model.addAttribute("pictures", pictures);
+		    
+		    return "search/searchItems";
+		}
 
 	// jaeeun - 주문하기
 	@GetMapping("/{storeNo}/order")
