@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/gallery.css">
 </head>
 <body>
-	<div class="container">
+	<div class="container" style="padding: 100px 40px 0px 40px;">
 		<span style="display: flex; flex-direction: row; justify-content: space-between; padding: 0 40px;">
               <c:choose>
 			    <c:when test="${isOwner eq true }">
@@ -101,6 +101,7 @@
 							    </c:choose>
 	            		 	</small>
 	            		 </p>
+				   		 <a href="${pageContext.request.contextPath}/store/${store.storeNo}/order" class="btn btn-outline-primary">주문요청하기</a>
 	            	</div>
 	        	</div>
 	    	</div>
@@ -122,9 +123,8 @@
 				</sec:authorize>
             </span>
             
-            
             <!-- KAKAO MAP API -->
-			<div class="col-md-12" id="map" style="width: 100%; height: 200px; border-radius: 20px; background-color: "#f6f6f6;"></div>
+			<div class="col-md-12" id="map" style="width: 100%; height: 200px; border-radius: 20px;"></div>
 			<div class="col-md-12" id="result"></div>
 				
             <span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 10px;">
@@ -278,7 +278,6 @@
 <!-- 					</a> -->
 <%-- 				</c:if> --%>
 <!-- 			</div> -->
-			
 <!-- 	    </div> -->
 		   
 			<div id="spinner" class="spinner"></div>

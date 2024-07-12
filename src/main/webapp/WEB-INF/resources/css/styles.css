@@ -3,11 +3,10 @@ html {
 	font-optical-sizing: auto;
 	font-weight: 400;
 	font-style: normal;
-	font-size: 1.25rem;
 }
 
 .container {
-	padding: 100px 40px 0px 40px;
+	padding: 120px 40px 0px 40px;
 	margin: 0 auto;
 }
 
@@ -22,6 +21,7 @@ body nav {
 
 body nav > * {
     margin: 0 100px;
+   	font-size: 1.25rem;
 }
 
 body div {

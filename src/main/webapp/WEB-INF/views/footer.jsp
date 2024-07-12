@@ -19,7 +19,7 @@
 <body>
 	<div style="width: 100%; height: 100px; background-color: #f6f6f6; text-align: center">
 		<small>
-			2024 © ALL RIGHTS RESERVED
+			©2024. OhMyStreetFood All rights reserved.
 		</small>
 	</div>
 </body>
