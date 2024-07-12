@@ -11,6 +11,8 @@ import org.omsf.chatRoom.model.chat.ChatRoom;
 import org.omsf.error.Exception.CustomBaseException;
 import org.omsf.error.Exception.ErrorCode;
 import org.omsf.error.Exception.NotFoundException;
+import org.omsf.store.dao.LikeRepository;
+import org.omsf.store.model.Like;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 public class ChatServiceImpl implements ChatService{
     private final ChatRepository chatRepository;
     private final SimpMessagingTemplate messagingTemplate;
-
+    private final LikeRepository likeRepository;
     //1. 고유 Address 조회
     @Override
     public List<String> getUserAddress(String username) {
@@ -73,6 +75,11 @@ public class ChatServiceImpl implements ChatService{
     @Override
     public DisplayName getDisplayNameByIdentifier(String identifier) {
         return chatRepository.getDisplayNameByIdentifier(identifier).orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public List<Integer> getNoticeList(String username) {
+        return likeRepository.getLikesByUsername(username).stream().map(Like::getStoreStoreNo).collect(Collectors.toList());
     }
 
     @Override
