@@ -66,6 +66,12 @@ public class ChatRoomController {
         return ResponseEntity.ok(chatService.getDisplayNameByIdentifier(identifier));
     }
 
+    //7. NoticeList
+    @GetMapping("/getNoticeList")
+    public ResponseEntity<List<Integer>> getNoticeList(@RequestParam String username){
+        return ResponseEntity.ok(chatService.getNoticeList(username));
+    }
+
     @GetMapping("/chatList")
     public ResponseEntity<List<ChatRoomVO>> findSubListByAddress(@RequestParam String address){
         return ResponseEntity.ok(chatService.findSubListByAddress(address));

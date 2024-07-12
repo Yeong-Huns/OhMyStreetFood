@@ -10,6 +10,7 @@ var stompClient = null;
 var socket = null;
 var currentPath = window.location.pathname;
 let subscribedChannels = {};
+let subscribedLikes = {};
 
 
 function subscribeNewRoomRequest(currentUser, storeNo) {
@@ -116,13 +117,52 @@ function connect(username) {
                     subscribeAddress(address, username);
                     initialize(address, username);
                 })
-            }).catch(error => console.error("/chat/getAddress 호출 오류 : ", error));
+            }).then(()=>noticeAlarm(username))
+            .catch(error => console.error("/chat/getAddress 호출 오류 : ", error))
+
+
     }, function (error) {
         console.error('웹소켓 연결 재시도 .. : ', error);
         setTimeout(function () {
             connect(username);
         }, 5000);
     });
+}
+
+function noticeAlarm(username){
+    fetch('/chat/getNoticeList?username='+username)
+        .then(res=>res.json())
+        .then(noticeList=>{
+            if(noticeList.length===0) {console.log("좋아요 누른 가게가 없어용"); return}
+            noticeList.forEach(notice => noticeAlarmRequest(notice));
+        })
+        .catch(err => console.error(err));
+}
+
+function noticeAlarmRequest(notice){
+    if((!subscribedLikes[notice])){
+    stompClient.subscribe('/topic/notice/' + notice, (payload)=> alarmToModal(payload))
+    console.log(`${notice} 채널의 뉴스피드 구독 진행중입니다.`);
+    subscribedLikes[notice] = true;
+    }
+}
+
+function unfollowAlarmRequest(notice){
+    subscribedLikes[notice] = false;
+    stompClient.unsubscribe('topic/notice'+notice);
+    console.log(`${notice} 채널의 뉴스피드 구독 취소`);
+}
+
+const alarmToModal = (payload) => {
+    const body = JSON.parse(payload.body);
+    const name = body.displayName;
+    const img = body.displayImg;
+    console.log(`${name} 사장님이 공지사항을 업로드 하셨어요!`);
+    console.log(`${img} 사장님 이미지 링크`);
+}
+
+function registerNewsFeed(storeNo){
+    stompClient.send("/app/notice/newsFeed", {}, storeNo);
 }
 
 function subscribeAddress(address) {

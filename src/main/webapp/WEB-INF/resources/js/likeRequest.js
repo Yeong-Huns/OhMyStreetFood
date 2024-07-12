@@ -43,8 +43,10 @@ document.addEventListener("DOMContentLoaded", function() {
 			
             if (buttonClassName.includes("far fa-heart")) {
                 insertLike(this, requestData);
+                noticeAlarmRequest(requestData.storeStoreNo);
             } else if (buttonClassName.includes("fas fa-heart")) {
                 deleteLike(this, requestData);
+                unfollowAlarmRequest(requestData.storeStoreNo);
             } else {
                 console.error("알 수 없는 클래스입니다.");
             }

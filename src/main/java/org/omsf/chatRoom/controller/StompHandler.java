@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.omsf.chatRoom.model.DisplayName;
 import org.omsf.chatRoom.model.MessageResponse;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.model.SubscribeRequest;
@@ -51,6 +52,14 @@ public class StompHandler {
         MessageResponse response = messageService.handleSendMessage(request);
         messagingTemplate.convertAndSend("/queue/chat/" + response.getSubscription(), response.getMessageVO());
     }
+
+    // 새로운 글 알람
+    @MessageMapping("/notice/newsFeed")
+    public void newsFeed(String storeNo) {
+        DisplayName displayName = chatService.getDisplayNameByIdentifier(storeNo);
+        messagingTemplate.convertAndSend("/topic/notice/"+storeNo, displayName);
+    }
+
 
     @Getter
     @Setter

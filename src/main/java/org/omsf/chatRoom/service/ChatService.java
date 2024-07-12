@@ -6,6 +6,7 @@ import org.omsf.chatRoom.model.DisplayName;
 import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.model.chat.ChatRoom;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -38,6 +39,8 @@ public interface ChatService {
     List<GetChatRoomNoBySubscriptionRequest> getChatRoomsWithLastMessage(String username);
     //6.
     DisplayName getDisplayNameByIdentifier(String identifier);
+    //7.
+    List<Integer> getNoticeList(String username);
 
     List<ChatRoomVO> findSubListByAddress(String address);
     List<Integer> findStoreListByAddress(@Param("address") String address);
