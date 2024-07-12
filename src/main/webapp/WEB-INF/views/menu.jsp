@@ -28,6 +28,10 @@
 		    align-items: center;
 		}
 		
+		.nav-item :hover {
+    		font-weight: bold;
+		}
+		
 		.nav-link {
 		    display: flex;
 		    align-items: center;
@@ -52,6 +56,11 @@
 				<li class="nav-item">
 					<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/store/list">
 						점포
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/alarm">
+						알림
 					</a>
 				</li>
 				<li class="nav-item">

@@ -56,11 +56,11 @@
     	}
     </style>
 <body>
-	<div class="container">
-	
+	<div class="container" style="padding: 60px 40px 0px 40px;">
+		
 		<!-- KAKAO MAP API -->
 		<div class="col-md-12">
-			<div id="map" style="width: 100%; height: 600px;"></div>
+			<div id="map" style="width: 100%; height: 500px; border-radius: 20px;"></div>
 		</div>
 	
 		<sec:authorize access="isAnonymous()">
