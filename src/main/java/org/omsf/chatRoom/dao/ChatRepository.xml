@@ -187,7 +187,11 @@
         SELECT
             COALESCE(mem.nickname, s.storeName) AS displayName,
             CASE
-                WHEN mem.username IS NOT NULL THEN '/img/00.jpg'
+                WHEN mem.username IS NOT NULL THEN
+                    CASE
+                        WHEN mem.PROFILEIMAGE IS NOT NULL THEN mem.PROFILEIMAGE
+                        ELSE '/img/00.jpg'
+                        END
                 WHEN s.picture IS NULL THEN '/img/00.jpg'
                 ELSE p.picture
                 END AS displayImg
@@ -200,6 +204,7 @@
                 LEFT JOIN store s ON d.identifier = TO_CHAR(s.storeNo)
                 LEFT JOIN photo p ON s.picture = p.photoNo
         WHERE mem.username IS NOT NULL OR s.storeNo IS NOT NULL
+
     </select>
 
 

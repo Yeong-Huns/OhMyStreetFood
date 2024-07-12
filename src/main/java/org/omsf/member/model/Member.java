@@ -44,6 +44,7 @@ public class Member { // yunbin
 	private String memberType; 
 	private Date createdAt;
 	private Date modifiedAt;
+	private String profileImage;
 	
 	public Member(String memberType) {
 		this.memberType=memberType;

@@ -5,19 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.omsf.chatRoom.model.ChatRoomVO;
 import org.omsf.chatRoom.model.DisplayName;
 import org.omsf.chatRoom.model.GetChatRoomNoBySubscriptionRequest;
-import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.service.ChatService;
-import org.omsf.error.Exception.BadRequestException;
 import org.omsf.error.Exception.ErrorCode;
 import org.omsf.error.Exception.NotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 /**
  * packageName    : org.omsf.chatRoom.controller

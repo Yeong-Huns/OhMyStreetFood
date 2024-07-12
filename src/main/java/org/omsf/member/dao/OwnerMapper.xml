@@ -13,9 +13,9 @@
     
 	<insert id="insertOwner">
 		INSERT INTO member(
-		username, password, membertype, businessregistrationnumber, createdat, modifiedat)
+		username, password, membertype, businessregistrationnumber, createdat, modifiedat, profileImage)
 		VALUES (
-		#{username}, #{password}, #{memberType}, #{businessRegistrationNumber}, SYSDATE, SYSDATE)
+		#{username}, #{password}, #{memberType}, #{businessRegistrationNumber}, SYSDATE, SYSDATE, #{profileImage})
 	</insert>
 	
 	<resultMap id="ownerMap" type="org.omsf.member.model.Owner">

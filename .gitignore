@@ -6,6 +6,7 @@ out
 gen
 *.class
 
+.vscode
 # Log file
 *.log
 
@@ -35,3 +36,5 @@ maven-status\
 ohmystreetfood-0.0.1-SNAPSHOT\
 /target/ohmystreetfood-0.0.1-SNAPSHOT
 
+.factorypath
+.classpath

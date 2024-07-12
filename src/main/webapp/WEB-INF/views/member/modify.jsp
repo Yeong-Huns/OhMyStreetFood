@@ -24,13 +24,28 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<style>
+	#profileImage {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            transition: transform 0.2s;
+    }
+    #profileImage:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+</style>
+
 </head>
 <body>
 	<div class="container">
     	<div class="row justify-content-center">
-        	<div class="col-md-10">
+      <div class="col-md-10">
 			<h3 style="text-align: center;">회원정보수정</h3>
-			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/modifyMember/${member.memberType}" method="post">
+			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/modifyMember/${member.memberType}" method="post" enctype="multipart/form-data">
+				<img id="profileImage" src="${member.profileImage}" >
+	       		<input type="file" id="fileInput" name="profileFile" accept="image/*" style="display:none;">
 				<sec:authorize access="hasRole('ROLE_USER')">
 					<div class="form-group">
 						<label for="nickName">닉네임 변경</label>
@@ -133,6 +148,21 @@
 			}
 		});
 	});
+	
+	 document.getElementById('profileImage').addEventListener('click', function() {
+         document.getElementById('fileInput').click();
+     });
+
+     document.getElementById('fileInput').addEventListener('change', function(event) {
+         const file = event.target.files[0];
+         if (file) {
+             const reader = new FileReader();
+             reader.onload = function(e) {
+                 document.getElementById('profileImage').src = e.target.result;
+             };
+             reader.readAsDataURL(file);
+         }
+     });
 	</script>
 </body>
 </html>
