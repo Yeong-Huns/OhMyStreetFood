@@ -19,32 +19,25 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-	<!-- Logo -->
-	<div style="text-align: center; margin-top: 55px;">
-		<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px"></a>
+	<div class="container">
+		<!-- Search -->
+	    <div class="col-md-12">
+		    <jsp:include page="../search.jsp" />
+		</div>
+	
+	    <!-- Oderby -->
+	    <jsp:include page="../orderby.jsp" />
+	
+	    <div class="col-md-12" id="storeList">
+	        <jsp:include page="searchItems.jsp">
+	            <jsp:param name="stores" value="${stores}" />
+	            <jsp:param name="pictures" value="${pictures}" />
+	        </jsp:include>
+	    </div>
 	</div>
 	
-	<!-- Search -->
-    <div class="col-md-12">
-	    <jsp:include page="../search.jsp" />
-	</div>
-
-    <!-- Oderby -->
-    <jsp:include page="../orderby.jsp" />
-
-    <div class="col-md-12" id="storeList">
-        <jsp:include page="searchItems.jsp">
-            <jsp:param name="stores" value="${stores}" />
-            <jsp:param name="pictures" value="${pictures}" />
-        </jsp:include>
-    </div>
-
     <!-- Menu -->
-    <div class="row">
-        <div class="col-md-12">
-            <jsp:include page="../menu.jsp" />
-        </div>
-    </div>
+    <jsp:include page="../menu.jsp" />
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

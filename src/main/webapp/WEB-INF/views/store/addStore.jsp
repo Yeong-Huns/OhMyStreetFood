@@ -19,11 +19,7 @@
 	
 </head>
 <body>
-    <!-- Logo -->
-	<div style="text-align: center;">
-		<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px"></a>
-	</div>
-		
+	<div class="container">
 		<div class="col-md-12 text-center" id="title">
 			<h3>가게 정보 등록</h3>
 		</div>
@@ -130,13 +126,10 @@
 				<button type="submit" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">등록하기</button>
 			</div>
 		</form>
+	</div>
 	
 	<!-- Menu -->
-    <div class="row">
-        <div class="col-md-12">
-            <jsp:include page="../menu.jsp" />
-        </div>
-    </div>
+    <jsp:include page="../menu.jsp" />
 	
 	<script type="module" src="${pageContext.request.contextPath}/js/addStore.js"></script>
 	<!-- kakaoMap API key -->

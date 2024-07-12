@@ -11,9 +11,9 @@
     <!--  */ -->
 	<insert id="insertGeneralMember">
 		INSERT INTO member (
-		username, nickname, password, membertype, createdat, modifiedat)
+		username, nickname, password, membertype, createdat, modifiedat, profileimage)
 		VALUES (
-		#{username}, #{nickName}, #{password}, #{memberType}, SYSDATE, SYSDATE)
+		#{username}, #{nickName}, #{password}, #{memberType}, SYSDATE, SYSDATE, #{profileImage})
 	</insert>
 	
 	<select id="checkMemberNickName" resultType="boolean">
@@ -32,7 +32,7 @@
 	</resultMap>
 	
 	<select id="findByUsername" resultMap="generalMemberMap">
-		SELECT username, nickname, password, membertype, createdat, modifiedat
+		SELECT username, nickname, password, membertype, createdat, modifiedat, profileimage
 		FROM MEMBER
 		WHERE USERNAME = #{username}
 	</select>
@@ -47,7 +47,8 @@
 	            <if test="nickName != null and nickName != ''">
 	                nickname = #{nickName,jdbcType=VARCHAR},
 	            </if>
-	            modifiedat = SYSDATE
+	            modifiedat = SYSDATE,
+	            profileimage = #{profileImage}
 	        </trim>
 	    </set>
 	    where username = #{username,jdbcType=VARCHAR}

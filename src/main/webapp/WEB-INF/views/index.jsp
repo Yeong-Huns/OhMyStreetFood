@@ -56,50 +56,41 @@
     	}
     </style>
 <body>
-	<!-- Logo -->
-	<div style="text-align: center;">
-		<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px"></a>
-	</div>
-
-	<!-- Search -->
-	<div class="col-md-12">
-      <jsp:include page="search.jsp" />
-	</div>
-
-	<!-- KAKAO MAP API -->
-	<div class="col-md-12">
-		<div id="map" style="width: 100%; height: 400px; border-radius: 20px"></div>
-	</div>
-
-	<sec:authorize access="isAnonymous()">
-		<div class="col-md-12">
-			<span style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#e2f0fe; border-radius:10px;">
-		    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="${pageContext.request.contextPath}/signup/owner">사장님 모드</a></strong>
-			</span>
-		</div>
-	</sec:authorize>
-
-
-	<!-- Store Carousel -->
-	<div class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
-		<h5>인기 점포</h5>
-		<div id="storeCarousel" class="owl-carousel owl-theme">
-		</div>
-	</div>
-    
-    <!-- Menu -->
-    <div class="row">
-        <div class="col-md-12">
-            <jsp:include page="menu.jsp" />
-        </div>
-    </div>
-
-	<!-- Spinner -->
-	<div id="spinner-wrapper">
-        <div id="spinner"></div>
-        <div id="spinner-text">현재 위치를 기반으로 주위 상점을 알아보고 있습니다</div>
-    </div> 
+	<div class="container">
 	
+		<!-- KAKAO MAP API -->
+		<div class="col-md-12">
+			<div id="map" style="width: 100%; height: 600px;"></div>
+		</div>
+	
+		<sec:authorize access="isAnonymous()">
+			<div class="col-md-12">
+				<span style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%; height: 50px; background-color:#e2f0fe; border-radius:10px;">
+			    	우리 점포 무료로 홍보하기!&nbsp;<strong><a href="${pageContext.request.contextPath}/signup/owner">사장님 모드</a></strong>
+				</span>
+			</div>
+		</sec:authorize>
+	
+		<!-- Store Carousel -->
+		<div class="d-flex flex-wrap" style="display: flex; overflow-x: auto; width: 100%;">
+			<h4>인기 점포</h4>
+			<div id="storeCarousel" class="owl-carousel owl-theme">
+			</div>
+		</div>
+
+		<!-- Spinner -->
+		<div id="spinner-wrapper">
+	        <div id="spinner"></div>
+	        <div id="spinner-text">현재 위치를 기반으로 주위 상점을 알아보고 있습니다</div>
+	    </div> 
+	</div>
+	
+	<!-- Menu -->
+	<jsp:include page="menu.jsp" />
+	
+	<!-- Footer -->
+   	<jsp:include page="footer.jsp" />
+   	
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

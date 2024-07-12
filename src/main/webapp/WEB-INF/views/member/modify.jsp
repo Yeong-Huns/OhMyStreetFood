@@ -24,8 +24,72 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<style>
+	#profileImage {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            transition: transform 0.2s;
+    }
+    #profileImage:hover {
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+</style>
 
-<script>
+</head>
+<body>
+	<div class="container">
+    	<div class="row justify-content-center">
+        	<div class="col-md-10" style="text-align: center;">
+<!-- 			<div class="col-md-12 text-center" id="title"> -->
+<!-- 				<h3>회원 정보 수정</h3> -->
+<!-- 			</div> -->
+			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/modifyMember/${member.memberType}" method="post" enctype="multipart/form-data">
+				<img id="profileImage" src="${member.profileImage}" >
+	       		<input type="file" id="fileInput" name="profileFile" accept="image/*" style="display:none;">
+				<sec:authorize access="hasRole('ROLE_USER')">
+					<div class="form-group">
+						<label for="nickName">닉네임 변경</label>
+						<span style="display: flex; align-items: center;"> 
+						<form:input path="nickName" class="form-control" id="nickName" value="${member.nickName}"/>
+						<input type="button" id="nickNameDuplicateConfirm" class="btn btn-primary" value="중복 확인">
+						</span>
+						<label id="nickNameAlertLabel"></label>
+					</div>
+				</sec:authorize>
+				<div class="form-group">
+					<label for="password">비밀번호 변경</label>
+					<span style="display: flex; align-items: center;"> 
+					<form:password path="password" class="form-control" placeholder="Password"/>
+					</span>
+					<form:errors path="password" cssClass="text-danger"/>
+				</div>
+				<div class="form-group">
+					<label for="passwordConfirm">비밀번호 확인</label>
+					<form:password path="passwordConfirm" class="form-control" placeholder="Password Confirm"/>
+					<form:errors path="passwordConfirm" cssClass="text-danger"/>
+				</div>
+				<div class="col-md-12">
+					<form:hidden path="memberType" value="${member.memberType}" />
+					<form:hidden path="username" value="${member.username }" />
+					<input type="submit" value="변경" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">
+				</div>
+			</form:form>
+			<div class="col-md-12 text-center">
+				<a href="#" id="withdrawal">회원 탈퇴</a>
+			</div>
+		</div>
+	</div>
+	</div>		
+
+	<!-- Menu -->
+    <jsp:include page="../menu.jsp" />
+    
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	
+	<script>
 	var isNickNameDuplicateChecked = false;
 	
 	$(document).ready(function(){
@@ -86,64 +150,21 @@
 			}
 		});
 	});
-</script>
-</head>
-<body>
-	<!-- Logo -->
-	<div style="text-align: center; margin-top: 55px;">
-		<a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px"></a>
-	</div>
+	
+	 document.getElementById('profileImage').addEventListener('click', function() {
+         document.getElementById('fileInput').click();
+     });
 
-	<div class="main">
-    	<div class="row justify-content-center">
-        	<div class="col-md-10">
-<!-- 			<div class="col-md-12 text-center" id="title"> -->
-<!-- 				<h3>회원 정보 수정</h3> -->
-<!-- 			</div> -->
-			<form:form modelAttribute="member" action="${pageContext.request.contextPath}/modifyMember/${member.memberType}" method="post">
-				<sec:authorize access="hasRole('ROLE_USER')">
-					<div class="form-group">
-						<label for="nickName">닉네임 변경</label>
-						<span style="display: flex; align-items: center;"> 
-						<form:input path="nickName" class="form-control" id="nickName" value="${member.nickName}"/>
-						<input type="button" id="nickNameDuplicateConfirm" class="btn btn-primary" value="중복 확인">
-						</span>
-						<label id="nickNameAlertLabel"></label>
-					</div>
-				</sec:authorize>
-				<div class="form-group">
-					<label for="password">비밀번호 변경</label>
-					<span style="display: flex; align-items: center;"> 
-					<form:password path="password" class="form-control" placeholder="Password"/>
-					</span>
-					<form:errors path="password" cssClass="text-danger"/>
-				</div>
-				<div class="form-group">
-					<label for="passwordConfirm">비밀번호 확인</label>
-					<form:password path="passwordConfirm" class="form-control" placeholder="Password Confirm"/>
-					<form:errors path="passwordConfirm" cssClass="text-danger"/>
-				</div>
-				<div class="col-md-12">
-					<form:hidden path="memberType" value="${member.memberType}" />
-					<form:hidden path="username" value="${member.username }" />
-					<input type="submit" value="변경" class="btn btn-primary" style="height: 50px; width: 100%; margin-bottom: 10px;">
-				</div>
-			</form:form>
-			<div class="col-md-12 text-center">
-				<a href="#" id="withdrawal">회원 탈퇴</a>
-			</div>
-		</div>
-	</div>
-	</div>		
-
-	<!-- Menu -->
-    <div class="row">
-        <div class="col-md-12">
-            <jsp:include page="../menu.jsp" />
-        </div>
-    </div>
-    
-	<!-- Bootstrap JS -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+     document.getElementById('fileInput').addEventListener('change', function(event) {
+         const file = event.target.files[0];
+         if (file) {
+             const reader = new FileReader();
+             reader.onload = function(e) {
+                 document.getElementById('profileImage').src = e.target.result;
+             };
+             reader.readAsDataURL(file);
+         }
+     });
+	</script>
 </body>
 </html>

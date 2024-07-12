@@ -58,6 +58,30 @@
             float: right;
             margin-top: -8px;
         }
+        .profile-container {
+            margin-bottom: 20px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .profile-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .profile-info {
+            text-align: center;
+            margin-top: 20px;
+        }
     </style>
     <title>OhMyStreetFood!</title>
     <!-- Bootstrap CSS -->
@@ -74,8 +98,123 @@
 
     <!-- JQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+	<div class="row justify-content-center">
+	    <div class="col-md-10">
+	        <div align="center" style="margin-bottom: 20px; width: 200px; height: 200px; border-radius: 50%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; text-align: center; margin: 0 auto; object-fit: cover; padding: 0">
+	                <img src="${member.profileImage}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+	        </div>
+	
+	        <div class="col-md-12 text-center">
+	            <sec:authentication property="principal.username" var="username"/>
+	            <input type="hidden" id="memberUsername" value="${username}">
+	               
+	            <sec:authorize access="hasRole('ROLE_ADMIN')">
+	                관리자 계정입니다
+	            </sec:authorize>
+	         	${member.nickName }<br>
+	            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmPasswordModal">회원 정보 수정</a><br>
+	            <a href="${pageContext.request.contextPath}/logout">로그아웃</a>
+	        </div>
+	
+	        <div style="width:100%;">
+	            <i class="fas fa-store"></i>&nbsp;<strong>내가 등록한 가게</strong>
+	        </div>
+	        <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+	            <c:forEach items="${registeredStores}" var="store" varStatus="status">
+	                <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+	                    <a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
+	                    <sec:authorize access="authentication.name == '${store.username}' && hasRole('ROLE_OWNER')">
+	                        <button type="button" class="btn btn-danger delete-btn" id="delete-btn" data-store-no="${store.storeNo}">삭제</button>
+	                    </sec:authorize>
+	                </p>
+	                <hr/>
+	            </c:forEach>
+	        </div>
+	
+	        <sec:authorize access="hasRole('ROLE_USER')">
+	            <div style="width:100%;">
+	                <i class="fas fa-heart"></i>&nbsp;<strong>내가 찜한 가게</strong>
+	            </div>
+	            <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+	                <c:forEach items="${likeStores}" var="store" varStatus="status">
+	                    <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+	                        <a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
+	                        <i class="like-btn far fa-heart" data-store-no="${store.storeNo}"></i>
+	                    </p>
+	                    <hr/>
+	                </c:forEach>
+	            </div>
+	
+	            <div style="width:100%;">
+	                <i class="fa fa-pen"></i>&nbsp;<strong>내가 쓴 리뷰</strong>
+	            </div>
+	            <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+	                <c:forEach items="${reviews}" var="review" varStatus="status">
+	                    <c:set var="loop_flag" value="true"/>
+	                    <c:forEach items="${reviewStores}" var="store" varStatus="status">
+	                        <c:if test="${review.storeStoreNo eq store.storeNo and loop_flag}">
+	                            <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
+	                            <a href="${pageContext.request.contextPath}/store/${store.storeNo}">${store.storeName}</a>
+	                            <c:set var="loop_flag" value="false"/>
+	                        </c:if>
+	                    </c:forEach>
+	                    <span>
+	                            <a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${fn:substring(review.content, 0, 15)}${fn:length(review.content) > 15 ? '...' : ''}</a>
+	                    </p>
+	                    </span>
+	                    <hr/>
+	                </c:forEach>
+	            </div>
+	        </sec:authorize>
+	
+	        <div style="width:100%;">
+	            <i class="fa fa-comments"></i>&nbsp;<strong>나의 채팅방</strong>
+	            <button id="show-more-chatrooms" class="btn btn-primary btn-float-right hidden">더보기</button>
+	        </div>
+	        <div class="section-box" id="custom-chat-room-container">
+	        </div>
+	
+	    </div>
+	
+	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+	
+	    <div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
+	        <div class="modal-dialog modal-dialog-centered">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <h5 class="modal-title" id="confirmPasswordLabel">비밀번호 확인</h5>
+	                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	                </div>
+	                <div class="modal-body">
+	                    <div class="mb-3">
+	                        <input type="password" class="form-control" id="password" name="password" required>
+	                        <label id="confirmPasswordAlert" class="text-danger"></label>
+	                    </div>
+	                </div>
+	                <div class="modal-footer">
+	                    <button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
 
-    <script>
+	<sec:authorize access="isAuthenticated()">
+	    <!-- like 요청 -->
+	    <script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
+	</sec:authorize>
+
+	<!-- Menu -->
+    <jsp:include page="../menu.jsp"/>
+    
+    <!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+        <script>
         $(document).ready(function () {
         	$("#confirmPasswordBtn").click(function () {
                 var password = $("#password").val();
@@ -202,131 +341,6 @@
                 .catch(error => console.error('Error fetching chat rooms:', error));
         }
     </script>
-</head>
-<body>
-<!-- Logo -->
-<div style="text-align: center;">
-    <a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/img/logo.png" style="width: 450px"></a>
-</div>
-
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div align="center" style="margin-bottom: 20px; width: 200px; height: 200px; border-radius: 50%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; text-align: center; margin: 0 auto;">
-            <sec:authentication property="principal.username" var="username"/>
-            <input type="hidden" id="memberUsername" value="${username}">
-            <sec:authorize access="hasRole('ROLE_OWNER')">${username}</sec:authorize>
-            <sec:authorize access="hasRole('ROLE_USER')">
-                ${member.nickName }<br>
-                ${username }
-            </sec:authorize>
-            <sec:authorize access="hasRole('ROLE_ADMIN')">
-                관리자 계정입니다
-            </sec:authorize>
-        </div>
-
-        <div class="col-md-12 text-center">
-            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmPasswordModal">회원 정보 수정</a><br>
-            <a href="${pageContext.request.contextPath}/logout">로그아웃</a>
-        </div>
-
-        <div style="width:100%;">
-            <i class="fas fa-store"></i>&nbsp;<strong>내가 등록한 가게</strong>
-        </div>
-        <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-            <c:forEach items="${registeredStores}" var="store" varStatus="status">
-                <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
-                    <a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
-                    <sec:authorize access="authentication.name == '${store.username}' && hasRole('ROLE_OWNER')">
-                        <button type="button" class="btn btn-danger delete-btn" id="delete-btn" data-store-no="${store.storeNo}">삭제</button>
-                    </sec:authorize>
-                </p>
-                <hr/>
-            </c:forEach>
-        </div>
-
-        <sec:authorize access="hasRole('ROLE_USER')">
-            <div style="width:100%;">
-                <i class="fas fa-heart"></i>&nbsp;<strong>내가 찜한 가게</strong>
-            </div>
-            <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-                <c:forEach items="${likeStores}" var="store" varStatus="status">
-                    <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
-                        <a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
-                        <i class="like-btn far fa-heart" data-store-no="${store.storeNo}"></i>
-                    </p>
-                    <hr/>
-                </c:forEach>
-            </div>
-
-            <div style="width:100%;">
-                <i class="fa fa-pen"></i>&nbsp;<strong>내가 쓴 리뷰</strong>
-            </div>
-            <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-                <c:forEach items="${reviews}" var="review" varStatus="status">
-                    <c:set var="loop_flag" value="true"/>
-                    <c:forEach items="${reviewStores}" var="store" varStatus="status">
-                        <c:if test="${review.storeStoreNo eq store.storeNo and loop_flag}">
-                            <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
-                            <a href="${pageContext.request.contextPath}/store/${store.storeNo}">${store.storeName}</a>
-                            <c:set var="loop_flag" value="false"/>
-                        </c:if>
-                    </c:forEach>
-                    <span>
-                            <a href="<c:url value="/review/${review.reviewNo}?requestPage=mypage" />">${fn:substring(review.content, 0, 15)}${fn:length(review.content) > 15 ? '...' : ''}</a>
-                    </p>
-                    </span>
-                    <hr/>
-                </c:forEach>
-            </div>
-        </sec:authorize>
-
-        <div style="width:100%;">
-            <i class="fa fa-comments"></i>&nbsp;<strong>나의 채팅방</strong>
-            <button id="show-more-chatrooms" class="btn btn-primary btn-float-right hidden">더보기</button>
-        </div>
-        <div class="section-box" id="custom-chat-room-container">
-        </div>
-
-    </div>
-
-    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-
-    <div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmPasswordLabel">비밀번호 확인</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <input type="password" class="form-control" id="password" name="password" required>
-                        <label id="confirmPasswordAlert" class="text-danger"></label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<sec:authorize access="isAuthenticated()">
-    <!-- like 요청 -->
-    <script src="${pageContext.request.contextPath}/js/likeRequest.js"></script>
-</sec:authorize>
-
-<!-- Menu -->
-<div class="row">
-    <div class="col-md-12">
-        <jsp:include page="../menu.jsp"/>
-    </div>
-</div>
 </body>
 <!-- jQuery UI JS -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
