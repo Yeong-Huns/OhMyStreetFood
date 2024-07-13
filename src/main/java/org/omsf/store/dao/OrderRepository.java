@@ -17,6 +17,6 @@ import org.omsf.store.model.Order;
 */
 
 public interface OrderRepository {
-	void saveOrder(Order orders);
+	void saveOrder(Order order);
 	Optional<Order> getOrderByNo(int orderNo);
 }

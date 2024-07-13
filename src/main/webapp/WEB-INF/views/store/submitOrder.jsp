@@ -22,27 +22,86 @@
 </head>
 <body>
     <div class="container">
-        <h3 style="text-align: center;">주문진행상황</h3>
-        <div style="text-align: center">
-	        해당 가게 사장님에게 주문이 요청되었습니다<br>
-		    사장님 승인이 완료되어야 진짜 주문이 완료됩니다
-	    </div>
+        <h3 style="text-align: center;">주문요청하기</h3>
+    	
+        <form id="orderForm" method="post" action="${pageContext.request.contextPath}/store/${store.storeNo}/order/submit">
+		    <div class="row">
+		        <div class="col-sm-6 form-group">
+		            <label for="pickup-date">픽업일자<span style="color: red;">&nbsp;*&nbsp;</span></label>
+		            <input type="date" class="form-control" id="pickup-date" name="pickupDate" required>
+		        </div>
+		        <div class="col-sm-6 form-group">
+		            <label for="pickup-time">픽업시간<span style="color: red;">&nbsp;*&nbsp;</span></label>
+		            <input type="time" class="form-control" id="pickup-time" name="pickupTime" required>
+		        </div>
+		    </div>
+		
+		    <div class="form-group">
+		        <label>주문 내역<span style="color: red;">&nbsp;*&nbsp;</span></label>
+		        <table class="table table-bordered">
+		            <thead>
+		                <tr>
+		                    <th style="text-align: center;">메 뉴</th>
+		                    <th style="text-align: center;">가 격</th>
+		                    <th style="text-align: center;">수 량</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <c:forEach items="${menus}" var="menu">
+		                    <tr>
+		                        <td><input type="text" class="form-control" name="menuNames" value="${menu.menuName}" style="text-align: right;" readonly></td>
+		                        <td><input type="text" class="form-control price" name="prices" value="${menu.price}" style="text-align: right;" readonly></td>
+		                        <td><input type="number" class="form-control quantity" name="quantities" min="0" style="text-align: right;" onchange="calculateTotal()" required></td>
+		                    </tr>
+		                </c:forEach>
+		            </tbody>
+		            <tfoot>
+		                <tr>
+		                    <th colspan="2" style="text-align: center;">총 합 계</th>
+		                    <th id="totalPriceInput" style="text-align: right;">0</th>
+		                </tr>
+		            </tfoot>
+		        </table>
+		    </div>
+		
+		    <div class="form-group">
+		        <label>메모</label>
+		        <input type="text" class="form-control" name="memo">
+		    </div>
+		
+		    <div class="d-flex justify-content-end">
+		        <button type="submit" class="btn btn-primary">주문요청하기</button>
+		    </div>
 
-주문번호: ${empty order.orderno ? 'Unknown' : order.orderno}<br>
-가게번호: ${empty order.storeno ? 'Unknown' : order.storeno}<br>
-${empty order.username ? 'Unknown' : order.username}<br>
-${empty order.totalprice ? 'Unknown' : order.totalprice}<br>
-${empty order.approval ? 'Unknown' : order.approval}<br>
-${empty order.paymentstatus ? 'Unknown' : order.paymentstatus}<br>
-${empty order.paymentmethod ? 'Unknown' : order.paymentmethod}<br>
-${empty order.createdat ? 'Unknown' : order.createdat}<br>
-${empty order.pickupat ? 'Unknown' : order.pickupat}<br>
-${empty order.approvedat ? 'Unknown' : order.approvedat}<br>
-${empty order.paidat ? 'Unknown' : order.paidat}<br>
+		    <input type="hidden" name="totalPrice" id="totalPrice">
+		</form>    	
     </div>
     
     <!-- Menu -->
     <jsp:include page="../menu.jsp" />
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        function calculateTotal() {
+            let total = 0;
+            document.querySelectorAll('tbody tr').forEach(row => {
+                const price = parseFloat(row.querySelector('.price').value);
+                const quantity = parseInt(row.querySelector('.quantity').value);
+                if (!isNaN(price) && !isNaN(quantity)) {
+                    total += price * quantity;
+                }
+            });
+            document.getElementById('totalPriceInput').innerText = total.toFixed(0);
+            document.getElementById('totalPrice').value = total.toFixed(0);
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('pickup-date').setAttribute('min', today);
+        });
+    </script>
 </body>
 </html>

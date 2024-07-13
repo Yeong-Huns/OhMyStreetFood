@@ -338,7 +338,7 @@ public class StoreController {
 		
 		model.addAttribute("store", store);
 		model.addAttribute("menus", menus);
-	    return "store/placeOrder";
+	    return "store/submitOrder";
 	}
 	
 	// jaeeun - 주문내역저장
@@ -361,17 +361,15 @@ public class StoreController {
 		order.setTotalprice(totalPrice);
 		order.setPickupat(pickupat);
 	    
-	    orderService.saveOrder(order);
-	    
-	    int orderNo = order.getOrderno();
-	    System.out.println("orderNo" + orderNo);
+		int orderNo = orderService.saveOrder(order);
+		
 	    model.addAttribute("order", order);
 	    
-	    return "redirect:/{storeNo}/order/status?orderno=" + orderNo;
+	    return "redirect:/store/{storeNo}/order/status/" + orderNo;
     }
 	
 	// jaeeun - 주문진행상황
-	@GetMapping("/{storeNo}/order/status")
+	@GetMapping("/{storeNo}/order/status/{orderNo}")
 	public String showOrder(Model model,
 							@PathVariable("storeNo") int storeNo,
 							@PathVariable("orderNo") int orderNo) {
@@ -380,9 +378,9 @@ public class StoreController {
 		Order order = orderService.getOrderByNo(orderNo);
 
 		model.addAttribute("store", store);
-	    model.addAttribute("order", order);
+		model.addAttribute("order", order);
 	    
-        return "store/submitOrder";
+        return "store/statusOrder";
     }
 		
 	// leejongseop - 현재 위치에 기반하여 주변 가게 리스트 가져오기
