@@ -17,9 +17,12 @@
         <result property="paidat" column="paidat"/>
     </resultMap>
 	
-	<insert id="saveOrder">
-        INSERT INTO orders (storeno, username, totalprice, pickupat)
-        VALUES (#{storeno}, #{username}, #{totalprice}, #{pickupat})
+	<insert id="saveOrder" useGeneratedKeys="true" keyProperty="orderno">
+        <selectKey keyProperty="orderno" resultType="int" order="BEFORE">
+            SELECT orderno_seq.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO orders (orderno, storeno, username, totalprice, pickupat)
+        VALUES (#{orderno}, #{storeno}, #{username}, #{totalprice}, #{pickupat})
     </insert>
     
     <select id="getOrderByNo" parameterType="int" resultMap="orderResultMap">
