@@ -1,8 +1,10 @@
 package org.omsf.store.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.omsf.store.model.Order;
+import org.omsf.store.model.OrderMenu;
 
 /**
 * @packageName    : org.omsf.store.service
@@ -17,6 +19,11 @@ import org.omsf.store.model.Order;
 */
 
 public interface OrderRepository {
+	// Order
 	void saveOrder(Order order);
 	Optional<Order> getOrderByNo(int orderNo);
+	
+	// OrderMenu
+	void saveOrderMenu(OrderMenu orderMenu);
+	List<OrderMenu> getOrderMenuByNo(int orderNo);
 }

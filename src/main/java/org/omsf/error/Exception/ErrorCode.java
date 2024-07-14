@@ -31,6 +31,7 @@ public enum ErrorCode {
     NOT_FOUND_MESSAGE(HttpStatus.NOT_FOUND, "no_record", "메세지 기록이 없습니다."),
     NOT_ALLOWED_REQUEST(HttpStatus.METHOD_NOT_ALLOWED, "E2", "로직상 있을 수 없는 요청입니다."),
     NOT_FOUND_STORENO(HttpStatus.NOT_FOUND, "E4", "해당 주소로 등록된 storeNo가 없습니다."),
+    NOT_FOUND_ORDER(HttpStatus.NOT_FOUND, "E4", "등록된 주문이 없습니다."),
     ;
 
 

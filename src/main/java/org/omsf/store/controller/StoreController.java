@@ -349,19 +349,25 @@ public class StoreController {
 							@RequestParam("pickupDate") String pickupDate,
 							@RequestParam("pickupTime") String pickupTime,
 							@RequestParam("totalPrice") int totalPrice,
+							@RequestParam("paymethod") String paymethod,
+							@RequestParam("memo") String memo,
 							Principal principal) {
         
 		String username = principal.getName();
 		
 		LocalDateTime pickupDateTime = LocalDateTime.parse(pickupDate + "T" + pickupTime);
-		Timestamp pickupat = Timestamp.valueOf(pickupDateTime);
+		Timestamp reservedat = Timestamp.valueOf(pickupDateTime);
 		
 		order.setStoreno(storeNo);
 		order.setUsername(username);
 		order.setTotalprice(totalPrice);
-		order.setPickupat(pickupat);
-	    
-		int orderNo = orderService.saveOrder(order);
+		order.setReservedat(reservedat);
+		order.setPaymethod(paymethod);
+		order.setMemo(memo);
+		
+		orderService.saveOrder(order);
+		
+		int orderNo = order.getOrderno();
 		
 	    model.addAttribute("order", order);
 	    

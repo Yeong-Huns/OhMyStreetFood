@@ -27,12 +27,14 @@ public class Order {
 	private Integer storeno;
 	private String username;
 	private Integer totalprice;
-	private String approval;
-	private String paymentstatus;
-	private String paymentmethod;
+	private String paymethod;
+	private String memo;
+	private Timestamp reservedat;
 	private Timestamp createdat;
-	private Timestamp pickupat;
+	private String approval;
 	private Timestamp approvedat;
+	private String paystatus;
 	private Timestamp paidat;
+	private Timestamp pickupat;
 	
 }

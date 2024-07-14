@@ -1,6 +1,9 @@
 package org.omsf.store.service;
 
+import java.util.List;
+
 import org.omsf.store.model.Order;
+import org.omsf.store.model.OrderMenu;
 
 /**
 * @packageName    : org.omsf.store.service
@@ -15,6 +18,11 @@ import org.omsf.store.model.Order;
 */
 
 public interface OrderService {
-	int saveOrder(Order order);
+	// Order
+	void saveOrder(Order order);
 	Order getOrderByNo(int orderNo);
+	
+	// OrderMenu
+	void saveOrderMenu(OrderMenu orderMenu);
+	List<OrderMenu> getOrderMenuByNo(int orderNo);
 }

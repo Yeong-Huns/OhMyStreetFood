@@ -19,11 +19,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class OrdersMenu {
-	
-	private Integer ordermenuno;
-	private Integer orderno;
-	private String ordermenuname;
-	private Integer ordermenuprice;
-	
+public class OrderMenu {
+    private Integer orderno;
+    private String ordername;
+    private Integer orderprice;
+    private Integer orderquantity;
 }

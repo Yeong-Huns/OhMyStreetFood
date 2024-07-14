@@ -49,12 +49,12 @@
 				</li>
 				
 				<li class="nav-item">
-					<a class="nav-link" href="${pageContext.request.contextPath}/store/search">
+					<a class="nav-link" href="${pageContext.request.contextPath}/search">
 						검색
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/store/list">
+					<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/list">
 						점포
 					</a>
 				</li>

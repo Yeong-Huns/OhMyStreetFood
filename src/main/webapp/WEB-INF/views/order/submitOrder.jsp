@@ -24,7 +24,7 @@
     <div class="container">
         <h3 style="text-align: center;">주문요청하기</h3>
     	
-        <form id="orderForm" method="post" action="${pageContext.request.contextPath}/store/${store.storeNo}/order/submit">
+        <form id="orderForm" method="post" action="${pageContext.request.contextPath}/${store.storeNo}/order/submit">
 		    <div class="row">
 		        <div class="col-sm-6 form-group">
 		            <label for="pickup-date">픽업일자<span style="color: red;">&nbsp;*&nbsp;</span></label>
@@ -49,9 +49,9 @@
 		            <tbody>
 		                <c:forEach items="${menus}" var="menu">
 		                    <tr>
-		                        <td><input type="text" class="form-control" name="menuNames" value="${menu.menuName}" style="text-align: right;" readonly></td>
-		                        <td><input type="text" class="form-control price" name="prices" value="${menu.price}" style="text-align: right;" readonly></td>
-		                        <td><input type="number" class="form-control quantity" name="quantities" min="0" style="text-align: right;" onchange="calculateTotal()" required></td>
+		                        <td><input type="text" class="form-control" id="menuNames" name="menuNames" value="${menu.menuName}" style="text-align: right;" readonly></td>
+		                        <td><input type="text" class="form-control price" id="prices" name="prices" value="${menu.price}" style="text-align: right;" readonly></td>
+		                        <td><input type="number" class="form-control quantity" id="quantities" name="quantities" min="0" style="text-align: right;" onchange="calculateTotal()" required></td>
 		                    </tr>
 		                </c:forEach>
 		            </tbody>
@@ -63,10 +63,19 @@
 		            </tfoot>
 		        </table>
 		    </div>
-		
+			
+			<div class="form-group">
+                <label for="paymethod">결제수단<span style="color: red;">&nbsp;*&nbsp;</span></label>
+                <select class="form-control" id="paymethod" name="paymethod">
+                    <option value="현장결제">현장결제</option>
+                    <option value="계좌이체">계좌이체</option>
+                    <option value="카드">카드</option>
+                </select>
+            </div>
+            
 		    <div class="form-group">
-		        <label>메모</label>
-		        <input type="text" class="form-control" name="memo">
+		        <label for="memo">요청사항</label>
+		        <input type="text" class="form-control" id="memo" name="memo">
 		    </div>
 		
 		    <div class="d-flex justify-content-end">

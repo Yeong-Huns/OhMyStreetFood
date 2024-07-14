@@ -1,9 +1,12 @@
 package org.omsf.store.service;
 
+import java.util.List;
+
 import org.omsf.error.Exception.CustomBaseException;
 import org.omsf.error.Exception.ErrorCode;
 import org.omsf.store.dao.OrderRepository;
 import org.omsf.store.model.Order;
+import org.omsf.store.model.OrderMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,15 +28,27 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
     private OrderRepository orderRepository;
 
+	// Order
 	@Override
-	public int saveOrder(Order order) {
+	public void saveOrder(Order order) {
 		orderRepository.saveOrder(order);
-        return order.getOrderno();
 	}
 
 	@Override
 	public Order getOrderByNo(int orderNo) {
-		Order order = orderRepository.getOrderByNo(orderNo).orElseThrow(() -> new CustomBaseException(ErrorCode.NOT_FOUND_STORE));
+		Order order = orderRepository.getOrderByNo(orderNo).orElseThrow(() -> new CustomBaseException(ErrorCode.NOT_FOUND_ORDER));
 		return order;
 	}
+
+	// OrderMenu
+	@Override
+	public void saveOrderMenu(OrderMenu orderMenu) {
+		orderRepository.saveOrderMenu(orderMenu);
+	}
+	
+	@Override
+    public List<OrderMenu> getOrderMenuByNo(int orderNo) {
+        List<OrderMenu> ordermenu = orderRepository.getOrderMenuByNo(orderNo);
+        return ordermenu;
+    }
 }

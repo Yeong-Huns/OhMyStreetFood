@@ -193,26 +193,26 @@ CREATE SEQUENCE orderno_seq
   NOMAXVALUE; 
 
 CREATE TABLE ORDERS (
-    orderno NUMBER DEFAULT orderno_seq.NEXTVAL NOT NULL,
-    storeno NUMBER NOT NULL,
-    username VARCHAR2(255) NOT NULL,
-    totalprice NUMBER NOT NULL,
-    memo VARCHAR2(255),
-    approval VARCHAR2(50),
-    paymentstatus VARCHAR2(50),
-    paymentmethod VARCHAR2(50),
-    createdat TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
-    pickupat TIMESTAMP NOT NULL,
-    approvedat TIMESTAMP,
-    paidat TIMESTAMP,
-    PRIMARY KEY (orderno)
+    ORDERNO     NUMBER      NOT NULL,
+    STORENO     NUMBER      NOT NULL,
+    USERNAME    VARCHAR2(255)   NOT NULL,
+    TOTALPRICE  NUMBER      NOT NULL,
+    PAYMETHOD   VARCHAR2(255),
+    MEMO        VARCHAR2(255),
+    RESERVEDAT  TIMESTAMP   NOT NULL,
+    CREATEDAT   TIMESTAMP   NOT NULL,
+    APPROVAL    VARCHAR2(20),
+    APPROVEDAT  TIMESTAMP,
+    PAYSTATUS   VARCHAR2(20),
+    PAIDAT      TIMESTAMP,
+    PICKUPAT    TIMESTAMP,
+    PRIMARY KEY (ORDERNO)
 );
 
 -- 주문 메뉴 테이블
 CREATE TABLE ORDERS_MENU (
-    ordermenuno INT NOT NULL,
     orderno INT NOT NULL,
-    ordermenuname VARCHAR(50) NOT NULL,
-    ordermenuprice INT NOT NULL,
-    PRIMARY KEY (ordermenuno)
+    ordername VARCHAR(50) NOT NULL,
+    orderprice INT NOT NULL,
+    orderquantity INT
 );

@@ -59,7 +59,7 @@
         });
 
         function loadMoreStores(offset) {
-            var url = '/store/lists';
+            var url = '/lists';
             var keyword = '${keyword}';
             var orderType = '${param.orderType}';
             var limit = 5;
