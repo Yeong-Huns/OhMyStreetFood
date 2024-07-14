@@ -1,6 +1,8 @@
 package org.omsf.store.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.omsf.error.Exception.CustomBaseException;
 import org.omsf.error.Exception.ErrorCode;
@@ -39,6 +41,16 @@ public class OrderServiceImpl implements OrderService {
 		Order order = orderRepository.getOrderByNo(orderNo).orElseThrow(() -> new CustomBaseException(ErrorCode.NOT_FOUND_ORDER));
 		return order;
 	}
+	
+	@Override
+	public void updateOrderApproval(int orderNo, String approval) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("orderNo", orderNo);
+	    params.put("approval", approval);
+
+	    orderRepository.updateOrderApproval(params);
+	}
+
 
 	// OrderMenu
 	@Override
