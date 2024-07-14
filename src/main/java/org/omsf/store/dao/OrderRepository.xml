@@ -33,6 +33,13 @@
 		SELECT * FROM orders WHERE orderno = #{orderno}
 	</select>
 	
+	<update id="updateOrderApproval" parameterType="java.util.Map">
+	    UPDATE orders
+	    SET approval = #{approval},
+	        approvedat = SYSDATE
+	    WHERE orderno = #{orderNo}
+	</update>
+	
 	
 	<!-- OrderMenu -->
     <resultMap id="orderMenuResultMap" type="org.omsf.store.model.OrderMenu">

@@ -24,7 +24,7 @@
     <div class="container">
         <h3 style="text-align: center;">주문요청하기</h3>
     	
-        <form id="orderForm" method="post" action="${pageContext.request.contextPath}/${store.storeNo}/order/submit">
+        <form id="orderForm" method="post" action="${pageContext.request.contextPath}/order/${store.storeNo}/submit">
 		    <div class="row">
 		        <div class="col-sm-6 form-group">
 		            <label for="pickup-date">픽업일자<span style="color: red;">&nbsp;*&nbsp;</span></label>
@@ -51,7 +51,7 @@
 		                    <tr>
 		                        <td><input type="text" class="form-control" id="menuNames" name="menuNames" value="${menu.menuName}" style="text-align: right;" readonly></td>
 		                        <td><input type="text" class="form-control price" id="prices" name="prices" value="${menu.price}" style="text-align: right;" readonly></td>
-		                        <td><input type="number" class="form-control quantity" id="quantities" name="quantities" min="0" style="text-align: right;" onchange="calculateTotal()" required></td>
+		                        <td><input type="number" class="form-control quantity" id="quantities" name="quantities" min="0" value="0" style="text-align: right;" onchange="calculateTotal()"></td>
 		                    </tr>
 		                </c:forEach>
 		            </tbody>
@@ -109,7 +109,20 @@
 
         document.addEventListener('DOMContentLoaded', (event) => {
             const today = new Date().toISOString().split('T')[0];
+            const maxDate = new Date();
+            maxDate.setDate(maxDate.getDate() + 10);
+            const maxDateISO = maxDate.toISOString().split('T')[0];
+
             document.getElementById('pickup-date').setAttribute('min', today);
+            document.getElementById('pickup-date').setAttribute('max', maxDateISO);
+        });
+        
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            const total = parseFloat(document.getElementById('totalPrice').value);
+            if (total === 0) {
+                alert('총 합계가 0입니다');
+                event.preventDefault(); // Prevent form submission
+            }
         });
     </script>
 </body>

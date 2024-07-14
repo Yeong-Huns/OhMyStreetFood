@@ -12,12 +12,14 @@ import org.omsf.store.model.Store;
 import org.omsf.store.service.MenuService;
 import org.omsf.store.service.OrderService;
 import org.omsf.store.service.StoreService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +47,7 @@ public class OrderController {
 	private final MenuService menuService;	
     
 	// jaeeun - 주문하기
-	@GetMapping("/{storeNo}/order")
+	@GetMapping("/order/{storeNo}")
 	public String showOrderPage(Model model,
 								@PathVariable("storeNo") int storeNo) {
 		Store store = storeService.getStoreByNo(storeNo);
@@ -57,7 +59,7 @@ public class OrderController {
 	}
 	
 	// jaeeun - 주문내역저장
-	@PostMapping("/{storeNo}/order/submit")
+	@PostMapping("/order/{storeNo}/submit")
 	public String submitOrder(Model model,
 							@ModelAttribute Order order, 
 							@PathVariable("storeNo") int storeNo,
@@ -99,11 +101,11 @@ public class OrderController {
 		
 	    model.addAttribute("order", order);
 	    
-	    return "redirect:/{storeNo}/order/" + orderNo;
+	    return "redirect:/order/{storeNo}/" + orderNo;
     }
 	
 	// jaeeun - 주문진행상황
-	@GetMapping("/{storeNo}/order/{orderNo}")
+	@GetMapping("/order/{storeNo}/{orderNo}")
 	public String showOrder(Model model,
 							@PathVariable("storeNo") int storeNo,
 							@PathVariable("orderNo") int orderNo) {
@@ -111,12 +113,28 @@ public class OrderController {
 		Store store = storeService.getStoreByNo(storeNo);
 		Order order = orderService.getOrderByNo(orderNo);
 		List<OrderMenu> menus = orderService.getOrderMenuByNo(orderNo);
-
+		
 		model.addAttribute("store", store);
 		model.addAttribute("order", order);
 		model.addAttribute("menus", menus);
 	    
         return "order/statusOrder";
+    }
+	
+	@PutMapping("/order/{storeNo}/{orderNo}/approve")
+    public ResponseEntity<String> approveOrder(@PathVariable("storeNo") int storeNo,
+                                               @PathVariable("orderNo") int orderNo) {
+        orderService.updateOrderApproval(orderNo, "O");
+        
+        return ResponseEntity.ok("주문 승인이 완료되었습니다");
+    }
+	
+	@PutMapping("/order/{storeNo}/{orderNo}/reject")
+    public ResponseEntity<String> rejectOrder(@PathVariable("storeNo") int storeNo,
+                                               @PathVariable("orderNo") int orderNo) {
+        orderService.updateOrderApproval(orderNo, "X");
+        
+        return ResponseEntity.ok("주문 거절이 완료되었습니다");
     }
 }
 

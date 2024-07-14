@@ -21,6 +21,7 @@ public interface OrderService {
 	// Order
 	void saveOrder(Order order);
 	Order getOrderByNo(int orderNo);
+	void updateOrderApproval(int orderNo, String string);
 	
 	// OrderMenu
 	void saveOrderMenu(OrderMenu orderMenu);

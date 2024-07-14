@@ -1,6 +1,7 @@
 package org.omsf.store.dao;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.omsf.store.model.Order;
@@ -22,6 +23,7 @@ public interface OrderRepository {
 	// Order
 	void saveOrder(Order order);
 	Optional<Order> getOrderByNo(int orderNo);
+	void updateOrderApproval(Map<String, Object> params);
 	
 	// OrderMenu
 	void saveOrderMenu(OrderMenu orderMenu);

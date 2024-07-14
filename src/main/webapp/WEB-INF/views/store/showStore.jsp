@@ -101,7 +101,7 @@
 							    </c:choose>
 	            		 	</small>
 	            		 </p>
-				   		 <a href="${pageContext.request.contextPath}/${store.storeNo}/order" class="btn btn-outline-primary">주문요청하기</a>
+				   		 <a href="${pageContext.request.contextPath}/order/${store.storeNo}" class="btn btn-outline-primary">주문요청하기</a>
 	            	</div>
 	        	</div>
 	    	</div>
