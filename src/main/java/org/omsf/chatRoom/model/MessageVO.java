@@ -1,10 +1,7 @@
 package org.omsf.chatRoom.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class MessageVO {
     private long messageNo;
     private String content;
@@ -30,4 +28,11 @@ public class MessageVO {
     private boolean isReceived;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Builder
+    public MessageVO(String content, String senderId, long chatRoomNo, boolean isReceived) {
+        this.content = content;
+        this.senderId = senderId;
+        this.chatRoomNo = chatRoomNo;
+    }
 }
