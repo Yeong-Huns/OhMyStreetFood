@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spinner.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/customOverlay.css">
-    
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/chatbot.css">
 </head>
     <style>
     	.owl-item {
@@ -83,7 +83,10 @@
 	        <div id="spinner"></div>
 	        <div id="spinner-text">현재 위치를 기반으로 주위 상점을 알아보고 있습니다</div>
 	    </div> 
+	    
 	</div>
+    <!-- chatbot -->
+	<jsp:include page="chatbot.jsp" />
 	
 	<!-- Menu -->
 	<jsp:include page="menu.jsp" />

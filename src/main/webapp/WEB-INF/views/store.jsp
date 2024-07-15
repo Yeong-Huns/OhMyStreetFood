@@ -33,6 +33,9 @@
 
     <!-- Menu -->
     <jsp:include page="menu.jsp" />
+    
+    <!-- chatbot -->
+	<jsp:include page="chatbot.jsp" />
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
