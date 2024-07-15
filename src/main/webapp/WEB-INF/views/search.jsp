@@ -25,7 +25,8 @@
 			<i class="fas fa-search" style="color: white;"></i>
 		</button>
 	</form>
-	
+	<!-- chatbot -->
+	<jsp:include page="chatbot.jsp" />
 	<script>
         document.addEventListener('DOMContentLoaded', function() {
             var latitude = sessionStorage.getItem('latitude');
