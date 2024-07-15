@@ -1,0 +1,60 @@
+@charset "UTF-8";
+
+.image-button {
+    position: fixed;
+    bottom: 50px; /* 화면 아래로부터의 거리 */
+    right: 50px;  /* 화면 오른쪽으로부터의 거리 */
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 1000; /* 다른 요소들 위에 버튼이 나타나도록 설정 */
+}
+
+.image-button img {
+    display: block;
+    width: 100px; /* 원하는 크기로 설정 */
+    height: auto;
+    transition: opacity 0.3s ease;
+}
+
+.image-button:hover img {
+    opacity: 0.8; /* 마우스를 올렸을 때 투명도를 살짝 줄임 */
+    transition: opacity 0.3s ease;
+}
+
+.popup {
+    display: none; /* 기본적으로 팝업을 숨김 */
+    position: fixed;
+    bottom: 160px; /* 챗봇 버튼 바로 위에 위치하도록 조정 */
+    right: 50px;  /* 챗봇 버튼과 같은 오른쪽 정렬 */
+    background-color: white;
+    border: 1px solid #888;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1001; /* 챗봇 버튼보다 앞에 나타나도록 설정 */
+    width: 300px; /* 원하는 너비 설정 */
+    animation: slideIn 0.3s; /* 부드럽게 나타나는 애니메이션 */
+}
+
+@keyframes slideIn {
+    from {transform: translateY(50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.chatbot-close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.chatbot-close-button:hover,
+.chatbot-close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
