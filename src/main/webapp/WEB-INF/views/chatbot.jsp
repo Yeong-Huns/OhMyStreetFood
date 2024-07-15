@@ -31,14 +31,16 @@
 	
     <div id="chatbot-popup" class="popup">
         <div class="popup-content">
-            <span class="chatbot-close-button">&times;</span>
-            <h2>Chat with our bot</h2>
-            <div class="modal-body chat-messages" id="chat-messages">
+        	<div class="modal-header chatroom-header">
+	            <h2>Chat with our bot</h2>
+	            <span class="chatbot-close-button">&times;</span>
+            </div>
+            <div class="modal-body chatbot-messages" id="chatbot-messages">
                 <!-- 채팅 메시지 표시 영역 -->
             </div>
             <div class="modal-footer chat-footer">
-                <input type="text" id="message-input" class="form-control message-input" placeholder="메시지를 입력하세요...">
-                <button class="btn btn-primary send-button" id="send-button">전송</button>
+                <input type="text" id="chatbot-message-input" class="form-control message-input" placeholder="메시지를 입력하세요...">
+                <button class="btn btn-primary send-button" id="chatbot-send-button">전송</button>
             </div>
         </div>
     </div>
