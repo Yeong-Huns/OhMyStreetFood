@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const popup = document.getElementById("chatbot-popup");
     const btn = document.getElementById("chatbot-button");
     const span = document.getElementsByClassName("chatbot-close-button")[0];
-
+	const input = document.getElementById('chatbot-message-input');
     btn.onclick = function() {
         popup.style.display = "block";
     }
@@ -20,9 +20,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
     
-    document.getElementById('chatbot-send-button').addEventListener('click', function() {
-		
-        const messageInput = document.getElementById('chatbot-message-input');
+    input.addEventListener('keypress', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            console.log("엔터키");
+            sendToChatbot();
+        }
+    });
+    
+    document.getElementById('chatbot-send-button').addEventListener('click', sendToChatbot);
+    
+    function sendToChatbot(){
+		const messageInput = document.getElementById('chatbot-message-input');
         const chatMessages = document.getElementById('chatbot-messages');
 
         if (messageInput.value.trim() !== '') {
@@ -61,6 +70,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 			.catch((error) => console.log(error));
             
         }
-    });
+	}
 });
 

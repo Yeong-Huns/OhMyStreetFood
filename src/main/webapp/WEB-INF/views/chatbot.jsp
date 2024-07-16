@@ -32,11 +32,29 @@
     <div id="chatbot-popup" class="popup">
         <div class="popup-content">
         	<div class="modal-header chatroom-header">
-	            <h2>Chat with our bot</h2>
+	            <h2>Ohmystreetfood bot</h2>
 	            <span class="chatbot-close-button">&times;</span>
             </div>
             <div class="modal-body chatbot-messages" id="chatbot-messages">
                 <!-- 채팅 메시지 표시 영역 -->
+                <div class="chatbot-response">
+                	<div class="chatbot-avatar" style="background-color:white;"></div>
+	                <div class="chatbot-response-message">
+	                	<div>
+	                		안녕하세요. 길거리 음식점에 대해 궁금한 점이 있으신가요? 제가 도와드리겠습니다.
+	                	</div>
+	                </div>
+                </div>
+                <div class="chatbot-response">
+	                <div class="chatbot-avatar">
+		                <img src="${pageContext.request.contextPath}/img/chatbot_icon1.png" alt="Avatar">
+		            </div>
+	                <div class="chatbot-response-message">
+	                	<div>
+	                		Ohmystreefood 봇입니다. 궁금한 점을 입력해주세요.
+	                	</div>
+	                </div>
+                </div>
             </div>
             <div class="modal-footer chat-footer">
                 <input type="text" id="chatbot-message-input" class="form-control message-input" placeholder="메시지를 입력하세요...">
