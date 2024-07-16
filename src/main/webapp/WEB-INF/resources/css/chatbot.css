@@ -94,7 +94,8 @@
 
 .user-sent-message {
     text-align: right;
-    margin: 5px 0;
+    margin: 5px 15px 5px 5px;
+    padding: 0;
 }
 
 .user-sent-message div {
@@ -109,6 +110,8 @@
 .chatbot-response-message{
 	text-align: left;
     margin: 5px 0;
+    padding: 0;
+    min-width:50%;
 }
 
 .chatbot-response-message div {
@@ -131,6 +134,9 @@
     font-size: 24px;
     color: #fff;
     flex-shrink: 0;
+    position: relative;
+    top:0;
+    margin-top:5px;
 }
 .chatbot-avatar img {
     width: 30px;
@@ -140,4 +146,34 @@
 .chatbot-response {
 	display: flex; 
 	align-items: center;
+	padding: 5px;
+}
+.chat {
+	min-height: 100px;
+	align-items: flex-start;
+}
+.loading-dots {
+  display: flex;
+  align-items: center;
+}
+
+.loading-dots span {
+  animation: blink 1.4s infinite both;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }

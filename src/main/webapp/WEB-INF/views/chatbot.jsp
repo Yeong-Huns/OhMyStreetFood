@@ -37,7 +37,7 @@
             </div>
             <div class="modal-body chatbot-messages" id="chatbot-messages">
                 <!-- 채팅 메시지 표시 영역 -->
-                <div class="chatbot-response">
+                <div class="chat chatbot-response">
                 	<div class="chatbot-avatar" style="background-color:white;"></div>
 	                <div class="chatbot-response-message">
 	                	<div>
@@ -45,7 +45,7 @@
 	                	</div>
 	                </div>
                 </div>
-                <div class="chatbot-response">
+                <div class="chat chatbot-response">
 	                <div class="chatbot-avatar">
 		                <img src="${pageContext.request.contextPath}/img/chatbot_icon1.png" alt="Avatar">
 		            </div>
