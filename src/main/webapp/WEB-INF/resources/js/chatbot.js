@@ -19,5 +19,48 @@ document.addEventListener('DOMContentLoaded', (event) => {
             popup.style.display = "none";
         }
     }
+    
+    document.getElementById('chatbot-send-button').addEventListener('click', function() {
+		
+        const messageInput = document.getElementById('chatbot-message-input');
+        const chatMessages = document.getElementById('chatbot-messages');
+
+        if (messageInput.value.trim() !== '') {
+            const newMessage = document.createElement('div');
+            newMessage.classList.add('user-sent-message');
+            const messageContent = document.createElement('div');
+            let message = messageInput.value;
+            messageContent.textContent = message;
+            newMessage.appendChild(messageContent);
+            chatMessages.appendChild(newMessage);
+            messageInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight; // 새로운 메시지로 스크롤
+            
+            console.log('입력 메시지 : ' + message);
+            // 챗봇 api에 전송
+            fetch("http://localhost:8000/api/main_chat",{
+				method: "POST",
+				headers:{
+		            'Content-Type' : 'application/json'
+		        },
+				body: JSON.stringify({
+					message: message
+				})
+			})
+			.then((response) => response.json())
+			.then((result) => {
+				console.log(result);
+				const newMessage = document.createElement('div');
+                newMessage.classList.add('chatbot-response-message');
+                const messageContent = document.createElement('div');
+                messageContent.textContent = result.response;
+                newMessage.appendChild(messageContent);
+                chatMessages.appendChild(newMessage);
+                chatMessages.scrollTop = chatMessages.scrollHeight; // 새로운 메시지로 스크롤
+			})
+			.catch((error) => console.log(error));
+            
+        }
+    });
 });
 
