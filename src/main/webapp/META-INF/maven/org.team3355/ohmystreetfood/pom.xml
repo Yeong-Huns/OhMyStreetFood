@@ -150,6 +150,21 @@
             <version>2.9.0</version>
         </dependency>
 
+<!--        &lt;!&ndash; Spring Data MongoDB &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.data</groupId>-->
+<!--            <artifactId>spring-data-mongodb</artifactId>-->
+<!--            <version>3.4.0</version> &lt;!&ndash; 적절한 버전을 사용하세요 &ndash;&gt;-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; MongoDB Java Driver &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.mongodb</groupId>-->
+<!--            <artifactId>mongodb-driver-sync</artifactId>-->
+<!--            <version>4.6.0</version> &lt;!&ndash; 적절한 버전을 사용하세요 &ndash;&gt;-->
+<!--        </dependency>-->
+
+
         <!--
         <dependency>
             <groupId>com.zaxxer</groupId>
