@@ -1,6 +1,7 @@
 package org.omsf.alarm.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.service.ChatService;
@@ -19,16 +20,19 @@ import org.springframework.web.client.RestTemplate;
  * -----------------------------------------------------------
  * 2024-07-15        Yeong-Huns       최초 생성
  */
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class AlarmHandler {
     private final RestTemplate restTemplate;
     private final ChatService chatService;
 
-    public void sendRequestAlarm(String username, long storeNo){
+    public void sendRequestAlarm(String username, long storeNo, String httpMapping){
+        log.info("username: {}", username);
+        log.info("storeNo: {}", storeNo);
         handleSubChannelRequest(username, storeNo);
         long chatRoomNo = chatService.getChatRoomNoBySubscription(username, storeNo);
-        handleOrderRequest(username, chatRoomNo);
+        handleOrderRequest(username, chatRoomNo, httpMapping);
     }
 
 
@@ -41,12 +45,13 @@ public class AlarmHandler {
                 Void.class);
     }
 
-    private void handleOrderRequest(String username, long chatRoomNo){
+    private void handleOrderRequest(String username, long chatRoomNo, String httpMapping){
+        String content = "<strong>[주문 요청]</strong> 새로운 주문이 있어요. <br> <a href=\"" + httpMapping + "\">내역 보기</a>";
         restTemplate.postForObject("http://localhost:8080/rest/chat/sendRequest",
                 MessageVO.builder()
                         .senderId(username)
                         .chatRoomNo(chatRoomNo)
-                        .content("[주문 요청] 가게 사장님께 주문 요청을 전달했습니다.")
+                        .content(content)
                         .build(),
                 Void.class);
     }

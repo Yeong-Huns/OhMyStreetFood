@@ -250,7 +250,7 @@
 	        }
 	    })
 	    .then(response => {
-			sendRejectStatus(response, orderUsername, storeNo);
+			sendRejectStatus(response, orderUsername, store);
 	        if (response.ok) {
 	            //alert('주문 거절이 완료되었습니다');
 	            location.reload();

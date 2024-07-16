@@ -96,10 +96,10 @@ public class OrderController {
 
 	        orderService.saveOrderMenu(orderMenu);
 	    }	    
-		
-	    model.addAttribute("order", order);
 
-		alarmHandler.sendRequestAlarm(username, storeNo);
+	    model.addAttribute("order", order);
+		String httpMapping = "http://localhost:8080/order/"+storeNo+"/"+orderNo;
+		alarmHandler.sendRequestAlarm(username, storeNo, httpMapping);
 
 		return "redirect:/order/{storeNo}/" + orderNo;
     }
