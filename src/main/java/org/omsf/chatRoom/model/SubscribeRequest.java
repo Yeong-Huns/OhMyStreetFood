@@ -1,6 +1,8 @@
 package org.omsf.chatRoom.model;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -16,11 +18,17 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class SubscribeRequest {
     private String customerId;
     private long storeNo;
 
     public String getCombinedId(){
         return customerId + storeNo;
+    }
+    @Builder
+    public SubscribeRequest(String customerId, long storeNo) {
+        this.customerId = customerId;
+        this.storeNo = storeNo;
     }
 }

@@ -51,9 +51,6 @@ public class ChatBotController {
     @MessageMapping("/chat/chatBot")
     @SendTo("/topic/public")
     public String sendMessage(@Payload String chatMessage) throws IOException {
-            log.error("🤕 {}", apiUrl);
-            log.error("🤕 {}", secreteKey);
-            log.error("🤕 {}", chatMessage);
             URL url = new URL(apiUrl);
 
             String message = getReqMessage(chatMessage);

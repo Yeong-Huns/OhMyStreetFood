@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+<%@ include file="../chat/chatHandler.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -200,7 +201,7 @@
     // 결제 폼 제출 시 처리
     document.getElementById('paymentForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        alert('결제 처리가 완료되었습니다.');
+        //alert('결제 처리가 완료되었습니다.');
         var paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
         paymentModal.hide();
     });
@@ -210,7 +211,8 @@
 	    const form = document.getElementById('approveOrder');
 	    const storeNo = form.getAttribute('data-store-no');
 	    const orderNo = form.getAttribute('data-order-no');
-
+		const orderUsername = document.querySelector("p:nth-child(3)").innerText.split(' ')[1]; // chat
+		const store = document.querySelector("p:nth-child(2)").innerText.split(' ')[1]; // chat
 	    fetch(`/order/${storeNo}/${orderNo}/approve`, {
 	        method: 'PUT',
 	        headers: {
@@ -218,16 +220,18 @@
 	        }
 	    })
 	    .then(response => {
+			sendOrderStatus(response, orderUsername, store);
 	        if (response.ok) {
-	            alert('주문 승인이 완료되었습니다');
+	            //alert('주문 승인이 완료되었습니다');
 	            location.reload();
 	        } else {
-	            alert('주문 승인이 실패되었습니다');
+	            //alert('주문 승인이 실패되었습니다');
 	            location.reload();
 	        }
 	    })
 	    .catch(error => {
 	        console.error('Error:', error);
+
 	        alert('An error occurred. Please try again.');
 	    });
 	}
@@ -236,6 +240,8 @@
 	    const form = document.getElementById('rejectOrder');
 	    const storeNo = form.getAttribute('data-store-no');
 	    const orderNo = form.getAttribute('data-order-no');
+		const orderUsername = document.querySelector("p:nth-child(3)").innerText.split(' ')[1];
+		const store = document.querySelector("p:nth-child(2)").innerText.split(' ')[1]; // chat
 
 	    fetch(`/order/${storeNo}/${orderNo}/reject`, {
 	        method: 'PUT',
@@ -244,11 +250,12 @@
 	        }
 	    })
 	    .then(response => {
+			sendRejectStatus(response, orderUsername, store);
 	        if (response.ok) {
-	            alert('주문 거절이 완료되었습니다');
+	            //alert('주문 거절이 완료되었습니다');
 	            location.reload();
 	        } else {
-	            alert('주문 거절이 실패되었습니다');
+	            //alert('주문 거절이 실패되었습니다');
 	            location.reload();
 	        }
 	    })

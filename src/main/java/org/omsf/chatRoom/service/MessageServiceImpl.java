@@ -86,6 +86,7 @@ public class MessageServiceImpl implements MessageService {
         return messages;
     }
 
+
     @Override
     public String findRoomAddressByChatRoomNo(long chatRoomNo) {
         return chatRepository.findRoomAddressByChatRoomNo(chatRoomNo);
