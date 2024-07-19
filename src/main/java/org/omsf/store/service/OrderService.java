@@ -23,7 +23,8 @@ public interface OrderService {
 	void saveOrder(Order order);
 	Order getOrderByNo(int orderNo);
 	void updateOrderApproval(int orderNo, String string);
-	boolean updatePayStatus(String storeNo, String orderNo, String paystatus, LocalDateTime paidat);
+	void updatePayStatus(String storeNo, String orderNo, String paystatus, LocalDateTime paidat);
+	void updateOrderPickup(int orderNo, LocalDateTime pickupat);
 	
 	// OrderMenu
 	void saveOrderMenu(OrderMenu orderMenu);

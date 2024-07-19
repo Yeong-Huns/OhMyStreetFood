@@ -124,6 +124,9 @@
 					<form id="rejectOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
 					    <button type="button" class="btn btn-danger" onclick="rejectOrder()">(사장님)거절하기</button>
 					</form>
+					<form id="pickupOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
+					    <button type="button" class="btn btn-success" onclick="pickupOrder()">(사장님)픽업완료</button>
+					</form>
 				    /////
 				    <!-- <button class="btn btn-primary" onclick="showPaymentModal()">(주문자)카드결제</button> -->
 				    <button class="btn btn-primary" onclick="requestPay()">결제하기</button>
@@ -158,57 +161,12 @@
 		</div>
     </div>
     
-    <!-- Payment -->
-	<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
-	    <div class="modal-dialog">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <h5 class="modal-title" id="paymentModalLabel">결제하기</h5>
-	                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	            </div>
-	            <div class="modal-body">
-	                <!-- 결제 정보 입력 폼 -->
-	                <form id="paymentForm">
-	                    <div class="mb-3">
-	                        <label for="cardNumber" class="form-label">카드 번호</label>
-	                        <input type="text" class="form-control" id="cardNumber" required>
-	                    </div>
-	                    <div class="mb-3">
-	                        <label for="expiryDate" class="form-label">유효기간</label>
-	                        <input type="text" class="form-control" id="expiryDate" required>
-	                    </div>
-	                    <div class="mb-3">
-	                        <label for="cvc" class="form-label">CVC</label>
-	                        <input type="text" class="form-control" id="cvc" required>
-	                    </div>
-	                    <button type="submit" class="btn btn-primary">결제하기</button>
-	                </form>
-	            </div>
-	        </div>
-	    </div>
-	</div>
-
     <!-- Menu -->
     <jsp:include page="../menu.jsp" />
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    function showPaymentModal() {
-        var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'), {
-            keyboard: false
-        });
-        paymentModal.show();
-    }
-
-    // 결제 폼 제출 시 처리
-    document.getElementById('paymentForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        //alert('결제 처리가 완료되었습니다.');
-        var paymentModal = bootstrap.Modal.getInstance(document.getElementById('paymentModal'));
-        paymentModal.hide();
-    });
-	</script>
+    
 	<script>
 	function approveOrder() {
 	    const form = document.getElementById('approveOrder');
@@ -264,6 +222,36 @@
 	    })
 	    .catch(error => {
 	        console.error('Error:', error);
+	        alert('An error occurred. Please try again.');
+	    });
+	}
+	
+	function pickupOrder() {
+	    const form = document.getElementById('pickupOrder');
+	    const storeNo = form.getAttribute('data-store-no');
+	    const orderNo = form.getAttribute('data-order-no');
+
+	    fetch(`/order/${storeNo}/${orderNo}/pickup`, {
+	        method: 'PUT',
+	        headers: {
+	            'Content-Type': 'application/json'
+	        },
+            body: JSON.stringify({
+                pickupat: new Date().toISOString()
+            })
+	    })
+	    .then(response => {
+	        if (response.ok) {
+	            alert('픽업이 완료되었습니다');
+	            location.reload();
+	        } else {
+	            alert('픽업이 실패되었습니다');
+	            location.reload();
+	        }
+	    })
+	    .catch(error => {
+	        console.error('Error:', error);
+
 	        alert('An error occurred. Please try again.');
 	    });
 	}
