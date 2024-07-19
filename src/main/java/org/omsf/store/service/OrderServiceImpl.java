@@ -1,5 +1,6 @@
 package org.omsf.store.service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,10 @@ public class OrderServiceImpl implements OrderService {
 	    orderRepository.updateOrderApproval(params);
 	}
 
+	@Override
+	public boolean updatePayStatus(String storeNo, String orderNo, String paystatus, LocalDateTime paidat) {
+		return orderRepository.updatePayStatus(storeNo, orderNo, paystatus, paidat);
+	}
 
 	// OrderMenu
 	@Override
@@ -63,4 +68,5 @@ public class OrderServiceImpl implements OrderService {
         List<OrderMenu> ordermenu = orderRepository.getOrderMenuByNo(orderNo);
         return ordermenu;
     }
+	
 }

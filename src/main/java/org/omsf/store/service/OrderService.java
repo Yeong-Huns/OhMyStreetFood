@@ -1,5 +1,6 @@
 package org.omsf.store.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.omsf.store.model.Order;
@@ -22,6 +23,7 @@ public interface OrderService {
 	void saveOrder(Order order);
 	Order getOrderByNo(int orderNo);
 	void updateOrderApproval(int orderNo, String string);
+	boolean updatePayStatus(String storeNo, String orderNo, String paystatus, LocalDateTime paidat);
 	
 	// OrderMenu
 	void saveOrderMenu(OrderMenu orderMenu);

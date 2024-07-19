@@ -1,5 +1,11 @@
 package org.omsf.store.controller;
 
+import java.security.Principal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.omsf.alarm.controller.AlarmHandler;
@@ -15,6 +21,14 @@ import org.omsf.store.service.StoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -135,6 +149,24 @@ public class OrderController {
         orderService.updateOrderApproval(orderNo, "X");
         
         return ResponseEntity.ok("주문 거절이 완료되었습니다");
+    }
+	
+	@PostMapping("/order/{storeNo}/{orderNo}/pay")
+    public ResponseEntity<String> payOrder(@PathVariable String storeNo, 
+    										@PathVariable String orderNo, 
+    										@RequestBody Map<String, String> paymentDetails) {
+        String paystatus = paymentDetails.get("paystatus");
+        String paidat = paymentDetails.get("paidat");
+
+        LocalDateTime paidAtDateTime = LocalDateTime.parse(paidat, DateTimeFormatter.ISO_DATE_TIME);
+
+        boolean result = orderService.updatePayStatus(storeNo, orderNo, paystatus, paidAtDateTime);
+        
+        if (result) {
+            return ResponseEntity.ok("Payment status updated successfully");
+        } else {
+            return ResponseEntity.status(500).body("Payment status update failed");
+        }
     }
 }
 
