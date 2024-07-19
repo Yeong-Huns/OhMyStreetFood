@@ -53,8 +53,22 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public boolean updatePayStatus(String storeNo, String orderNo, String paystatus, LocalDateTime paidat) {
-		return orderRepository.updatePayStatus(storeNo, orderNo, paystatus, paidat);
+	public void updatePayStatus(String storeNo, String orderNo, String paystatus, LocalDateTime paidat) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("storeNo", storeNo);
+	    params.put("orderNo", orderNo);
+	    params.put("paystatus", paystatus);
+	    params.put("paidat", paidat);
+	    orderRepository.updatePayStatus(params);
+	}
+	
+	@Override
+	public void updateOrderPickup(int orderNo, LocalDateTime pickupat) {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("orderNo", orderNo);
+	    params.put("pickupat", pickupat);
+
+	    orderRepository.updateOrderPickup(params);
 	}
 
 	// OrderMenu
@@ -68,5 +82,5 @@ public class OrderServiceImpl implements OrderService {
         List<OrderMenu> ordermenu = orderRepository.getOrderMenuByNo(orderNo);
         return ordermenu;
     }
-	
+
 }

@@ -6,11 +6,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.omsf.alarm.controller.AlarmHandler;
-import org.omsf.chatRoom.model.MessageVO;
-import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Order;
 import org.omsf.store.model.OrderMenu;
@@ -21,7 +18,6 @@ import org.omsf.store.service.StoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,12 +25,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
 * @packageName    : org.omsf.store.controller
@@ -150,9 +143,9 @@ public class OrderController {
         
         return ResponseEntity.ok("주문 거절이 완료되었습니다");
     }
-	
+
 	@PostMapping("/order/{storeNo}/{orderNo}/pay")
-    public ResponseEntity<String> payOrder(@PathVariable String storeNo, 
+    public String payOrder(@PathVariable String storeNo, 
     										@PathVariable String orderNo, 
     										@RequestBody Map<String, String> paymentDetails) {
         String paystatus = paymentDetails.get("paystatus");
@@ -160,13 +153,22 @@ public class OrderController {
 
         LocalDateTime paidAtDateTime = LocalDateTime.parse(paidat, DateTimeFormatter.ISO_DATE_TIME);
 
-        boolean result = orderService.updatePayStatus(storeNo, orderNo, paystatus, paidAtDateTime);
+        orderService.updatePayStatus(storeNo, orderNo, paystatus, paidAtDateTime);
         
-        if (result) {
-            return ResponseEntity.ok("Payment status updated successfully");
-        } else {
-            return ResponseEntity.status(500).body("Payment status update failed");
-        }
+        return "redirect:/order/{storeNo}/{orderNo}";
+    }
+	
+	@PutMapping("/order/{storeNo}/{orderNo}/pickup")
+    public ResponseEntity<String> pickupOrder(@PathVariable("storeNo") int storeNo,
+                                               @PathVariable("orderNo") int orderNo,
+                                               @RequestBody Map<String, String> pickupDetails) {
+		String pickupat = pickupDetails.get("pickupat");
+		
+		LocalDateTime pickupAtDateTime = LocalDateTime.parse(pickupat, DateTimeFormatter.ISO_DATE_TIME);
+		
+        orderService.updateOrderPickup(orderNo, pickupAtDateTime);
+        
+        return ResponseEntity.ok("주문 거절이 완료되었습니다");
     }
 }
 

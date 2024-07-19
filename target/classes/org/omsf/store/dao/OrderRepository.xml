@@ -40,7 +40,18 @@
 	    WHERE orderno = #{orderNo}
 	</update>
 	
+	<update id="updatePayStatus" parameterType="java.util.Map">
+	    UPDATE orders
+	    SET paystatus = #{paystatus}, paidat = #{paidat}
+	    WHERE storeno = #{storeNo} AND orderno = #{orderNo}
+	</update>
 	
+	<update id="updateOrderPickup" parameterType="java.util.Map">
+	    UPDATE orders
+	    SET pickupat = #{pickupat}
+	    WHERE orderno = #{orderNo}
+	</update>
+
 	<!-- OrderMenu -->
     <resultMap id="orderMenuResultMap" type="org.omsf.store.model.OrderMenu">
 	    <id property="orderno" column="orderno"/>

@@ -68,9 +68,7 @@
 			<div class="form-group">
                 <label for="paymethod">결제수단<span style="color: red;">&nbsp;*&nbsp;</span></label>
                 <select class="form-control" id="paymethod" name="paymethod">
-                    <option value="현장결제">현장결제</option>
-                    <option value="계좌이체">계좌이체</option>
-                    <option value="카드">카드</option>
+                    <option value="신용카드">신용카드</option>
                 </select>
             </div>
             

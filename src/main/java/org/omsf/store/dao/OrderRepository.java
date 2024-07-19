@@ -1,6 +1,5 @@
 package org.omsf.store.dao;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,7 +24,8 @@ public interface OrderRepository {
 	void saveOrder(Order order);
 	Optional<Order> getOrderByNo(int orderNo);
 	void updateOrderApproval(Map<String, Object> params);
-	boolean updatePayStatus(String storeNo, String orderNo, String paystatus, LocalDateTime paidat);
+	void updatePayStatus(Map<String, Object> params);
+	void updateOrderPickup(Map<String, Object> params);
 	
 	// OrderMenu
 	void saveOrderMenu(OrderMenu orderMenu);
