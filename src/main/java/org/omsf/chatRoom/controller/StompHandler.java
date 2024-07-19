@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -52,6 +54,7 @@ public class StompHandler {
         MessageResponse response = messageService.handleSendMessage(request);
         messagingTemplate.convertAndSend("/queue/chat/" + response.getSubscription(), response.getMessageVO());
     }
+ 
 
     // 새로운 글 알람
     @MessageMapping("/notice/newsFeed")

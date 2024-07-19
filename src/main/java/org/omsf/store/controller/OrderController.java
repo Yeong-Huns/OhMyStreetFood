@@ -6,7 +6,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.omsf.alarm.controller.AlarmHandler;
+import org.omsf.chatRoom.model.MessageVO;
+import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Order;
 import org.omsf.store.model.OrderMenu;
@@ -17,6 +21,7 @@ import org.omsf.store.service.StoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +29,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.security.Principal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
 * @packageName    : org.omsf.store.controller
@@ -47,7 +55,8 @@ public class OrderController {
 	
 	private final StoreService storeService;
 	private final OrderService orderService;
-	private final MenuService menuService;	
+	private final MenuService menuService;
+	private final AlarmHandler alarmHandler;
     
 	// jaeeun - 주문하기
 	@GetMapping("/order/{storeNo}")
@@ -101,10 +110,12 @@ public class OrderController {
 
 	        orderService.saveOrderMenu(orderMenu);
 	    }	    
-		
+
 	    model.addAttribute("order", order);
-	    
-	    return "redirect:/order/{storeNo}/" + orderNo;
+		String httpMapping = "http://localhost:8080/order/"+storeNo+"/"+orderNo;
+		alarmHandler.sendRequestAlarm(username, storeNo, httpMapping);
+
+		return "redirect:/order/{storeNo}/" + orderNo;
     }
 	
 	// jaeeun - 주문진행상황

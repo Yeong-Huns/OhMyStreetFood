@@ -1,0 +1,179 @@
+@charset "UTF-8";
+
+.image-button {
+    position: fixed;
+    bottom: 50px; /* 화면 아래로부터의 거리 */
+    right: 50px;  /* 화면 오른쪽으로부터의 거리 */
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    z-index: 1000; /* 다른 요소들 위에 버튼이 나타나도록 설정 */
+}
+
+.image-button img {
+    display: block;
+    width: 100px; /* 원하는 크기로 설정 */
+    height: auto;
+    transition: opacity 0.3s ease;
+}
+
+.image-button:hover img {
+    opacity: 0.8; /* 마우스를 올렸을 때 투명도를 살짝 줄임 */
+    transition: opacity 0.3s ease;
+}
+
+.popup {
+    display: none; /* 기본적으로 팝업을 숨김 */
+    position: fixed;
+    bottom: 160px; /* 챗봇 버튼 바로 위에 위치하도록 조정 */
+    right: 50px;  /* 챗봇 버튼과 같은 오른쪽 정렬 */
+    background-color: white;
+    border: 1px solid #888;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1001; /* 챗봇 버튼보다 앞에 나타나도록 설정 */
+    width: 500px; /* 원하는 너비 설정 */
+    height: 500px;
+    animation: slideIn 0.3s; /* 부드럽게 나타나는 애니메이션 */
+}
+
+.chatbot-messages {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+@keyframes slideIn {
+    from {transform: translateY(50px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.chatbot-close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.chatbot-close-button:hover,
+.chatbot-close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+.chatbot-messages {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.chat-footer {
+    display: flex;
+    gap: 10px; /* 간격을 두고 싶다면 이 속성을 사용하세요 */
+}
+
+#chatbot-message-input {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    width:60%;
+}
+
+#chatbot-send-button {
+    padding: 10px 20px;
+}
+
+.user-sent-message {
+    text-align: right;
+    margin: 5px 15px 5px 5px;
+    padding: 0;
+}
+
+.user-sent-message div {
+    display: inline-block;
+    background-color: #dcf8c6;
+    color: #000;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
+
+.chatbot-response-message{
+	text-align: left;
+    margin: 5px 0;
+    padding: 0;
+    min-width:50%;
+}
+
+.chatbot-response-message div {
+    display: inline-block;
+    background-color: #fff3cd;
+    color: #000;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%;
+}
+.chatbot-avatar {
+	width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #fff;
+    flex-shrink: 0;
+    position: relative;
+    top:0;
+    margin-top:5px;
+}
+.chatbot-avatar img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+.chatbot-response {
+	display: flex; 
+	align-items: center;
+	padding: 5px;
+}
+.chat {
+	min-height: 100px;
+	align-items: flex-start;
+}
+.loading-dots {
+  display: flex;
+  align-items: center;
+}
+
+.loading-dots span {
+  animation: blink 1.4s infinite both;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}

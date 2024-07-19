@@ -32,7 +32,7 @@ public interface MessageService {
     MessageVO getMessageById(long messageNo);
     //5. chatRoomNo로 모든 Message 조회
     List<MessageWithProfile> findAllMessageByChatRoomNo(long chatRoomNo);
-    //6.
+
 
 
 
