@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+    <!-- PortOne -->
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <style>
 	.icons {
 	    display: flex;
@@ -122,7 +124,8 @@
 					    <button type="button" class="btn btn-danger" onclick="rejectOrder()">(사장님)거절하기</button>
 					</form>
 				    /////
-				    <button class="btn btn-primary" onclick="showPaymentModal()">(주문자)카드결제</button>
+				    <!-- <button class="btn btn-primary" onclick="showPaymentModal()">(주문자)카드결제</button> -->
+				    <button class="btn btn-primary" onclick="requestPay()">결제하기</button>
 			    </span>
 			</span>
 		    <p><strong>가게번호:</strong> ${empty order.storeno ? 'Unknown' : order.storeno}</p>
@@ -258,5 +261,60 @@
 	    });
 	}
 	</script>
+	<script>
+	var merchantUid = "order-" + new Date().getTime(); // Unique order number
+
+	function requestPay() {
+	    IMP.init("imp30164472");
+
+	    IMP.request_pay({
+	        pg: "html5_inicis",
+	        pay_method: "card",
+	        merchant_uid: merchantUid,
+	        name: "OhMyStreetFood!",
+	        amount: ${order.totalprice},
+	        buyer_email: '${order.username}',
+	        buyer_name: '${order.username}',
+	        buyer_tel: "",
+	        buyer_addr: "",
+	        buyer_postcode: ""
+	    }, function (rsp) {
+	        if (rsp.success) {
+	            // 결제 성공 시
+	            console.log(rsp);
+	            alert('결제가 완료되었습니다.');
+	            
+	            // 결제 성공 후 서버에 결제 완료 여부와 결제 시간 업데이트 요청
+	            fetch(`/order/${order.storeno}/${order.orderno}/pay`, {
+	                method: 'POST',
+	                headers: {
+	                    'Content-Type': 'application/json'
+	                },
+	                body: JSON.stringify({
+	                    paystatus: 'O',
+	                    paidat: new Date().toISOString()
+	                })
+	            })
+	            .then(response => {
+	                if (response.ok) {
+	                    alert('결제 정보가 성공적으로 업데이트되었습니다.');
+	                    location.reload();
+	                } else {
+	                    alert('결제 정보 업데이트에 실패했습니다.');
+	                }
+	            })
+	            .catch(error => {
+	                console.error('Error:', error);
+	                alert('결제 정보 업데이트 중 오류가 발생했습니다.');
+	            });
+
+	        } else {
+	            // 결제 실패 시
+	            console.log(rsp);
+	            alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
+	        }
+	    });
+	}
+    </script>
 </body>
 </html>
