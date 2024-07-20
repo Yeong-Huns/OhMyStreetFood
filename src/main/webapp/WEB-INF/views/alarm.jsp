@@ -92,6 +92,7 @@
 	                </p>
 	                <hr/>
 	            </c:forEach>
+	            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmPasswordModal">회원 정보 수정</a><br>
 	        </div>
 	
 	        <div style="width:100%;">

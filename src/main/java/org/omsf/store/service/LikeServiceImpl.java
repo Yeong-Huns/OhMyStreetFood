@@ -42,5 +42,11 @@ public class LikeServiceImpl implements LikeService {
 	public List<Like> getLikesByUsername(String username) {
 		return likeRepository.getLikesByUsername(username);
 	}
+	
+	//changhwan
+	@Override
+	public List<Like> getLikesByStoreNo(int storeNo) {
+		return likeRepository.getLikesByStoreNo(storeNo);
+	}
 
 }
