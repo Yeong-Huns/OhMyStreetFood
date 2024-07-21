@@ -1,14 +1,20 @@
 package org.omsf.store.controller;
 
+import java.security.Principal;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.omsf.store.model.NoticeDto;
-import org.omsf.store.model.NoticeDto.Response;
+import org.omsf.store.model.Pagenation;
+import org.omsf.store.model.NoticeDto.NoticeDetailResponse;
 import org.omsf.store.service.NoticeService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +33,15 @@ public class NoticeController {
         return ResponseEntity.ok(response);
 	}
 	
-//	@GetMapping("/")
+	@GetMapping("/")
+	public ResponseEntity<List<NoticeDetailResponse>> noticeList(
+			Principal principal,
+		    @RequestParam(defaultValue = "1") int pageNumber,
+		    @RequestParam(defaultValue = "5") int pageSize) {
+	
+		List<NoticeDetailResponse> response =  noticeService.findNoticesByUsername(principal.getName(), pageNumber, pageSize);
+		return ResponseEntity.ok(response);
+	}
 	
 	public void testNotice() {
 		//클라이언트에서 noticedto.create들어옴

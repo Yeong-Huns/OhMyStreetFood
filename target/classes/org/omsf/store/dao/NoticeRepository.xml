@@ -36,15 +36,25 @@
   		</selectKey>
     </insert>
     
-    <select id="getNotices" resultMap="noticeStatusResultMap">
-    	SELECT *
-    	FROM USERNOTICESTATUS
-    	WHERE MEMBER_USERNAME = #{username} 
-    		AND ISDELETED = 0
-    	 ORDER BY 
-            CREATEDAT DESC
+    <select id="findNoticesByUsername" resultType="org.omsf.store.model.NoticeDto$NoticeDetailResponse">
+    	 SELECT
+            n.NOTICENO AS noticeNo,
+            n.TITLE AS title,
+            n.CONTENT AS content,
+            ns.ISREAD AS isRead,
+            ns.ISDELETED AS isDeleted,
+            ns.MEMBER_USERNAME AS memberUsername,
+            n.CREATEDAT AS createdAt
+        FROM
+            NOTICE n
+            JOIN USERNOTICESTATUS ns ON n.NOTICENO = ns.NOTICE_NOTICENO
+        WHERE
+            ns.MEMBER_USERNAME = #{username}
+            AND ns.ISDELETED = 0
+        ORDER BY
+            n.CREATEDAT DESC
         OFFSET #{page.offset} ROWS
-        FETCH NEXT #{page.pageSize} ROWS ONLY 
+        FETCH NEXT #{page.pageSize} ROWS ONLY
     </select>
 	
 	<update id="markNoticeAsRead">

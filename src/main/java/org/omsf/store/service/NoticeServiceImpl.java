@@ -8,6 +8,7 @@ import org.omsf.store.model.NoticeDto;
 import org.omsf.store.model.NoticeDto.NoticeDetailRequest;
 import org.omsf.store.model.NoticeDto.NoticeDetailResponse;
 import org.omsf.store.model.NoticeMessage;
+import org.omsf.store.model.Pagenation;
 import org.omsf.store.model.UserNoticeStatus;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +53,6 @@ public class NoticeServiceImpl implements NoticeService {
 			UserNoticeStatus noticeStatus = UserNoticeStatus.builder()
 					.username(user)
 					.noticeNo(noticeNo)
-					
 					.build();
 			
 			noticeRepository.sendToSubscriber(noticeStatus);
@@ -61,8 +61,19 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public List<NoticeDetailResponse> getNotices(NoticeDetailRequest noticeRequest) {
-		List<NoticeDetailResponse> noticeList = noticeRepository.getNotices(noticeRequest);
+	public List<NoticeDetailResponse> findNoticesByUsername(String username, int pageNumber, int pageSize) {
+		Pagenation page = Pagenation.builder()
+				.pageNumber(pageNumber)
+				.pageSize(pageSize)
+				.offset((pageNumber - 1) * pageSize)
+				.build();
+		
+		NoticeDetailRequest noticeRequest = NoticeDetailRequest.builder()
+		.username(username)
+		.page(page)
+		.build();
+		
+		List<NoticeDetailResponse> noticeList = noticeRepository.findNoticesByUsername(noticeRequest);
 		return noticeList;
 	}
 

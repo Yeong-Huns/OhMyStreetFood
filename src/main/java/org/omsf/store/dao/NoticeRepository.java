@@ -14,7 +14,7 @@ public interface NoticeRepository {
 	int createNotice(Notice notice);
 	int sendToSubscriber(UserNoticeStatus noticeStatus);
 	
-	List<NoticeDetailResponse> getNotices(NoticeDetailRequest noticeRequest);
+	List<NoticeDetailResponse> findNoticesByUsername(NoticeDetailRequest noticeRequest);
 	void markNoticeAsRead(int noticeNo);
 	void markNoticeAsDeleted(int noticeNo);
 }
