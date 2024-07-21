@@ -18,4 +18,7 @@ public interface LikeRepository {
 	
 	// yunbin
 	List<Like> getLikesByUsername(String username);
+	
+	//changhwan
+	List<Like> getLikesByStoreNo(int storeNo);
 }

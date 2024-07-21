@@ -44,4 +44,11 @@
 		where member_username = #{username}
 	</select>
 	
+	<!-- changhwan -->
+	<select id="getLikesByStoreNo" resultType="org.omsf.store.model.Like">
+		select member_username as memberUsername, store_storeno as storeStoreNo
+		from "LIKE"
+		where store_storeno = #{storeNo}
+	</select>
+	
 </mapper>

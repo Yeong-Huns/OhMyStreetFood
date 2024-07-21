@@ -17,7 +17,9 @@
 	<logger name="jdbc.sqltiming" level="off" />
 
 	<logger name="com.zaxxer.hikari" level="info" /> <!-- log 상세출력 debug -->
-
+	
+	<!-- BlockingQueueConsumer의 로그 X -->
+    <logger name="org.springframework.amqp.rabbit.listener.BlockingQueueConsumer" level="OFF"/>
 	<root value="info">
 		<appender-ref ref="CONSOLE" />
 	</root>
