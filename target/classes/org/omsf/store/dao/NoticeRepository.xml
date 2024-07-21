@@ -24,14 +24,14 @@
     	INSERT INTO NOTICE (TITLE, CONTENT, STORE_STORENO, CREATEDAT)
     	VALUES (#{title}, #{content}, #{storeNo}, #{createdAt})
     	<selectKey keyProperty="noticeNo" resultType="int" order="AFTER">
-       		SELECT NOTICE_SEQ.CURRVAL FROM DUAL
-  		</selectKey>
+        	SELECT NOTICE_SEQ.CURRVAL FROM DUAL
+    	</selectKey>
     </insert>
     
     <insert id="sendToSubscriber">
-    	INSERT INTO USERNOTICESTATUS (NOTICE_NOTICENO, NOTICE_NOTICENO)
-    	VALUES (#{noticeId}, #{username})
-    	<selectKey keyProperty="noticeNo" resultType="int" order="AFTER">
+    	INSERT INTO USERNOTICESTATUS (NOTICE_NOTICENO, MEMBER_USERNAME)
+    	VALUES (#{noticeNo}, #{username})
+    	<selectKey keyProperty="noticeStatusNo" resultType="int" order="AFTER">
        		SELECT USERNOTICESTATUS_SEQ.CURRVAL FROM DUAL
   		</selectKey>
     </insert>
@@ -50,13 +50,13 @@
 	<update id="markNoticeAsRead">
 		UPDATE USERNOTICESTATUS
 		SET ISREAD = 1
-		WHERE NOTICENO = #{noticeId};
+		WHERE NOTICENO = #{noticeNo};
 	</update>
 	
 	<update id="markNoticeAsDeleted">
 		UPDATE USERNOTICESTATUS
 		SET ISDELETED = 1
-		WHERE NOTICENO = #{noticeId}; 
+		WHERE NOTICENO = #{noticeNo}; 
 	</update>
 	
 </mapper>
