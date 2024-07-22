@@ -164,7 +164,7 @@
 	            <sec:authorize access="hasRole('ROLE_ADMIN')">
 	                관리자 계정입니다
 	            </sec:authorize>
-	         	${member.nickName }<br>
+	         	<h5><strong>${member.nickName }</strong></h5><br>
 	            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmPasswordModal">회원 정보 수정</a><br>
 	            <a href="${pageContext.request.contextPath}/logout">로그아웃</a>
 	        </div>

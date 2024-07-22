@@ -59,9 +59,16 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/alarm">
-						알림
-					</a>
+					<sec:authorize access="isAnonymous()">
+						<a class="nav-link" id="storeLink" href="javascript:void(0)" onclick="showLoginAlert()">
+							알림
+						</a>
+					</sec:authorize>
+					<sec:authorize access="isAuthenticated()">
+						<a class="nav-link" id="storeLink" href="${pageContext.request.contextPath}/alarm">
+							알림
+						</a>
+					</sec:authorize>
 				</li>
 				<li class="nav-item">
 					<sec:authorize access="isAnonymous()">
@@ -86,6 +93,12 @@
 	
 	<!-- 위도, 경도값 적용 JS -->
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/sessionStorage.js"></script>
+    
+    <script>
+	    function showLoginAlert() {
+		    alert('로그인이 필요합니다.');
+	    }
+	</script>
     
 </body>
 </html>

@@ -101,7 +101,14 @@
 							    </c:choose>
 	            		 	</small>
 	            		 </p>
-				   		 <a href="${pageContext.request.contextPath}/order/${store.storeNo}" class="btn btn-outline-primary">주문요청하기</a>
+	            		 <c:if test="${isOwner eq true}">
+	            		 	<sec:authorize access="isAnonymous()">
+				   		 		<a href="javascript:void(0)" onclick="showLoginAlert()" class="btn btn-outline-primary">주문요청하기</a>
+				   		 	</sec:authorize>
+				   		 	<sec:authorize access="hasRole('ROLE_USER')">
+				   		 		<a href="${pageContext.request.contextPath}/order/${store.storeNo}" class="btn btn-outline-primary">주문요청하기</a>
+				   		 	</sec:authorize>
+				   		 </c:if>
 	            	</div>
 	        	</div>
 	    	</div>

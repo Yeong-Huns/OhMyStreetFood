@@ -22,6 +22,7 @@
     	<intercept-url pattern="/store/createstore" access="authenticated" />
     	<intercept-url pattern="/store/**/update" access="authenticated" />
     	<intercept-url pattern="/store/like/**" access="hasRole('ROLE_USER')" />
+    	<intercept-url pattern="/store/**/delete" access="hasRole('ROLE_OWNER')" />
     	
     	<intercept-url pattern="/review/list/**" access="permitAll"/>
     	<intercept-url pattern="/review/api/**" access="permitAll"/>
@@ -30,6 +31,16 @@
     	<intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
 
     	<intercept-url pattern="/chat/**" access="authenticated" />
+    	
+    	<intercept-url pattern="/alarm" access="authenticated"/>
+    	
+    	<intercept-url pattern="/order/**" access="hasRole('ROLE_USER')"/>
+    	<intercept-url pattern="/order/**/**" access="hasRole('ROLE_USER') or hasRole('ROLE_OWNER')"/>
+    	<intercept-url pattern="/order/**/submit" access="hasRole('ROLE_USER')"/>
+    	<intercept-url pattern="/order/**/**/approve" access="hasRole('ROLE_OWNER')"/>
+    	<intercept-url pattern="/order/**/**/reject" access="hasRole('ROLE_OWNER')"/>
+    	<intercept-url pattern="/order/**/**/pickup" access="hasRole('ROLE_OWNER')"/>
+    	<intercept-url pattern="/order/**/**/pay" access="hasRole('ROLE_USER')"/>
     	
 	    <intercept-url pattern="/**" access="permitAll" />
 	    <intercept-url pattern="/store/delete/**" access="hasRole('ROLE_OWNER')"/>

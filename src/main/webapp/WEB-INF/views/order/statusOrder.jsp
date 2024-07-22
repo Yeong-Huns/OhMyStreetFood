@@ -118,18 +118,21 @@
         	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
 			    <h4>주문 내역 #${empty order.orderno ? 'Unknown' : order.orderno} </h4>
 			    <span>
-				    <form id="approveOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
-					    <button type="button" class="btn btn-primary" onclick="approveOrder()">(사장님)승인하기</button>
-					</form>
-					<form id="rejectOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
-					    <button type="button" class="btn btn-danger" onclick="rejectOrder()">(사장님)거절하기</button>
-					</form>
-					<form id="pickupOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
-					    <button type="button" class="btn btn-success" onclick="pickupOrder()">(사장님)픽업완료</button>
-					</form>
-				    /////
+			    	<sec:authorize access="hasRole('ROLE_OWNER')">
+					    <form id="approveOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
+						    <button type="button" class="btn btn-primary" onclick="approveOrder()">승인하기</button>
+						</form>
+						<form id="rejectOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
+						    <button type="button" class="btn btn-danger" onclick="rejectOrder()">거절하기</button>
+						</form>
+						<form id="pickupOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
+						    <button type="button" class="btn btn-success" onclick="pickupOrder()">픽업완료</button>
+						</form>
+					</sec:authorize>
 				    <!-- <button class="btn btn-primary" onclick="showPaymentModal()">(주문자)카드결제</button> -->
-				    <button class="btn btn-primary" onclick="requestPay()">결제하기</button>
+				    <sec:authorize access="hasRole('ROLE_USER')">
+				    	<button class="btn btn-primary" onclick="requestPay()">결제하기</button>
+				    </sec:authorize>	
 			    </span>
 			</span>
 		    <p><strong>가게번호:</strong> ${empty order.storeno ? 'Unknown' : order.storeno}</p>
