@@ -12,6 +12,7 @@ public interface NoticeService {
 	void sendToSubscribers(List<String> username, int noticeNo);
 	
 	List<NoticeDetailResponse> findNoticesByUsername(String username, int pageNumber, int pageSize);
+	List<NoticeDetailResponse> findNoticesByUsername(String username);
 	void markNoticeAsRead(int noticeNo);
 	void markNoticeAsDeleted(int noticeNo);
 	

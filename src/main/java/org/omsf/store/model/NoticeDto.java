@@ -60,6 +60,7 @@ public class NoticeDto {
 	    private boolean isDeleted;
 	    private String memberUsername;
 	    private Timestamp createdAt;
+	    private String storePicture;
 	}
 	
 	@Getter

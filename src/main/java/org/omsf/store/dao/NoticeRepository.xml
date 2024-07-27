@@ -44,10 +44,13 @@
             ns.ISREAD AS isRead,
             ns.ISDELETED AS isDeleted,
             ns.MEMBER_USERNAME AS memberUsername,
-            n.CREATEDAT AS createdAt
+            n.CREATEDAT AS createdAt,
+            p.PICTURE AS storePicture
         FROM
             NOTICE n
             JOIN USERNOTICESTATUS ns ON n.NOTICENO = ns.NOTICE_NOTICENO
+            LEFT JOIN STORE s ON n.STORE_STORENO = s.STORENO
+    		LEFT JOIN PHOTO p ON s.PICTURE = p.PHOTONO
         WHERE
             ns.MEMBER_USERNAME = #{username}
             AND ns.ISDELETED = 0
@@ -60,13 +63,13 @@
 	<update id="markNoticeAsRead">
 		UPDATE USERNOTICESTATUS
 		SET ISREAD = 1
-		WHERE NOTICENO = #{noticeNo};
+		WHERE NOTICE_NOTICENO = #{noticeNo}
 	</update>
 	
 	<update id="markNoticeAsDeleted">
 		UPDATE USERNOTICESTATUS
 		SET ISDELETED = 1
-		WHERE NOTICENO = #{noticeNo}; 
+		WHERE NOTICE_NOTICENO = #{noticeNo}
 	</update>
 	
 </mapper>

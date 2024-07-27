@@ -1,5 +1,6 @@
 package org.omsf.main;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Map;
 
 import org.omsf.store.model.Photo;
 import org.omsf.store.model.Store;
+import org.omsf.store.service.NoticeService;
 import org.omsf.store.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,8 @@ public class MenuController {
 
 	@Autowired
 	private StoreService storeService;
+	@Autowired
+	private NoticeService noticeService;
 	
     @GetMapping("/")
     public String showHome(Model model) {
@@ -48,7 +52,10 @@ public class MenuController {
     }
     
     @GetMapping("/alarm")
-    public String showChart() {
+    public String showChart(Model model, Principal principal) {
+    	String username = principal.getName();
+    	model.addAttribute("notices", noticeService.findNoticesByUsername(username));
+    	
     	return "alarm";
     }
 }

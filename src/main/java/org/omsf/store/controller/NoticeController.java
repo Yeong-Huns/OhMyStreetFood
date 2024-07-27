@@ -2,11 +2,11 @@ package org.omsf.store.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.omsf.store.model.NoticeDto;
-import org.omsf.store.model.Pagenation;
 import org.omsf.store.model.NoticeDto.NoticeDetailResponse;
 import org.omsf.store.service.NoticeService;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +43,19 @@ public class NoticeController {
 		return ResponseEntity.ok(response);
 	}
 	
-	public void testNotice() {
+	@PostMapping("/delete")
+    public ResponseEntity<String> deleteNotice(@RequestBody Map<String, Integer> body) {
+        Integer noticeId = body.get("noticeId");
+        if (noticeId != null) {
+            noticeService.markNoticeAsDeleted(noticeId);
+            return ResponseEntity.ok("삭제되었습니다.");
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+	
+	@GetMapping("/test")
+	public ResponseEntity<String> testNotice() {
 		//클라이언트에서 noticedto.create들어옴
 		//서비스로 공지사항 생성 요청
 		// 서비스에서 공지사항을 생성하고 rabbitmq에 메세지 보내서
@@ -55,6 +67,8 @@ public class NoticeController {
 				.build();
 	
 		NoticeDto.Response response = noticeService.createNotice(noticeDto);
+		return ResponseEntity.ok("테스트 공지 생성");
 	}
+	
 	
 }

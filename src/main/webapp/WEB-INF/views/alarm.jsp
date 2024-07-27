@@ -2,6 +2,8 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="chat/chatHandler.jsp" %>
@@ -33,7 +35,7 @@
         margin-bottom: 20px;
         padding: 20px;
     }
-
+	
     .custom-chat-room {
         display: flex;
         align-items: center;
@@ -73,6 +75,36 @@
         float: right;
         margin-top: -8px;
     }
+        .custom-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1055;
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        outline: 0;
+    }
+
+    .custom-modal-dialog {
+        position: relative;
+        width: auto;
+        margin: 1.75rem auto;
+        max-width: 500px; /* 모달의 최대 너비 설정 */
+    }
+
+    .modal-content {
+    	width: ;
+        height: 500px; /* 모달의 최대 높이를 화면 높이의 80%로 설정 */
+        overflow-y: auto; /* 내용이 넘칠 경우 스크롤 생성 */
+    }
+
+    @media (max-width: 576px) {
+        .custom-modal-dialog {
+            margin: 1rem;
+        }
+    }
     </style>
 </head>
 <body>
@@ -83,16 +115,47 @@
 	            <i class="fas fa-store"></i>&nbsp;<strong>점포별 공지사항</strong>
 	        </div>
 	        <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
-	            <c:forEach items="${registeredStores}" var="store" varStatus="status">
-	                <p style="display: flex; flex-direction: row; justify-content: space-between; padding: 20px 0 0 20px;">
-	                    <a href="${pageContext.request.contextPath}/store/${store.storeNo} ">${store.storeName}</a>
-	                    <sec:authorize access="authentication.name == '${store.username}' && hasRole('ROLE_OWNER')">
-	                        <button type="button" class="btn btn-danger delete-btn" id="delete-btn" data-store-no="${store.storeNo}">삭제</button>
-	                    </sec:authorize>
-	                </p>
-	                <hr/>
-	            </c:forEach>
-	            <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmPasswordModal">회원 정보 수정</a><br>
+	            
+	            <c:forEach items="${notices}" var="notice">
+					<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#noticeModal${notice.noticeNo}"
+						data-notice-id="${notice.noticeNo}"  style="text-decoration-line: none; color: black;">
+						<div class="custom-chat-room">
+		                    <img src="${ notice.storePicture }" width="50" height="50">
+		                    <div>
+		                        <p><strong>${notice.title}</strong></p>
+		                        <p>${fn:substring(notice.content, 0, 50)}${fn:length(notice.content) > 50 ? '...' : ''}</p>
+		                    	 <small>
+					                <fmt:formatDate value="${notice.createdAt}" pattern="yyyy-MM-dd" />
+					            </small>
+		                    </div>
+	                	</div>
+                	</a>
+                	
+                	 <!-- 각 공지사항에 모달 -->
+				    <div class="modal fade custom-modal" id="noticeModal${notice.noticeNo}" tabindex="-1" aria-labelledby="noticeModalLabel${notice.noticeNo}" aria-hidden="true">
+					    <div class="modal-dialog modal-dialog-centered custom-modal-dialog">
+					        <div class="modal-content">
+					            <div class="modal-header">
+					                <h5 class="modal-title" id="noticeModalLabel${notice.noticeNo}">공지사항 상세</h5>
+					                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					            </div>
+					            <div class="modal-body">
+					                <h3>${notice.title}</h3>
+					                <p>${notice.content}</p>
+					                <small><fmt:formatDate value="${notice.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></small>
+					            </div>
+					            <div class="modal-footer">
+					                <form action="${pageContext.request.contextPath}/deleteNotice" method="post">
+					                    <input type="hidden" name="noticeId" value="${notice.noticeNo}">
+					                    <button type="button" class="btn btn-danger" onclick="deleteNotice(${notice.noticeNo})">삭제</button>
+					                </form>
+					                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+					            </div>
+					        </div>
+					    </div>
+					</div>
+				</c:forEach>
+	            
 	        </div>
 	
 	        <div style="width:100%;">
@@ -106,25 +169,6 @@
 	
 	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 	
-	    <div class="modal fade" id="confirmPasswordModal" tabindex="-1" aria-labelledby="confirmPasswordLabel" aria-hidden="true">
-	        <div class="modal-dialog modal-dialog-centered">
-	            <div class="modal-content">
-	                <div class="modal-header">
-	                    <h5 class="modal-title" id="confirmPasswordLabel">비밀번호 확인</h5>
-	                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-	                </div>
-	                <div class="modal-body">
-	                    <div class="mb-3">
-	                        <input type="password" class="form-control" id="password" name="password" required>
-	                        <label id="confirmPasswordAlert" class="text-danger"></label>
-	                    </div>
-	                </div>
-	                <div class="modal-footer">
-	                    <button type="button" class="btn btn-primary" id="confirmPasswordBtn">확인</button>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
 	</div>
 </div>
 
@@ -140,6 +184,29 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
         <script>
+        function deleteNotice(noticeId) {
+            if (confirm('정말로 이 공지사항을 삭제하시겠습니까?')) {
+                fetch('/notice/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ noticeId: noticeId })
+                })
+                .then(response => {
+                    if (response.ok) {
+                    	alert('공지사항이 성공적으로 삭제되었습니다.');
+                    	location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message);
+                });
+            }
+        }
+        
+        
         $(document).ready(function () {
         	$("#confirmPasswordBtn").click(function () {
                 var password = $("#password").val();
@@ -266,6 +333,7 @@
                 .catch(error => console.error('Error fetching chat rooms:', error));
         }
     </script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/notice.js"></script>
 </body>
 <!-- jQuery UI JS -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
