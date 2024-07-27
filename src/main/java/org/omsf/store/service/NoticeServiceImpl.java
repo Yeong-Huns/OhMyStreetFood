@@ -76,7 +76,12 @@ public class NoticeServiceImpl implements NoticeService {
 		List<NoticeDetailResponse> noticeList = noticeRepository.findNoticesByUsername(noticeRequest);
 		return noticeList;
 	}
-
+	
+	@Override
+	public List<NoticeDetailResponse> findNoticesByUsername(String username) {
+		return findNoticesByUsername(username, 1, 100);
+	}
+	
 	@Override
 	public void markNoticeAsRead(int noticeNo) {
 		noticeRepository.markNoticeAsRead(noticeNo);
