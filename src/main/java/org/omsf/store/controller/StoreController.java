@@ -171,6 +171,10 @@ public class StoreController {
 				}
 				else
 					model.addAttribute("isOwner", false);
+				if (principal != null && principal.getName().equals(member.getUsername())) {
+				    model.addAttribute("Owner", true);
+				}
+
 			}
 		}
 		

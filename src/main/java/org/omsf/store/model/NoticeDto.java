@@ -3,22 +3,26 @@ package org.omsf.store.model;
 import java.sql.Timestamp;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 public class NoticeDto {
 	
 	@Builder
 	@Getter
+	@NoArgsConstructor
+	@AllArgsConstructor
 	public static class Create {
 		
 		@NotBlank(message = "제목은 필수입니다.")
 		private String title;
 		@NotBlank(message = "내용은 필수입니다.")
 		private String content;
-		@NotBlank()
+		@NotNull()
 		private Integer storeNo;
 		
 		public Notice toEntity() {

@@ -109,11 +109,45 @@
 				   		 		<a href="${pageContext.request.contextPath}/order/${store.storeNo}" class="btn btn-outline-primary">주문요청하기</a>
 				   		 	</sec:authorize>
 				   		 </c:if>
+				   		 <c:if test="${Owner eq true}">
+					   		 <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#noticeModal"
+							 class="btn btn-outline-primary">공지사항 작성</a>
+				   		 </c:if>
 	            	</div>
 	        	</div>
 	    	</div>
 	    </div>
-	    	
+	    
+	    
+	    	<div class="modal fade custom-modal" id="noticeModal" tabindex="-1" aria-labelledby="noticeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="noticeModalLabel">공지사항 작성</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="noticeForm">
+          <div class="mb-3">
+            <label for="noticeTitle" class="form-label">제목</label>
+            <input type="text" class="form-control" id="noticeTitle" required>
+          </div>
+          <div class="mb-3">
+            <label for="noticeContent" class="form-label">내용</label>
+            <textarea class="form-control" id="noticeContent" rows="3" required></textarea>
+          </div>
+          <input type="hidden" id="noticeStoreNo" value="${store.storeNo}">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" onclick="createNotice()">공지 보내기</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+					
+					
 	    <div>
 	    	<span style="display: flex; flex-direction: row; justify-content: space-between; margin-bottom: 20px;">
                  <span><h5>가게 정보</h5></span>
@@ -561,6 +595,9 @@
 		            }
 		        });
 		    });
+		    
+		    
+		    
 		});
 		
 		$('#title').on('input', function() {
@@ -570,6 +607,42 @@
 		$('#content').on('input', function() {
 	        $('#error-content').text("");
 	    });
+	</script>
+	<script>
+		function createNotice() {
+	  	  const title = document.getElementById('noticeTitle').value;
+	  	  const content = document.getElementById('noticeContent').value;
+	  	  const storeNo = document.getElementById('noticeStoreNo').value;
+		  console.log(storeNo);
+	  	  if (!title || !content) {
+	  	    alert('제목과 내용을 모두 입력해주세요.');
+	  	    return;
+	  	  }
+	
+	  	  const data = {
+	  	    title: title,
+	  	    content: content,
+	  	    storeNo: storeNo
+	  	  };
+	
+	  	  fetch('/notice/create', {
+	  	    method: 'POST',
+	  	    headers: {
+	  	      'Content-Type': 'application/json',
+	  	    },
+	  	    body: JSON.stringify(data)
+	  	  })
+	  	  .then(response => response.json())
+	  	  .then(data => {
+	  	    console.log('Success:', data);
+	  	    alert('공지사항이 성공적으로 작성되었습니다.');
+	  	 	window.location.reload()
+	  	  })
+	  	  .catch((error) => {
+	  	    console.error('Error:', error);
+	  	    alert('공지사항 작성 중 오류가 발생했습니다.');
+	  	  });
+	  	}
 	</script>
 </body>
 </html>
