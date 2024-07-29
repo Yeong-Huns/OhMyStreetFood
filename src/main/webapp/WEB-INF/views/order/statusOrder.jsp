@@ -64,9 +64,9 @@
 	        <c:when test="${!empty order.createdat && !empty order.approvedat && !empty order.paidat && empty order.pickupat}">
 	            결제가 완료되었으니 픽업을 해주세요
 	        </c:when>
-	        <c:when test="${!empty order.createdat && !empty order.approvedat && !empty order.paidat && !empty order.pickupat}">
+<%-- 	        <c:when test="${!empty order.createdat && !empty order.approvedat && !empty order.paidat && !empty order.pickupat}">
 	            주문 픽업이 완료되었습니다
-	        </c:when>
+	        </c:when> --%>
 	    </c:choose>
 	</div>
     	
@@ -75,17 +75,17 @@
 			<div class="progress" style="padding: 0px; margin: 20px;">
 		    <c:choose>
 		        <c:when test="${!empty order.createdat && empty order.approvedat && empty order.paidat && empty order.pickupat}">
-		            <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+		            <div class="progress-bar" role="progressbar" style="width: 33%;" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
 		        </c:when>
 		        <c:when test="${!empty order.createdat && !empty order.approvedat && empty order.paidat && empty order.pickupat}">
-		            <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+		            <div class="progress-bar" role="progressbar" style="width: 66%;" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
 		        </c:when>
 		        <c:when test="${!empty order.createdat && !empty order.approvedat && !empty order.paidat && empty order.pickupat}">
-		            <div class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-		        </c:when>
-		        <c:when test="${!empty order.createdat && !empty order.approvedat && !empty order.paidat && !empty order.pickupat}">
 		            <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 		        </c:when>
+<%-- 		        <c:when test="${!empty order.createdat && !empty order.approvedat && !empty order.paidat && !empty order.pickupat}">
+		            <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+		        </c:when> --%>
 		    </c:choose>			
 		</div>
 	
@@ -105,11 +105,11 @@
 		        	결제 완료<br>
 					${empty order.paidat ? '' : order.paidat}
 		        </div>
-		        <div style="width: 100px; text-align: center; padding: 0px;">
+<%-- 		        <div style="width: 100px; text-align: center; padding: 0px;">
 					<i class="fas fa-box"></i><br>
 					픽업 완료<br>
 					${empty order.pickupat ? '' : order.pickupat}
-		        </div>
+		        </div> --%>
 		    </div>
 	  	</div>
 	  	
@@ -125,13 +125,14 @@
 						<form id="rejectOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
 						    <button type="button" class="btn btn-danger" onclick="rejectOrder()">거절하기</button>
 						</form>
-						<form id="pickupOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
+						<%-- <form id="pickupOrder" data-store-no="{storeNo}" data-order-no="${order.orderno}">
 						    <button type="button" class="btn btn-success" onclick="pickupOrder()">픽업완료</button>
-						</form>
+						</form> --%>
 					</sec:authorize>
-				    <!-- <button class="btn btn-primary" onclick="showPaymentModal()">(주문자)카드결제</button> -->
 				    <sec:authorize access="hasRole('ROLE_USER')">
-				    	<button class="btn btn-primary" onclick="requestPay()">결제하기</button>
+				    	<c:if test="${!empty order.approvedat}">
+						    <button class="btn btn-primary" onclick="requestPay()">결제하기</button>
+				    	</c:if>
 				    </sec:authorize>	
 			    </span>
 			</span>

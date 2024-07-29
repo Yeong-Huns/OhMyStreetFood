@@ -220,10 +220,10 @@
 	            </div>
 	        </sec:authorize>
 	
-	        <div style="width:100%;">
+	        <!-- <div style="width:100%;">
 	            <i class="fas fa-utensils"></i>&nbsp;<strong>주문 내역</strong>
 	        </div>
-	        <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;">
+	        <div style="width:100%; height:auto; background-color:#f6f6f6; border-radius:10px; margin-bottom: 20px;"> -->
 	
 	    </div>
 	
