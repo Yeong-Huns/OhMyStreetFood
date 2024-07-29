@@ -126,6 +126,23 @@ function sendRejectStatus(response, orderUsername, storeNo) {
         .catch(error => console.error("/chat/chatRoomNoBySubscription 호출 중 에러 발생 : " + error))
 }
 
+function sendPurchaseStatus(response, orderUsername, storeNo) {
+    const message = response.ok ? "[결제 완료] 결제가 완료되었습니다. : " : (() => { throw new Error("결제 진행 중 오류 발생!"); })();
+    fetch('/chat/chatRoomNoBySubscription?customer=' + orderUsername + '&storeNo=' + storeNo)
+        .then(response => response.json())
+        .then(data => chatRoomNoBySubscription(message, storeNo, data))
+        .catch(error => console.error("/chat/chatRoomNoBySubscription 호출 중 에러 발생 : " + error))
+}
+
+function sendPurchaseRejectStatus(orderUsername, storeNo) {
+    const message ="[결제 실패] 결제에 실패하였습니다. "
+    fetch('/chat/chatRoomNoBySubscription?customer=' + orderUsername + '&storeNo=' + storeNo)
+        .then(response => response.json())
+        .then(data => chatRoomNoBySubscription(message, storeNo, data))
+        .catch(error => console.error("/chat/chatRoomNoBySubscription 호출 중 에러 발생 : " + error))
+}
+
+
 function fetchChatRooms(username) {
     fetch('/chat/rooms')
         .then(response => response.json())

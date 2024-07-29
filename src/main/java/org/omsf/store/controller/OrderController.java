@@ -106,6 +106,7 @@ public class OrderController {
 
 	    model.addAttribute("order", order);
 		String httpMapping = "http://localhost:8080/order/"+storeNo+"/"+orderNo;
+		log.info("httpMapping: {}", httpMapping);
 		alarmHandler.sendRequestAlarm(username, storeNo, httpMapping);
 
 		return "redirect:/order/{storeNo}/" + orderNo;

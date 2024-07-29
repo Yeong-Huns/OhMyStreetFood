@@ -264,6 +264,11 @@
 	var merchantUid = "order-" + new Date().getTime(); // Unique order number
 
 	function requestPay() {
+		const form = document.getElementById('pickupOrder');
+		const storeNo = form.getAttribute('data-store-no');
+		const orderNo = form.getAttribute('data-order-no');
+		const orderUsername = document.querySelector("p:nth-child(3)").innerText.split(' ')[1];
+		const store = document.querySelector("p:nth-child(2)").innerText.split(' ')[1]; // chat
 	    IMP.init("imp30164472");
 
 	    IMP.request_pay({
@@ -295,7 +300,9 @@
 	                })
 	            })
 	            .then(response => {
-	                if (response.ok) {
+					sendPurchaseStatus(response, orderUsername, storeNo)
+					if (response.ok) {
+
 	                    alert('결제 정보가 성공적으로 업데이트되었습니다.');
 	                    location.reload();
 	                } else {
@@ -310,6 +317,8 @@
 	        } else {
 	            // 결제 실패 시
 	            console.log(rsp);
+
+				sendPurchaseRejectStatus( orderUsername, storeNo);
 	            alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
 	        }
 	    });

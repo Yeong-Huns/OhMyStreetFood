@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.omsf.chatRoom.model.MessageVO;
 import org.omsf.chatRoom.model.SubscribeRequest;
 import org.omsf.chatRoom.service.ChatService;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,8 +27,8 @@ public class AlarmHandler {
     private final ChatService chatService;
 
     public void sendRequestAlarm(String username, long storeNo, String httpMapping){
-        log.info("username: {}", username);
-        log.info("storeNo: {}", storeNo);
+        log.info("username🤕: {}", username);
+        log.info("storeNo🤕: {}", storeNo);
         handleSubChannelRequest(username, storeNo);
         long chatRoomNo = chatService.getChatRoomNoBySubscription(username, storeNo);
         handleOrderRequest(username, chatRoomNo, httpMapping);
