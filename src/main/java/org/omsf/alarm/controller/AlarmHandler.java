@@ -34,6 +34,13 @@ public class AlarmHandler {
         handleOrderRequest(username, chatRoomNo, httpMapping);
     }
 
+    public void sendCompleteAlarm(String username, long storeNo, String httpMapping){
+        log.info("username🤕: {}", username);
+        log.info("storeNo🤕: {}", storeNo);
+        handleSubChannelRequest(username, storeNo);
+        long chatRoomNo = chatService.getChatRoomNoBySubscription(username, storeNo);
+        handleOrderSuccess(username, chatRoomNo, httpMapping);
+    }
 
     private void handleSubChannelRequest(String username, long storeNo){
         restTemplate.postForObject("http://localhost:8080/rest/chat/subRequest",
@@ -46,6 +53,17 @@ public class AlarmHandler {
 
     private void handleOrderRequest(String username, long chatRoomNo, String httpMapping){
         String content = "<strong>[주문 요청]</strong> 새로운 주문이 있어요. <br> <a href=\"" + httpMapping + "\">내역 보기</a>";
+        restTemplate.postForObject("http://localhost:8080/rest/chat/sendRequest",
+                MessageVO.builder()
+                        .senderId(username)
+                        .chatRoomNo(chatRoomNo)
+                        .content(content)
+                        .build(),
+                Void.class);
+    }
+
+    private void handleOrderSuccess(String username, long chatRoomNo, String httpMapping){
+        String content = "<strong>[주문 완료]</strong> 주문요청이 승인 되었습니다. <br> <a href=\"" + httpMapping + "\">내역 보기</a>";
         restTemplate.postForObject("http://localhost:8080/rest/chat/sendRequest",
                 MessageVO.builder()
                         .senderId(username)
