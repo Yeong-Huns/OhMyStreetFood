@@ -6,6 +6,7 @@ html {
 }
 
 .container {
+	min-height: 1300px;
 	padding: 150px 40px;
 	margin: 0 auto;
 }

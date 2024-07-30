@@ -131,7 +131,7 @@
 					</sec:authorize>
 				    <sec:authorize access="hasRole('ROLE_USER')">
 				    	<c:if test="${!empty order.approvedat}">
-						    <button class="btn btn-primary" onclick="requestPay()">결제하기</button>
+						    <button class="btn btn-primary" onclick="requestPay('${order.storeno}', '${order.orderno}', '${order.totalprice}')">결제하기</button>
 				    	</c:if>
 				    </sec:authorize>	
 			    </span>
@@ -230,45 +230,44 @@
 	    });
 	}
 	
-	function pickupOrder() {
-	    const form = document.getElementById('pickupOrder');
-	    const storeNo = form.getAttribute('data-store-no');
-	    const orderNo = form.getAttribute('data-order-no');
+// 	function pickupOrder() {
+// 	    const form = document.getElementById('pickupOrder');
+// 	    const storeNo = form.getAttribute('data-store-no');
+// 	    const orderNo = form.getAttribute('data-order-no');
 
-	    fetch(`/order/${storeNo}/${orderNo}/pickup`, {
-	        method: 'PUT',
-	        headers: {
-	            'Content-Type': 'application/json'
-	        },
-            body: JSON.stringify({
-                pickupat: new Date().toISOString()
-            })
-	    })
-	    .then(response => {
-	        if (response.ok) {
-	            alert('픽업이 완료되었습니다');
-	            location.reload();
-	        } else {
-	            alert('픽업이 실패되었습니다');
-	            location.reload();
-	        }
-	    })
-	    .catch(error => {
-	        console.error('Error:', error);
+// 	    fetch(`/order/${storeNo}/${orderNo}/pickup`, {
+// 	        method: 'PUT',
+// 	        headers: {
+// 	            'Content-Type': 'application/json'
+// 	        },
+//             body: JSON.stringify({
+//                 pickupat: new Date().toISOString()
+//             })
+// 	    })
+// 	    .then(response => {
+// 	        if (response.ok) {
+// 	            alert('픽업이 완료되었습니다');
+// 	            location.reload();
+// 	        } else {
+// 	            alert('픽업이 실패되었습니다');
+// 	            location.reload();
+// 	        }
+// 	    })
+// 	    .catch(error => {
+// 	        console.error('Error:', error);
 
-	        alert('An error occurred. Please try again.');
-	    });
-	}
+// 	        alert('An error occurred. Please try again.');
+// 	    });
+// 	}
 	</script>
 	<script>
 	var merchantUid = "order-" + new Date().getTime(); // Unique order number
 
-	function requestPay() {
-		const form = document.getElementById('pickupOrder');
-		const storeNo = form.getAttribute('data-store-no');
-		const orderNo = form.getAttribute('data-order-no');
-		const orderUsername = document.querySelector("p:nth-child(3)").innerText.split(' ')[1];
-		const store = document.querySelector("p:nth-child(2)").innerText.split(' ')[1]; // chat
+	function requestPay(storeNo, orderNo, totalprice) {
+	    const orderUsername = document.querySelector("p:nth-child(3)").innerText.split(' ')[1];
+	    const store = document.querySelector("p:nth-child(2)").innerText.split(' ')[1]; // chat
+
+	    // Initialize IMP
 	    IMP.init("imp30164472");
 
 	    IMP.request_pay({
@@ -276,7 +275,7 @@
 	        pay_method: "card",
 	        merchant_uid: merchantUid,
 	        name: "OhMyStreetFood!",
-	        amount: ${order.totalprice},
+	        amount: totalprice,
 	        buyer_email: '${order.username}',
 	        buyer_name: '${order.username}',
 	        buyer_tel: "",
@@ -284,12 +283,10 @@
 	        buyer_postcode: ""
 	    }, function (rsp) {
 	        if (rsp.success) {
-	            // 결제 성공 시
 	            console.log(rsp);
 	            alert('결제가 완료되었습니다.');
-	            
-	            // 결제 성공 후 서버에 결제 완료 여부와 결제 시간 업데이트 요청
-	            fetch(`/order/${order.storeno}/${order.orderno}/pay`, {
+
+	            fetch(`/order/${storeNo}/${orderNo}/pay`, {
 	                method: 'POST',
 	                headers: {
 	                    'Content-Type': 'application/json'
@@ -300,9 +297,7 @@
 	                })
 	            })
 	            .then(response => {
-					sendPurchaseStatus(response, orderUsername, storeNo)
-					if (response.ok) {
-
+	                if (response.ok) {
 	                    alert('결제 정보가 성공적으로 업데이트되었습니다.');
 	                    location.reload();
 	                } else {
@@ -315,14 +310,12 @@
 	            });
 
 	        } else {
-	            // 결제 실패 시
 	            console.log(rsp);
-
-				sendPurchaseRejectStatus( orderUsername, storeNo);
 	            alert('결제에 실패하였습니다. 에러 내용: ' + rsp.error_msg);
 	        }
 	    });
 	}
+
     </script>
 </body>
 </html>
