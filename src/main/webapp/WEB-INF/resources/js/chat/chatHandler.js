@@ -108,7 +108,7 @@ function sendMessage(subscription, address) {
     messageInput.value = '';
 }
 * */
-
+/*
 function sendOrderStatus(response, orderUsername, storeNo) {
     console.log(`orderUserName: ${orderUsername} storeNo : ${storeNo}`);
     const message = response.ok ? "[주문 완료] 회원님의 주문 요청이 승인 되었습니다.: " : (() => { throw new Error("주문 승인 처리 중 오류 발생"); })();
@@ -116,7 +116,7 @@ function sendOrderStatus(response, orderUsername, storeNo) {
         .then(response => response.json())
         .then(data => chatRoomNoBySubscription(message, storeNo, data))
         .catch(error => console.error("/chat/chatRoomNoBySubscription 호출 중 에러 발생 : " + error))
-}
+}*/
 
 function sendRejectStatus(response, orderUsername, storeNo) {
     const message = response.ok ? "[주문 거절] 회원님의 주문 요청이 사장님에 의해 거절 되었습니다.: " : (() => { throw new Error("주문 거절 처리 중 오류 발생"); })();

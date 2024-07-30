@@ -178,7 +178,7 @@
 	    const orderNo = form.getAttribute('data-order-no');
 		const orderUsername = document.querySelector("p:nth-child(3)").innerText.split(' ')[1]; // chat
 		const store = document.querySelector("p:nth-child(2)").innerText.split(' ')[1]; // chat
-	    fetch(`/order/${storeNo}/${orderNo}/approve`, {
+	    fetch(`/order/${orderUsername}/${storeNo}/${orderNo}/approve`, {
 	        method: 'PUT',
 	        headers: {
 	            'Content-Type': 'application/json'

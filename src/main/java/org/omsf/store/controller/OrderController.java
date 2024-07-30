@@ -129,11 +129,14 @@ public class OrderController {
         return "order/statusOrder";
     }
 	
-	@PutMapping("/order/{storeNo}/{orderNo}/approve")
-    public ResponseEntity<String> approveOrder(@PathVariable("storeNo") int storeNo,
+	@PutMapping("/order/{orderUsername}/{storeNo}/{orderNo}/approve")
+    public ResponseEntity<String> approveOrder(
+			@PathVariable("orderUsername") String username,
+			@PathVariable("storeNo") int storeNo,
                                                @PathVariable("orderNo") int orderNo) {
         orderService.updateOrderApproval(orderNo, "O");
-        
+		String httpMapping = "http://localhost:8080/order/"+storeNo+"/"+orderNo;
+		alarmHandler.sendCompleteAlarm(username, storeNo, httpMapping);
         return ResponseEntity.ok("주문 승인이 완료되었습니다");
     }
 	
