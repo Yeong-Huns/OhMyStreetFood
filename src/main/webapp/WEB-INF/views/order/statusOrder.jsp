@@ -178,14 +178,15 @@
 	    const orderNo = form.getAttribute('data-order-no');
 		const orderUsername = document.querySelector("p:nth-child(3)").innerText.split(' ')[1]; // chat
 		const store = document.querySelector("p:nth-child(2)").innerText.split(' ')[1]; // chat
-	    fetch(`/order/${orderUsername}/${storeNo}/${orderNo}/approve`, {
+	    fetch(`/order/${storeNo}/${orderNo}/approve`, {
 	        method: 'PUT',
 	        headers: {
 	            'Content-Type': 'application/json'
-	        }
+	        },
+	        body: JSON.stringify({ orderUsername: orderUsername })
 	    })
 	    .then(response => {
-			sendOrderStatus(response, orderUsername, store);
+			// sendOrderStatus(response, orderUsername, store);
 	        if (response.ok) {
 	            //alert('주문 승인이 완료되었습니다');
 	            location.reload();

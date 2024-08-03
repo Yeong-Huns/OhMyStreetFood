@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
-
 import org.omsf.alarm.controller.AlarmHandler;
 import org.omsf.store.model.Menu;
 import org.omsf.store.model.Order;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -129,12 +127,12 @@ public class OrderController {
         return "order/statusOrder";
     }
 	
-	@PutMapping("/order/{orderUsername}/{storeNo}/{orderNo}/approve")
-    public ResponseEntity<String> approveOrder(
-			@PathVariable("orderUsername") String username,
-			@PathVariable("storeNo") int storeNo,
-                                               @PathVariable("orderNo") int orderNo) {
+	@PutMapping("/order/{storeNo}/{orderNo}/approve")
+    public ResponseEntity<String> approveOrder(@PathVariable("storeNo") int storeNo,
+                                               @PathVariable("orderNo") int orderNo,
+                                               @RequestBody Map<String, String> request) {
         orderService.updateOrderApproval(orderNo, "O");
+        String username = request.get("orderUsername");
 		String httpMapping = "http://localhost:8080/order/"+storeNo+"/"+orderNo;
 		alarmHandler.sendCompleteAlarm(username, storeNo, httpMapping);
         return ResponseEntity.ok("주문 승인이 완료되었습니다");
