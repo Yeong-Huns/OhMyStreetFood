@@ -11,18 +11,23 @@
     <td><img src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/dc809eb2-dd7f-43bc-8c75-eb374aae91ed"></td>
   </tr>
   <tr>
-    <td>김창환</td>
-    <td>조재은</td>
-    <td>이종섭</td>
-    <td>이윤빈</td>
-    <td>김영훈</td>
+    <td>김창환<br>
+    (상점관리 및 알람)</td>
+    <td>조재은<br>
+    (검색 및 결제)</td>
+    <td>이종섭<br>
+    (지도 및 챗봇)</td>
+    <td>이윤빈<br>
+    (회원관리)</td>
+    <td>김영훈<br>
+    (채팅 및 알람)</td>
   </tr>
 </table>
 <br>
 
 <h3>프로젝트 소개</h3>
 <ul>
-  <li>기간: 2024. 06. 17 - 2024. 07. 05 (총 15일)</li>
+  <li>기간: 2024. 06. 17 - 2024. 07. 07 (총 4주)</li>
   <li>주제: 포장마차나 푸드트럭등의 길거리 음식점 정보들이 모여있는 지도 형식의 웹 서비스</li>
 </ul>
 <br>
@@ -32,9 +37,17 @@
   <li>환경: Spring Tool Suite 4, SQL Developer 20, SQL Developer Modeler 20</li>
   <li>세부 스택: Spring Framework 5 (Legacy), Spring Security 5, Web Socket</li>
   <li>데이터 베이스: MyBatis, Oracle21C</li>
-  <li>언어: Java8, JavaScript, Html, Css, JSP, Bootstrap, jQuery, Ajax</li>
+  <li>언어: Java 8, JavaScript, Html, Css, JSP, Bootstrap, jQuery, Ajax</li>
   <li>협업도구: Git, GitHub, Google Workspace</li>
 </ul>
+<br>
+
+<h3>시스템 아키텍쳐</h3>
+  <img width="900" src="https://github.com/user-attachments/assets/63098f3e-71a7-4bcc-90fe-93cc5cff79c3">
+<br>
+
+<h3>DB 설계</h3>
+  <img width="900" src="https://github.com/user-attachments/assets/88a428c9-cd87-4d2d-9477-890cdeaa94b8">
 <br>
 
 <h3>주요 기능</h3>
@@ -160,7 +173,6 @@
       <li>사장님 인증 상점의 경우 1 : 1 채팅 가능</li>
       <br>
       <img width="900" src="https://github.com/user-attachments/assets/b177cbe3-2136-46f4-86de-fbe1f6544e2c">
-      <img width="900" src="https://github.com/user-attachments/assets/f6a6456b-5b08-423c-9baa-2326202ffbd3">
   </li>
   <br>
 
