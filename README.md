@@ -1,5 +1,4 @@
 <h1>길거리 음식점 웹사이트, 'Oh my street food!'</h1>
-<img src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/0292ecec-f08b-45f1-92e2-572548b76a17">
 <br>
 
 <h3>팀 소개</h3>
@@ -44,9 +43,10 @@
     <ul>
       <li>현재 위치 기준 등록된 주변 가게 보기</li>
       <li>인기 점포 리스트</li>
+      <li>챗봇</li>
     </ul>
     <br>
-    <img width="900" alt="1" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/03546f56-44e7-4218-88c5-e01c417cd939">
+    <img width="900" src="https://github.com/user-attachments/assets/70fd91af-a5a2-406e-a93b-a1a4d3a695af">
   </li>
   <br>
   
@@ -56,7 +56,7 @@
       <li>Ip 기준 인기 검색어</li>
     </ul>
     <br>
-    <img width="900" alt="2" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/0d2b53ef-07c7-46bc-a982-c1fd40964ac6">
+    <img width="900" src="https://github.com/user-attachments/assets/65377cca-b7be-42ec-abb4-04c455dbe5da">
   </li>
   <br>
   
@@ -67,7 +67,7 @@
       <li>무한 스크롤</li>
     </ul>
     <br>
-    <img width="900" alt="3" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/b6acd8ab-8bbf-4908-aeb7-8943805c6566">
+    <img width="900" src="https://github.com/user-attachments/assets/6966eaad-9020-4589-8a00-230e279a5fa9">
   </li>
   <br>
   
@@ -77,7 +77,7 @@
       <li>점포 이름, 운영일, 시간, 대표 사진, 소개, 메뉴 추가</li>
     </ul>
     <br>
-    <img width="900" alt="4" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/7773b86f-0a6a-4b40-b0c0-680bce570e48">
+    <img width="900" src="https://github.com/user-attachments/assets/82cd3bff-fad3-4c63-9543-303ebb259556">
   </li>
   <br>
   
@@ -88,7 +88,7 @@
       <li>리뷰</li>
     </ul>
     <br>
-    <img width="900" alt="5" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/6bb115ca-f120-4e60-b44f-db4b9b416b13">
+    <img width="900" src="https://github.com/user-attachments/assets/adf72235-eb41-4d35-9e36-08eb5fd26a58">
   </li>
   <br>
   
@@ -97,7 +97,7 @@
       <li>일반 회원, 사장 회원, 관리자 계정</li>
     </ul>
     <br>
-    <img width="1200" alt="6" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/e24d658a-cd22-4302-8b32-6a147424bd3f">
+    <img width="1200" src="https://github.com/user-attachments/assets/7be7ff45-88e5-4124-b4a6-01f5e4b3f371">
   </li>
   <br>
   
@@ -107,8 +107,8 @@
       <li>사장 회원은 사업자 번호</li>
     </ul>
     <br>
-    <img width="1200" alt="7" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/b3f81870-cccd-4dbf-9fa2-650341b35091">
-    <img width="1200" alt="8" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/a4d00689-0fc7-49a9-991d-2a4c090f36ce">
+    <img width="1200" src="https://github.com/user-attachments/assets/982eb981-9e65-49e4-ad00-591fd5269ded">
+    <img width="1200" src="https://github.com/user-attachments/assets/e5179f0d-4e6c-4de4-be9a-3aedbf382acb">
   </li>
   <br>
   
@@ -118,7 +118,7 @@
       <li>나의 채팅방 내역</li>
     </ul>
     <br>
-    <img width="900" alt="9" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/7cc94b52-55d1-4124-bcf6-83e439ed8172">
+    <img width="900" src="https://github.com/user-attachments/assets/b8b42fcf-c3ea-48d7-a05a-09989538c01c">
   </li>
   <br>
   
