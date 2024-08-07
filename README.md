@@ -92,12 +92,34 @@
   </li>
   <br>
   
+  <li>점포수정페이지
+    <ul>
+      <li>사진 갤러리식 입력</li>
+    </ul>
+    <br>
+    <img width="900" src="https://github.com/user-attachments/assets/b8bdc5ab-ef10-41b8-80ec-0983b75dda0e">
+  </li>
+  <br>
+
+  <li>주문결제페이지
+    <ul>
+      <li>주문 API 연동</li>
+    </ul>
+    <br>
+    <img width="900" src="https://github.com/user-attachments/assets/d12e8a83-3382-452b-ac57-b3d5aed86d28">
+    <img width="900" src="https://github.com/user-attachments/assets/2fda26ab-d18e-40bb-aa13-5444067b12ca">
+    <img width="900" src="https://github.com/user-attachments/assets/212244fe-804b-48dd-a2ab-b9f0118fd662">
+    <img width="900" src="https://github.com/user-attachments/assets/e1ad2f95-23c4-4611-bf12-03b30bc7bb14">
+    <img width="900" src="https://github.com/user-attachments/assets/2ea25278-d6b8-4622-b8fa-06f67a5f7603">
+  </li>
+  <br>
+  
   <li>로그인페이지
     <ul>
       <li>일반 회원, 사장 회원, 관리자 계정</li>
     </ul>
     <br>
-    <img width="1200" src="https://github.com/user-attachments/assets/7be7ff45-88e5-4124-b4a6-01f5e4b3f371">
+    <img width="900" src="https://github.com/user-attachments/assets/7be7ff45-88e5-4124-b4a6-01f5e4b3f371">
   </li>
   <br>
   
@@ -107,8 +129,8 @@
       <li>사장 회원은 사업자 번호</li>
     </ul>
     <br>
-    <img width="1200" src="https://github.com/user-attachments/assets/982eb981-9e65-49e4-ad00-591fd5269ded">
-    <img width="1200" src="https://github.com/user-attachments/assets/e5179f0d-4e6c-4de4-be9a-3aedbf382acb">
+    <img width="900" src="https://github.com/user-attachments/assets/982eb981-9e65-49e4-ad00-591fd5269ded">
+    <img width="900" src="https://github.com/user-attachments/assets/e5179f0d-4e6c-4de4-be9a-3aedbf382acb">
   </li>
   <br>
   
@@ -126,10 +148,10 @@
     <ul>
       <li>잘못 등록된 정보 회원들이 신고하면 관리자가 확인 후 대응</li>
       <br>
-      <img width="900" alt="10" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/2d7da01f-9b6c-4d86-a12f-3ac6113c4d17">
+      <img width="900" src="https://github.com/user-attachments/assets/c99ac587-0c08-4528-83be-0cdb483a32d8">
       <li>가게 업데이트된 로그 내용 테이블에 저장 후 어느 시점으로 복구 가능</li>
       <br>
-      <img width="900" alt="11" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/91c3eb06-2d29-4438-a790-4ccfc0857a07">
+      <img width="900" src="https://github.com/user-attachments/assets/913d88b4-201e-4df1-84d5-050c3ec02332">
   </li>
   <br>
       
@@ -137,14 +159,14 @@
     <ul>
       <li>사장님 인증 상점의 경우 1 : 1 채팅 가능</li>
       <br>
-      <img width="900" alt="12" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/603427b8-44c4-492c-abb8-90375a83326c">
-      <img width="900" alt="13" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/c23fa408-2b8d-4b01-814a-442b6669a803">
+      <img width="900" src="https://github.com/user-attachments/assets/b177cbe3-2136-46f4-86de-fbe1f6544e2c">
+      <img width="900" src="https://github.com/user-attachments/assets/f6a6456b-5b08-423c-9baa-2326202ffbd3">
   </li>
   <br>
 
   <li>에러페이지 및 게임
-    <img width="900" alt="14" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/5afee1b7-ce33-45f3-9ccb-85cade4e77dd">
-    <img width="900" alt="15" src="https://github.com/iamjaeeuncho/OhMyStreetFood/assets/46369038/25b6356f-ab0b-4556-9b6b-d362be27ef42">
+    <img width="900" src="https://github.com/user-attachments/assets/dbbcdb60-ea60-4fcd-9eea-cdf5411a094d">
+    <img width="900" src="https://github.com/user-attachments/assets/8d99e778-1162-4ad3-9354-580e0987be5d">
   </li>
   <br>
 </ul>
